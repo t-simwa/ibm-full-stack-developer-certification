@@ -1,104 +1,1771 @@
-Welcome to Passing Data and
-States Between Components. After watching this video, you will be able to describe the lifecycle of
-React components, and explain how to pass data
-and states to components. Each React component has three
-phases in its lifecycle. Mounting is when the
-component is first created. Updating is when
-the component is rendered on a change of
-state or properties, props, and unmounting
-is when the component is removed from the document
-object model or DOM. In mounting, four methods
-are called in this order. The constructor method
-constructs the object. This may call the
-superconstructor with the props object if any specific
-props are being set. The getDerivedStateFromProps
-method is used only when the state depends
-on the changes to props. The render method is mandatory
-in a React component. This method makes the
-component appear. It must return a DOM element, and it can return only
-one root element which may or may not have many
-nested child elements. The componentDidMount method
-is invoked immediately after a component is mounted or
-inserted into the DOM tree. When the component app
-method is created, the constructor is invoked. The constructor first calls the super and then
-logs onto the console. Then the render
-method is invoked. This method logs onto the console and then
-renders the component. Lastly, the componentDidMount
-method is invoked. You can see this in the order of the console logs in
-the page rendered. In updating, five methods
-are called in this order. The getDerivedStateFromProps
-method is used only when the state depends
-on the changes to props. The shouldComponentUpdate
-method by default returns true. Every time there is
-a change in state, this method is called to check if the component
-should update. It is not called during the initial creation
-of the component. Make this method
-return false only if you don't want to render
-the changes in state. The render method is the same render method
-used in mounting, but here updates the component. The getSnapshotBeforeUpdate
-method is invoked just before the
-changes are rendered. It helps keep track
-of what has changed. Any value returned
-by this lifecycle, will be passed as a parameter to the componentDidUpdate
-method, and componentDidUpdate
-is invoked immediately after
-updating occurs. When the state of
-the component app is changed, it is updated. Consider an app component with a click counter
-maintained as the state. With the on click of the button, increment counter is invoked, increasing the
-counter state by one. Every time the state changes, the component is re-rendered, but this can be controlled. The shouldComponentUpdate
-method returns true by default. This method is
-rarely overridden. That is, its behavior
-is rarely changed. It usually inherits from the super-class and returns true. The render method logs onto the console and then
-renders the component. Lastly, the componentDidUpdate
-method is invoked. You can see this in the order of the Console logs in
-the page rendered. When a component is unmounted or removed from the DOM tree, the componentWillUnmount
-method is called. In this example, you have two components,
-AppInner and app. AppInner is rendered
-inside app with a state. ComponentDidMount of the app
-components mounting phase is handled and a timer for
-five seconds is started. After five seconds, a
-callback is invoked, changing the state of
-the inner component to a div element instead of
-the AppInner component, which removes or
-unmounts the component. Then componentWillUnmount
-of AppInner is called. You can see this in the order of the console logs in
-the page rendered. You can pass data between
-React components. Consider the relationship
-between components. Three types of relationships are parent to child using props, child to parent using callbacks, and between siblings
-using Redux. Redux is not within the
-scope of this module. Here, you have two
-classes, AppInner and app. The app component contains
-the AppInner component. App is the parent and
-AppInner is the child. App sets the property color
-and name for AppInner. The data is passed to
-the child every time a new value is entered in the
-input boxes in the parent. On the browser, when
-the component loads, you see the default name
-John and color green. When the values of color and name are changed in
-the parent component, they are passed to
-the child component, which is re-rendered. Here, you will pass data
-from child to parent. You pass a callback to
-the child as a property, and then through the callback
-pass data to the parent. Callback is a normal method, but is called at a later time
-when a condition is met. In this example, app is
-the parent component, which contains a child
-component, AppInner. In the parent, you pass the callback func1 as a
-property to the child. Func1 is a parent
-component function which takes a string argument. On componentDidMount
-of AppInner, you invoke the sendData method. This method invokes setInterval at a one
-second interval. setInterval takes a callback
-as a first parameter and a second interval in
-which the callback should be invoked as
-the second parameter. In this case, every one second, the current time is obtained
-and the method set as parentCallback is invoked
-passing the time. The method set as parentCallback is the
-parent class method which sets the state of the
-parent component, thereby re-rendering it. You can see the current
-time being passed from the child to the
-parent through callback. The parent is re-rendered
-every second. In this video, you learned that each React component has three
-phases in its lifecycle, mounting, updating,
-and unmounting. When a component is
-created or updated, methods are called
-in the same order, and you can pass data between components from parent to
-child using properties, from child to parent using callbacks, and between siblings.
+================================================================================
+PASSING DATA AND STATES BETWEEN COMPONENTS
+Comprehensive Study Guide
+================================================================================
+
+WELCOME
+-------
+Welcome to Passing Data and States Between Components. After studying this 
+guide, you will be able to describe the lifecycle of React components, and 
+explain how to pass data and states to components.
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Describe the lifecycle of React components
+• Explain the three phases of component lifecycle (mounting, updating, unmounting)
+• Understand the order of lifecycle methods in each phase
+• Explain how to pass data and states to components
+• Understand parent-to-child data passing using props
+• Understand child-to-parent data passing using callbacks
+• Understand sibling-to-sibling data passing (using Redux - mentioned but not detailed)
+
+OVERVIEW
+--------
+Understanding component lifecycle and data flow is fundamental to building 
+React applications. Each React component goes through a lifecycle with 
+specific phases, and during these phases, various methods are called in a 
+specific order. Additionally, React components need to communicate with each 
+other, and there are specific patterns for passing data between components 
+based on their relationships.
+
+================================================================================
+PART 1: REACT COMPONENT LIFECYCLE OVERVIEW
+================================================================================
+
+SECTION 1.1: THE THREE PHASES OF COMPONENT LIFECYCLE
+------------------------------------------------------
+
+Each React component has three phases in its lifecycle.
+
+PHASE 1: MOUNTING
+-----------------
+DEFINITION
+----------
+Mounting is when the component is first created.
+
+DETAILED EXPLANATION
+--------------------
+Mounting is the initial phase of a component's lifecycle. This is when React 
+creates the component instance and adds it to the DOM for the first time. 
+Think of mounting as the "birth" of your component - it's being brought into 
+existence and made visible in the browser.
+
+WHAT HAPPENS DURING MOUNTING
+-----------------------------
+• Component class is instantiated (created)
+• Component is initialized with initial state and props
+• Component is rendered for the first time
+• Component is inserted into the DOM tree
+• Component becomes visible to users
+
+REAL-WORLD ANALOGY
+------------------
+Think of mounting like moving into a new house:
+• You sign the lease (component created)
+• You get the keys (component initialized)
+• You move your furniture in (component rendered)
+• You're officially living there (component mounted in DOM)
+
+PHASE 2: UPDATING
+-----------------
+DEFINITION
+----------
+Updating is when the component is rendered on a change of state or 
+properties, props.
+
+DETAILED EXPLANATION
+--------------------
+Updating occurs whenever a component needs to re-render due to changes. These 
+changes can happen because:
+• The component's state changes (via setState)
+• The component receives new props from its parent
+• The parent component re-renders
+• A force update is triggered
+
+WHAT HAPPENS DURING UPDATING
+-----------------------------
+• Component receives new props or state changes
+• React determines if re-rendering is necessary
+• Component re-renders with new data
+• DOM is updated to reflect changes
+• Component remains in the DOM (unlike mounting/unmounting)
+
+REAL-WORLD ANALOGY
+------------------
+Think of updating like renovating your house:
+• You decide to change something (state/props change)
+• You plan the changes (React determines what needs updating)
+• You make the renovations (component re-renders)
+• Your house is updated but still the same house (component stays in DOM)
+
+PHASE 3: UNMOUNTING
+-------------------
+DEFINITION
+----------
+Unmounting is when the component is removed from the document object model 
+or DOM.
+
+DETAILED EXPLANATION
+--------------------
+Unmounting is the final phase of a component's lifecycle. This happens when 
+a component is no longer needed and React removes it from the DOM. This is 
+the "death" of your component - it's being removed and cleaned up.
+
+WHAT HAPPENS DURING UNMOUNTING
+-------------------------------
+• Component is marked for removal
+• Cleanup operations are performed
+• Component is removed from the DOM tree
+• Component instance is destroyed
+• Memory is freed
+
+REAL-WORLD ANALOGY
+------------------
+Think of unmounting like moving out of a house:
+• You decide to leave (component will be removed)
+• You clean up and pack (cleanup operations)
+• You move out (component removed from DOM)
+• The house is empty (component destroyed)
+
+================================================================================
+PART 2: MOUNTING PHASE - DETAILED EXPLORATION
+================================================================================
+
+SECTION 2.1: MOUNTING PHASE OVERVIEW
+-------------------------------------
+
+In mounting, four methods are called in this order.
+
+THE FOUR METHODS IN ORDER
+--------------------------
+1. constructor - Constructs the object
+2. getDerivedStateFromProps - Used when state depends on props changes
+3. render - Makes the component appear
+4. componentDidMount - Invoked after component is mounted
+
+These methods execute in this exact sequence, and React ensures they're 
+called automatically when a component is being mounted.
+
+================================================================================
+
+SECTION 2.2: THE CONSTRUCTOR METHOD
+------------------------------------
+
+DEFINITION
+----------
+The constructor method constructs the object. This may call the superconstructor 
+with the props object if any specific props are being set.
+
+DETAILED EXPLANATION
+--------------------
+The constructor is the first method called when a component is being created. 
+It's where you initialize the component's state and bind methods. The 
+constructor receives props as a parameter and can pass them to the parent 
+class using super(props).
+
+WHAT THE CONSTRUCTOR DOES
+-------------------------
+• Initializes the component instance
+• Sets up initial state
+• Binds event handler methods (if needed)
+• Calls super(props) to initialize the parent React.Component class
+
+WHEN TO CALL super(props)
+-------------------------
+You should call super(props) when:
+• You need to access this.props in the constructor
+• You're setting up props-based initial state
+• Following React best practices
+
+You can call super() without props if you don't need props in the constructor, 
+but it's generally recommended to always call super(props).
+
+CONSTRUCTOR SYNTAX
+------------------
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props); // Call parent constructor with props
+    // Initialize state
+    this.state = {
+      // initial state values
+    };
+    // Bind methods if needed
+    this.handleClick = this.handleClick.bind(this);
+  }
+}
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+When the component app method is created, the constructor is invoked. The 
+constructor first calls the super and then logs onto the console.
+
+This means:
+1. super(props) is called first - initializes React.Component
+2. Then any custom constructor code runs (like console.log)
+3. Component is ready for the next lifecycle method
+
+EXAMPLE USAGE
+-------------
+class App extends React.Component {
+  constructor(props) {
+    super(props); // Must call super first
+    console.log('Constructor called');
+    this.state = {
+      count: 0
+    };
+  }
+  
+  render() {
+    return <div>Count: {this.state.count}</div>;
+  }
+}
+
+IMPORTANT NOTES
+---------------
+• Constructor is optional if you don't need to initialize state or bind methods
+• If you define a constructor, you must call super(props)
+• Don't call setState in the constructor - use this.state directly
+• Avoid side effects in constructor - use componentDidMount instead
+
+================================================================================
+
+SECTION 2.3: THE getDerivedStateFromProps METHOD
+------------------------------------------------
+
+DEFINITION
+----------
+The getDerivedStateFromProps method is used only when the state depends on 
+the changes to props.
+
+DETAILED EXPLANATION
+--------------------
+getDerivedStateFromProps is a static method that allows you to update a 
+component's state based on incoming props. It's called right before render, 
+both during mounting and updating phases. This method is used when your 
+component's state needs to be synchronized with props.
+
+WHEN IT'S CALLED
+----------------
+• Called before every render (both mount and update)
+• Called during mounting phase (after constructor)
+• Called during updating phase (when props change)
+• Receives nextProps and prevState as parameters
+
+WHAT IT DOES
+------------
+• Receives the next props that will be used
+• Receives the previous state
+• Returns an object to update state, or null for no update
+• Allows state to be derived from props
+
+HOW IT WORKS
+------------
+getDerivedStateFromProps is a static method, meaning:
+• It doesn't have access to `this`
+• It receives props and state as parameters
+• It must return an object (to update state) or null (no update)
+• It's called automatically by React
+
+SYNTAX
+------
+static getDerivedStateFromProps(nextProps, prevState) {
+  // If state should change based on props
+  if (nextProps.value !== prevState.value) {
+    return { value: nextProps.value }; // Update state
+  }
+  return null; // No state update needed
+}
+
+WHEN TO USE IT
+--------------
+Use getDerivedStateFromProps when:
+• Your component's state needs to sync with props
+• You need to reset state when specific props change
+• State is derived from props
+
+WHEN NOT TO USE IT
+------------------
+Avoid using getDerivedStateFromProps for:
+• Computing derived data (use render instead)
+• Side effects (use componentDidUpdate instead)
+• Resetting state on every prop change (consider a key prop instead)
+
+IMPORTANT NOTES
+---------------
+• This method is optional - only use it when state depends on props
+• During mounting, it's called after constructor but before render
+• It's a static method, so no access to `this`
+• Must return an object or null
+
+================================================================================
+
+SECTION 2.4: THE render METHOD
+-------------------------------
+
+DEFINITION
+----------
+The render method is mandatory in a React component. This method makes the 
+component appear. It must return a DOM element, and it can return only one 
+root element which may or may not have many nested child elements.
+
+DETAILED EXPLANATION
+--------------------
+The render method is the most important lifecycle method. It's responsible for 
+describing what the component should look like. During mounting, render is 
+called to create the initial UI representation. Without render, your 
+component won't display anything.
+
+WHAT render DOES
+----------------
+• Returns JSX that describes the component's UI
+• Creates a virtual DOM representation
+• Determines what should be displayed
+• Must be a pure function (no side effects)
+
+RENDER METHOD CHARACTERISTICS
+------------------------------
+• MANDATORY - Every class component must have a render method
+• Must return valid JSX (or null)
+• Should be pure - same input produces same output
+• Should not modify component state directly
+• Should not perform side effects (API calls, subscriptions, etc.)
+• Must return a single root element (or use React Fragment)
+
+THE SINGLE ROOT ELEMENT RULE
+-----------------------------
+The render method must return only one root element, but that root element 
+can have many nested child elements.
+
+VALID EXAMPLES:
+// Single root div with nested children
+return (
+  <div>
+    <h1>Title</h1>
+    <p>Content</p>
+    <button>Click</button>
+  </div>
+);
+
+// Using React Fragment (also valid)
+return (
+  <>
+    <h1>Title</h1>
+    <p>Content</p>
+  </>
+);
+
+INVALID EXAMPLE:
+// Multiple root elements - NOT ALLOWED
+return (
+  <h1>Title</h1>
+  <p>Content</p>
+);
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+Then the render method is invoked. This method logs onto the console and then 
+renders the component.
+
+This means:
+1. render() is called
+2. Any console.log statements execute
+3. JSX is returned and rendered to the DOM
+4. Component becomes visible
+
+EXAMPLE USAGE
+-------------
+class App extends React.Component {
+  render() {
+    console.log('Render method called');
+    return (
+      <div>
+        <h1>Hello World</h1>
+        <p>This component is now visible</p>
+      </div>
+    );
+  }
+}
+
+IMPORTANT NOTES
+---------------
+• render is mandatory - you cannot have a component without it
+• render is called during both mounting and updating phases
+• Keep render pure - no side effects, no state modifications
+• Return a single root element (or Fragment)
+
+================================================================================
+
+SECTION 2.5: THE componentDidMount METHOD
+------------------------------------------
+
+DEFINITION
+----------
+The componentDidMount method is invoked immediately after a component is 
+mounted or inserted into the DOM tree.
+
+DETAILED EXPLANATION
+--------------------
+componentDidMount is called once, immediately after React has rendered your 
+component for the first time and added it to the DOM. This is one of the 
+most commonly used lifecycle methods because it's the perfect place to perform 
+operations that require the component to be in the DOM.
+
+WHEN IT'S CALLED
+----------------
+• Called once during the component's lifetime
+• Called after the first render completes
+• Called after the component is added to the DOM
+• Called on the client side only (not during server-side rendering)
+
+WHAT YOU CAN DO IN componentDidMount
+-------------------------------------
+This method is perfect for:
+• Fetching data from an API
+• Setting up subscriptions (WebSocket, event listeners, etc.)
+• Starting timers or intervals
+• Accessing DOM elements directly
+• Integrating with third-party libraries
+• Calling setState (which will trigger a re-render)
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+Lastly, the componentDidMount method is invoked. You can see this in the 
+order of the console logs in the page rendered.
+
+This means:
+1. Constructor runs (logs to console)
+2. Render runs (logs to console, renders component)
+3. Component is added to DOM
+4. componentDidMount runs (logs to console)
+
+The console logs will show the order: Constructor → Render → componentDidMount
+
+EXAMPLE USAGE
+-------------
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log('1. Constructor');
+    this.state = { data: null };
+  }
+  
+  componentDidMount() {
+    console.log('3. componentDidMount');
+    // Component is now in the DOM, safe to fetch data
+    fetch('/api/data')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ data: data });
+      });
+  }
+  
+  render() {
+    console.log('2. Render');
+    return <div>Component mounted!</div>;
+  }
+}
+
+// Console output order:
+// 1. Constructor
+// 2. Render
+// 3. componentDidMount
+
+REAL-WORLD ANALOGY
+------------------
+Think of componentDidMount like the moment after you've moved into a new house:
+• You've signed the lease (constructor)
+• You've moved your furniture in (render)
+• You're officially living there (component in DOM)
+• Now you can set up internet, hang pictures, unpack (componentDidMount)
+
+================================================================================
+PART 3: UPDATING PHASE - DETAILED EXPLORATION
+================================================================================
+
+SECTION 3.1: UPDATING PHASE OVERVIEW
+-------------------------------------
+
+In updating, five methods are called in this order.
+
+THE FIVE METHODS IN ORDER
+--------------------------
+1. getDerivedStateFromProps - Used when state depends on props changes
+2. shouldComponentUpdate - Checks if component should update
+3. render - Updates the component
+4. getSnapshotBeforeUpdate - Captures information before DOM updates
+5. componentDidUpdate - Invoked after updating occurs
+
+These methods execute in this exact sequence whenever a component needs to 
+update due to prop or state changes.
+
+================================================================================
+
+SECTION 3.2: getDerivedStateFromProps IN UPDATING PHASE
+-------------------------------------------------------
+
+DEFINITION
+----------
+The getDerivedStateFromProps method is used only when the state depends on 
+the changes to props.
+
+DETAILED EXPLANATION
+--------------------
+During the updating phase, getDerivedStateFromProps is called again (it was 
+also called during mounting). This allows you to update state based on new 
+props that the component receives. The method works the same way as in the 
+mounting phase.
+
+WHEN IT'S CALLED DURING UPDATING
+---------------------------------
+• Called before render during updating
+• Called when props change
+• Called when parent component re-renders
+• Receives the new props and current state
+
+PURPOSE IN UPDATING PHASE
+-------------------------
+• Sync state with new props
+• Update state when specific props change
+• Reset state based on prop changes
+
+This is the same method used in mounting, but now it's being called again 
+because the component is updating, not mounting.
+
+================================================================================
+
+SECTION 3.3: THE shouldComponentUpdate METHOD
+----------------------------------------------
+
+DEFINITION
+----------
+The shouldComponentUpdate method by default returns true. Every time there is 
+a change in state, this method is called to check if the component should 
+update. It is not called during the initial creation of the component. Make 
+this method return false only if you don't want to render the changes in 
+state.
+
+DETAILED EXPLANATION
+--------------------
+shouldComponentUpdate is a performance optimization method. It allows you to 
+control whether a component should re-render when props or state change. By 
+default, React re-renders components whenever props or state change, but 
+sometimes you might want to prevent unnecessary re-renders.
+
+WHEN IT'S CALLED
+----------------
+• Called before every update (not during mounting)
+• Called when props change
+• Called when state changes
+• Called when parent component re-renders
+• NOT called during initial component creation
+
+WHAT IT DOES
+------------
+• Receives nextProps and nextState as parameters
+• Returns true (component should update) or false (skip update)
+• By default, returns true
+• Allows you to prevent unnecessary re-renders
+
+HOW IT WORKS
+------------
+shouldComponentUpdate(nextProps, nextState) {
+  // Compare current props/state with next props/state
+  // Return true to update, false to skip
+  return true; // or false
+}
+
+DEFAULT BEHAVIOR
+----------------
+The shouldComponentUpdate method returns true by default. This means:
+• Component will re-render on every prop/state change
+• React assumes all changes are important
+• This is the safe default behavior
+
+WHEN TO RETURN false
+--------------------
+Make this method return false only if you don't want to render the changes in 
+state.
+
+Return false when:
+• You know the changes don't affect the UI
+• You want to prevent unnecessary re-renders for performance
+• The component's display won't change even with new props/state
+
+EXAMPLE: PREVENTING UNNECESSARY RENDERS
+----------------------------------------
+class MyComponent extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    // Only update if the count actually changed
+    if (this.props.count === nextProps.count) {
+      return false; // Don't re-render
+    }
+    return true; // Re-render
+  }
+  
+  render() {
+    return <div>Count: {this.props.count}</div>;
+  }
+}
+
+RARELY OVERRIDDEN
+----------------
+The shouldComponentUpdate method is rarely overridden. That is, its behavior 
+is rarely changed. It usually inherits from the super-class and returns true.
+
+WHY IT'S RARELY OVERRIDDEN
+--------------------------
+• Default behavior (return true) is usually correct
+• Premature optimization can cause bugs
+• React's diffing algorithm is already efficient
+• Modern React uses React.memo and PureComponent for optimization
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+When the state of the component app is changed, it is updated. Consider an 
+app component with a click counter maintained as the state. With the on click 
+of the button, increment counter is invoked, increasing the counter state by 
+one. Every time the state changes, the component is re-rendered, but this can 
+be controlled. The shouldComponentUpdate method returns true by default.
+
+This means:
+1. User clicks button
+2. State changes (counter increases)
+3. shouldComponentUpdate is called
+4. Returns true (default behavior)
+5. Component re-renders with new counter value
+
+EXAMPLE USAGE
+-------------
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+  
+  incrementCounter = () => {
+    this.setState({ count: this.state.count + 1 });
+  }
+  
+  shouldComponentUpdate(nextProps, nextState) {
+    // Default behavior - return true
+    // Component will re-render when state changes
+    return true;
+  }
+  
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.incrementCounter}>Increment</button>
+      </div>
+    );
+  }
+}
+
+IMPORTANT NOTES
+---------------
+• shouldComponentUpdate is not called during mounting
+• Default return value is true
+• Rarely needs to be overridden
+• Use for performance optimization when needed
+• Be careful - returning false incorrectly can cause bugs
+
+================================================================================
+
+SECTION 3.4: THE render METHOD IN UPDATING PHASE
+--------------------------------------------------
+
+DEFINITION
+----------
+The render method is the same render method used in mounting, but here updates 
+the component.
+
+DETAILED EXPLANATION
+--------------------
+During the updating phase, the render method is called again. It's the same 
+method used during mounting, but now it's creating an updated virtual DOM 
+representation based on the new props or state. React will then compare this 
+new representation with the previous one to determine what needs to be updated 
+in the actual DOM.
+
+WHAT HAPPENS DURING UPDATE RENDER
+----------------------------------
+1. Component receives new props or state changes
+2. render() is called with the new data
+3. New virtual DOM tree is created
+4. React compares new virtual DOM with previous one (diffing)
+5. Only changed parts are updated in the real DOM
+
+RENDER DURING UPDATING VS MOUNTING
+-----------------------------------
+• MOUNTING: Creates initial virtual DOM tree
+• UPDATING: Creates updated virtual DOM tree and compares with previous
+
+Both use the same render method, but the context is different.
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+The render method logs onto the console and then renders the component.
+
+This means:
+1. render() is called during update
+2. Console.log executes
+3. Component re-renders with new data
+4. DOM is updated to reflect changes
+
+EXAMPLE USAGE
+-------------
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+  
+  incrementCounter = () => {
+    this.setState({ count: this.state.count + 1 });
+  }
+  
+  render() {
+    console.log('Render called - Count:', this.state.count);
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.incrementCounter}>Increment</button>
+      </div>
+    );
+  }
+}
+
+// When button is clicked:
+// 1. State changes
+// 2. shouldComponentUpdate returns true
+// 3. Render is called (logs to console)
+// 4. Component updates in DOM
+
+================================================================================
+
+SECTION 3.5: THE getSnapshotBeforeUpdate METHOD
+------------------------------------------------
+
+DEFINITION
+----------
+The getSnapshotBeforeUpdate method is invoked just before the changes are 
+rendered. It helps keep track of what has changed. Any value returned by this 
+lifecycle will be passed as a parameter to the componentDidUpdate method.
+
+DETAILED EXPLANATION
+--------------------
+getSnapshotBeforeUpdate is called right before the most recently rendered 
+output is committed to the DOM. It allows you to capture some information 
+from the DOM (like scroll position) before it potentially changes. This 
+snapshot can then be used in componentDidUpdate to restore or use that 
+information.
+
+WHEN IT'S CALLED
+----------------
+• Called right before DOM updates are applied
+• Called after render but before componentDidUpdate
+• Called with previous props and previous state
+• Must return a value (or null) that gets passed to componentDidUpdate
+
+WHAT IT DOES
+------------
+• Captures information from the DOM before it changes
+• Receives previous props and previous state
+• Returns a snapshot value (or null)
+• The returned value is passed to componentDidUpdate as the third parameter
+
+HOW IT WORKS
+------------
+The method signature is:
+getSnapshotBeforeUpdate(prevProps, prevState) {
+  // Capture information here
+  return snapshotValue; // or null
+}
+
+The returned snapshot is then available in componentDidUpdate as the third 
+parameter.
+
+COMMON USE CASES
+----------------
+1. Preserving Scroll Position:
+   getSnapshotBeforeUpdate(prevProps, prevState) {
+     if (prevProps.list.length < this.props.list.length) {
+       const list = this.listRef.current;
+       return list.scrollHeight - list.scrollTop;
+     }
+     return null;
+   }
+
+2. Capturing DOM Measurements:
+   getSnapshotBeforeUpdate(prevProps, prevState) {
+     return this.chatRef.current.scrollHeight;
+   }
+
+WHEN TO USE IT
+--------------
+Use getSnapshotBeforeUpdate when:
+• You need to preserve scroll position in a chat or feed
+• You need to capture DOM measurements before updates
+• You need to save UI state that might be lost during updates
+
+IMPORTANT NOTES
+---------------
+• This method is rarely needed
+• Most components don't need to use it
+• It's useful for specific UI preservation scenarios
+• Must return a value (even if null)
+• The returned value is passed to componentDidUpdate
+
+================================================================================
+
+SECTION 3.6: THE componentDidUpdate METHOD
+-------------------------------------------
+
+DEFINITION
+----------
+componentDidUpdate is invoked immediately after updating occurs.
+
+DETAILED EXPLANATION
+--------------------
+componentDidUpdate is called immediately after updating occurs. This method 
+is not called for the initial render (that's what componentDidMount is for). 
+It's the perfect place to perform side effects after a component has updated.
+
+WHEN IT'S CALLED
+----------------
+• Called after every update (not the initial render)
+• Called after the DOM has been updated
+• Called with previous props, previous state, and snapshot (if 
+  getSnapshotBeforeUpdate returned a value)
+• Can be called multiple times during a component's lifetime
+
+WHAT YOU CAN DO IN componentDidUpdate
+--------------------------------------
+This method allows you to:
+• Send network requests based on prop/state changes
+• Update the DOM directly (though React recommends avoiding this)
+• Integrate with third-party libraries that need DOM updates
+• Use the snapshot from getSnapshotBeforeUpdate
+• Call setState (but must be wrapped in a condition to avoid infinite loops)
+
+SYNTAX
+------
+componentDidUpdate(prevProps, prevState, snapshot) {
+  // prevProps - previous props before update
+  // prevState - previous state before update
+  // snapshot - value returned from getSnapshotBeforeUpdate
+}
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+Lastly, the componentDidUpdate method is invoked. You can see this in the 
+order of the Console logs in the page rendered.
+
+This means:
+1. State changes (counter increments)
+2. getDerivedStateFromProps (if used)
+3. shouldComponentUpdate returns true
+4. Render is called (logs to console)
+5. getSnapshotBeforeUpdate (if used)
+6. DOM is updated
+7. componentDidUpdate is called (logs to console)
+
+The console logs will show: Render → componentDidUpdate
+
+EXAMPLE USAGE
+-------------
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+  
+  incrementCounter = () => {
+    this.setState({ count: this.state.count + 1 });
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    console.log('componentDidUpdate called');
+    console.log('Previous count:', prevState.count);
+    console.log('Current count:', this.state.count);
+  }
+  
+  render() {
+    console.log('Render called');
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.incrementCounter}>Increment</button>
+      </div>
+    );
+  }
+}
+
+// Console output when button is clicked:
+// Render called
+// componentDidUpdate called
+// Previous count: 0
+// Current count: 1
+
+IMPORTANT WARNING ABOUT setState
+---------------------------------
+⚠️ CRITICAL: You can call setState in componentDidUpdate, but you MUST wrap 
+it in a condition. Otherwise, you'll create an infinite loop:
+
+// ❌ WRONG - Creates infinite loop
+componentDidUpdate() {
+  this.setState({ count: this.state.count + 1 });
+}
+
+// ✅ CORRECT - Only updates if needed
+componentDidUpdate(prevProps, prevState) {
+  if (this.props.userId !== prevProps.userId) {
+    this.setState({ loading: true });
+    fetchUserData(this.props.userId);
+  }
+}
+
+REAL-WORLD ANALOGY
+------------------
+Think of componentDidUpdate like checking your mailbox after you've received 
+a package:
+• You've received a package (component updated)
+• You check what arrived (componentDidUpdate)
+• You can now use or process what you received (perform side effects)
+
+================================================================================
+PART 4: UNMOUNTING PHASE - DETAILED EXPLORATION
+================================================================================
+
+SECTION 4.1: UNMOUNTING PHASE OVERVIEW
+----------------------------------------
+
+When a component is unmounted or removed from the DOM tree, the 
+componentWillUnmount method is called.
+
+THE UNMOUNTING METHOD
+---------------------
+The unmounting phase has only one lifecycle method:
+• componentWillUnmount - Called before component is removed
+
+This is the final phase of a component's lifecycle, and it's crucial for 
+proper cleanup.
+
+================================================================================
+
+SECTION 4.2: THE componentWillUnmount METHOD
+---------------------------------------------
+
+DEFINITION
+----------
+When a component is unmounted or removed from the DOM tree, the 
+componentWillUnmount method is called.
+
+DETAILED EXPLANATION
+--------------------
+componentWillUnmount is called immediately before a component is unmounted 
+and destroyed. This is your last chance to perform any necessary cleanup 
+operations. After this method completes, the component will be removed from 
+the DOM and its instance will be destroyed.
+
+WHEN IT'S CALLED
+----------------
+• Called once, just before the component is removed from the DOM
+• Called before the component instance is destroyed
+• Called when parent component stops rendering this component
+• Called when navigating away from a component
+• Called when a conditional render makes the component disappear
+
+WHAT YOU MUST DO IN componentWillUnmount
+-----------------------------------------
+This method should perform necessary cleanup such as:
+• Canceling network requests
+• Removing event listeners
+• Clearing timers (clearInterval, clearTimeout)
+• Cleaning up subscriptions (WebSocket connections, etc.)
+• Removing DOM references
+• Canceling any pending promises
+
+WHAT HAPPENS IN THE EXAMPLE
+---------------------------
+In this example, you have two components, AppInner and app. AppInner is 
+rendered inside app with a state. ComponentDidMount of the app components 
+mounting phase is handled and a timer for five seconds is started. After five 
+seconds, a callback is invoked, changing the state of the inner component to 
+a div element instead of the AppInner component, which removes or unmounts 
+the component. Then componentWillUnmount of AppInner is called. You can see 
+this in the order of the console logs in the page rendered.
+
+This means:
+1. App component mounts
+2. AppInner component mounts (inside App)
+3. componentDidMount of App starts a 5-second timer
+4. After 5 seconds, App's state changes
+5. AppInner is replaced with a div (unmounted)
+6. componentWillUnmount of AppInner is called
+7. Console logs show the unmounting
+
+EXAMPLE USAGE
+-------------
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { showInner: true };
+  }
+  
+  componentDidMount() {
+    // Start a timer for 5 seconds
+    setTimeout(() => {
+      // After 5 seconds, change state to remove AppInner
+      this.setState({ showInner: false });
+    }, 5000);
+  }
+  
+  render() {
+    return (
+      <div>
+        {this.state.showInner ? <AppInner /> : <div>AppInner removed</div>}
+      </div>
+    );
+  }
+}
+
+class AppInner extends React.Component {
+  componentDidMount() {
+    console.log('AppInner mounted');
+  }
+  
+  componentWillUnmount() {
+    console.log('AppInner will unmount');
+    // Perform cleanup here
+  }
+  
+  render() {
+    return <div>I am AppInner</div>;
+  }
+}
+
+// Console output:
+// AppInner mounted (when App renders AppInner)
+// ... 5 seconds pass ...
+// AppInner will unmount (when AppInner is removed)
+
+REAL-WORLD ANALOGY
+------------------
+Think of componentWillUnmount like moving out of a house:
+• You're about to leave (component will be unmounted)
+• You need to clean up before you go (componentWillUnmount)
+• Turn off utilities (cancel subscriptions)
+• Return keys (remove event listeners)
+• Cancel services (abort network requests)
+• If you don't clean up, you'll keep paying for things you're not using 
+  (memory leaks)
+
+================================================================================
+PART 5: PASSING DATA BETWEEN COMPONENTS
+================================================================================
+
+SECTION 5.1: OVERVIEW OF DATA PASSING
+--------------------------------------
+
+You can pass data between React components. Consider the relationship between 
+components. Three types of relationships are parent to child using props, 
+child to parent using callbacks, and between siblings using Redux. Redux is 
+not within the scope of this module.
+
+UNDERSTANDING COMPONENT RELATIONSHIPS
+-------------------------------------
+React components form a tree structure, similar to a family tree:
+• Parent components contain child components
+• Child components can have their own children (grandchildren)
+• Sibling components are components at the same level
+
+THREE TYPES OF DATA FLOW
+-------------------------
+1. PARENT TO CHILD - Using props (properties)
+2. CHILD TO PARENT - Using callbacks
+3. SIBLING TO SIBLING - Using Redux (not covered in this module)
+
+Each relationship type requires a different approach to pass data.
+
+================================================================================
+
+SECTION 5.2: PARENT TO CHILD DATA PASSING USING PROPS
+-------------------------------------------------------
+
+DEFINITION
+----------
+Here, you have two classes, AppInner and app. The app component contains the 
+AppInner component. App is the parent and AppInner is the child. App sets the 
+property color and name for AppInner. The data is passed to the child every 
+time a new value is entered in the input boxes in the parent. On the browser, 
+when the component loads, you see the default name John and color green. When 
+the values of color and name are changed in the parent component, they are 
+passed to the child component, which is re-rendered.
+
+DETAILED EXPLANATION
+--------------------
+Passing data from parent to child is the most common and straightforward way 
+to share data in React. The parent component passes data down to its child 
+components using props (properties). Props are read-only in the child 
+component - they cannot be modified by the child.
+
+HOW IT WORKS
+------------
+1. Parent component has data (in state or as variables)
+2. Parent passes data to child as props
+3. Child component receives props
+4. Child component uses props to render or perform logic
+5. When parent's data changes, new props are passed down
+6. Child component re-renders with new props
+
+THE EXAMPLE EXPLAINED
+---------------------
+In the example:
+• App (parent) contains AppInner (child)
+• App has input boxes for name and color
+• App passes name and color as props to AppInner
+• AppInner receives and displays these props
+• When user types in App's inputs, App's state changes
+• New props are passed to AppInner
+• AppInner re-renders with new values
+
+EXAMPLE CODE STRUCTURE
+-----------------------
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: 'John',    // Default name
+      color: 'green'    // Default color
+    };
+  }
+  
+  handleNameChange = (e) => {
+    this.setState({ name: e.target.value });
+  }
+  
+  handleColorChange = (e) => {
+    this.setState({ color: e.target.value });
+  }
+  
+  render() {
+    return (
+      <div>
+        {/* Input boxes in parent */}
+        <input 
+          type="text" 
+          value={this.state.name} 
+          onChange={this.handleNameChange} 
+        />
+        <input 
+          type="text" 
+          value={this.state.color} 
+          onChange={this.handleColorChange} 
+        />
+        
+        {/* Pass data to child as props */}
+        <AppInner 
+          name={this.state.name} 
+          color={this.state.color} 
+        />
+      </div>
+    );
+  }
+}
+
+class AppInner extends React.Component {
+  render() {
+    // Receive props from parent
+    return (
+      <div style={{ color: this.props.color }}>
+        Hello, {this.props.name}!
+      </div>
+    );
+  }
+}
+
+WHAT HAPPENS STEP BY STEP
+-------------------------
+1. Component loads - Default values: name='John', color='green'
+2. App renders with default state
+3. AppInner receives props: name='John', color='green'
+4. AppInner displays: "Hello, John!" in green
+5. User types in name input - App's state changes
+6. App re-renders with new name
+7. AppInner receives new props: name='NewName', color='green'
+8. AppInner re-renders with new name
+9. Same process happens when color changes
+
+KEY POINTS
+----------
+• Data flows DOWN from parent to child
+• Props are passed as attributes in JSX
+• Child receives props via this.props
+• Props are read-only in child component
+• When parent's data changes, child automatically receives new props
+• Child re-renders when props change
+
+REAL-WORLD ANALOGY
+------------------
+Think of parent-to-child props like a parent giving instructions to a child:
+• Parent has information (state)
+• Parent writes instructions on a note (passes props)
+• Child reads the note (receives props)
+• Child follows instructions (uses props to render)
+• If parent updates the note (state changes), child gets new instructions 
+  (new props)
+
+================================================================================
+
+SECTION 5.3: CHILD TO PARENT DATA PASSING USING CALLBACKS
+-----------------------------------------------------------
+
+DEFINITION
+----------
+Here, you will pass data from child to parent. You pass a callback to the 
+child as a property, and then through the callback pass data to the parent. 
+Callback is a normal method, but is called at a later time when a condition 
+is met. In this example, app is the parent component, which contains a child 
+component, AppInner. In the parent, you pass the callback func1 as a property 
+to the child. Func1 is a parent component function which takes a string 
+argument. On componentDidMount of AppInner, you invoke the sendData method. 
+This method invokes setInterval at a one second interval. setInterval takes a 
+callback as a first parameter and a second interval in which the callback 
+should be invoked as the second parameter. In this case, every one second, the 
+current time is obtained and the method set as parentCallback is invoked 
+passing the time. The method set as parentCallback is the parent class method 
+which sets the state of the parent component, thereby re-rendering it. You can 
+see the current time being passed from the child to the parent through 
+callback. The parent is re-rendered every second.
+
+DETAILED EXPLANATION
+--------------------
+Passing data from child to parent requires a different approach because props 
+only flow downward. To send data upward, you pass a callback function from 
+parent to child as a prop. The child then calls this callback function with 
+the data, which executes in the parent's context, allowing the child to 
+update the parent's state.
+
+UNDERSTANDING CALLBACKS
+-----------------------
+Callback is a normal method, but is called at a later time when a condition 
+is met.
+
+A callback is:
+• A function passed as an argument to another function
+• Not executed immediately
+• Executed later when a specific condition is met
+• Used to communicate back to the caller
+
+HOW IT WORKS
+------------
+1. Parent creates a callback function
+2. Parent passes callback to child as a prop
+3. Child receives callback as a prop
+4. Child calls the callback when it needs to send data
+5. Callback executes in parent's context
+6. Parent's state is updated
+7. Parent re-renders
+
+THE EXAMPLE EXPLAINED STEP BY STEP
+-----------------------------------
+In this example:
+• App (parent) contains AppInner (child)
+• App has a function func1 that takes a string argument
+• App passes func1 to AppInner as a prop (parentCallback)
+• AppInner receives parentCallback as a prop
+• When AppInner mounts, it starts setInterval
+• Every second, AppInner gets current time
+• AppInner calls parentCallback with the time
+• parentCallback is actually App's func1
+• func1 executes in App's context, updating App's state
+• App re-renders with new time
+
+EXAMPLE CODE STRUCTURE
+-----------------------
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentTime: ''  // Will store time from child
+    };
+  }
+  
+  // This is the callback function (func1)
+  func1 = (timeString) => {
+    // This function receives data from child
+    // It updates parent's state
+    this.setState({ currentTime: timeString });
+  }
+  
+  render() {
+    return (
+      <div>
+        <p>Time from child: {this.state.currentTime}</p>
+        {/* Pass callback to child as prop */}
+        <AppInner parentCallback={this.func1} />
+      </div>
+    );
+  }
+}
+
+class AppInner extends React.Component {
+  componentDidMount() {
+    // Start sending data to parent
+    this.sendData();
+  }
+  
+  sendData = () => {
+    // setInterval takes a callback and an interval
+    // First parameter: callback function to execute
+    // Second parameter: interval in milliseconds (1000 = 1 second)
+    setInterval(() => {
+      // Get current time
+      const currentTime = new Date().toLocaleTimeString();
+      
+      // Call the parent's callback function
+      // parentCallback is the prop name, func1 is the actual function
+      this.props.parentCallback(currentTime);
+      
+      // This calls App's func1 with currentTime
+      // func1 then updates App's state
+      // App re-renders with new time
+    }, 1000); // Execute every 1000 milliseconds (1 second)
+  }
+  
+  render() {
+    return <div>I am AppInner, sending time to parent</div>;
+  }
+}
+
+UNDERSTANDING setInterval
+-------------------------
+setInterval takes a callback as a first parameter and a second interval in 
+which the callback should be invoked as the second parameter.
+
+setInterval syntax:
+setInterval(callbackFunction, intervalInMilliseconds)
+
+• First parameter: The function to execute repeatedly
+• Second parameter: How often to execute (in milliseconds)
+• Returns: An interval ID (useful for clearing the interval)
+
+In this case, every one second, the current time is obtained and the method 
+set as parentCallback is invoked passing the time.
+
+WHAT HAPPENS EVERY SECOND
+--------------------------
+1. setInterval callback executes
+2. Current time is obtained: new Date().toLocaleTimeString()
+3. parentCallback is called with the time
+4. parentCallback is actually App's func1
+5. func1 executes, updating App's state
+6. App re-renders with new time
+7. Process repeats every second
+
+THE DATA FLOW
+-------------
+Child (AppInner) → Calls callback → Parent (App) → Updates state → Re-renders
+
+You can see the current time being passed from the child to the parent through 
+callback. The parent is re-rendered every second.
+
+KEY POINTS
+----------
+• Data flows UP from child to parent using callbacks
+• Parent passes a function to child as a prop
+• Child calls the function when it needs to send data
+• Callback executes in parent's context
+• Parent's state is updated, causing re-render
+• This is how child components can communicate with parents
+
+REAL-WORLD ANALOGY
+------------------
+Think of child-to-parent callbacks like a child calling home:
+• Parent gives child a phone number (passes callback as prop)
+• Child calls the number when something happens (calls callback)
+• Parent answers and receives information (callback executes)
+• Parent updates their records (state updates)
+• Parent takes action based on the call (re-renders)
+
+ANOTHER ANALOGY
+---------------
+Think of it like a restaurant order system:
+• Customer (parent) gives waiter (child) their order number (callback)
+• Waiter takes order and calls the number when food is ready (child calls 
+  callback with data)
+• Customer receives notification (callback executes in parent)
+• Customer updates their status (parent state updates)
+
+IMPORTANT NOTES
+---------------
+• Callbacks must be passed as props
+• Child cannot directly modify parent's state
+• Child calls the callback, parent handles the update
+• This is the standard React pattern for child-to-parent communication
+• Always clean up setInterval in componentWillUnmount
+
+CLEANUP REMINDER
+----------------
+Remember to clean up setInterval in componentWillUnmount:
+
+componentWillUnmount() {
+  clearInterval(this.intervalId);
+}
+
+================================================================================
+
+SECTION 5.4: SIBLING TO SIBLING DATA PASSING
+----------------------------------------------
+
+DEFINITION
+----------
+Three types of relationships are parent to child using props, child to parent 
+using callbacks, and between siblings using Redux. Redux is not within the 
+scope of this module.
+
+DETAILED EXPLANATION
+--------------------
+Sibling components are components that are at the same level in the component 
+tree - they share the same parent but are not parent-child to each other. 
+Passing data directly between siblings is not straightforward in React because 
+data flows in one direction (downward via props).
+
+HOW SIBLING COMMUNICATION WORKS
+--------------------------------
+Since React has one-way data flow, sibling communication typically requires:
+1. Lifting state up to a common parent
+2. Parent passes data to both siblings as props
+3. Siblings can communicate through the parent using callbacks
+
+ALTERNATIVE: REDUX
+------------------
+Redux is a state management library that allows components to share state 
+without prop drilling. However, Redux is not within the scope of this module.
+
+BASIC PATTERN FOR SIBLINGS (Without Redux)
+------------------------------------------
+If you need siblings to communicate:
+
+1. Lift shared state to common parent
+2. Parent manages the state
+3. Parent passes data to both siblings as props
+4. Siblings can update parent's state via callbacks
+5. Parent re-renders, passing new data to both siblings
+
+EXAMPLE STRUCTURE
+-----------------
+class Parent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { sharedData: '' };
+  }
+  
+  updateSharedData = (data) => {
+    this.setState({ sharedData: data });
+  }
+  
+  render() {
+    return (
+      <div>
+        <Sibling1 
+          data={this.state.sharedData} 
+          onUpdate={this.updateSharedData} 
+        />
+        <Sibling2 
+          data={this.state.sharedData} 
+          onUpdate={this.updateSharedData} 
+        />
+      </div>
+    );
+  }
+}
+
+// Sibling1 can update sharedData via onUpdate callback
+// Parent re-renders and passes new data to both Sibling1 and Sibling2
+// This way siblings communicate through the parent
+
+IMPORTANT NOTE
+--------------
+Redux is not within the scope of this module, so we focus on:
+• Parent to child (props)
+• Child to parent (callbacks)
+• Sibling communication through parent (lifting state up)
+
+================================================================================
+PART 6: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 6.1: LIFECYCLE SUMMARY
+-------------------------------
+
+In this guide, you learned that each React component has three phases in its 
+lifecycle, mounting, updating, and unmounting. When a component is created or 
+updated, methods are called in the same order.
+
+THE THREE PHASES
+----------------
+1. MOUNTING - Component is first created
+2. UPDATING - Component is rendered on a change of state or properties, props
+3. UNMOUNTING - Component is removed from the document object model or DOM
+
+METHODS CALLED IN ORDER - MOUNTING
+-----------------------------------
+In mounting, four methods are called in this order:
+1. constructor - Constructs the object, may call superconstructor with props
+2. getDerivedStateFromProps - Used when state depends on props changes
+3. render - Makes the component appear (mandatory)
+4. componentDidMount - Invoked after component is mounted
+
+METHODS CALLED IN ORDER - UPDATING
+------------------------------------
+In updating, five methods are called in this order:
+1. getDerivedStateFromProps - Used when state depends on props changes
+2. shouldComponentUpdate - Returns true by default, checks if component should 
+   update
+3. render - Updates the component
+4. getSnapshotBeforeUpdate - Invoked just before changes are rendered
+5. componentDidUpdate - Invoked immediately after updating occurs
+
+METHODS CALLED IN ORDER - UNMOUNTING
+---------------------------------------
+When a component is unmounted or removed from the DOM tree, the 
+componentWillUnmount method is called.
+
+================================================================================
+
+SECTION 6.2: DATA PASSING SUMMARY
+-----------------------------------
+
+You can pass data between components from parent to child using properties, 
+from child to parent using callbacks, and between siblings.
+
+THREE TYPES OF DATA FLOW
+-------------------------
+1. PARENT TO CHILD - Using properties (props)
+   • Parent passes data to child as props
+   • Data flows downward
+   • Child receives props via this.props
+   • When parent's data changes, child receives new props and re-renders
+
+2. CHILD TO PARENT - Using callbacks
+   • Parent passes a callback function to child as a prop
+   • Child calls the callback when it needs to send data
+   • Callback executes in parent's context
+   • Parent's state is updated, causing re-render
+
+3. SIBLING TO SIBLING - Using Redux (not covered in this module)
+   • Siblings can communicate through common parent
+   • Or use state management libraries like Redux
+   • Redux is not within the scope of this module
+
+KEY CONCEPTS
+------------
+• Props flow downward (parent to child)
+• Callbacks flow upward (child to parent)
+• Callbacks are functions passed as props
+• Callbacks are called at a later time when a condition is met
+• Data changes trigger re-renders
+
+================================================================================
+
+SECTION 6.3: KEY POINTS TO REMEMBER
+-------------------------------------
+
+LIFECYCLE METHODS
+-----------------
+• Methods are called automatically by React
+• Methods are called in a specific order
+• Order is consistent for mounting and updating
+• Each phase has specific methods
+• render is mandatory and called in both mount and update
+
+CONSTRUCTOR
+-----------
+• First method called during mounting
+• Must call super(props) if accessing props
+• Used to initialize state
+• Used to bind methods
+
+getDerivedStateFromProps
+-------------------------
+• Used only when state depends on props
+• Called in both mounting and updating
+• Static method (no access to `this`)
+• Must return object or null
+
+RENDER
+------
+• Mandatory in every React component
+• Makes component appear
+• Must return single root element (or Fragment)
+• Called in both mounting and updating
+• Should be pure (no side effects)
+
+componentDidMount
+-----------------
+• Called after component is mounted
+• Component is now in the DOM
+• Perfect for side effects (API calls, subscriptions)
+• Called only once
+
+shouldComponentUpdate
+---------------------
+• Returns true by default
+• Called before every update (not during mounting)
+• Used to prevent unnecessary re-renders
+• Rarely overridden
+
+componentDidUpdate
+------------------
+• Called after every update
+• Receives previous props, previous state, and snapshot
+• Perfect for side effects after updates
+• Can call setState (must be conditional)
+
+componentWillUnmount
+--------------------
+• Called before component is removed
+• Last chance for cleanup
+• Must clean up timers, listeners, subscriptions
+• Prevents memory leaks
+
+DATA PASSING
+------------
+• Props flow downward (parent to child)
+• Callbacks flow upward (child to parent)
+• Callbacks are functions passed as props
+• Child calls callback to send data to parent
+• Parent's state updates, causing re-render
+
+================================================================================
+
+SECTION 6.4: STUDY TIPS
+-------------------------
+
+1. UNDERSTAND THE FLOW
+   • Memorize the order of lifecycle methods
+   • Understand when each phase occurs
+   • Practice tracing through a component's lifecycle
+   • Use console.log to see method execution order
+
+2. FOCUS ON COMMON METHODS
+   • constructor - Initialize component
+   • render - Describe UI (mandatory)
+   • componentDidMount - Side effects after mount
+   • componentDidUpdate - Side effects after update
+   • componentWillUnmount - Cleanup before removal
+
+3. UNDERSTAND DATA FLOW
+   • Props flow DOWN (parent → child)
+   • Callbacks flow UP (child → parent)
+   • Always trace data flow direction
+   • Remember: child cannot directly modify parent state
+
+4. PRACTICE WITH EXAMPLES
+   • Build components that use lifecycle methods
+   • Practice passing props from parent to child
+   • Practice using callbacks to pass data upward
+   • Use console.log to see when methods are called
+
+5. REMEMBER CLEANUP
+   • Always clean up in componentWillUnmount
+   • Clear intervals and timeouts
+   • Remove event listeners
+   • Cancel network requests
+
+6. UNDERSTAND CALLBACKS
+   • Callbacks are functions passed as props
+   • Child calls callback to communicate with parent
+   • Callback executes in parent's context
+   • This is how child updates parent's state
+
+7. AVOID COMMON MISTAKES
+   • Don't forget to call super(props) in constructor
+   • Don't perform side effects in render
+   • Don't forget cleanup in componentWillUnmount
+   • Don't call setState unconditionally in componentDidUpdate
+
+================================================================================
+
+SECTION 6.5: COMMON QUESTIONS ANSWERED
+----------------------------------------
+
+Q: What are the three phases of component lifecycle?
+A: Mounting (component is first created), updating (component is rendered on 
+   a change of state or properties), and unmounting (component is removed 
+   from the DOM).
+
+Q: What methods are called during mounting?
+A: In mounting, four methods are called in this order: constructor, 
+   getDerivedStateFromProps, render, and componentDidMount.
+
+Q: What methods are called during updating?
+A: In updating, five methods are called in this order: getDerivedStateFromProps, 
+   shouldComponentUpdate, render, getSnapshotBeforeUpdate, and componentDidUpdate.
+
+Q: What method is called during unmounting?
+A: When a component is unmounted, the componentWillUnmount method is called.
+
+Q: Is render mandatory?
+A: Yes, the render method is mandatory in a React component. This method 
+   makes the component appear.
+
+Q: What does render return?
+A: The render method must return a DOM element, and it can return only one 
+   root element which may or may not have many nested child elements.
+
+Q: How do you pass data from parent to child?
+A: You pass data from parent to child using properties (props). The parent 
+   sets properties on the child component, and the child receives them via 
+   this.props.
+
+Q: How do you pass data from child to parent?
+A: You pass a callback to the child as a property, and then through the 
+   callback pass data to the parent. The child calls the callback function 
+   when it needs to send data.
+
+Q: What is a callback?
+A: Callback is a normal method, but is called at a later time when a 
+   condition is met. It's a function passed as an argument that executes 
+   later.
+
+Q: How do siblings communicate?
+A: Siblings can communicate through their common parent (lifting state up) or 
+   using state management libraries like Redux. Redux is not within the scope 
+   of this module.
+
+Q: What does shouldComponentUpdate do?
+A: The shouldComponentUpdate method by default returns true. Every time there 
+   is a change in state, this method is called to check if the component 
+   should update. Make this method return false only if you don't want to 
+   render the changes in state.
+
+Q: When is shouldComponentUpdate called?
+A: It is not called during the initial creation of the component. It's called 
+   before every update to check if the component should re-render.
+
+================================================================================
+
+FINAL NOTES
+-----------
+This study guide has expanded on the original content while maintaining all 
+original definitions and information exactly as stated. Each concept has been 
+explained in detail to ensure thorough understanding. Understanding component 
+lifecycle and data flow is fundamental to building React applications.
+
+Remember:
+• Lifecycle methods are called automatically by React in a specific order
+• Data flows downward via props and upward via callbacks
+• Always clean up resources in componentWillUnmount
+• Use console.log to understand method execution order
+• Practice building components that use lifecycle methods and data passing
+
+Good luck with your React learning journey!
+
+================================================================================
+END OF STUDY GUIDE
+================================================================================
