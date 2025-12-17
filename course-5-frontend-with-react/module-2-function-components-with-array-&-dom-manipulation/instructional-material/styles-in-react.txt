@@ -1,0 +1,1644 @@
+================================================================================
+STYLES IN REACT
+Comprehensive Study Guide
+================================================================================
+
+WELCOME
+-------
+Welcome to Styles in React. This comprehensive guide will teach you everything 
+you need to know about styling React components.
+
+ESTIMATED TIME NEEDED
+---------------------
+3 minutes (for basic reading)
+30-60 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Explore various styles in React
+• Understand inline styles and how to use them
+• Master CSS modules and their benefits
+• Apply JavaScript object-based styling with conditional logic
+• Choose the right styling approach for your React components
+
+OVERVIEW
+--------
+Styling in React can be done in various ways, including inline styles, CSS 
+modules, styled components, and more. Each approach has its own advantages and 
+use cases. Understanding these different methods will help you write better, 
+more maintainable React applications.
+
+================================================================================
+PART 1: INLINE STYLES IN REACT
+================================================================================
+
+SECTION 1.1: WHAT ARE INLINE STYLES?
+-------------------------------------
+
+DEFINITION
+----------
+Inline styles are CSS styles applied directly to HTML elements using the style 
+attribute. In React, inline styles are written as JavaScript objects rather than 
+as CSS strings.
+
+DETAILED EXPLANATION
+--------------------
+In traditional HTML, you might write inline styles like this:
+  <div style="background-color: lightblue; padding: 20px;">
+  
+However, in React, inline styles are written as JavaScript objects. This allows 
+you to:
+• Use JavaScript variables and expressions
+• Apply conditional styling based on state or props
+• Dynamically calculate style values
+• Keep styles close to the component logic
+
+KEY CHARACTERISTICS OF INLINE STYLES IN REACT:
+• Written as JavaScript objects (not strings)
+• CSS property names use camelCase (backgroundColor, not background-color)
+• Property values are strings (even for numbers, you often add 'px')
+• Applied directly to elements using the style attribute
+• Scoped to the specific element (no style conflicts)
+• Cannot use CSS pseudo-classes (:hover, :active, etc.)
+• Cannot use media queries
+• Cannot use CSS animations/keyframes directly
+
+REAL-WORLD ANALOGY
+------------------
+Think of inline styles like writing notes directly on a document. Just like you 
+might write a note directly on a paper (inline), React inline styles are written 
+directly on the element. This is great for quick, specific styling, but if you 
+need to style many elements the same way, it's like writing the same note over 
+and over - not very efficient.
+
+================================================================================
+
+SECTION 1.2: INLINE STYLES SYNTAX AND USAGE
+--------------------------------------------
+
+BASIC EXAMPLE
+-------------
+Let's examine the inline styles example from the original content:
+
+  import React from 'react';
+  function MyComponent() {
+    return (
+      <div style={{ backgroundColor: 'lightblue', padding: '20px', borderRadius: '5px' }}>
+        <p style={{ color: 'white', fontSize: '18px' }}>This is a paragraph with inline styles.</p>
+      </div>
+    );
+  }
+  export default MyComponent;
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: import React from 'react';
+        • This imports the React library, which is required to write React 
+          components
+        • React must be imported (or available) to use JSX syntax
+
+Line 2: function MyComponent() {
+        • This declares a function component named MyComponent
+        • Function components are the modern way to write React components
+        • The function name starts with a capital letter (React convention)
+
+Line 3: return (
+        • The return statement begins the JSX that will be rendered
+        • The opening parenthesis allows JSX to span multiple lines
+
+Line 4: <div style={{ backgroundColor: 'lightblue', padding: '20px', borderRadius: '5px' }}>
+        • This creates a <div> element with inline styles
+        • style={...} is the React way to apply inline styles
+        • The double curly braces {{ }} are important:
+          - Outer {} tells React this is JavaScript/JSX expression
+          - Inner {} is the JavaScript object containing CSS properties
+        • backgroundColor: 'lightblue'
+          - Sets the background color to light blue
+          - Note: camelCase (backgroundColor) not kebab-case (background-color)
+        • padding: '20px'
+          - Adds 20 pixels of padding on all sides
+          - Value must be a string with 'px' unit
+        • borderRadius: '5px'
+          - Rounds the corners by 5 pixels
+          - Creates a subtle rounded rectangle effect
+
+Line 5: <p style={{ color: 'white', fontSize: '18px' }}>This is a paragraph with inline styles.</p>
+        • This creates a <p> (paragraph) element inside the div
+        • style={{ color: 'white', fontSize: '18px' }}
+          - color: 'white' - Sets text color to white
+          - fontSize: '18px' - Sets font size to 18 pixels
+          - Note: fontSize is camelCase (not font-size)
+        • The text "This is a paragraph with inline styles." will be displayed
+
+Line 6: </div>
+        • Closes the opening <div> tag from line 4
+
+Line 7: );
+        • Closes the return statement's opening parenthesis
+
+Line 8: }
+        • Closes the MyComponent function
+
+Line 9: export default MyComponent;
+        • Exports the component so it can be imported and used in other files
+        • default means this is the main export from this file
+
+WHAT THIS CODE DOES
+-------------------
+The above component will render a <div> with a light blue background, padding, 
+and border-radius. Inside the <div>, there's a <p> element with white text 
+color and a font size of 18 pixels, all styled using inline styles.
+
+VISUAL RESULT
+-------------
+When rendered, this component will display:
+┌─────────────────────────────────────┐
+│                                     │ ← 20px padding (light blue background)
+│  This is a paragraph with inline   │ ← White text, 18px font
+│  styles.                            │
+│                                     │
+└─────────────────────────────────────┘
+         ↑ Rounded corners (5px border-radius)
+
+================================================================================
+
+SECTION 1.3: UNDERSTANDING THE DOUBLE CURLY BRACES {{ }}
+--------------------------------------------------------
+
+WHY DOUBLE BRACES?
+------------------
+The double curly braces {{ }} in React inline styles can be confusing at first. 
+Let's break it down:
+
+  style={{ property: 'value' }}
+    ↑      ↑
+    |      └─ This is a JavaScript object
+    └──────── This tells React: "evaluate this JavaScript expression"
+
+STEP-BY-STEP EXPLANATION
+------------------------
+1. The outer curly braces { } tell React: "Hey, I'm writing JavaScript here, 
+   not JSX text"
+
+2. Inside those braces, we write a JavaScript object: { property: 'value' }
+
+3. So style={{ backgroundColor: 'lightblue' }} means:
+   • style= → Set the style attribute
+   • { → Start JavaScript expression
+   • { backgroundColor: 'lightblue' } → This is a JavaScript object
+   • } → End JavaScript expression
+
+ALTERNATIVE WAYS TO WRITE IT
+----------------------------
+You can also write it like this (storing the object in a variable first):
+
+  const divStyle = {
+    backgroundColor: 'lightblue',
+    padding: '20px',
+    borderRadius: '5px'
+  };
+  
+  return (
+    <div style={divStyle}>
+      <p>Content</p>
+    </div>
+  );
+
+Both approaches work the same way!
+
+================================================================================
+
+SECTION 1.4: CSS PROPERTY NAME CONVERSION RULES
+------------------------------------------------
+
+CAMELCASE CONVERSION
+--------------------
+In React inline styles, CSS property names must be converted from kebab-case 
+(hyphenated) to camelCase. Here's why and how:
+
+CSS PROPERTY → REACT PROPERTY
+------------------------------
+• background-color → backgroundColor
+• font-size → fontSize
+• margin-top → marginTop
+• border-radius → borderRadius
+• text-align → textAlign
+• z-index → zIndex
+• flex-direction → flexDirection
+
+THE RULE
+--------
+• Remove all hyphens (-)
+• Capitalize the first letter after each removed hyphen
+• Keep the first letter lowercase (unless it's a vendor prefix)
+
+EXAMPLES
+--------
+  // CSS: background-color: red;
+  style={{ backgroundColor: 'red' }}
+  
+  // CSS: font-size: 16px;
+  style={{ fontSize: '16px' }}
+  
+  // CSS: margin-top: 10px;
+  style={{ marginTop: '10px' }}
+  
+  // CSS: border-top-left-radius: 5px;
+  style={{ borderTopLeftRadius: '5px' }}
+
+SPECIAL CASES
+-------------
+Some properties stay the same:
+• float → float (stays the same)
+• display → display (stays the same)
+• position → position (stays the same)
+
+Vendor prefixes use capital letters:
+• WebkitTransform → WebkitTransform (capital W)
+• MozTransform → MozTransform (capital M)
+
+================================================================================
+
+SECTION 1.5: ADVANTAGES AND DISADVANTAGES OF INLINE STYLES
+-----------------------------------------------------------
+
+ADVANTAGES
+----------
+1. SCOPE ISOLATION
+   • Styles are scoped to the specific element
+   • No risk of style conflicts with other components
+   • No need to worry about CSS specificity
+
+2. DYNAMIC STYLING
+   • Easy to use JavaScript variables and expressions
+   • Can change styles based on state or props
+   • Perfect for conditional styling
+
+3. NO EXTERNAL FILES
+   • Everything is in one place (component file)
+   • No need to import separate CSS files
+   • Easier for small, simple components
+
+4. TYPE SAFETY (with TypeScript)
+   • Can get type checking for style properties
+   • Better IDE autocomplete support
+
+DISADVANTAGES
+-------------
+1. NO PSEUDO-CLASSES
+   • Cannot use :hover, :active, :focus, etc.
+   • Must handle interactions with JavaScript/state
+
+2. NO MEDIA QUERIES
+   • Cannot make responsive designs with inline styles alone
+   • Need to use JavaScript to detect screen size
+
+3. NO ANIMATIONS/KEYFRAMES
+   • Cannot define CSS animations directly
+   • Must use JavaScript libraries or CSS classes
+
+4. PERFORMANCE
+   • Can be slower for many elements (each element has its own style object)
+   • No CSS caching benefits
+
+5. MAINTENANCE
+   • Hard to maintain when styles are repeated
+   • No reusability across components
+   • Makes JSX harder to read with many styles
+
+WHEN TO USE INLINE STYLES
+--------------------------
+Use inline styles when:
+• Styling is dynamic and depends on state/props
+• You have very few, simple styles
+• Styles are unique to a single element
+• You need to calculate styles with JavaScript
+
+Avoid inline styles when:
+• You have many similar elements to style
+• You need hover effects or pseudo-classes
+• You need responsive design (media queries)
+• Styles are shared across multiple components
+
+================================================================================
+
+SECTION 1.6: DYNAMIC INLINE STYLES WITH VARIABLES
+---------------------------------------------------
+
+USING VARIABLES IN INLINE STYLES
+---------------------------------
+You can use JavaScript variables and expressions in inline styles:
+
+EXAMPLE 1: USING VARIABLES
+---------------------------
+  function MyComponent() {
+    const backgroundColor = 'lightblue';
+    const padding = 20;
+    
+    return (
+      <div style={{ 
+        backgroundColor: backgroundColor, 
+        padding: `${padding}px` 
+      }}>
+        Content
+      </div>
+    );
+  }
+
+EXPLANATION
+-----------
+• backgroundColor variable stores the color value
+• padding variable stores the number
+• Template literal `${padding}px` converts number to string with 'px' unit
+• Variables make styles easier to change and reuse
+
+EXAMPLE 2: CONDITIONAL STYLING
+------------------------------
+  function MyComponent({ isActive }) {
+    return (
+      <div style={{
+        backgroundColor: isActive ? 'green' : 'gray',
+        color: isActive ? 'white' : 'black'
+      }}>
+        {isActive ? 'Active' : 'Inactive'}
+      </div>
+    );
+  }
+
+EXPLANATION
+-----------
+• isActive prop determines the styles
+• Ternary operator (condition ? value1 : value2) chooses the style
+• Background and text color change based on isActive value
+• This is a common pattern for dynamic styling
+
+EXAMPLE 3: CALCULATED STYLES
+----------------------------
+  function ProgressBar({ percentage }) {
+    return (
+      <div style={{
+        width: '100%',
+        height: '20px',
+        backgroundColor: '#e0e0e0',
+        borderRadius: '10px'
+      }}>
+        <div style={{
+          width: `${percentage}%`,
+          height: '100%',
+          backgroundColor: percentage > 50 ? 'green' : 'red',
+          borderRadius: '10px',
+          transition: 'width 0.3s ease'
+        }} />
+      </div>
+    );
+  }
+
+EXPLANATION
+-----------
+• percentage prop is used to calculate width
+• Template literal `${percentage}%` creates percentage width
+• Conditional color based on percentage value
+• Shows how inline styles can create dynamic UI elements
+
+================================================================================
+PART 2: CSS MODULES IN REACT
+================================================================================
+
+SECTION 2.1: WHAT ARE CSS MODULES?
+-----------------------------------
+
+DEFINITION
+----------
+CSS modules are CSS files that are scoped locally to a component. When you 
+import a CSS module, the class names are automatically transformed to be unique, 
+preventing style conflicts between different components.
+
+DETAILED EXPLANATION
+--------------------
+CSS modules solve a major problem in React: style conflicts. In traditional CSS, 
+if two components use the same class name (like "button"), they can conflict 
+with each other. CSS modules automatically make class names unique, so each 
+component's styles are isolated.
+
+HOW CSS MODULES WORK
+--------------------
+1. You write a CSS file with a .module.css extension
+2. Import it as a JavaScript object in your component
+3. React/build tools automatically transform class names to be unique
+4. Use the imported object to reference class names in JSX
+
+KEY CHARACTERISTICS
+-------------------
+• File must end with .module.css (not just .css)
+• Imported as a JavaScript object
+• Class names are locally scoped (no conflicts)
+• Can still use global styles when needed
+• Works with all CSS features (pseudo-classes, media queries, etc.)
+• Class names are transformed at build time
+
+REAL-WORLD ANALOGY
+------------------
+Think of CSS modules like having your own private room. In a shared house 
+(traditional CSS), everyone uses the same living room and things can get mixed 
+up. With CSS modules, each component gets its own private room (scoped styles) 
+where it can organize things however it wants without worrying about conflicts 
+with other rooms.
+
+================================================================================
+
+SECTION 2.2: CSS MODULES SYNTAX AND USAGE
+------------------------------------------
+
+BASIC EXAMPLE FROM ORIGINAL CONTENT
+------------------------------------
+Let's examine the CSS modules example:
+
+toggleMessage.module.css:
+  .message {
+    display: block;
+    color: green;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+ToggleMessage.js:
+  import React, { useState } from 'react';
+  import styles from './toggleMessage.module.css';
+  function ToggleMessage() {
+    const [isVisible, setIsVisible] = useState(true);
+    const toggleVisibility = () => {
+      setIsVisible(!isVisible);
+    };
+    return (
+      <div>
+        <h2>Toggle Message</h2>
+        <button onClick={toggleVisibility}>
+          {isVisible ? 'Hide Message' : 'Show Message'}
+        </button>
+        <p className={isVisible ? styles.message : ''}>This is a hidden message.</p>
+      </div>
+    );
+  }
+  export default ToggleMessage;
+
+================================================================================
+
+SECTION 2.3: CSS MODULE FILE EXPLANATION
+-----------------------------------------
+
+THE CSS FILE: toggleMessage.module.css
+--------------------------------------
+  .message {
+    display: block;
+    color: green;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: .message {
+        • This defines a CSS class named "message"
+        • The dot (.) indicates this is a class selector
+        • The opening brace { starts the style rules
+
+Line 2: display: block;
+        • Sets the display property to block
+        • Block elements take full width and start on a new line
+        • Makes the element visible (opposite of display: none)
+
+Line 3: color: green;
+        • Sets the text color to green
+        • This is standard CSS syntax (not camelCase)
+
+Line 4: font-size: 18px;
+        • Sets the font size to 18 pixels
+        • Note: In CSS files, use kebab-case (font-size)
+        • In inline styles, you'd use camelCase (fontSize)
+
+Line 5: margin-top: 10px;
+        • Adds 10 pixels of space above the element
+        • Creates spacing between elements
+
+Line 6: }
+        • Closes the .message class definition
+
+IMPORTANT NOTES ABOUT CSS MODULE FILES
+---------------------------------------
+• File name MUST end with .module.css (not .css)
+• Use standard CSS syntax (kebab-case for properties)
+• Class names are automatically scoped (made unique)
+• You can write normal CSS - pseudo-classes, media queries, etc. all work
+
+================================================================================
+
+SECTION 2.4: COMPONENT FILE EXPLANATION
+-----------------------------------------
+
+THE COMPONENT FILE: ToggleMessage.js
+------------------------------------
+Let's break down each line:
+
+Line 1: import React, { useState } from 'react';
+        • import React - Imports the React library (needed for JSX)
+        • { useState } - Imports the useState hook from React
+        • useState is a React hook that lets you add state to functional components
+        • Hooks allow functional components to have state and lifecycle features
+
+Line 2: import styles from './toggleMessage.module.css';
+        • This imports the CSS module file as a JavaScript object
+        • The object is named "styles" (you can name it anything)
+        • './toggleMessage.module.css' is the relative path to the CSS file
+        • After import, styles.message will reference the .message class
+        • The class name is automatically transformed to be unique (e.g., 
+          "message" becomes something like "ToggleMessage_message__abc123")
+
+DETAILED EXPLANATION OF CSS MODULE IMPORT
+------------------------------------------
+Import styles from ./toggleMessage.module.css: This imports the CSS module 
+toggleMessage.module.css as an object named styles. In CSS, a module typically 
+refers to a file (usually with a .module.css extension) that contains a set 
+of CSS rules scoped to a particular component or module in your application. 
+These CSS rules are locally scoped to prevent unintended style conflicts 
+between components.
+
+WHAT HAPPENS BEHIND THE SCENES
+-------------------------------
+When you import a CSS module:
+1. Build tools (like webpack) process the .module.css file
+2. Each class name is transformed to include a unique hash
+3. The original class name (.message) becomes something unique 
+   (e.g., .ToggleMessage_message__xyz789)
+4. A JavaScript object is created mapping original names to transformed names
+5. You use styles.message in your component, which references the unique class
+
+Line 3: function ToggleMessage() {
+        • Declares a function component named ToggleMessage
+        • Function components are the modern React way
+
+Line 4: const [isVisible, setIsVisible] = useState(true);
+        • This initializes a state variable isVisible using the useState hook
+        • It represents whether the message paragraph should be visible or not, 
+          and it defaults to true
+        • useState(true) creates state with initial value of true
+        • Returns an array: [currentValue, setterFunction]
+        • isVisible = current state value (true or false)
+        • setIsVisible = function to update the state
+        • When you call setIsVisible(false), isVisible becomes false and 
+          component re-renders
+
+Line 5: const toggleVisibility = () => {
+        • This is a function that toggles the visibility of the message 
+          paragraph by updating the state variable isVisible when the button 
+          is clicked
+        • Arrow function syntax (ES6)
+        • This function will be called when button is clicked
+
+Line 6: setIsVisible(!isVisible);
+        • Updates the state to the opposite of current value
+        • !isVisible means "not isVisible" (true becomes false, false becomes true)
+        • This toggles the state between true and false
+
+Line 7: };
+        • Closes the toggleVisibility function
+
+Line 8: return (
+        • Starts the JSX return statement
+
+Line 9: <div>
+        • Creates a container div element
+
+Line 10: <h2>Toggle Message</h2>
+         • Heading element displaying "Toggle Message"
+         • No special styling applied
+
+Line 11: <button onClick={toggleVisibility}>
+         • Creates a button element
+         • onClick={toggleVisibility} - When clicked, calls toggleVisibility function
+         • onClick is React's way to handle click events
+         • The function reference is passed (not called with parentheses)
+
+Line 12: {isVisible ? 'Hide Message' : 'Show Message'}
+         • Ternary operator (conditional expression)
+         • If isVisible is true, shows "Hide Message"
+         • If isVisible is false, shows "Show Message"
+         • Button text changes based on state
+
+Line 13: </button>
+         • Closes the button element
+
+Line 14: <p className={isVisible ? styles.message : ''}>This is a hidden message.</p>
+         • This paragraph element displays the message
+         • Its class name is conditionally set based on the value of isVisible
+         • If isVisible is true, it applies the message class from the CSS 
+           module, otherwise, it applies an empty string, effectively removing 
+           any additional styles
+         • className (not class) - React uses className instead of class
+         • styles.message references the .message class from the CSS module
+         • When isVisible is true: className="ToggleMessage_message__xyz789" 
+           (applies green color, etc.)
+         • When isVisible is false: className="" (no styles applied, but text 
+           still visible - you might want display: none instead)
+
+Line 15: </div>
+         • Closes the container div
+
+Line 16: );
+         • Closes the return statement
+
+Line 17: }
+         • Closes the ToggleMessage function
+
+Line 18: export default ToggleMessage;
+         • Exports the component for use in other files
+
+================================================================================
+
+SECTION 2.5: HOW CSS MODULES PREVENT STYLE CONFLICTS
+-----------------------------------------------------
+
+THE PROBLEM CSS MODULES SOLVE
+-----------------------------
+Without CSS modules, if two components use the same class name, they conflict:
+
+ComponentA.css:
+  .button { color: red; }
+
+ComponentB.css:
+  .button { color: blue; }
+
+Both components import their CSS, and the last one loaded wins (or they conflict).
+
+HOW CSS MODULES FIX IT
+----------------------
+With CSS modules, class names are automatically made unique:
+
+ComponentA.module.css:
+  .button { color: red; }
+  /* Becomes: .ComponentA_button__abc123 { color: red; } */
+
+ComponentB.module.css:
+  .button { color: blue; }
+  /* Becomes: .ComponentB_button__xyz789 { color: blue; } */
+
+Now there's no conflict! Each component's styles are isolated.
+
+EXAMPLE DEMONSTRATION
+---------------------
+  // ComponentA.js
+  import stylesA from './ComponentA.module.css';
+  // stylesA.button = "ComponentA_button__abc123"
+  
+  // ComponentB.js
+  import stylesB from './ComponentB.module.css';
+  // stylesB.button = "ComponentB_button__xyz789"
+  
+  // No conflict! Each has its own unique class name
+
+================================================================================
+
+SECTION 2.6: ADVANTAGES AND DISADVANTAGES OF CSS MODULES
+---------------------------------------------------------
+
+ADVANTAGES
+----------
+1. STYLE ISOLATION
+   • No style conflicts between components
+   • Class names are automatically scoped
+   • Safe to use common names like "button", "container", etc.
+
+2. FULL CSS FEATURES
+   • Can use pseudo-classes (:hover, :active, :focus)
+   • Can use media queries for responsive design
+   • Can use CSS animations and keyframes
+   • Can use CSS variables
+   • All CSS features work normally
+
+3. BETTER ORGANIZATION
+   • Styles are co-located with components
+   • Easy to find styles for a specific component
+   • Clear relationship between component and styles
+
+4. PERFORMANCE
+   • CSS is still processed and cached by browser
+   • Only loads styles for components that are used
+   • Better than inline styles for many elements
+
+5. DEVELOPER EXPERIENCE
+   • Autocomplete for class names in IDE
+   • Type safety with TypeScript
+   • Easy refactoring (rename class in one place)
+
+DISADVANTAGES
+-------------
+1. FILE NAMING REQUIREMENT
+   • Must use .module.css extension
+   • Easy to forget and use .css instead
+
+2. DYNAMIC STYLING
+   • Harder to use with dynamic values
+   • Need to use inline styles for calculated values
+   • Conditional classes require template literals
+
+3. GLOBAL STYLES
+   • Need special syntax (:global) for global styles
+   • Can be confusing when mixing local and global
+
+4. BUILD TOOL DEPENDENCY
+   • Requires build tools configured for CSS modules
+   • Create React App supports it, but custom setups need configuration
+
+WHEN TO USE CSS MODULES
+-----------------------
+Use CSS modules when:
+• You want style isolation without conflicts
+• You need CSS features like pseudo-classes or media queries
+• You have component-specific styles
+• You want to organize styles with components
+• You're building a larger application
+
+Avoid CSS modules when:
+• You need highly dynamic, calculated styles
+• You have very simple, one-off styles
+• You want global styles that apply everywhere
+• Your build setup doesn't support CSS modules
+
+================================================================================
+
+SECTION 2.7: ADVANCED CSS MODULES PATTERNS
+-------------------------------------------
+
+MULTIPLE CLASSES
+----------------
+You can apply multiple CSS module classes:
+
+  import styles from './MyComponent.module.css';
+  
+  <div className={`${styles.container} ${styles.highlighted}`}>
+    Content
+  </div>
+
+CONDITIONAL CLASSES
+-------------------
+Apply classes conditionally:
+
+  <div className={isActive ? styles.active : styles.inactive}>
+    Content
+  </div>
+
+Or with template literals:
+
+  <div className={`${styles.base} ${isActive ? styles.active : ''}`}>
+    Content
+  </div>
+
+COMBINING WITH INLINE STYLES
+----------------------------
+You can combine CSS modules with inline styles:
+
+  <div 
+    className={styles.container}
+    style={{ width: `${dynamicWidth}px` }}
+  >
+    Content
+  </div>
+
+GLOBAL STYLES IN CSS MODULES
+-----------------------------
+Use :global() for styles that should be global:
+
+  /* In your CSS module file */
+  :global(.global-button) {
+    padding: 10px;
+  }
+  
+  /* Can be used anywhere without importing */
+  <button className="global-button">Click</button>
+
+================================================================================
+PART 3: JAVASCRIPT OBJECT-BASED STYLING (STYLED COMPONENTS APPROACH)
+================================================================================
+
+SECTION 3.1: WHAT IS JAVASCRIPT OBJECT-BASED STYLING?
+-------------------------------------------------------
+
+DEFINITION
+----------
+CSS can also be applied in React components using JavaScript objects, similar to 
+the messageStyle object in the provided React component. This approach stores 
+CSS properties as JavaScript object properties and applies them using the style 
+attribute.
+
+DETAILED EXPLANATION
+--------------------
+Instead of writing CSS in a separate file or inline directly in JSX, you can 
+create JavaScript objects that contain style properties. These objects can:
+• Be stored in variables
+• Be calculated dynamically
+• Use conditional logic
+• Be reused across elements
+• Be composed from multiple objects
+
+This is different from inline styles written directly in JSX because:
+• Styles are defined separately (better organization)
+• Can be reused and composed
+• Easier to read and maintain
+• Can include conditional logic more cleanly
+
+REAL-WORLD ANALOGY
+------------------
+Think of JavaScript object-based styling like creating a style template. Instead 
+of writing styles directly on each element (like writing on sticky notes), you 
+create a reusable template (like a form letter) that you can fill in with 
+different values and apply wherever needed.
+
+================================================================================
+
+SECTION 3.2: BASIC JAVASCRIPT OBJECT STYLING EXAMPLE
+------------------------------------------------------
+
+EXAMPLE FROM ORIGINAL CONTENT
+------------------------------
+  import React, { useState } from 'react';
+  function ToggleMessage() {
+    const [isVisible, setIsVisible] = useState(true);
+    const toggleVisibility = () => {
+      setIsVisible(!isVisible);
+    };
+    const messageStyle = {
+      display: isVisible ? 'block' : 'none',
+      color: 'green',
+      fontSize: '18px',
+      marginTop: '10px'
+    };
+    return (
+      <div>
+        <h2>Toggle Message</h2>
+        <button onClick={toggleVisibility}>
+          {isVisible ? 'Hide Message' : 'Show Message'}
+        </button>
+        <p style={messageStyle}>This is a hidden message.</p>
+      </div>
+    );
+  }
+
+================================================================================
+
+SECTION 3.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+Line 1: import React, { useState } from 'react';
+        • Imports React library and useState hook
+        • Same as previous examples
+
+Line 2: function ToggleMessage() {
+        • Function component declaration
+
+Line 3: const [isVisible, setIsVisible] = useState(true);
+        • Creates state variable isVisible with initial value true
+        • Same as CSS modules example
+
+Line 4: const toggleVisibility = () => {
+        • Function to toggle visibility state
+
+Line 5: setIsVisible(!isVisible);
+        • Toggles the state value
+
+Line 6: };
+        • Closes toggleVisibility function
+
+Line 7: const messageStyle = {
+        • Creates a JavaScript object named messageStyle
+        • This object will contain CSS properties
+        • Object is defined outside JSX for better readability
+
+Line 8: display: isVisible ? 'block' : 'none',
+        • Conditional styling based on isVisible state
+        • If isVisible is true: display is 'block' (element is visible)
+        • If isVisible is false: display is 'none' (element is hidden)
+        • This is a conditional styling example
+        • The comma (,) separates this property from the next
+
+Line 9: color: 'green',
+        • Sets text color to green
+        • For example, in the following code there is one object with name 
+          messageStyle { color: 'green', fontSize: '18px' } represents CSS 
+          properties for color and font size
+        • Standard CSS color value as string
+
+Line 10: fontSize: '18px',
+         • Sets font size to 18 pixels
+         • Note: camelCase (fontSize) not kebab-case (font-size)
+         • Value includes unit 'px' as a string
+         • Also has a conditional styling. For example, { display: isVisible ? 
+           'block' : 'none' } that dynamically sets the display property based 
+           on the value of isVisible
+
+Line 11: marginTop: '10px'
+         • Adds 10 pixels of margin above the element
+         • camelCase property name
+         • No comma at end (last property in object)
+
+Line 12: };
+         • Closes the messageStyle object definition
+
+Line 13: return (
+         • Starts JSX return
+
+Line 14: <div>
+         • Container div
+
+Line 15: <h2>Toggle Message</h2>
+         • Heading element
+
+Line 16: <button onClick={toggleVisibility}>
+         • Button with click handler
+
+Line 17: {isVisible ? 'Hide Message' : 'Show Message'}
+         • Conditional button text
+
+Line 18: </button>
+         • Closes button
+
+Line 19: <p style={messageStyle}>This is a hidden message.</p>
+         • Paragraph element
+         • style={messageStyle} applies the messageStyle object as inline styles
+         • When isVisible is true: paragraph is visible (display: block)
+         • When isVisible is false: paragraph is hidden (display: none)
+         • Text color is always green when visible
+         • Font size is always 18px when visible
+
+Line 20: </div>
+         • Closes container
+
+Line 21: );
+         • Closes return
+
+Line 22: }
+         • Closes function
+
+================================================================================
+
+SECTION 3.4: UNDERSTANDING CONDITIONAL STYLING
+-----------------------------------------------
+
+CONDITIONAL STYLING EXPLAINED
+------------------------------
+The key feature of this example is conditional styling:
+
+  display: isVisible ? 'block' : 'none',
+
+HOW IT WORKS
+------------
+• isVisible ? 'block' : 'none' is a ternary operator
+• Syntax: condition ? valueIfTrue : valueIfFalse
+• If isVisible is true → use 'block' (show element)
+• If isVisible is false → use 'none' (hide element)
+
+STEP-BY-STEP EXECUTION
+----------------------
+1. Component renders with isVisible = true
+2. messageStyle object is created with display: 'block'
+3. Paragraph is visible (green text, 18px font)
+4. User clicks button
+5. toggleVisibility() is called
+6. setIsVisible(false) updates state
+7. Component re-renders with isVisible = false
+8. messageStyle object is recreated with display: 'none'
+9. Paragraph is hidden (not displayed)
+
+WHY THIS APPROACH IS USEFUL
+---------------------------
+• Styles are organized in one place (messageStyle object)
+• Easy to see all styles at once
+• Conditional logic is clear and readable
+• Can be reused if needed
+• Easier to maintain than inline styles in JSX
+
+================================================================================
+
+SECTION 3.5: ADVANCED PATTERNS WITH STYLE OBJECTS
+--------------------------------------------------
+
+COMPOSING MULTIPLE STYLE OBJECTS
+--------------------------------
+You can combine multiple style objects:
+
+  const baseStyle = {
+    padding: '10px',
+    margin: '5px'
+  };
+  
+  const textStyle = {
+    color: 'blue',
+    fontSize: '16px'
+  };
+  
+  const combinedStyle = {
+    ...baseStyle,
+    ...textStyle
+  };
+  
+  <div style={combinedStyle}>Content</div>
+
+EXPLANATION
+-----------
+• Spread operator (...) copies properties from objects
+• Later properties override earlier ones
+• Creates a new object with all properties combined
+
+FUNCTIONS THAT RETURN STYLE OBJECTS
+------------------------------------
+You can create functions that return style objects:
+
+  const getButtonStyle = (isActive) => ({
+    backgroundColor: isActive ? 'blue' : 'gray',
+    color: 'white',
+    padding: '10px',
+    borderRadius: '5px'
+  });
+  
+  <button style={getButtonStyle(true)}>Active</button>
+  <button style={getButtonStyle(false)}>Inactive</button>
+
+EXPLANATION
+-----------
+• Function takes parameters and returns style object
+• Can calculate styles based on input
+• Reusable across multiple elements
+
+COMPUTED STYLE PROPERTIES
+-------------------------
+You can compute style values:
+
+  const getProgressStyle = (percentage) => ({
+    width: `${percentage}%`,
+    height: '20px',
+    backgroundColor: percentage > 50 ? 'green' : 'red'
+  });
+  
+  <div style={getProgressStyle(75)} />
+
+EXPLANATION
+-----------
+• percentage parameter is used in calculations
+• Template literal creates percentage string
+• Conditional color based on percentage value
+
+================================================================================
+
+SECTION 3.6: COMPARING THE THREE APPROACHES
+--------------------------------------------
+
+INLINE STYLES (DIRECT IN JSX)
+------------------------------
+  <div style={{ color: 'red', fontSize: '16px' }}>
+    Content
+  </div>
+
+Pros:
+• Quick and simple
+• No separate files
+• Dynamic values easy
+
+Cons:
+• Hard to read with many styles
+• No pseudo-classes
+• Not reusable
+
+CSS MODULES
+-----------
+  import styles from './Component.module.css';
+  <div className={styles.container}>Content</div>
+
+Pros:
+• Full CSS features
+• Style isolation
+• Better organization
+
+Cons:
+• Requires .module.css files
+• Harder for dynamic values
+• Build tool dependency
+
+JAVASCRIPT OBJECT STYLING
+-------------------------
+  const myStyle = { color: 'red', fontSize: '16px' };
+  <div style={myStyle}>Content</div>
+
+Pros:
+• Organized and readable
+• Easy conditional logic
+• Reusable objects
+• Dynamic values easy
+
+Cons:
+• No pseudo-classes
+• No media queries
+• Still inline styles (performance)
+
+WHEN TO USE EACH
+---------------
+• INLINE STYLES: Quick, simple, one-off styles
+• CSS MODULES: Component styles, need CSS features, larger apps
+• JS OBJECT STYLING: Dynamic styles, conditional logic, organized inline styles
+
+================================================================================
+PART 4: ADDITIONAL STYLING APPROACHES IN REACT
+================================================================================
+
+SECTION 4.1: STYLED COMPONENTS (LIBRARY)
+-----------------------------------------
+
+WHAT ARE STYLED COMPONENTS?
+---------------------------
+Styled Components is a popular library that lets you write CSS directly in your 
+JavaScript/React code. It uses tagged template literals to create styled React 
+components.
+
+BASIC EXAMPLE
+-------------
+  import styled from 'styled-components';
+  
+  const StyledButton = styled.button`
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    
+    &:hover {
+      background-color: darkblue;
+    }
+  `;
+  
+  function MyComponent() {
+    return <StyledButton>Click me</StyledButton>;
+  }
+
+KEY FEATURES
+------------
+• Write CSS as template literals
+• Automatic class name generation
+• Support for pseudo-classes (:hover, etc.)
+• Can use props for dynamic styling
+• Scoped styles automatically
+
+ADVANTAGES
+----------
+• Best of both worlds (CSS syntax + JavaScript)
+• Full CSS feature support
+• Dynamic styling with props
+• No class name conflicts
+
+DISADVANTAGES
+------------
+• Requires installing a library
+• Adds to bundle size
+• Learning curve
+
+================================================================================
+
+SECTION 4.2: GLOBAL CSS FILES
+------------------------------
+
+TRADITIONAL CSS APPROACH
+------------------------
+You can still use traditional CSS files in React:
+
+styles.css:
+  .container {
+    padding: 20px;
+  }
+
+Component.js:
+  import './styles.css';
+  
+  function Component() {
+    return <div className="container">Content</div>;
+  }
+
+WHEN TO USE
+-----------
+• Global styles (reset, typography, etc.)
+• Shared utility classes
+• Third-party CSS frameworks (Bootstrap, etc.)
+
+CAUTIONS
+--------
+• No style isolation (can conflict)
+• Global scope (affects all components)
+• Harder to track where styles are used
+
+================================================================================
+
+SECTION 4.3: CSS-IN-JS LIBRARIES
+---------------------------------
+
+OTHER POPULAR OPTIONS
+--------------------
+• Emotion - Similar to styled-components
+• JSS - JavaScript to CSS compiler
+• Aphrodite - Inline styles with pseudo-class support
+• Styled-jsx - CSS-in-JS with scoped styles
+
+EACH HAS ITS OWN APPROACH
+-------------------------
+Different libraries offer different features and syntax. Choose based on:
+• Your project needs
+• Team preferences
+• Performance requirements
+• Learning curve
+
+================================================================================
+PART 5: BEST PRACTICES AND RECOMMENDATIONS
+================================================================================
+
+SECTION 5.1: CHOOSING THE RIGHT STYLING APPROACH
+-------------------------------------------------
+
+DECISION TREE
+-------------
+Ask yourself:
+
+1. Do you need CSS features (pseudo-classes, media queries)?
+   YES → Use CSS Modules or Styled Components
+   NO → Continue to question 2
+
+2. Are styles dynamic/conditional?
+   YES → Use JavaScript object styling or inline styles
+   NO → Continue to question 3
+
+3. Are styles component-specific?
+   YES → Use CSS Modules
+   NO → Use global CSS
+
+4. Do you want style isolation?
+   YES → Use CSS Modules or Styled Components
+   NO → Use global CSS
+
+GENERAL RECOMMENDATIONS
+-----------------------
+• Small projects: Inline styles or CSS Modules
+• Large projects: CSS Modules or Styled Components
+• Dynamic styles: JavaScript object styling
+• Global styles: Traditional CSS files
+• Component styles: CSS Modules
+
+================================================================================
+
+SECTION 5.2: PERFORMANCE CONSIDERATIONS
+----------------------------------------
+
+INLINE STYLES PERFORMANCE
+-------------------------
+• Each element gets its own style object
+• No CSS caching benefits
+• Can be slower for many elements
+• Good for few, dynamic styles
+
+CSS MODULES PERFORMANCE
+-----------------------
+• CSS is processed and cached
+• Browser optimizes CSS rendering
+• Better for many styled elements
+• Styles are shared across instances
+
+OPTIMIZATION TIPS
+-----------------
+• Avoid inline styles for repeated elements
+• Use CSS Modules for component styles
+• Minimize style recalculations
+• Use CSS for static styles
+• Use JavaScript for dynamic styles
+
+================================================================================
+
+SECTION 5.3: MAINTAINABILITY TIPS
+-----------------------------------
+
+ORGANIZATION
+------------
+• Keep styles close to components
+• Use consistent naming conventions
+• Group related styles together
+• Document complex style logic
+
+NAMING CONVENTIONS
+------------------
+• CSS Modules: Use descriptive class names
+• Style objects: Use descriptive variable names
+• Components: Match style names to component names
+
+CODE STRUCTURE
+--------------
+• Define style objects before JSX
+• Keep conditional logic clear
+• Extract reusable style functions
+• Comment complex style calculations
+
+================================================================================
+PART 6: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 6.1: CONCEPT SUMMARY
+-----------------------------
+
+THREE MAIN APPROACHES COVERED
+------------------------------
+1. INLINE STYLES
+   • Written directly in JSX as objects
+   • Syntax: style={{ property: 'value' }}
+   • Use camelCase for property names
+   • Good for dynamic, simple styles
+
+2. CSS MODULES
+   • Separate .module.css files
+   • Imported as JavaScript objects
+   • Automatic style scoping
+   • Good for component-specific styles
+
+3. JAVASCRIPT OBJECT STYLING
+   • Style objects defined in component
+   • Applied using style attribute
+   • Can include conditional logic
+   • Good for organized dynamic styles
+
+================================================================================
+
+SECTION 6.2: KEY DIFFERENCES
+-----------------------------
+
+SYNTAX DIFFERENCES
+------------------
+• INLINE: style={{ color: 'red' }} (direct in JSX)
+• CSS MODULES: className={styles.className} (imported object)
+• JS OBJECT: const style = { color: 'red' }; style={style}
+
+PROPERTY NAMING
+---------------
+• INLINE/JS OBJECT: camelCase (fontSize, backgroundColor)
+• CSS MODULES: kebab-case (font-size, background-color)
+
+FEATURE SUPPORT
+---------------
+• INLINE/JS OBJECT: No pseudo-classes, no media queries
+• CSS MODULES: Full CSS features supported
+
+SCOPE
+-----
+• INLINE/JS OBJECT: Scoped to element
+• CSS MODULES: Scoped to component (automatic)
+
+================================================================================
+
+SECTION 6.3: WHEN TO USE EACH APPROACH
+---------------------------------------
+
+USE INLINE STYLES WHEN:
+-----------------------
+• Styling is simple and one-off
+• Styles are highly dynamic
+• You need quick prototyping
+• Styles depend on calculations
+
+USE CSS MODULES WHEN:
+--------------------
+• You need CSS features (pseudo-classes, etc.)
+• You want style isolation
+• You have component-specific styles
+• You're building a larger application
+
+USE JS OBJECT STYLING WHEN:
+---------------------------
+• You want organized dynamic styles
+• You need conditional styling logic
+• You want reusable style objects
+• You need computed style values
+
+================================================================================
+
+SECTION 6.4: COMMON PATTERNS AND EXAMPLES
+------------------------------------------
+
+PATTERN 1: CONDITIONAL STYLING
+-------------------------------
+  const style = {
+    color: isActive ? 'green' : 'red'
+  };
+
+PATTERN 2: COMPOSED STYLES
+---------------------------
+  const baseStyle = { padding: '10px' };
+  const highlightStyle = { backgroundColor: 'yellow' };
+  const combined = { ...baseStyle, ...highlightStyle };
+
+PATTERN 3: CSS MODULE WITH CONDITIONAL CLASS
+--------------------------------------------
+  <div className={`${styles.base} ${isActive ? styles.active : ''}`}>
+
+PATTERN 4: DYNAMIC VALUES
+-------------------------
+  const style = {
+    width: `${percentage}%`,
+    height: `${height}px`
+  };
+
+================================================================================
+
+SECTION 6.5: STUDY TIPS
+------------------------
+
+1. PRACTICE EACH APPROACH
+   • Try rewriting the same component with different approaches
+   • See which feels more natural for different scenarios
+   • Understand the trade-offs
+
+2. BUILD SMALL PROJECTS
+   • Create components using each styling method
+   • Mix approaches in one project
+   • See how they work together
+
+3. READ EXISTING CODE
+   • Look at React projects on GitHub
+   • See how others style components
+   • Learn from real-world examples
+
+4. EXPERIMENT WITH CONDITIONAL STYLING
+   • Practice with state-based styling
+   • Try prop-based styling
+   • Combine multiple conditions
+
+5. UNDERSTAND THE BUILD PROCESS
+   • Learn how CSS modules are processed
+   • Understand how React handles inline styles
+   • Know what happens at build time vs runtime
+
+================================================================================
+
+SECTION 6.6: COMMON MISTAKES TO AVOID
+--------------------------------------
+
+MISTAKE 1: MIXING PROPERTY NAMING
+----------------------------------
+  // WRONG: Using kebab-case in inline styles
+  style={{ background-color: 'red' }}
+  
+  // CORRECT: Using camelCase
+  style={{ backgroundColor: 'red' }}
+
+MISTAKE 2: FORGETTING .module.css EXTENSION
+-------------------------------------------
+  // WRONG: Regular CSS file won't work as module
+  import styles from './styles.css';
+  
+  // CORRECT: Must use .module.css
+  import styles from './styles.module.css';
+
+MISTAKE 3: USING 'class' INSTEAD OF 'className'
+------------------------------------------------
+  // WRONG: 'class' is reserved in JavaScript
+  <div class="container">
+  
+  // CORRECT: Use 'className' in React
+  <div className="container">
+
+MISTAKE 4: FORGETTING STRING VALUES
+-----------------------------------
+  // WRONG: Numbers without units
+  style={{ fontSize: 18 }}
+  
+  // CORRECT: String with unit
+  style={{ fontSize: '18px' }}
+
+MISTAKE 5: NOT HANDLING CONDITIONAL CLASSES
+-------------------------------------------
+  // WRONG: Applying class when condition is false
+  className={styles.message} // Always applied
+  
+  // CORRECT: Conditional application
+  className={isVisible ? styles.message : ''}
+
+================================================================================
+
+SECTION 6.7: QUICK REFERENCE GUIDE
+-----------------------------------
+
+INLINE STYLES QUICK REFERENCE
+------------------------------
+  // Basic syntax
+  <div style={{ color: 'red', fontSize: '16px' }}>
+  
+  // With variable
+  const myStyle = { color: 'red' };
+  <div style={myStyle}>
+  
+  // Conditional
+  <div style={{ color: isActive ? 'green' : 'red' }}>
+
+CSS MODULES QUICK REFERENCE
+----------------------------
+  // Import
+  import styles from './Component.module.css';
+  
+  // Use
+  <div className={styles.className}>
+  
+  // Conditional
+  <div className={isActive ? styles.active : styles.inactive}>
+  
+  // Multiple classes
+  <div className={`${styles.base} ${styles.highlight}`}>
+
+JS OBJECT STYLING QUICK REFERENCE
+----------------------------------
+  // Define
+  const style = {
+    color: 'red',
+    fontSize: '16px'
+  };
+  
+  // Use
+  <div style={style}>
+  
+  // Conditional
+  const style = {
+    display: isVisible ? 'block' : 'none'
+  };
+  
+  // Compose
+  const combined = { ...style1, ...style2 };
+
+PROPERTY NAME CONVERSION
+------------------------
+  CSS Property          →  React Property
+  ----------------------------
+  background-color      →  backgroundColor
+  font-size            →  fontSize
+  margin-top           →  marginTop
+  border-radius        →  borderRadius
+  text-align           →  textAlign
+  z-index              →  zIndex
+
+================================================================================
+
+SECTION 6.8: PRACTICAL EXAMPLES SUMMARY
+----------------------------------------
+
+EXAMPLE 1: SIMPLE INLINE STYLES
+---------------------------------
+  <div style={{ backgroundColor: 'lightblue', padding: '20px' }}>
+    Content
+  </div>
+
+EXAMPLE 2: CSS MODULE WITH STATE
+---------------------------------
+  import styles from './Component.module.css';
+  const [isVisible, setIsVisible] = useState(true);
+  <p className={isVisible ? styles.message : ''}>Message</p>
+
+EXAMPLE 3: JS OBJECT WITH CONDITIONAL STYLING
+----------------------------------------------
+  const messageStyle = {
+    display: isVisible ? 'block' : 'none',
+    color: 'green',
+    fontSize: '18px'
+  };
+  <p style={messageStyle}>Message</p>
+
+================================================================================
+
+FINAL NOTES
+-----------
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• Each styling approach has its place
+• Choose based on your specific needs
+• You can mix approaches in one project
+• Practice is key to mastering React styling
+• Start simple and add complexity as needed
+
+You now have a comprehensive understanding of styling in React. These concepts 
+are fundamental to building modern React applications with beautiful, 
+maintainable user interfaces.
+
+Good luck with your React styling journey!
+
+================================================================================
+END OF STUDY GUIDE
+================================================================================
+
+Author(s)
+---------
+Richa Arora
+
+Original Content Maintained
+----------------------------
+All original definitions, explanations, and code examples from the source 
+material have been preserved and expanded upon in this comprehensive guide.
