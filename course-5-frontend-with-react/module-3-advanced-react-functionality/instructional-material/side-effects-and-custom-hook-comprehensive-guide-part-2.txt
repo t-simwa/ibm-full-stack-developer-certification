@@ -1,0 +1,1964 @@
+================================================================================
+SIDE EFFECTS MANAGEMENT AND CUSTOM HOOKS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This is Part 2 of the comprehensive guide on Side Effects Management and Custom 
+Hooks. Part 1 covered useEffect and side effects in detail. Part 2 focuses on 
+custom hooks - a powerful feature that allows you to extract and reuse stateful 
+logic between components.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES FOR PART 2
+------------------------------
+After studying Part 2, you will be able to:
+• Describe a custom hook in React
+• Understand why custom hooks are useful
+• Create custom hooks from scratch
+• Use custom hooks in components
+• Understand the UseToggle example in detail
+• Apply custom hook patterns to your own projects
+• Follow best practices for custom hooks
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 5: INTRODUCTION TO CUSTOM HOOKS
+  SECTION 5.1: WHAT ARE CUSTOM HOOKS?
+  SECTION 5.2: WHY USE CUSTOM HOOKS?
+  SECTION 5.3: RULES FOR CUSTOM HOOKS
+  SECTION 5.4: NAMING CONVENTIONS
+
+PART 6: CREATING CUSTOM HOOKS
+  SECTION 6.1: BASIC STRUCTURE OF CUSTOM HOOKS
+  SECTION 6.2: SIMPLE CUSTOM HOOK EXAMPLE
+  SECTION 6.3: CUSTOM HOOKS WITH MULTIPLE HOOKS
+  SECTION 6.4: CUSTOM HOOKS WITH PARAMETERS
+
+PART 7: COMPLETE USETOGGLE EXAMPLE
+  SECTION 7.1: OVERVIEW OF USETOGGLE
+  SECTION 7.2: USETOGGLE CUSTOM HOOK CODE
+  SECTION 7.3: LINE-BY-LINE EXPLANATION OF USETOGGLE
+  SECTION 7.4: TOGGLEBUTTON COMPONENT CODE
+  SECTION 7.5: LINE-BY-LINE EXPLANATION OF TOGGLEBUTTON
+  SECTION 7.6: HOW USETOGGLE AND TOGGLEBUTTON WORK TOGETHER
+
+PART 8: ADVANCED CUSTOM HOOK PATTERNS
+  SECTION 8.1: CUSTOM HOOK FOR API FETCHING
+  SECTION 8.2: CUSTOM HOOK FOR FORM HANDLING
+  SECTION 8.3: CUSTOM HOOK FOR LOCAL STORAGE
+  SECTION 8.4: CUSTOM HOOK FOR DEBOUNCING
+  SECTION 8.5: COMPOSING MULTIPLE CUSTOM HOOKS
+
+PART 9: BEST PRACTICES AND SUMMARY
+  SECTION 9.1: BEST PRACTICES FOR CUSTOM HOOKS
+  SECTION 9.2: COMMON MISTAKES TO AVOID
+  SECTION 9.3: TESTING CUSTOM HOOKS
+  SECTION 9.4: SUMMARY AND KEY TAKEAWAYS
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 5.3:") to quickly jump to any section.
+
+================================================================================
+PART 5: INTRODUCTION TO CUSTOM HOOKS
+================================================================================
+
+SECTION 5.1: WHAT ARE CUSTOM HOOKS?
+------------------------------------
+
+DEFINITION
+----------
+You can use a custom hook in React to create reusable logic. Custom hooks allow 
+you to abstract complex logic that you can easily reuse across different 
+components in your application.
+
+DETAILED EXPLANATION
+--------------------
+Custom hooks are JavaScript functions that:
+• Start with "use" (React convention - required!)
+• Can call other React hooks (useState, useEffect, etc.)
+• Allow you to extract component logic into reusable functions
+• Share stateful logic between components without changing component hierarchy
+• Return values, functions, or both
+
+A custom hook is a new composition of one or multiple hooks. Since you can treat 
+hooks as functions, they have the same features. You can reuse and combine them 
+as needed.
+
+KEY CHARACTERISTICS
+-------------------
+1. MUST START WITH "use"
+   • React uses this naming convention to identify hooks
+   • Examples: useToggle, useFetch, useLocalStorage
+   • This allows React's linting rules to work correctly
+
+2. CAN USE OTHER HOOKS
+   • Custom hooks can call useState, useEffect, useContext, etc.
+   • They can even call other custom hooks
+   • This is what makes them powerful
+
+3. REUSABLE LOGIC
+   • Extract logic from components
+   • Share logic between multiple components
+   • Keep components clean and focused
+
+4. REGULAR JAVASCRIPT FUNCTIONS
+   • They're just functions that follow React's hook rules
+   • Can take parameters
+   • Can return values, objects, arrays, or functions
+
+REAL-WORLD ANALOGY
+------------------
+Think of custom hooks like recipes in a cookbook:
+• Basic hooks (useState, useEffect) are like basic ingredients (flour, eggs)
+• Custom hooks are like recipes that combine ingredients (cake recipe)
+• Components are like the final dish (the actual cake you serve)
+
+Just like you can use the same recipe to make multiple cakes, you can use the 
+same custom hook in multiple components.
+
+EXAMPLE CONCEPT
+---------------
+Instead of writing this logic in every component:
+  function Component1() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    // ... component code
+  }
+
+  function Component2() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    // ... component code (same logic repeated!)
+  }
+
+You can create a custom hook:
+  function useToggle() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    return [isOn, toggle];
+  }
+
+And use it in both components:
+  function Component1() {
+    const [isOn, toggle] = useToggle();
+    // ... component code
+  }
+
+  function Component2() {
+    const [isOn, toggle] = useToggle();
+    // ... component code (logic reused!)
+  }
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: WHY USE CUSTOM HOOKS?
+------------------------------------
+
+BENEFIT 1: CODE REUSABILITY
+---------------------------
+You can write a custom hook for multiple components instead of duplicating code 
+from one component to another.
+
+BEFORE (Code Duplication):
+  function ToggleButton() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    return <button onClick={toggle}>{isOn ? 'ON' : 'OFF'}</button>;
+  }
+
+  function Switch() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    return <div onClick={toggle}>Switch: {isOn ? 'ON' : 'OFF'}</div>;
+  }
+
+AFTER (Code Reuse):
+  function useToggle() {
+    const [isOn, setIsOn] = useState(false);
+    const toggle = () => setIsOn(!isOn);
+    return [isOn, toggle];
+  }
+
+  function ToggleButton() {
+    const [isOn, toggle] = useToggle();
+    return <button onClick={toggle}>{isOn ? 'ON' : 'OFF'}</button>;
+  }
+
+  function Switch() {
+    const [isOn, toggle] = useToggle();
+    return <div onClick={toggle}>Switch: {isOn ? 'ON' : 'OFF'}</div>;
+  }
+
+BENEFIT 2: SEPARATION OF CONCERNS
+----------------------------------
+Custom hooks separate logic from UI, making components cleaner and easier to 
+understand.
+
+COMPONENT FOCUSES ON UI:
+  function UserProfile() {
+    const user = useUser(userId);  // Logic in hook
+    const posts = useUserPosts(userId);  // Logic in hook
+    
+    return (
+      <div>
+        <h1>{user.name}</h1>
+        {posts.map(post => <div key={post.id}>{post.title}</div>)}
+      </div>
+    );
+  }
+
+LOGIC IS IN HOOKS:
+  function useUser(userId) {
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+      fetchUser(userId).then(setUser);
+    }, [userId]);
+    return user;
+  }
+
+BENEFIT 3: EASIER TESTING
+--------------------------
+Custom hooks can be tested independently from components, making testing easier 
+and more focused.
+
+BENEFIT 4: SHARING LOGIC WITHOUT PROP DRILLING
+-----------------------------------------------
+Multiple components can share the same stateful logic without passing props 
+through many levels or using higher-order components.
+
+BENEFIT 5: ABSTRACTING COMPLEX LOGIC
+-------------------------------------
+Custom hooks allow you to abstract complex logic that you can easily reuse 
+across different components in your application.
+
+EXAMPLE: Complex logic abstracted
+  function useForm(initialValues) {
+    const [values, setValues] = useState(initialValues);
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
+    
+    const handleChange = (name, value) => {
+      setValues(prev => ({ ...prev, [name]: value }));
+      // Validation logic here
+    };
+    
+    const handleBlur = (name) => {
+      setTouched(prev => ({ ...prev, [name]: true }));
+      // Validation logic here
+    };
+    
+    return { values, errors, touched, handleChange, handleBlur };
+  }
+
+Now any component can use this complex form logic easily!
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: RULES FOR CUSTOM HOOKS
+------------------------------------
+
+RULE 1: MUST START WITH "use"
+------------------------------
+Custom hooks MUST start with "use" followed by a capital letter.
+
+CORRECT:
+  function useToggle() { }
+  function useFetch() { }
+  function useLocalStorage() { }
+
+INCORRECT:
+  function toggle() { }  // Missing "use"
+  function fetchData() { }  // Missing "use"
+  function Toggle() { }  // Wrong case
+
+WHY THIS RULE EXISTS
+-------------------
+React's linting rules (ESLint plugin) use this naming convention to:
+• Identify hooks and apply hook rules
+• Warn about violations of Rules of Hooks
+• Help developers follow best practices
+
+RULE 2: FOLLOW THE RULES OF HOOKS
+----------------------------------
+Custom hooks must follow all the Rules of Hooks:
+• Only call hooks at the top level
+• Don't call hooks conditionally
+• Don't call hooks in loops
+• Don't call hooks in nested functions
+
+CORRECT:
+  function useToggle() {
+    const [isOn, setIsOn] = useState(false);  // Top level ✓
+    const toggle = () => setIsOn(!isOn);
+    return [isOn, toggle];
+  }
+
+INCORRECT:
+  function useToggle(condition) {
+    if (condition) {
+      const [isOn, setIsOn] = useState(false);  // Conditional ✗
+    }
+    return [isOn, setIsOn];
+  }
+
+RULE 3: CAN CALL OTHER HOOKS
+----------------------------
+Custom hooks can call other React hooks (useState, useEffect, etc.) and other 
+custom hooks.
+
+EXAMPLE:
+  function useToggle() {
+    const [isOn, setIsOn] = useState(false);  // Using useState
+    useEffect(() => {  // Using useEffect
+      console.log('Toggle state changed:', isOn);
+    }, [isOn]);
+    const toggle = () => setIsOn(!isOn);
+    return [isOn, toggle];
+  }
+
+RULE 4: RETURN VALUES
+---------------------
+Custom hooks can return:
+• A single value
+• An array of values
+• An object with values and functions
+• Nothing (if it's a side-effect-only hook)
+
+EXAMPLES:
+  // Returns array
+  function useToggle() {
+    return [isOn, toggle];
+  }
+
+  // Returns object
+  function useForm() {
+    return { values, errors, handleChange };
+  }
+
+  // Returns single value
+  function useWindowWidth() {
+    return width;
+  }
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: NAMING CONVENTIONS
+--------------------------------
+
+HOOK NAMES
+----------
+Custom hooks should be named descriptively:
+• Start with "use"
+• Use camelCase
+• Describe what the hook does
+
+GOOD NAMES:
+  useToggle
+  useFetch
+  useLocalStorage
+  useWindowSize
+  useDebounce
+  useAuthentication
+
+BAD NAMES:
+  toggle  // Missing "use"
+  fetch  // Missing "use"
+  Toggle  // Wrong case
+  use_toggle  // Wrong format
+
+RETURN VALUE NAMING
+-------------------
+When returning values from custom hooks, use descriptive names that match the 
+hook's purpose.
+
+GOOD:
+  function useToggle() {
+    const [isOn, toggle] = useState(false);
+    return [isOn, toggle];  // Clear names
+  }
+
+  function useUser() {
+    const [user, setUser] = useState(null);
+    return { user, setUser };  // Clear names
+  }
+
+AVOID:
+  function useToggle() {
+    const [value, setValue] = useState(false);
+    return [value, setValue];  // Generic names
+  }
+
+FILE NAMING
+-----------
+Custom hooks are often placed in separate files:
+• File name: useToggle.js or useToggle.jsx
+• Export: export function useToggle() { }
+• Import: import { useToggle } from './hooks/useToggle';
+
+[END SECTION 5.4]
+[END PART 5]
+================================================================================
+
+PART 6: CREATING CUSTOM HOOKS
+================================================================================
+
+SECTION 6.1: BASIC STRUCTURE OF CUSTOM HOOKS
+--------------------------------------------
+
+BASIC TEMPLATE
+--------------
+  function useCustomHook() {
+    // 1. Can use other hooks here
+    const [state, setState] = useState(initialValue);
+    
+    // 2. Can have custom logic here
+    const customFunction = () => {
+      // Logic
+    };
+    
+    // 3. Return values, functions, or both
+    return { state, customFunction };
+  }
+
+STRUCTURE BREAKDOWN
+-------------------
+1. FUNCTION DECLARATION
+   • Starts with "use"
+   • Can take parameters
+   • Can use other hooks
+
+2. HOOK USAGE
+   • Can call useState, useEffect, etc.
+   • Can call other custom hooks
+   • Must follow Rules of Hooks
+
+3. CUSTOM LOGIC
+   • Can define helper functions
+   • Can perform calculations
+   • Can handle side effects
+
+4. RETURN STATEMENT
+   • Returns what components need
+   • Can be array, object, or single value
+   • Should be consistent across uses
+
+MINIMAL EXAMPLE
+---------------
+  function useCounter() {
+    const [count, setCount] = useState(0);
+    return [count, setCount];
+  }
+
+  // Usage
+  function MyComponent() {
+    const [count, setCount] = useCounter();
+    return <div>{count}</div>;
+  }
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: SIMPLE CUSTOM HOOK EXAMPLE
+----------------------------------------
+
+EXAMPLE: useCounter Hook
+------------------------
+A simple counter hook that increments and decrements.
+
+HOOK CODE:
+  function useCounter(initialValue = 0) {
+    const [count, setCount] = useState(initialValue);
+    
+    const increment = () => setCount(prev => prev + 1);
+    const decrement = () => setCount(prev => prev - 1);
+    const reset = () => setCount(initialValue);
+    
+    return { count, increment, decrement, reset };
+  }
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: function useCounter(initialValue = 0) {
+        • function - Declares a function
+        • useCounter - Hook name (starts with "use")
+        • initialValue = 0 - Parameter with default value
+          - If no value provided, defaults to 0
+          - Allows customization of starting count
+
+Line 2: const [count, setCount] = useState(initialValue);
+        • Creates state for the counter
+        • Initial value comes from parameter
+        • count holds current value
+        • setCount updates the value
+
+Line 3: (empty line)
+
+Line 4: const increment = () => setCount(prev => prev + 1);
+        • Defines increment function
+        • Uses function form of setState
+        • prev => prev + 1 - Takes previous value, adds 1
+        • Function form ensures we get latest value
+
+Line 5: const decrement = () => setCount(prev => prev - 1);
+        • Defines decrement function
+        • Similar to increment but subtracts 1
+
+Line 6: const reset = () => setCount(initialValue);
+        • Defines reset function
+        • Sets count back to initial value
+        • Uses initialValue parameter
+
+Line 7: (empty line)
+
+Line 8: return { count, increment, decrement, reset };
+        • Returns object with all values and functions
+        • Components can destructure what they need
+        • count - current count value
+        • increment - function to increase count
+        • decrement - function to decrease count
+        • reset - function to reset count
+
+USAGE IN COMPONENT
+------------------
+  function Counter() {
+    const { count, increment, decrement, reset } = useCounter(10);
+    
+    return (
+      <div>
+        <p>Count: {count}</p>
+        <button onClick={increment}>+</button>
+        <button onClick={decrement}>-</button>
+        <button onClick={reset}>Reset</button>
+      </div>
+    );
+  }
+
+EXPLANATION
+-----------
+• useCounter(10) - Starts counter at 10
+• Destructures returned object
+• Uses functions in button onClick handlers
+• count displays current value
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: CUSTOM HOOKS WITH MULTIPLE HOOKS
+---------------------------------------------
+
+EXAMPLE: useWindowSize Hook
+----------------------------
+A hook that combines useState and useEffect to track window size.
+
+HOOK CODE:
+  function useWindowSize() {
+    const [windowSize, setWindowSize] = useState({
+      width: window.innerWidth,
+      height: window.innerHeight
+    });
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight
+        });
+      };
+
+      window.addEventListener('resize', handleResize);
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []); // Empty array - set up once
+
+    return windowSize;
+  }
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: function useWindowSize() {
+        • Custom hook declaration
+        • No parameters needed
+
+Line 2: const [windowSize, setWindowSize] = useState({
+        • Creates state object
+        • Stores width and height
+        • Initial values from window object
+
+Line 3-4: width: window.innerWidth,
+          height: window.innerHeight
+        • Initial width from browser window
+        • Initial height from browser window
+        • window.innerWidth/Height - Browser API
+
+Line 5: });
+        • Closes useState call
+
+Line 6: (empty line)
+
+Line 7: useEffect(() => {
+        • useEffect hook for side effect
+        • Sets up event listener
+
+Line 8: const handleResize = () => {
+        • Event handler function
+        • Called when window resizes
+
+Line 9-11: setWindowSize({
+            width: window.innerWidth,
+            height: window.innerHeight
+          });
+        • Updates state with new window dimensions
+        • Gets current window size
+        • Triggers re-render with new size
+
+Line 12: };
+        • Closes handleResize function
+
+Line 13: (empty line)
+
+Line 14: window.addEventListener('resize', handleResize);
+        • Adds event listener
+        • Listens for 'resize' events
+        • Calls handleResize when window resizes
+
+Line 15: (empty line)
+
+Line 16: return () => {
+        • Cleanup function
+        • Runs when component unmounts
+
+Line 17: window.removeEventListener('resize', handleResize);
+        • Removes event listener
+        • Prevents memory leaks
+        • Stops listening when component unmounts
+
+Line 18: };
+        • Closes cleanup function
+
+Line 19: }, []); // Empty array - set up once
+         • Empty dependency array
+         • Sets up listener once on mount
+         • Cleanup runs on unmount
+
+Line 20: (empty line)
+
+Line 21: return windowSize;
+         • Returns current window size object
+         • Components can use width and height
+
+USAGE IN COMPONENT
+------------------
+  function ResponsiveComponent() {
+    const { width, height } = useWindowSize();
+    
+    return (
+      <div>
+        <p>Window width: {width}px</p>
+        <p>Window height: {height}px</p>
+        {width < 768 && <p>Mobile view</p>}
+      </div>
+    );
+  }
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: CUSTOM HOOKS WITH PARAMETERS
+------------------------------------------
+
+EXAMPLE: useFetch Hook
+----------------------
+A hook that fetches data from an API, taking URL as parameter.
+
+HOOK CODE:
+  function useFetch(url) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      setLoading(true);
+      setError(null);
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setData(data);
+          setLoading(false);
+        })
+        .catch(error => {
+          setError(error.message);
+          setLoading(false);
+        });
+    }, [url]); // Re-fetch when URL changes
+
+    return { data, loading, error };
+  }
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: function useFetch(url) {
+        • Custom hook with parameter
+        • url - API endpoint to fetch from
+
+Line 2: const [data, setData] = useState(null);
+        • State for fetched data
+        • Starts as null (no data yet)
+
+Line 3: const [loading, setLoading] = useState(true);
+        • State for loading status
+        • Starts as true (fetching initially)
+
+Line 4: const [error, setError] = useState(null);
+        • State for error messages
+        • Starts as null (no errors)
+
+Line 5: (empty line)
+
+Line 6: useEffect(() => {
+        • useEffect for fetching data
+        • Runs when component mounts or url changes
+
+Line 7: setLoading(true);
+        • Sets loading to true
+        • Indicates fetch is starting
+
+Line 8: setError(null);
+        • Clears any previous errors
+        • Resets error state
+
+Line 9: (empty line)
+
+Line 10: fetch(url)
+         • Fetches data from URL
+         • url comes from parameter
+         • Returns Promise
+
+Line 11: .then(response => {
+         • Handles fetch response
+         • response - Response object
+
+Line 12: if (!response.ok) {
+         • Checks if response is successful
+         • response.ok is true for 200-299 status codes
+
+Line 13: throw new Error('Network response was not ok');
+         • Throws error if response not ok
+         • Will be caught by .catch()
+
+Line 14: }
+         • Closes if statement
+
+Line 15: return response.json();
+         • Parses response as JSON
+         • Returns Promise with parsed data
+
+Line 16: })
+         • Closes first .then()
+
+Line 17: .then(data => {
+         • Handles parsed JSON data
+         • data - The actual data from API
+
+Line 18: setData(data);
+         • Updates data state
+         • Stores fetched data
+
+Line 19: setLoading(false);
+         • Sets loading to false
+         • Indicates fetch is complete
+
+Line 20: })
+         • Closes second .then()
+
+Line 21: .catch(error => {
+         • Handles any errors
+         • Catches network errors or thrown errors
+
+Line 22: setError(error.message);
+         • Stores error message
+         • error.message - String description
+
+Line 23: setLoading(false);
+         • Sets loading to false
+         • Even on error, loading stops
+
+Line 24: });
+         • Closes .catch()
+
+Line 25: }, [url]); // Re-fetch when URL changes
+          • Dependency array contains url
+          • Effect runs when url changes
+          • Allows fetching different endpoints
+
+Line 26: (empty line)
+
+Line 27: return { data, loading, error };
+         • Returns object with all states
+         • Components can use all three values
+
+USAGE IN COMPONENT
+------------------
+  function UserProfile({ userId }) {
+    const { data, loading, error } = useFetch(`/api/users/${userId}`);
+    
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!data) return <div>No data</div>;
+    
+    return (
+      <div>
+        <h1>{data.name}</h1>
+        <p>{data.email}</p>
+      </div>
+    );
+  }
+
+[END SECTION 6.4]
+[END PART 6]
+================================================================================
+
+PART 7: COMPLETE USETOGGLE EXAMPLE
+================================================================================
+
+SECTION 7.1: OVERVIEW OF USETOGGLE
+-----------------------------------
+
+OVERVIEW FROM ORIGINAL CONTENT
+-------------------------------
+As mentioned in the original content: "You can use a custom hook in React to 
+create reusable logic. Custom hooks allow you to abstract complex logic that 
+you can easily reuse across different components in your application. Let us 
+understand this with an example. You have two components, ToggleButton and 
+UseToggle."
+
+WHAT WE'LL COVER
+---------------
+This section provides a complete, detailed explanation of:
+• The UseToggle custom hook (the reusable logic)
+• The ToggleButton component (using the hook)
+• How they work together
+• Line-by-line explanations of both
+
+THE USE CASE
+------------
+The UseToggle hook manages the true and false state of a toggle. It provides:
+• Current state (isToggled - true or false)
+• Function to toggle the state (toggle)
+
+The ToggleButton component uses this hook to create a button that switches 
+between "ON" and "OFF" states.
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: USETOGGLE CUSTOM HOOK CODE
+-----------------------------------------
+
+COMPLETE USETOGGLE HOOK CODE
+-----------------------------
+  import { useState } from 'react';
+
+  function useToggle(initialValue = false) {
+    const [isToggled, setIsToggled] = useState(initialValue);
+    
+    const toggle = () => {
+      setIsToggled(prev => !prev);
+    };
+    
+    return [isToggled, toggle];
+  }
+
+  export default useToggle;
+
+WHAT THIS HOOK DOES
+-------------------
+• Manages a boolean state (true/false)
+• Provides a function to toggle between true and false
+• Returns both the current state and the toggle function
+• Can start with a custom initial value (defaults to false)
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: LINE-BY-LINE EXPLANATION OF USETOGGLE
+---------------------------------------------------
+
+DETAILED LINE-BY-LINE BREAKDOWN
+--------------------------------
+
+IMPORT STATEMENT
+-----------------
+Line 1: import { useState } from 'react';
+        • import { useState } - Named import of useState hook
+          - useState is needed to manage the toggle state
+          - Destructured from React's exports
+        • from 'react' - Specifies where to import from
+          - React package provides the useState hook
+        • ; - Statement terminator
+
+HOOK DECLARATION
+----------------
+Line 2: (empty line for readability)
+
+Line 3: function useToggle(initialValue = false) {
+        • function - Declares a function
+        • useToggle - Hook name (starts with "use")
+          - Follows React naming convention
+          - Must start with "use" for React to recognize it as a hook
+        • (initialValue = false) - Parameter with default value
+          - initialValue - Optional parameter for starting state
+          - = false - Default value is false if not provided
+          - Allows customization: useToggle(true) starts as true
+          - If called without argument: useToggle() starts as false
+        • { - Opens function body
+
+STATE MANAGEMENT
+----------------
+Line 4: const [isToggled, setIsToggled] = useState(initialValue);
+        • const - Declares a constant variable
+        • [isToggled, setIsToggled] - Array destructuring
+          - isToggled - Current state value (true or false)
+          - setIsToggled - Function to update the state
+        • = useState(initialValue) - Calls useState hook
+          - initialValue - Starting value for state
+          - Returns [currentValue, setterFunction]
+          - State is initialized with initialValue parameter
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "It manages the true and false state of the ToggleButton."
+
+TOGGLE FUNCTION
+---------------
+Line 5: (empty line for readability)
+
+Line 6: const toggle = () => {
+        • const - Declares a constant
+        • toggle - Function name
+          - This function will toggle the state
+          - Can be called to switch between true and false
+        • = () => { - Arrow function syntax
+          - No parameters needed
+          - Opens function body
+
+Line 7: setIsToggled(prev => !prev);
+        • setIsToggled - State setter function
+        • (prev => !prev) - Function form of setState
+          - prev - Previous state value (true or false)
+          - => - Arrow function syntax
+          - !prev - Logical NOT operator
+            * If prev is true, !prev is false
+            * If prev is false, !prev is true
+          - This toggles the boolean value
+        • Function form ensures we get the latest state value
+        • ; - Statement terminator
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "The hook returns two values, IsToggled, representing the current state, 
+        either true or false, and Toggle, a function that toggles the state 
+        between true and false when invoked."
+
+Line 8: };
+        • Closes the toggle function
+
+RETURN STATEMENT
+----------------
+Line 9: (empty line for readability)
+
+Line 10: return [isToggled, toggle];
+         • return - Returns values from the hook
+         • [isToggled, toggle] - Returns an array
+           - isToggled - Current state (true/false)
+           - toggle - Function to toggle the state
+         • Array format allows destructuring in components
+         • ; - Statement terminator
+         
+         EXPLANATION FROM ORIGINAL CONTENT:
+         "The hook returns two values, IsToggled, representing the current 
+         state, either true or false, and Toggle, a function that toggles the 
+         state between true and false when invoked."
+
+HOOK CLOSURE
+------------
+Line 11: }
+         • Closes the useToggle function
+
+EXPORT STATEMENT
+----------------
+Line 12: (empty line for readability)
+
+Line 13: export default useToggle;
+         • export default - Exports as default export
+         • useToggle - The hook being exported
+         • Allows importing: import useToggle from './useToggle'
+         • ; - Statement terminator
+
+HOW THE HOOK WORKS
+------------------
+1. Hook is called with optional initialValue
+2. useState creates state with initialValue (or false)
+3. toggle function is created that flips the boolean
+4. Hook returns [currentState, toggleFunction]
+5. Components can use both values
+
+EXAMPLE USAGE PATTERNS
+----------------------
+  // Pattern 1: Array destructuring
+  const [isToggled, toggle] = useToggle();
+  
+  // Pattern 2: With initial value
+  const [isToggled, toggle] = useToggle(true); // Starts as true
+  
+  // Pattern 3: Named destructuring (if returned as object)
+  // const { isToggled, toggle } = useToggle(); // If returned as object
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: TOGGLEBUTTON COMPONENT CODE
+---------------------------------------
+
+COMPLETE TOGGLEBUTTON COMPONENT CODE
+-------------------------------------
+  import React from 'react';
+  import useToggle from './useToggle';
+
+  function ToggleButton() {
+    const [isToggled, toggle] = useToggle();
+    
+    return (
+      <button onClick={toggle}>
+        {isToggled ? 'ON' : 'OFF'}
+      </button>
+    );
+  }
+
+  export default ToggleButton;
+
+WHAT THIS COMPONENT DOES
+-------------------------
+• Uses the useToggle hook to manage toggle state
+• Renders a button that displays "ON" or "OFF"
+• Clicking the button toggles between ON and OFF states
+• Provides a simple and reusable way to create toggle functionality
+
+[END SECTION 7.4]
+================================================================================
+
+SECTION 7.5: LINE-BY-LINE EXPLANATION OF TOGGLEBUTTON
+-------------------------------------------------------
+
+DETAILED LINE-BY-LINE BREAKDOWN
+--------------------------------
+
+IMPORT STATEMENTS
+-----------------
+Line 1: import React from 'react';
+        • import React - Imports React library
+          - Required for JSX syntax
+          - Provides React functionality
+        • from 'react' - Specifies where to import from
+          - React package
+        • ; - Statement terminator
+
+Line 2: import useToggle from './useToggle';
+        • import useToggle - Imports the custom hook
+          - useToggle is the hook we created
+          - Default import (no curly braces)
+        • from './useToggle' - Path to the hook file
+          - './' means current directory
+          - 'useToggle' is the file name
+          - Could be './hooks/useToggle' if in subfolder
+        • ; - Statement terminator
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "The ToggleButton component imports and utilizes a custom hook named 
+        UseToggle, which uses the logic for toggling between true and false 
+        states."
+
+COMPONENT DECLARATION
+---------------------
+Line 3: (empty line for readability)
+
+Line 4: function ToggleButton() {
+        • function - Declares a function component
+        • ToggleButton - Component name
+          - Must start with capital letter (React convention)
+          - PascalCase naming
+        • () - No props needed for this component
+        • { - Opens function body
+
+USING THE CUSTOM HOOK
+---------------------
+Line 5: const [isToggled, toggle] = useToggle();
+        • const - Declares a constant variable
+        • [isToggled, toggle] - Array destructuring
+          - isToggled - Current toggle state (true/false)
+          - toggle - Function to toggle the state
+        • = useToggle() - Calls the custom hook
+          - () - No arguments, so uses default initialValue (false)
+          - Returns [isToggled, toggle]
+        • ; - Statement terminator
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "Within the ToggleButton component, the UseToggle hook is used to 
+        manage the state of a button. The hook returns two values, IsToggled, 
+        representing the current state, either true or false, and Toggle, a 
+        function that toggles the state between true and false when invoked."
+
+RETURN STATEMENT
+----------------
+Line 6: (empty line for readability)
+
+Line 7: return (
+        • return - Returns JSX to render
+        • ( - Parentheses allow JSX to span multiple lines
+
+Line 8: <button onClick={toggle}>
+        • <button> - HTML button element
+        • onClick={toggle} - Event handler
+          - onClick - React event prop (camelCase)
+          - {toggle} - JSX expression
+          - toggle - The function from useToggle hook
+          - When button is clicked, toggle function is called
+        • > - Closes opening tag
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "Upon clicking the button, the toggle function is triggered, updating 
+        the state accordingly."
+
+Line 9: {isToggled ? 'ON' : 'OFF'}
+        • { } - JSX expression syntax
+        • isToggled - Current state from hook
+        • ? 'ON' : 'OFF' - Ternary operator (conditional)
+          - If isToggled is true → displays 'ON'
+          - If isToggled is false → displays 'OFF'
+        • This is conditional rendering based on state
+        
+        EXPLANATION FROM ORIGINAL CONTENT:
+        "In the JSX, a button is rendered with a text content of on when the 
+        state is true and off when the state is false."
+
+Line 10: </button>
+         • Closes the button element
+
+Line 11: );
+         • Closes the return statement parentheses
+
+COMPONENT CLOSURE
+-----------------
+Line 12: }
+         • Closes the ToggleButton function
+
+EXPORT STATEMENT
+-----------------
+Line 13: (empty line for readability)
+
+Line 14: export default ToggleButton;
+         • export default - Exports component as default
+         • ToggleButton - Component being exported
+         • Allows importing: import ToggleButton from './ToggleButton'
+         • ; - Statement terminator
+
+HOW THE COMPONENT WORKS
+-----------------------
+1. Component renders
+2. useToggle() is called, returns [false, toggleFunction]
+3. Button renders with "OFF" (because isToggled is false)
+4. User clicks button
+5. toggle() function is called
+6. State updates: false → true
+7. Component re-renders
+8. Button now shows "ON" (because isToggled is true)
+9. Process repeats on each click
+
+[END SECTION 7.5]
+================================================================================
+
+SECTION 7.6: HOW USETOGGLE AND TOGGLEBUTTON WORK TOGETHER
+-----------------------------------------------------------
+
+THE COMPLETE FLOW
+-----------------
+
+STEP 1: INITIAL RENDER
+-----------------------
+  ToggleButton renders
+    ↓
+  Calls useToggle()
+    ↓
+  useState(false) creates state
+    ↓
+  Returns [false, toggleFunction]
+    ↓
+  Button displays "OFF"
+
+STEP 2: USER CLICKS BUTTON
+---------------------------
+  onClick event fires
+    ↓
+  toggle() function called
+    ↓
+  setIsToggled(prev => !prev) executes
+    ↓
+  State changes: false → true
+    ↓
+  Component re-renders
+
+STEP 3: RE-RENDER AFTER CLICK
+------------------------------
+  ToggleButton re-renders
+    ↓
+  Calls useToggle() again
+    ↓
+  useState returns current state (true)
+    ↓
+  Returns [true, toggleFunction]
+    ↓
+  Button displays "ON"
+
+STEP 4: USER CLICKS AGAIN
+--------------------------
+  Same process repeats
+    ↓
+  State changes: true → false
+    ↓
+  Button displays "OFF" again
+
+VISUAL REPRESENTATION
+---------------------
+
+BEFORE CLICKING:
+  State: false
+  Display: [OFF]
+  isToggled: false
+
+AFTER FIRST CLICK:
+  State: true
+  Display: [ON]
+  isToggled: true
+
+AFTER SECOND CLICK:
+  State: false
+  Display: [OFF]
+  isToggled: false
+
+EXPLANATION FROM ORIGINAL CONTENT
+---------------------------------
+As mentioned: "The output before clicking the ToggleButton will be as shown. 
+After clicking the ToggleButton, the output will be as shown. This toggle will 
+be performed as long as the user clicks on the button."
+
+BENEFITS OF THIS PATTERN
+------------------------
+1. REUSABILITY
+   • useToggle can be used in multiple components
+   • Logic is written once, used many times
+
+2. SEPARATION OF CONCERNS
+   • Logic (useToggle) is separate from UI (ToggleButton)
+   • Component focuses on rendering
+   • Hook focuses on state management
+
+3. TESTABILITY
+   • Hook can be tested independently
+   • Component can be tested separately
+   • Easier to debug
+
+4. MAINTAINABILITY
+   • Changes to toggle logic only need to happen in one place
+   • All components using useToggle benefit from improvements
+
+EXAMPLE: USING USETOGGLE IN ANOTHER COMPONENT
+---------------------------------------------
+  function LightSwitch() {
+    const [isOn, toggle] = useToggle(false);
+    
+    return (
+      <div>
+        <p>Light is {isOn ? 'ON' : 'OFF'}</p>
+        <button onClick={toggle}>
+          Turn {isOn ? 'OFF' : 'ON'}
+        </button>
+      </div>
+    );
+  }
+
+Same hook, different component, different UI!
+
+[END SECTION 7.6]
+[END PART 7]
+================================================================================
+
+PART 8: ADVANCED CUSTOM HOOK PATTERNS
+================================================================================
+
+SECTION 8.1: CUSTOM HOOK FOR API FETCHING
+------------------------------------------
+
+PATTERN: useApi Hook
+--------------------
+A more advanced version of useFetch with better error handling and options.
+
+HOOK CODE:
+  function useApi(url, options = {}) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+      let cancelled = false;
+
+      async function fetchData() {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const response = await fetch(url, options);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const result = await response.json();
+
+          if (!cancelled) {
+            setData(result);
+            setLoading(false);
+          }
+        } catch (err) {
+          if (!cancelled) {
+            setError(err.message);
+            setLoading(false);
+          }
+        }
+      }
+
+      fetchData();
+
+      return () => {
+        cancelled = true;
+      };
+    }, [url, JSON.stringify(options)]);
+
+    return { data, loading, error };
+  }
+
+FEATURES:
+• Handles component unmounting during fetch
+• Prevents state updates if component unmounts
+• Supports custom fetch options
+• Better error handling
+
+[END SECTION 8.1]
+================================================================================
+
+SECTION 8.2: CUSTOM HOOK FOR FORM HANDLING
+------------------------------------------
+
+PATTERN: useForm Hook
+---------------------
+A hook that manages form state, validation, and submission.
+
+HOOK CODE:
+  function useForm(initialValues = {}) {
+    const [values, setValues] = useState(initialValues);
+    const [errors, setErrors] = useState({});
+    const [touched, setTouched] = useState({});
+
+    const handleChange = (name, value) => {
+      setValues(prev => ({ ...prev, [name]: value }));
+      // Clear error when user starts typing
+      if (errors[name]) {
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[name];
+          return newErrors;
+        });
+      }
+    };
+
+    const handleBlur = (name) => {
+      setTouched(prev => ({ ...prev, [name]: true }));
+    };
+
+    const handleSubmit = (onSubmit) => {
+      return (e) => {
+        e.preventDefault();
+        onSubmit(values);
+      };
+    };
+
+    return {
+      values,
+      errors,
+      touched,
+      handleChange,
+      handleBlur,
+      handleSubmit
+    };
+  }
+
+USAGE:
+  function LoginForm() {
+    const { values, handleChange, handleSubmit } = useForm({
+      email: '',
+      password: ''
+    });
+
+    const onSubmit = (formValues) => {
+      console.log('Submitting:', formValues);
+    };
+
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          name="email"
+          value={values.email}
+          onChange={(e) => handleChange('email', e.target.value)}
+        />
+        <input
+          name="password"
+          type="password"
+          value={values.password}
+          onChange={(e) => handleChange('password', e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
+    );
+  }
+
+[END SECTION 8.2]
+================================================================================
+
+SECTION 8.3: CUSTOM HOOK FOR LOCAL STORAGE
+-------------------------------------------
+
+PATTERN: useLocalStorage Hook
+-----------------------------
+A hook that syncs state with browser's localStorage.
+
+HOOK CODE:
+  function useLocalStorage(key, initialValue) {
+    // Get from localStorage or use initial value
+    const [storedValue, setStoredValue] = useState(() => {
+      try {
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        return initialValue;
+      }
+    });
+
+    // Update localStorage when value changes
+    const setValue = (value) => {
+      try {
+        setStoredValue(value);
+        window.localStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        console.error('Error saving to localStorage:', error);
+      }
+    };
+
+    return [storedValue, setValue];
+  }
+
+USAGE:
+  function Settings() {
+    const [theme, setTheme] = useLocalStorage('theme', 'light');
+    
+    return (
+      <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    );
+  }
+
+[END SECTION 8.3]
+================================================================================
+
+SECTION 8.4: CUSTOM HOOK FOR DEBOUNCING
+----------------------------------------
+
+PATTERN: useDebounce Hook
+-------------------------
+A hook that delays updating a value until after a specified delay.
+
+HOOK CODE:
+  function useDebounce(value, delay) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  }
+
+USAGE:
+  function SearchBox() {
+    const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+    useEffect(() => {
+      if (debouncedSearchTerm) {
+        // Perform search API call
+        console.log('Searching for:', debouncedSearchTerm);
+      }
+    }, [debouncedSearchTerm]);
+
+    return (
+      <input
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Search..."
+      />
+    );
+  }
+
+BENEFIT: Reduces API calls by waiting for user to stop typing.
+
+[END SECTION 8.4]
+================================================================================
+
+SECTION 8.5: COMPOSING MULTIPLE CUSTOM HOOKS
+----------------------------------------------
+
+PATTERN: Using Multiple Hooks Together
+--------------------------------------
+Custom hooks can be composed together to create more complex functionality.
+
+EXAMPLE: useAuthenticatedUser Hook
+-----------------------------------
+  function useAuthenticatedUser() {
+    const [user, setUser] = useLocalStorage('user', null);
+    const { data, loading, error } = useFetch('/api/user/me');
+    
+    useEffect(() => {
+      if (data) {
+        setUser(data);
+      }
+    }, [data, setUser]);
+
+    const login = async (credentials) => {
+      // Login logic
+      const userData = await loginApi(credentials);
+      setUser(userData);
+    };
+
+    const logout = () => {
+      setUser(null);
+    };
+
+    return {
+      user,
+      loading,
+      error,
+      login,
+      logout,
+      isAuthenticated: !!user
+    };
+  }
+
+This hook combines:
+• useLocalStorage (for persistence)
+• useFetch (for API calls)
+• Custom logic (login/logout)
+
+[END SECTION 8.5]
+[END PART 8]
+================================================================================
+
+PART 9: BEST PRACTICES AND SUMMARY
+================================================================================
+
+SECTION 9.1: BEST PRACTICES FOR CUSTOM HOOKS
+----------------------------------------------
+
+PRACTICE 1: SINGLE RESPONSIBILITY
+----------------------------------
+Each custom hook should do one thing well.
+
+GOOD:
+  function useToggle() { /* Only handles toggle */ }
+  function useCounter() { /* Only handles counter */ }
+
+BAD:
+  function useToggleAndCounter() { /* Does too much */ }
+
+PRACTICE 2: DESCRIPTIVE NAMES
+-----------------------------
+Name hooks clearly to indicate their purpose.
+
+GOOD:
+  useWindowSize
+  useDebounce
+  useLocalStorage
+
+BAD:
+  useHook1
+  useThing
+  useStuff
+
+PRACTICE 3: RETURN CONSISTENT STRUCTURES
+----------------------------------------
+Return values in a consistent format (array or object).
+
+GOOD (Consistent):
+  function useToggle() {
+    return [value, setValue]; // Always array
+  }
+
+  function useCounter() {
+    return { count, increment, decrement }; // Always object
+  }
+
+BAD (Inconsistent):
+  function useToggle() {
+    return [value, setValue]; // Array
+  }
+
+  function useCounter() {
+    return [count, increment]; // Array (but different pattern)
+
+PRACTICE 4: DOCUMENT YOUR HOOKS
+--------------------------------
+Add comments explaining what the hook does and how to use it.
+
+EXAMPLE:
+  /**
+   * Custom hook for managing toggle state
+   * @param {boolean} initialValue - Initial toggle state (default: false)
+   * @returns {Array} [isToggled, toggle] - Current state and toggle function
+   */
+  function useToggle(initialValue = false) {
+    // Implementation
+  }
+
+PRACTICE 5: HANDLE EDGE CASES
+-----------------------------
+Consider error cases and edge scenarios.
+
+EXAMPLE:
+  function useLocalStorage(key, initialValue) {
+    const [storedValue, setStoredValue] = useState(() => {
+      try {
+        // Handle localStorage not available
+        if (typeof window === 'undefined') {
+          return initialValue;
+        }
+        const item = window.localStorage.getItem(key);
+        return item ? JSON.parse(item) : initialValue;
+      } catch (error) {
+        // Handle parsing errors
+        console.error('Error reading from localStorage:', error);
+        return initialValue;
+      }
+    });
+    // ... rest of hook
+  }
+
+[END SECTION 9.1]
+================================================================================
+
+SECTION 9.2: COMMON MISTAKES TO AVOID
+--------------------------------------
+
+MISTAKE 1: NOT STARTING WITH "use"
+----------------------------------
+WRONG:
+  function toggle() { }  // Missing "use"
+
+RIGHT:
+  function useToggle() { }  // Correct
+
+MISTAKE 2: CALLING HOOKS CONDITIONALLY
+--------------------------------------
+WRONG:
+  function useConditionalHook(condition) {
+    if (condition) {
+      const [value, setValue] = useState(0); // Conditional!
+    }
+  }
+
+RIGHT:
+  function useConditionalHook(condition) {
+    const [value, setValue] = useState(0); // Always called
+    // Use condition in logic, not in hook calls
+  }
+
+MISTAKE 3: RETURNING INCONSISTENT TYPES
+---------------------------------------
+WRONG:
+  function useToggle() {
+    if (someCondition) {
+      return [value, toggle]; // Array
+    }
+    return { value, toggle }; // Object - inconsistent!
+  }
+
+RIGHT:
+  function useToggle() {
+    return [value, toggle]; // Always array
+  }
+
+MISTAKE 4: NOT CLEANING UP SIDE EFFECTS
+----------------------------------------
+WRONG:
+  function useWindowSize() {
+    useEffect(() => {
+      window.addEventListener('resize', handleResize);
+      // Missing cleanup!
+    }, []);
+  }
+
+RIGHT:
+  function useWindowSize() {
+    useEffect(() => {
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
+  }
+
+MISTAKE 5: FORGETTING DEPENDENCIES
+----------------------------------
+WRONG:
+  function useFetch(url) {
+    useEffect(() => {
+      fetch(url); // Uses url but not in dependencies
+    }, []); // Missing url!
+  }
+
+RIGHT:
+  function useFetch(url) {
+    useEffect(() => {
+      fetch(url);
+    }, [url]); // url included
+  }
+
+[END SECTION 9.2]
+================================================================================
+
+SECTION 9.3: TESTING CUSTOM HOOKS
+----------------------------------
+
+WHY TEST CUSTOM HOOKS
+---------------------
+• Hooks contain reusable logic
+• Bugs in hooks affect multiple components
+• Easier to test logic separately from UI
+
+BASIC TESTING APPROACH
+----------------------
+Use React Testing Library's renderHook:
+
+  import { renderHook, act } from '@testing-library/react';
+  import { useToggle } from './useToggle';
+
+  test('useToggle toggles state', () => {
+    const { result } = renderHook(() => useToggle());
+    
+    expect(result.current[0]).toBe(false); // Initial state
+    
+    act(() => {
+      result.current[1](); // Call toggle
+    });
+    
+    expect(result.current[0]).toBe(true); // Toggled state
+  });
+
+TESTING WITH INITIAL VALUES
+---------------------------
+  test('useToggle with initial value', () => {
+    const { result } = renderHook(() => useToggle(true));
+    
+    expect(result.current[0]).toBe(true);
+  });
+
+[END SECTION 9.3]
+================================================================================
+
+SECTION 9.4: SUMMARY AND KEY TAKEAWAYS
+---------------------------------------
+
+KEY CONCEPTS FROM PART 2
+------------------------
+
+1. CUSTOM HOOKS DEFINITION
+   • Custom hooks are functions that start with "use"
+   • They can call other React hooks
+   • They allow you to extract and reuse logic
+   • They return values, functions, or both
+
+2. WHY USE CUSTOM HOOKS
+   • Code reusability - write once, use many times
+   • Separation of concerns - logic separate from UI
+   • Easier testing - test logic independently
+   • Abstraction - hide complex logic
+
+3. USETOGGLE EXAMPLE
+   • Manages boolean state (true/false)
+   • Returns [isToggled, toggle]
+   • Used in ToggleButton component
+   • Demonstrates reusability pattern
+
+4. BEST PRACTICES
+   • Start with "use"
+   • Follow Rules of Hooks
+   • Single responsibility
+   • Descriptive names
+   • Consistent return types
+   • Handle edge cases
+
+5. COMMON PATTERNS
+   • useToggle - Boolean state management
+   • useFetch/useApi - Data fetching
+   • useForm - Form handling
+   • useLocalStorage - Persistence
+   • useDebounce - Delayed updates
+
+FINAL SUMMARY FROM ORIGINAL CONTENT
+-----------------------------------
+As mentioned in the original content: "In this video, you learned that useEffect 
+is a React hook that allows you to perform side effects in functional components. 
+Side effects are actions that occur asynchronously, affecting the application 
+state or UI. In React's useEffect hook, dependencies refer to variables or values 
+which are used to determine when useEffect should run. Custom hooks allow you to 
+abstract complex logic that you can easily reuse across different components in 
+your application."
+
+QUICK REFERENCE GUIDE
+---------------------
+
+USEEFFECT QUICK REFERENCE
+-------------------------
+  useEffect(() => {
+    // Side effect code
+  }, []); // Empty = run once
+
+  useEffect(() => {
+    // Side effect code
+  }, [value]); // Run when value changes
+
+  useEffect(() => {
+    // Side effect code
+    return () => {
+      // Cleanup
+    };
+  }, []);
+
+CUSTOM HOOK QUICK REFERENCE
+---------------------------
+  function useCustomHook() {
+    const [state, setState] = useState(initialValue);
+    // Logic here
+    return [state, setState];
+  }
+
+  // Usage
+  const [value, setValue] = useCustomHook();
+
+USETOGGLE QUICK REFERENCE
+-------------------------
+  function useToggle(initialValue = false) {
+    const [isToggled, setIsToggled] = useState(initialValue);
+    const toggle = () => setIsToggled(prev => !prev);
+    return [isToggled, toggle];
+  }
+
+  // Usage
+  const [isOn, toggle] = useToggle();
+  <button onClick={toggle}>{isOn ? 'ON' : 'OFF'}</button>
+
+WHAT YOU'VE LEARNED
+-------------------
+After studying both parts of this guide, you can now:
+✓ Understand what side effects are
+✓ Use useEffect to perform side effects
+✓ Understand dependency arrays
+✓ Create custom hooks
+✓ Use custom hooks in components
+✓ Follow best practices
+✓ Avoid common mistakes
+
+NEXT STEPS
+----------
+• Practice creating your own custom hooks
+• Refactor existing components to use custom hooks
+• Build a library of reusable hooks
+• Share hooks between projects
+• Read React documentation for more hooks
+
+================================================================================
+END OF PART 2
+================================================================================
+
+FINAL NOTES
+-----------
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• useEffect allows side effects in function components
+• Side effects are asynchronous operations
+• Dependencies control when effects run
+• Custom hooks enable code reuse
+• Custom hooks must start with "use"
+• Follow the Rules of Hooks
+• Practice is key to mastery
+
+You now have a comprehensive understanding of Side Effects Management and 
+Custom Hooks in React. These concepts are fundamental to building modern 
+React applications.
+
+Good luck with your React journey!
+
+================================================================================
+END OF COMPREHENSIVE GUIDE
+================================================================================
+
+Author(s)
+---------
+Based on original content about Side Effects Management and Custom Hooks
+
+Original Content Maintained
+----------------------------
+All original definitions, explanations, and concepts from the source material 
+have been preserved and expanded upon in this comprehensive guide.
+
