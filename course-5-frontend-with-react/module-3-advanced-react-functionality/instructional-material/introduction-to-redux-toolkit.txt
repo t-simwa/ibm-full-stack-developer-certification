@@ -1,0 +1,81 @@
+[MUSIC] Welcome to a video about
+the Redux toolkit. After watching this video, you will be
+able define Redux Toolkit in the context of React, describe the Redux Toolkit
+utilities used to streamline Redux tasks, describe the Redux Toolkit architecture, describe the relationship
+between a store and a slice. In the context of React, Redux Toolkit (RTK)
+is an official package the Redux team provides to simplify Redux
+development and make it more efficient. It includes utilities that help
+streamline common Redux tasks, reduce boilerplate code,
+and simplify development. Redux Toolkit includes utilities
+to streamline Redux tasks. It provides a configureStore function
+that combines several pieces of Redux setup logic into a single function call. The function includes setting up the Redux
+store with commonly used middleware such as Redux Thunk for
+handling asynchronous actions and enabling the Redux Devtools Extension for
+debugging. Redux Toolkit introduces the createSlice
+function, which allows developers to define slice reducers that automatically
+handle immutable updates to the state. The function makes it easier to write
+reducer logic without having to worry about mutating the state directly. Redux Toolkit significantly reduces the
+boilerplate code needed to set up Redux in an application. This reduction leads to cleaner, more
+concise code and faster development time. Using Redux Toolkit can make your Redux
+code base cleaner, more organized, and easier to maintain, especially in larger applications
+where managing state can be complex. To get started with the Redux
+Toolkit in a React application, you can install it through npm or yarn. Also, ensure that React Redux is
+installed on your application. The Redux Toolkit contains at least
+one slice file and one store file. A slice in the Redux Toolkit represents
+a piece of your application state and the logic to update it. Slices are typically defined using
+the createSlice function provided by Redux Toolkit. It consists of a reducer,
+action creators, and an initial state. A reducer is a function that
+receives the current state and an action and
+returns a new state based on that action. Action creators are functions that create
+actions to be dispatched to the store. The initial state is the initial
+value of the state slice. The Redux store is a single JavaScript
+object that holds the complete state tree of your application. It is the source of truth for your data. In the Redux Toolkit, the store is created
+using the configureStore function, which takes in an object with
+reducer functions as its argument. The store allows access to the state
+through the getState function, allows state updates
+through dispatch(action), and registers listeners
+through subscribe(listener). The relationship between a slice and
+the store can be summarized as follows. Slices define individual parts
+of your application state and the logic to update them. The store is where all these slices are
+combined to form the complete state tree of your application. Each slice reducer is added to the Redux
+store during its creation using the configureStore function. The store combines all the slice
+reducers into a single reducer using combineReducers function. When actions are dispatched,
+the store delegates them to the appropriate slice reducers
+based on their corresponding slice. Let us understand the relationship between
+slices and stores using an example. Suppose you have an e-commerce application
+that depicts the increase in the product quantity in your cart, the total
+bill amount, and the number of super coins you will earn on a purchase that
+you can use in your next payment. In this application,
+you will have the following components, App.jsx is the parent component, ProductQuantity.jsx will increment
+the quantity of a product item, CartValue.jsx will
+calculate the total amount, CounterSlice.jsx will
+contain the reducer and any associated action creators
+within a single file, Store.jsx will store the Redux state, Main.jsx is the entry point. ProductQuantity.jsx displays
+a product's quantity and allows users to increase or decrease it. It imports use dispatch and use selector hooks from React Redux
+to interact with the Redux store. useSelector is used to extract
+the counter state from the Redux store. The component renders buttons to
+increment or decrease the quantity. When these buttons are clicked,
+the corresponding increment or decrement action from the CounterSlice is dispatched
+to the Redux store using dispatch. CartValue.jsx component
+determines the total bill amount and displays it based on the product
+quantity saved in the Redux store. To get the counter information from
+the Redux store, it uses useSelector. The final amount is calculated using the
+number of items and a set price per unit. CounterSlice.jsx file defines
+a Redux slice named counter. It initializes the counter state
+to zero and defines two reducers, increment and decrement. When the increment or
+decrement actions are dispatched, they update the counter state accordingly. Store.jsx file configures
+the Redux store using configureStore from the Redux toolkit. It imports the counterReducer
+from CounterSlice and sets it as the reducer for
+the CounterSlice. The configureStore is then exported and
+used in the application. The main.jsx component is
+the entry point of the application. It wraps the app component
+with the provider component from React Redux passing
+the Redux store as a prop. In this video, you learned that in
+the context of React, Redux Toolkit, or RTK, is an official package the Redux team provides to simplify Redux
+development and make it more efficient. Redux Toolkit provides a configureStore
+function that combines several pieces of Redux setup logic into
+a single function call. Redux Toolkit introduces the createSlice
+function, which allows developers to define "slice reducers" that automatically
+handle immutable updates to the state. A slice in the Redux Toolkit represents
+a piece of your application state and the logic to update it. The Redux store is a single JavaScript
+object that holds the complete state tree of your application.

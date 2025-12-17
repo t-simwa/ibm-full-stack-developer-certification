@@ -1,0 +1,52 @@
+Welcome to Binding Redux and Flow. After watching this video, you will be able to: Explain concept of state change. Describe data flow in Redux. And, list the advantages of
+one-way data flow in Redux. In a React application, state stores
+the properties of a component. When the state of a component changes, React responds by triggering the re-rendering
+of the document object model or DOM. As the application expands, it becomes difficult
+to manage the state in your application. The change in the state may involve the
+transfer of data between components and a long chain of props
+that can result in a complicated application code. The solution to this problem is offered by Redux. It is an open-source JavaScript library that
+can manage the state of your application. It is commonly used with ReactJS
+but is not limited to it, and can also be used with other
+JavaScript libraries such as Angular. A conventional React-Redux application comprises
+a single store along with a single root Reducer. As the application grows more
+complex, the root Reducer splits into smaller Reducers that operate on
+the different parts of the state tree. An alternate solution can be
+setting a global variable that can be accessed by different components. However, React will not react to any
+changes made in the global variable. Redux provides a central store that reduces the  complexity of the code and makes the state updating process easier. The Redux elements that are involved in
+updating of the component properties include: Central Store: The store holds the entire
+application list in the form of the ‘state tree’. Actions: These are information packages sent by the component with a type
+(description) to the reducer. Actions are simple objects which conventionally
+have two properties: type and payload. The type property is usually a string that
+identifies the action, and the payload is an optional property that contains
+some data that is required to perform a task. So, the main function of actions is to send data
+from the application to the Redux store. Reducer: This is a simple function that
+receives the old state and action as input and returns an updated state. Since the state is immutable, a
+reducer always returns a new state, which is an updated version of the previous state. Subscription: This is triggered in the components
+whenever the state is updated in the store. The data flow in a React-Redux
+application is unidirectional. It only goes in one direction. The flow of data in a React-Redux application begins at the component level when the
+user interacts with the application UI. This interaction leads to the action
+creators dispatching an action. So when an action is dispatched, it is
+received by the root reducer of the application and is passed on to all the reducers. Thus, it becomes the reducer’s task
+to determine if it needs to update the state based on the dispatched action. This is checked by using a simple switch
+statement to filter out the required actions. Each smaller reducer in the application
+accepts the dispatched action, and if the type of the dispatched action
+matches, it returns a newly updated state. It is essential to note here that the
+state never actually changes in Redux. Instead, the reducer always generates a new state which is a copy of the old
+state but with some modifications. The store then informs the
+component about the new state, which in turn retrieves the updated
+state and re-renders the component. Earlier developers used two-way
+binding to change the state data such that the UI reflected the change. Robust frameworks like Angular and
+Ember used this type of binding. However, two-way binding was affecting the browser performance adversely with the expansion of applications. In addition, it became difficult
+to keep track of the data flow. Large companies had a tough time implementing
+trivial applications like their chat feature. In the one-way data flow paradigm,
+building presentational components and wrapping them in containers or store
+(as in Redux applications), solves the problem. Now, the advantage of one-way data flow in Redux is that building large, front-end-heavy web applications
+becomes much more manageable. It is easier to manage the state
+when actions performed on the UI are separated from the changing and updating
+of the state that happens due to the action. You can use some of the same containers,
+actions, and reducers in React Native to quickly create apps for iOS and Android. The presentational components do change a bit when you use iOS or Android
+view components instead of HTML. In this video, you learned that: When the state of a component changes, React responds by triggering
+the re-rendering of the DOM. The Redux elements that are involved in
+updating of the component properties are: Central Store, Actions, Reducer, and Subscription. The data flow in a React-Redux
+application is unidirectional. And, it's easier to manage the state
+when actions performed on the UI are separated from the changing of the state.
