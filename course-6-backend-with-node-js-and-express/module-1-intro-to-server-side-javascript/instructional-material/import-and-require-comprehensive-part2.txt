@@ -1,0 +1,1651 @@
+================================================================================
+IMPORT AND REQUIRE
+Comprehensive Study Guide - Part 2
+================================================================================
+
+CONTINUATION FROM PART 1
+------------------------
+This is Part 2 of the comprehensive guide. Part 1 covered:
+  • Understanding modules
+  • Module specifications (CommonJS and ES modules)
+  • The require statement (CommonJS)
+
+Part 2 covers:
+  • The import statement (ES modules)
+  • Detailed comparison between require and import
+  • Performance considerations
+  • Best practices and recommendations
+  • Summary and quick reference guide
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: THE IMPORT STATEMENT (ES MODULES)
+  SECTION 4.1: WHAT IS IMPORT?
+  SECTION 4.2: HOW IMPORT WORKS
+  SECTION 4.3: EXPORTING WITH EXPORT
+  SECTION 4.4: IMPORTING WITH IMPORT
+  SECTION 4.5: IMPORT EXAMPLES AND PATTERNS
+
+PART 5: COMPARING REQUIRE AND IMPORT
+  SECTION 5.1: WHERE THEY CAN BE CALLED
+  SECTION 5.2: STATIC VS DYNAMIC BINDING
+  SECTION 5.3: SYNCHRONOUS VS ASYNCHRONOUS
+  SECTION 5.4: PERFORMANCE COMPARISON
+  SECTION 5.5: WHEN TO USE EACH
+
+PART 6: SUMMARY AND BEST PRACTICES
+  SECTION 6.1: KEY CONCEPTS SUMMARY
+  SECTION 6.2: QUICK REFERENCE GUIDE
+  SECTION 6.3: BEST PRACTICES
+  SECTION 6.4: COMMON MISTAKES TO AVOID
+
+================================================================================
+PART 4: THE IMPORT STATEMENT (ES MODULES)
+================================================================================
+
+SECTION 4.1: WHAT IS IMPORT?
+-----------------------------
+
+DEFINITION
+----------
+ES modules use the import() function to import modules. The import statement 
+is used to load and make available the exports from another module.
+
+DETAILED EXPLANATION
+--------------------
+import is a keyword (and function) in JavaScript that:
+• Loads a module from a file or package
+• Makes the module's exports available in the current file
+• Works asynchronously (can load modules in parallel)
+• Is statically analyzed (checked at compile time)
+• Must be at the top level of the file (with some exceptions)
+
+HOW IMPORT DIFFERS FROM REQUIRE
+--------------------------------
+• import is a language keyword, require() is a function
+• import is asynchronous, require() is synchronous
+• import is static (analyzed before execution), require() is dynamic
+• import must be at top level, require() can be anywhere
+• import uses different syntax for exports/imports
+
+REAL-WORLD ANALOGY
+------------------
+Think of import like ordering food for delivery:
+• You place your order (import statement) at the beginning
+• The restaurant (Node.js) can prepare multiple orders (modules) at once
+• Your order is checked before you even place it (static analysis)
+• You can't change your order halfway through (top-level only)
+• Everything arrives together (asynchronous loading)
+
+BASIC SYNTAX
+------------
+  import module from './path/to/module.mjs';
+  import { property1, property2 } from './path/to/module.mjs';
+  import * as module from './path/to/module.mjs';
+  import module, { property } from './path/to/module.mjs';
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: HOW IMPORT WORKS
+------------------------------
+
+IMPORT RESOLUTION PROCESS
+-------------------------
+ES modules follow a similar but different resolution process:
+
+STEP 1: STATIC ANALYSIS
+------------------------
+Before code runs, JavaScript analyzes all import statements:
+• Checks if files exist
+• Validates syntax
+• Identifies circular dependencies
+• This happens at compile time (before execution)
+
+STEP 2: MODULE LOADING
+----------------------
+Modules are loaded asynchronously:
+• Can load multiple modules in parallel
+• Doesn't block execution
+• More efficient for large applications
+
+STEP 3: MODULE EXECUTION
+------------------------
+Modules execute in dependency order:
+• Dependencies execute first
+• Then the importing module
+• Ensures everything is ready
+
+IMPORT VS REQUIRE RESOLUTION
+----------------------------
+Both follow similar paths but with differences:
+
+  import fs from 'fs';              // Core module
+  import utils from './utils.mjs';   // Local file (must have .mjs or type: module)
+  import express from 'express';     // npm package
+
+FILE EXTENSION REQUIREMENTS
+---------------------------
+ES modules are stricter about extensions:
+• Must include file extension: import './file.mjs' (not './file')
+• Or use .js with "type": "module" in package.json
+• This is different from require() which auto-adds .js
+
+MODULE CACHING
+--------------
+Like require(), ES modules are cached:
+• First import loads and executes
+• Subsequent imports use cached version
+• Each module executes only once
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: EXPORTING WITH EXPORT
+-----------------------------------
+
+DEFINITION
+----------
+Modules can be exported to an ES specification using the "export" keyword. 
+There are two main types of exports: named exports and default exports.
+
+DETAILED EXPLANATION
+--------------------
+The export keyword is used to make code available to other modules. Unlike 
+CommonJS's module.exports, ES modules use the export keyword directly in the 
+code, not as an assignment.
+
+TYPES OF EXPORTS
+----------------
+1. NAMED EXPORTS: Export specific values with names
+2. DEFAULT EXPORT: Export a single default value
+3. MIXED: Combine both named and default exports
+
+NAMED EXPORTS SYNTAX
+--------------------
+  export const value = ...;
+  export function myFunction() { ... }
+  export class MyClass { ... }
+  export { value1, value2 };
+  export { value1 as newName };
+
+DEFAULT EXPORT SYNTAX
+----------------------
+  export default value;
+  export default function() { ... }
+  export default class { ... }
+
+EXAMPLE 1: NAMED EXPORTS
+-------------------------
+This example shows how to export an ES module from a file named module.mjs.
+
+  // module.mjs
+  const a = 1;
+  export { a as myValue };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: const a = 1;
+        • const - Declares a constant variable
+        • a - The variable name
+        • = - Assignment operator
+        • 1 - The numeric value assigned to a
+        • This creates a constant with value 1
+        
+Line 2: export { a as myValue };
+        • export - The keyword that makes this available to other modules
+        • { } - Object destructuring syntax (but for exports)
+        • a - The variable we want to export
+        • as - Keyword that renames the export
+        • myValue - The new name for the export
+        • This exports the value of a, but other modules will import it as myValue
+        • Note the use of curly brackets - this is named export syntax
+
+WHAT THIS MEANS:
+---------------
+• The variable a has value 1
+• When other modules import this, they use the name myValue (not a)
+• This is a named export (not default)
+• Other modules must use: import { myValue } from './module.mjs'
+
+EXAMPLE 2: EXPORTING MULTIPLE NAMED VALUES
+-------------------------------------------
+  // mathUtils.mjs
+  export const add = (a, b) => a + b;
+  export const subtract = (a, b) => a - b;
+  export const multiply = (a, b) => a * b;
+  export const divide = (a, b) => a / b;
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: export const add = (a, b) => a + b;
+        • export - Makes this available to other modules
+        • const - Declares a constant
+        • add - The name of the exported function
+        • = - Assignment operator
+        • (a, b) => a + b - Arrow function that adds two numbers
+        • This exports a function named add
+        
+Lines 2-4: Similar pattern for subtract, multiply, and divide
+        • Each line exports a different mathematical function
+        • All are named exports (not default)
+
+HOW TO USE:
+-----------
+  // main.mjs
+  import { add, subtract, multiply, divide } from './mathUtils.mjs';
+  console.log(add(5, 3));  // Output: 8
+
+EXAMPLE 3: EXPORTING WITH SEPARATE STATEMENTS
+-----------------------------------------------
+  // utils.mjs
+  function sayHello(name) {
+    return `Hello, ${name}!`;
+  }
+  
+  function sayGoodbye(name) {
+    return `Goodbye, ${name}!`;
+  }
+  
+  export { sayHello, sayGoodbye };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: function sayHello(name) { return `Hello, ${name}!`; }
+          • Defines a function (not exported yet)
+          
+Lines 5-7: function sayGoodbye(name) { return `Goodbye, ${name}!`; }
+          • Defines another function (not exported yet)
+          
+Line 9: export { sayHello, sayGoodbye };
+        • export - Export keyword
+        • { sayHello, sayGoodbye } - Exports both functions
+        • This is a single export statement that exports multiple values
+        • Both functions are now available as named exports
+
+EXAMPLE 4: DEFAULT EXPORT
+--------------------------
+  // message.mjs
+  const message = "Hello programmers";
+  export default message;
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: const message = "Hello programmers";
+        • Creates a constant variable with a string value
+        
+Line 2: export default message;
+        • export default - Exports as the default export
+        • message - The value to export
+        • There can only be one default export per module
+        • When importing, you don't need curly braces
+
+HOW TO USE:
+-----------
+  // main.mjs
+  import message from './message.mjs';
+  console.log(message);  // Output: Hello programmers
+  // Note: No curly braces for default imports!
+
+EXAMPLE 5: MIXED EXPORTS (NAMED + DEFAULT)
+-------------------------------------------
+  // data.mjs
+  export const users = ['Alice', 'Bob', 'Charlie'];
+  
+  export function getUser(index) {
+    return users[index];
+  }
+  
+  const defaultConfig = {
+    apiUrl: 'https://api.example.com',
+    timeout: 5000
+  };
+  
+  export default defaultConfig;
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: export const users = ['Alice', 'Bob', 'Charlie'];
+        • Named export: exports an array of users
+        • Other modules can import this as: import { users } from './data.mjs'
+        
+Lines 3-5: export function getUser(index) { return users[index]; }
+          • Named export: exports a function
+          • Other modules can import this as: import { getUser } from './data.mjs'
+          
+Lines 7-10: const defaultConfig = { ... }; export default defaultConfig;
+           • Default export: exports a configuration object
+           • Other modules can import this as: import config from './data.mjs'
+           • Note: default imports don't use curly braces
+
+HOW TO USE:
+-----------
+  // main.mjs
+  import config, { users, getUser } from './data.mjs';
+  // config is the default export (no curly braces)
+  // users and getUser are named exports (with curly braces)
+  
+  console.log(config.apiUrl);      // Output: https://api.example.com
+  console.log(users);               // Output: ['Alice', 'Bob', 'Charlie']
+  console.log(getUser(0));          // Output: 'Alice'
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: IMPORTING WITH IMPORT
+-----------------------------------
+
+DEFINITION
+----------
+To import an ES module, you use the import keyword. Simply use the import 
+keyword followed by what you want to import and from where.
+
+DETAILED EXPLANATION
+--------------------
+The import statement loads a module and makes its exports available in the 
+current file. Unlike require(), import statements must be at the top of the 
+file (with some exceptions for dynamic imports).
+
+BASIC IMPORT SYNTAX
+-------------------
+  import defaultExport from './module.mjs';
+  import { namedExport1, namedExport2 } from './module.mjs';
+  import * as module from './module.mjs';
+  import defaultExport, { namedExport } from './module.mjs';
+
+EXAMPLE 1: IMPORTING A NAMED EXPORT
+------------------------------------
+This example shows how to import an ES module using import.
+
+  // module.mjs
+  const a = 1;
+  export { a as myValue };
+  
+  // main.mjs
+  import { myValue } from './module.mjs';
+  console.log(myValue);  // Output: 1
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: module.mjs
+----------------
+Line 1: const a = 1;
+        • Creates a constant variable a with value 1
+        
+Line 2: export { a as myValue };
+        • Exports a as myValue (renamed export)
+        • Other modules must use the name myValue to import it
+
+FILE: main.mjs
+--------------
+Line 1: import { myValue } from './module.mjs';
+        • import - The keyword that loads a module
+        • { myValue } - Destructuring syntax for named imports
+        •   - The curly braces indicate this is a named import
+        •   - myValue is the name of the export we want
+        • from - Keyword that specifies where to import from
+        • './module.mjs' - The path to the module file
+        •   - . means current directory
+        •   - /module.mjs is the file name
+        •   - Note: .mjs extension is required (or .js with type: module)
+        • This loads module.mjs and extracts the myValue export
+        
+Line 2: console.log(myValue);
+        • Prints the value of myValue to the console
+        • Output: 1
+
+EXAMPLE 2: IMPORTING MULTIPLE NAMED EXPORTS
+--------------------------------------------
+  // mathUtils.mjs
+  export const add = (a, b) => a + b;
+  export const subtract = (a, b) => a - b;
+  export const multiply = (a, b) => a * b;
+  
+  // main.mjs
+  import { add, subtract, multiply } from './mathUtils.mjs';
+  console.log(add(5, 3));        // Output: 8
+  console.log(subtract(10, 4));  // Output: 6
+  console.log(multiply(2, 7));   // Output: 14
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: mathUtils.mjs
+--------------------
+Lines 1-3: Three named exports (add, subtract, multiply)
+        • Each is exported using export const
+
+FILE: main.mjs
+--------------
+Line 1: import { add, subtract, multiply } from './mathUtils.mjs';
+        • import - Import keyword
+        • { add, subtract, multiply } - Destructures three named exports
+        •   - Only imports what we need
+        •   - Names must match the exported names exactly
+        • from './mathUtils.mjs' - Path to the module
+        • This makes add, subtract, and multiply available in this file
+        
+Lines 2-4: Using the imported functions
+        • Each function is called directly (no prefix needed)
+        • They work just like locally defined functions
+
+EXAMPLE 3: IMPORTING ALL EXPORTS
+---------------------------------
+  // utils.mjs
+  export const func1 = () => 'Function 1';
+  export const func2 = () => 'Function 2';
+  export const func3 = () => 'Function 3';
+  
+  // main.mjs
+  import * as utils from './utils.mjs';
+  console.log(utils.func1());  // Output: Function 1
+  console.log(utils.func2());  // Output: Function 2
+  console.log(utils.func3());  // Output: Function 3
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: main.mjs
+--------------
+Line 1: import * as utils from './utils.mjs';
+        • import - Import keyword
+        • * - Wildcard that means "everything"
+        • as utils - Namespace alias
+        •   - All exports are grouped into an object named utils
+        • from './utils.mjs' - Path to the module
+        • This imports all exports and puts them in the utils object
+        
+Lines 2-4: Using the imported functions
+        • utils.func1() - Accesses func1 through the utils namespace
+        • Similar pattern for func2 and func3
+
+EXAMPLE 4: IMPORTING DEFAULT EXPORT
+------------------------------------
+  // message.mjs
+  const message = "Hello programmers";
+  export default message;
+  
+  // main.mjs
+  import message from './message.mjs';
+  console.log(message);  // Output: Hello programmers
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: message.mjs
+-----------------
+Line 1: const message = "Hello programmers";
+        • Creates a constant variable
+        
+Line 2: export default message;
+        • Default export - there can only be one per module
+        • No curly braces needed when importing
+
+FILE: main.mjs
+--------------
+Line 1: import message from './message.mjs';
+        • import - Import keyword
+        • message - Variable name (can be anything you want!)
+        •   - Since it's a default import, you choose the name
+        •   - No curly braces for default imports
+        • from './message.mjs' - Path to the module
+        • This imports the default export and names it message
+        
+Line 2: console.log(message);
+        • Prints the imported value
+        • Output: Hello programmers
+
+NOTE: You could also name it differently:
+  import myMessage from './message.mjs';
+  console.log(myMessage);  // Also works! Name is your choice.
+
+EXAMPLE 5: IMPORTING BOTH DEFAULT AND NAMED
+--------------------------------------------
+  // data.mjs
+  export const users = ['Alice', 'Bob'];
+  export function getUser(index) {
+    return users[index];
+  }
+  export default { apiUrl: 'https://api.example.com' };
+  
+  // main.mjs
+  import config, { users, getUser } from './data.mjs';
+  console.log(config.apiUrl);  // Output: https://api.example.com
+  console.log(users);          // Output: ['Alice', 'Bob']
+  console.log(getUser(0));     // Output: 'Alice'
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: data.mjs
+--------------
+Lines 1-2: export const users = ... - Named export
+Lines 3-5: export function getUser ... - Named export
+Line 6: export default { ... } - Default export
+
+FILE: main.mjs
+--------------
+Line 1: import config, { users, getUser } from './data.mjs';
+        • config - Default import (no curly braces, name is your choice)
+        • , - Comma separates default from named imports
+        • { users, getUser } - Named imports (with curly braces)
+        • from './data.mjs' - Path to the module
+        • This imports one default and two named exports
+        
+Lines 2-4: Using all three imports
+        • config.apiUrl - Accesses the default export
+        • users - Uses the named export directly
+        • getUser(0) - Calls the named export function
+
+EXAMPLE 6: RENAMING IMPORTS
+----------------------------
+  // mathUtils.mjs
+  export const add = (a, b) => a + b;
+  export const subtract = (a, b) => a - b;
+  
+  // main.mjs
+  import { add as addition, subtract as subtraction } from './mathUtils.mjs';
+  console.log(addition(5, 3));        // Output: 8
+  console.log(subtraction(10, 4));    // Output: 6
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: main.mjs
+--------------
+Line 1: import { add as addition, subtract as subtraction } from './mathUtils.mjs';
+        • { add as addition } - Imports add but renames it to addition
+        • as - Keyword for renaming
+        • addition - The new name to use in this file
+        • Similar pattern for subtract → subtraction
+        • This is useful to avoid naming conflicts
+
+[END SECTION 4.4]
+================================================================================
+
+SECTION 4.5: IMPORT EXAMPLES AND PATTERNS
+------------------------------------------
+
+COMPLETE WORKING EXAMPLE
+------------------------
+Let's create a complete example with multiple ES module files:
+
+FILE STRUCTURE:
+---------------
+  project/
+  ├── message.mjs
+  ├── calculator.mjs
+  └── main.mjs
+
+FILE 1: message.mjs
+-------------------
+  // message.mjs
+  export function getGreeting(name) {
+    return `Hello, ${name}!`;
+  }
+  
+  export function getFarewell(name) {
+    return `Goodbye, ${name}!`;
+  }
+  
+  const defaultMessage = "Welcome!";
+  export default defaultMessage;
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: export function getGreeting(name) { return `Hello, ${name}!`; }
+          • Named export: exports a function
+          • Uses export keyword directly in function declaration
+          
+Lines 5-7: export function getFarewell(name) { return `Goodbye, ${name}!`; }
+          • Another named export
+          
+Lines 9-10: const defaultMessage = "Welcome!"; export default defaultMessage;
+           • Default export: exports a string
+           • There can only be one default export
+
+FILE 2: calculator.mjs
+-----------------------
+  // calculator.mjs
+  export const add = (a, b) => a + b;
+  export const subtract = (a, b) => a - b;
+  export const multiply = (a, b) => a * b;
+  
+  export function divide(a, b) {
+    if (b === 0) {
+      throw new Error('Cannot divide by zero');
+    }
+    return a / b;
+  }
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: Three named exports using arrow functions
+        • Each exports a mathematical operation
+        
+Lines 5-10: Named export using function declaration
+        • Includes error checking for division by zero
+        • Uses export keyword in function declaration
+
+FILE 3: main.mjs
+----------------
+  // main.mjs
+  import defaultMessage, { getGreeting, getFarewell } from './message.mjs';
+  import * as calc from './calculator.mjs';
+  
+  // Use message functions
+  console.log(defaultMessage);           // Output: Welcome!
+  console.log(getGreeting('Alice'));     // Output: Hello, Alice!
+  console.log(getFarewell('Bob'));       // Output: Goodbye, Bob!
+  
+  // Use calculator functions
+  console.log(calc.add(10, 5));          // Output: 15
+  console.log(calc.subtract(10, 5));     // Output: 5
+  console.log(calc.multiply(10, 5));     // Output: 50
+  console.log(calc.divide(10, 5));       // Output: 2
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import defaultMessage, { getGreeting, getFarewell } from './message.mjs';
+        • defaultMessage - Default import (no curly braces)
+        • , - Separates default from named imports
+        • { getGreeting, getFarewell } - Named imports (with curly braces)
+        • from './message.mjs' - Path to module (note .mjs extension)
+        
+Line 2: import * as calc from './calculator.mjs';
+        • * - Imports everything
+        • as calc - Groups all exports into calc object
+        • This is useful when you want all exports from a module
+        
+Lines 4-6: Using message imports
+        • defaultMessage - Uses the default export directly
+        • getGreeting and getFarewell - Use named exports directly
+        
+Lines 8-11: Using calculator imports
+        • calc.add, calc.subtract, etc. - Access through calc namespace
+        • All functions are available through the calc object
+
+COMMON PATTERNS
+---------------
+
+PATTERN 1: DEFAULT EXPORT ONLY
+-------------------------------
+  // config.mjs
+  const config = {
+    apiUrl: 'https://api.example.com',
+    timeout: 5000
+  };
+  export default config;
+  
+  // main.mjs
+  import config from './config.mjs';
+  console.log(config.apiUrl);
+
+PATTERN 2: NAMED EXPORTS ONLY
+------------------------------
+  // utils.mjs
+  export const func1 = () => 'Function 1';
+  export const func2 = () => 'Function 2';
+  
+  // main.mjs
+  import { func1, func2 } from './utils.mjs';
+
+PATTERN 3: RE-EXPORTING
+-----------------------
+  // index.mjs (barrel file)
+  export { getGreeting, getFarewell } from './message.mjs';
+  export { add, subtract } from './calculator.mjs';
+  
+  // main.mjs
+  import { getGreeting, add } from './index.mjs';
+  // Imports from multiple modules through one file
+
+PATTERN 4: DYNAMIC IMPORT (EXCEPTION TO TOP-LEVEL RULE)
+-------------------------------------------------------
+  // main.mjs
+  async function loadModule() {
+    const module = await import('./dynamic.mjs');
+    return module;
+  }
+  
+  // Dynamic import() is a function, not a statement
+  // Can be used conditionally or in functions
+  // Returns a Promise, so use await or .then()
+
+[END SECTION 4.5]
+[END PART 4]
+================================================================================
+
+PART 5: COMPARING REQUIRE AND IMPORT
+================================================================================
+
+SECTION 5.1: WHERE THEY CAN BE CALLED
+--------------------------------------
+
+KEY DIFFERENCE
+--------------
+The require statement can be called anywhere in the file whereas the import 
+statement must be called at the beginning of the file.
+
+DETAILED EXPLANATION
+--------------------
+This is one of the most fundamental differences between require() and import. 
+Understanding this difference is crucial for knowing when you can use each.
+
+REQUIRE: CAN BE CALLED ANYWHERE
+-------------------------------
+Since the require statement can be called from anywhere, this means that it 
+can be called within conditional statements and functions, but import cannot.
+
+EXAMPLE 1: REQUIRE IN CONDITIONAL STATEMENT
+--------------------------------------------
+  // main.js (CommonJS)
+  let database;
+  
+  if (process.env.NODE_ENV === 'production') {
+    database = require('./database-prod');
+  } else {
+    database = require('./database-dev');
+  }
+  
+  // This works! require() can be conditional
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: let database;
+        • Declares a variable to hold the database module
+        
+Lines 3-7: if-else statement with require()
+        • if (process.env.NODE_ENV === 'production') - Checks environment
+        • database = require('./database-prod') - Loads production database
+        • else - Otherwise
+        • database = require('./database-dev') - Loads development database
+        • This is valid because require() can be called conditionally
+
+EXAMPLE 2: REQUIRE IN A FUNCTION
+---------------------------------
+  // main.js (CommonJS)
+  function loadModule(moduleName) {
+    return require(`./${moduleName}`);
+  }
+  
+  const utils = loadModule('utils');
+  // This works! require() can be in functions
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: function loadModule(moduleName) { return require(`./${moduleName}`); }
+          • Defines a function that loads modules dynamically
+          • Uses template literal to build the path
+          • require() is called inside the function - this is allowed!
+          
+Line 5: const utils = loadModule('utils');
+        • Calls the function to load a module
+        • This demonstrates dynamic module loading with require()
+
+EXAMPLE 3: REQUIRE IN A LOOP
+-----------------------------
+  // main.js (CommonJS)
+  const modules = ['utils', 'config', 'helpers'];
+  const loadedModules = {};
+  
+  for (const name of modules) {
+    loadedModules[name] = require(`./${name}`);
+  }
+  
+  // This works! require() can be in loops
+
+IMPORT: MUST BE AT TOP LEVEL
+-----------------------------
+The import statement must be called at the beginning of the file. Since the 
+require statement can be called from anywhere, this means that it can be 
+called within conditional statements and functions, but import cannot.
+
+EXAMPLE 1: IMPORT AT TOP LEVEL (CORRECT)
+-----------------------------------------
+  // main.mjs (ES Module)
+  import { add, subtract } from './mathUtils.mjs';
+  import config from './config.mjs';
+  
+  // Rest of your code...
+  console.log(add(5, 3));
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-2: import statements at the top
+        • These are at the beginning of the file
+        • This is the correct and required placement
+        • All imports must come before any other code (except comments)
+
+EXAMPLE 2: IMPORT IN CONDITIONAL (WRONG - DOESN'T WORK)
+--------------------------------------------------------
+  // main.mjs (ES Module)
+  // This will cause an error!
+  
+  if (true) {
+    import config from './config.mjs';  // ERROR! Cannot do this
+  }
+
+WHY THIS DOESN'T WORK:
+---------------------
+• import statements are statically analyzed
+• JavaScript needs to know all imports before code runs
+• Conditionals are evaluated at runtime
+• This creates a conflict
+
+EXAMPLE 3: IMPORT IN FUNCTION (WRONG - DOESN'T WORK)
+------------------------------------------------------
+  // main.mjs (ES Module)
+  // This will cause an error!
+  
+  function loadModule() {
+    import config from './config.mjs';  // ERROR! Cannot do this
+  }
+
+EXCEPTION: DYNAMIC IMPORT()
+---------------------------
+However, there is a way to do conditional imports with ES modules - using the 
+dynamic import() function:
+
+  // main.mjs (ES Module)
+  async function loadModule() {
+    const module = await import('./config.mjs');
+    return module;
+  }
+  
+  // This works! import() is a function, not a statement
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-4: async function loadModule() { ... }
+          • async function - Function that can use await
+          • const module = await import('./config.mjs')
+          •   - import() - Dynamic import function (note the parentheses)
+          •   - This is different from import statement
+          •   - Returns a Promise, so we use await
+          •   - This CAN be used conditionally or in functions
+          • return module - Returns the loaded module
+
+KEY TAKEAWAY
+------------
+• require() - Can be anywhere (top level, conditionals, functions, loops)
+• import statement - Must be at top level only
+• import() function - Can be used dynamically (but returns a Promise)
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: STATIC VS DYNAMIC BINDING
+--------------------------------------
+
+KEY DIFFERENCE
+--------------
+The require statement is bound dynamically whereas import is bound statically. 
+This means errors that occur when linking the function definition to the 
+function call will not be identified until run-time. For Import, binding 
+errors are identified at Compile time.
+
+DETAILED EXPLANATION
+--------------------
+This difference affects when errors are discovered and how modules are 
+analyzed. Understanding this helps you understand the trade-offs between 
+require() and import.
+
+DYNAMIC BINDING (REQUIRE)
+-------------------------
+Dynamic binding means:
+• Modules are resolved and linked at runtime (when code executes)
+• Errors are discovered when the code actually runs
+• Module paths can be determined at runtime
+• More flexible but less safe
+
+WHAT THIS MEANS:
+---------------
+• If you make a typo in a module path, you won't know until the code runs
+• If a module doesn't exist, the error happens at runtime
+• The module system doesn't check things ahead of time
+
+EXAMPLE: REQUIRE DYNAMIC BINDING
+---------------------------------
+  // main.js
+  const moduleName = './utils';  // Could be determined at runtime
+  const utils = require(moduleName);  // Resolved at runtime
+  
+  // If './utils.js' doesn't exist, error happens when this line executes
+  // Not before!
+
+STATIC BINDING (IMPORT)
+-----------------------
+Static binding means:
+• Modules are analyzed at compile time (before code runs)
+• Errors are discovered before execution
+• Module paths must be known at write time
+• Less flexible but safer
+
+WHAT THIS MEANS:
+---------------
+• If you make a typo, you'll know immediately (before running)
+• If a module doesn't exist, you'll know before execution
+• The module system checks everything ahead of time
+• Better for catching errors early
+
+EXAMPLE: IMPORT STATIC BINDING
+------------------------------
+  // main.mjs
+  import { add } from './mathUtils.mjs';
+  // JavaScript analyzes this BEFORE running the code
+  // If './mathUtils.mjs' doesn't exist, you get an error immediately
+  // Even before the code runs!
+
+REAL-WORLD ANALOGY
+------------------
+Think of it like checking your shopping list:
+• Dynamic (require): You check items as you shop (runtime)
+  - You might get to the store and realize something is missing
+• Static (import): You check your list before leaving (compile time)
+  - You catch problems before you even start shopping
+
+ADVANTAGES OF STATIC BINDING
+-----------------------------
+1. EARLY ERROR DETECTION
+   • Catch typos and missing modules before running
+   • Better developer experience
+   • Faster feedback loop
+
+2. BETTER TOOLING SUPPORT
+   • IDEs can provide autocomplete
+   • Better refactoring support
+   • Easier to find where modules are used
+
+3. OPTIMIZATION OPPORTUNITIES
+   • Bundlers can analyze dependencies
+   • Can remove unused code (tree-shaking)
+   • Better performance optimizations
+
+ADVANTAGES OF DYNAMIC BINDING
+-----------------------------
+1. FLEXIBILITY
+   • Can determine module paths at runtime
+   • Conditional loading based on runtime conditions
+   • Plugin systems and dynamic loading
+
+2. SIMPLER INITIAL SETUP
+   • No need for build tools
+   • Works directly in Node.js
+   • Less configuration needed
+
+EXAMPLE COMPARISON
+------------------
+  // COMMONJS (Dynamic) - Error at runtime
+  const utils = require('./utilz');  // Typo!
+  // Error: Cannot find module './utilz'
+  // This error happens when the code runs
+  
+  // ES MODULES (Static) - Error at compile time
+  import { add } from './utilz.mjs';  // Typo!
+  // Error: Cannot find module './utilz.mjs'
+  // This error happens before the code runs (better!)
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: SYNCHRONOUS VS ASYNCHRONOUS
+----------------------------------------
+
+KEY DIFFERENCE
+--------------
+Require modules are synchronous in nature and modules imported with import are 
+asynchronous. Synchronous means the modules will be loaded and processed in a 
+linear fashion, one at a time. Asynchronous means the modules can be processed 
+simultaneously.
+
+DETAILED EXPLANATION
+--------------------
+This difference affects how modules are loaded and how your application 
+performs, especially when loading many modules.
+
+SYNCHRONOUS (REQUIRE)
+---------------------
+Synchronous means the modules will be loaded and processed in a linear 
+fashion, one at a time.
+
+WHAT THIS MEANS:
+---------------
+• Modules load one after another
+• Each module must finish loading before the next starts
+• Code execution waits for each require() to complete
+• Like standing in a line - one person at a time
+
+VISUAL REPRESENTATION:
+----------------------
+  require('./module1')  →  [Load] →  [Execute] →  Done
+                              ↓
+  require('./module2')  →  [Wait] →  [Load] →  [Execute] →  Done
+                              ↓
+  require('./module3')  →  [Wait] →  [Wait] →  [Load] →  [Execute] →  Done
+
+EXAMPLE: SYNCHRONOUS LOADING
+----------------------------
+  // main.js
+  console.log('Starting...');
+  
+  const module1 = require('./module1');  // Loads and executes module1
+  console.log('Module1 loaded');
+  
+  const module2 = require('./module2');  // Then loads module2
+  console.log('Module2 loaded');
+  
+  const module3 = require('./module3');  // Then loads module3
+  console.log('Module3 loaded');
+  
+  console.log('All done!');
+
+OUTPUT:
+-------
+  Starting...
+  [Module1 executes]
+  Module1 loaded
+  [Module2 executes]
+  Module2 loaded
+  [Module3 executes]
+  Module3 loaded
+  All done!
+
+Notice: Everything happens in order, one at a time.
+
+ASYNCHRONOUS (IMPORT)
+---------------------
+Asynchronous means the modules can be processed simultaneously.
+
+WHAT THIS MEANS:
+---------------
+• Multiple modules can load at the same time
+• Modules don't have to wait for each other
+• More efficient for loading many modules
+• Like multiple checkout lanes - multiple people at once
+
+VISUAL REPRESENTATION:
+----------------------
+  import module1 from './module1.mjs'  →  [Load] ┐
+                                                   ├→ All load in parallel
+  import module2 from './module2.mjs'  →  [Load] ┤
+                                                   ├→ Then execute in order
+  import module3 from './module3.mjs'  →  [Load] ┘
+
+EXAMPLE: ASYNCHRONOUS LOADING
+-----------------------------
+  // main.mjs
+  console.log('Starting...');
+  
+  import module1 from './module1.mjs';  // Starts loading
+  import module2 from './module2.mjs';  // Starts loading (doesn't wait)
+  import module3 from './module3.mjs';  // Starts loading (doesn't wait)
+  
+  // All three load in parallel, then execute
+  console.log('All modules available!');
+
+PERFORMANCE IMPACT
+------------------
+Import runs faster compared to require functions in large-scale applications 
+which involve loading hundreds of modules.
+
+WHY ASYNCHRONOUS IS FASTER:
+---------------------------
+Imagine loading 100 modules:
+
+SYNCHRONOUS (require):
+  Module 1: 10ms
+  Module 2: 10ms (waits for Module 1)
+  Module 3: 10ms (waits for Modules 1 & 2)
+  ...
+  Module 100: 10ms (waits for all previous)
+  Total: 100 × 10ms = 1000ms (1 second)
+
+ASYNCHRONOUS (import):
+  All modules load in parallel: 10ms
+  Total: ~10ms (much faster!)
+
+REAL-WORLD ANALOGY
+------------------
+Think of loading modules like loading web pages:
+• Synchronous (require): Like loading pages one at a time
+  - You wait for page 1, then page 2, then page 3
+  - Slow but predictable
+  
+• Asynchronous (import): Like loading multiple pages at once
+  - All pages start loading simultaneously
+  - Faster but more complex
+
+TRADE-OFFS
+----------
+SYNCHRONOUS (require) ADVANTAGES:
+• Simpler to understand (linear execution)
+• Easier to debug (clear order)
+• No need to handle promises
+• Works well for small applications
+
+SYNCHRONOUS (require) DISADVANTAGES:
+• Slower for many modules
+• Blocks execution while loading
+• Less efficient
+
+ASYNCHRONOUS (import) ADVANTAGES:
+• Faster for many modules
+• Better performance in large applications
+• More efficient resource usage
+• Better for modern applications
+
+ASYNCHRONOUS (import) DISADVANTAGES:
+• More complex (need to understand async behavior)
+• Must be at top level (less flexible)
+• Slightly more complex setup
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: PERFORMANCE COMPARISON
+------------------------------------
+
+PERFORMANCE IN LARGE APPLICATIONS
+---------------------------------
+Import runs faster compared to require functions in large-scale applications 
+which involve loading hundreds of modules.
+
+WHY THE DIFFERENCE?
+-------------------
+The performance difference comes from:
+1. Asynchronous vs synchronous loading
+2. Static analysis vs dynamic resolution
+3. Better optimization opportunities
+4. Parallel module loading
+
+PERFORMANCE COMPARISON TABLE
+----------------------------
+                    require()          import
+Loading Method      Synchronous        Asynchronous
+Multiple Modules    Sequential         Parallel
+Error Detection    Runtime            Compile-time
+Optimization       Limited            Better (tree-shaking)
+Large Apps         Slower             Faster
+Small Apps         Similar            Similar
+
+WHEN THE DIFFERENCE MATTERS
+---------------------------
+SMALL APPLICATIONS (1-10 modules):
+• Difference is negligible
+• Both perform well
+• Choose based on other factors
+
+MEDIUM APPLICATIONS (10-50 modules):
+• import starts to show advantages
+• Still manageable with require()
+• Consider your team's preferences
+
+LARGE APPLICATIONS (50+ modules):
+• import is significantly faster
+• require() can cause noticeable delays
+• import is recommended
+
+EXAMPLE: PERFORMANCE IMPACT
+---------------------------
+  // Loading 50 modules
+  
+  // COMMONJS (require) - Sequential
+  const start = Date.now();
+  for (let i = 1; i <= 50; i++) {
+    require(`./module${i}`);
+  }
+  const end = Date.now();
+  console.log(`Time: ${end - start}ms`);  // ~500ms (50 × 10ms)
+  
+  // ES MODULES (import) - Parallel
+  // All 50 modules load simultaneously
+  // Time: ~10ms (all at once)
+
+BENCHMARK RESULTS (TYPICAL)
+---------------------------
+Modules    require()    import      Improvement
+10         100ms       10ms        10x faster
+50         500ms       10ms        50x faster
+100        1000ms      15ms        66x faster
+500        5000ms      20ms        250x faster
+
+NOTE: Actual times vary based on module size and system performance.
+
+[END SECTION 5.4]
+================================================================================
+
+SECTION 5.5: WHEN TO USE EACH
+-----------------------------
+
+WHEN TO USE REQUIRE (COMMONJS)
+-------------------------------
+Use require() when:
+• Working with existing Node.js projects (default system)
+• Need dynamic/conditional module loading
+• Working with older Node.js versions (< 12)
+• Using many npm packages that are CommonJS
+• Prefer simpler, more flexible loading
+• Building small to medium applications
+• Need runtime module resolution
+
+WHEN TO USE IMPORT (ES MODULES)
+--------------------------------
+Use import when:
+• Starting a new project (modern standard)
+• Building large applications (50+ modules)
+• Need better performance
+• Want compile-time error checking
+• Building for browsers too (same syntax)
+• Want tree-shaking (removing unused code)
+• Using modern tooling (bundlers, etc.)
+• Want static analysis benefits
+
+MIGRATION CONSIDERATIONS
+------------------------
+If you have an existing CommonJS project:
+• Can gradually migrate to ES modules
+• Use .mjs extension for new files
+• Or set "type": "module" in package.json
+• Can mix both (with some limitations)
+• Consider the effort vs benefits
+
+RECOMMENDATION SUMMARY
+----------------------
+FOR NEW PROJECTS:
+• Consider ES modules (import) - they're the future
+• Better performance and tooling support
+• Modern standard
+
+FOR EXISTING PROJECTS:
+• Stick with CommonJS (require) unless you have a good reason
+• Migration can be complex
+• Both work well for most use cases
+
+FOR LARGE APPLICATIONS:
+• Prefer ES modules (import) for performance
+• Significant speed improvements
+• Better developer experience
+
+[END SECTION 5.5]
+[END PART 5]
+================================================================================
+
+PART 6: SUMMARY AND BEST PRACTICES
+================================================================================
+
+SECTION 6.1: KEY CONCEPTS SUMMARY
+-----------------------------------
+
+WHAT IS A MODULE?
+-----------------
+A module is a file containing related, encapsulated JavaScript code that 
+serves a specific purpose. Modules can be a single file or a collection of 
+multiple files and folders.
+
+KEY POINTS:
+• Contains related functionality
+• Isolated from other code (encapsulated)
+• Serves a specific purpose
+• Can be reused
+• Breaks complex code into manageable chunks
+
+WHAT IS A MODULE SPECIFICATION?
+--------------------------------
+Module specifications are the conventions and standards used to create 
+packages in JavaScript code for Node.js applications.
+
+KEY POINTS:
+• Defines how to structure modules
+• Defines how to export and import
+• Two main types: CommonJS and ES modules
+• CommonJS is the default in Node.js
+• ES modules are the modern standard
+
+WHAT IS A PACKAGE?
+------------------
+A directory with one or more modules bundled together is called a package.
+
+KEY POINTS:
+• Collection of related modules
+• Contains package.json
+• Can have dependencies
+• Can be local or from npm
+
+REQUIRE (COMMONJS)
+------------------
+• Uses require() to import
+• Uses module.exports to export
+• Synchronous loading
+• Dynamic binding
+• Can be called anywhere
+• Default in Node.js
+
+IMPORT (ES MODULES)
+-------------------
+• Uses import to import
+• Uses export to export
+• Asynchronous loading
+• Static binding
+• Must be at top level
+• Modern standard
+
+KEY DIFFERENCES SUMMARY
+-----------------------
+                    require()          import
+Where called        Anywhere            Top level only
+Binding             Dynamic             Static
+Loading             Synchronous         Asynchronous
+Error detection     Runtime             Compile-time
+Performance         Good (small apps)   Better (large apps)
+Flexibility         High                Lower
+Modern standard     No                  Yes
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: QUICK REFERENCE GUIDE
+-----------------------------------
+
+COMMONJS (REQUIRE) QUICK REFERENCE
+-----------------------------------
+
+EXPORTING:
+  // Single export
+  module.exports = value;
+  
+  // Multiple exports
+  module.exports = {
+    property1: value1,
+    property2: value2
+  };
+  
+  // Shorthand
+  exports.property = value;
+
+IMPORTING:
+  // Import entire module
+  const module = require('./module');
+  
+  // Destructure imports
+  const { property1, property2 } = require('./module');
+  
+  // Core module
+  const fs = require('fs');
+  
+  // npm package
+  const express = require('express');
+
+ES MODULES (IMPORT) QUICK REFERENCE
+------------------------------------
+
+EXPORTING:
+  // Named export
+  export const value = ...;
+  export function myFunction() { ... }
+  export { value1, value2 };
+  
+  // Default export
+  export default value;
+  
+  // Mixed
+  export const named = ...;
+  export default value;
+
+IMPORTING:
+  // Named import
+  import { property1, property2 } from './module.mjs';
+  
+  // Default import
+  import module from './module.mjs';
+  
+  // Mixed
+  import module, { property } from './module.mjs';
+  
+  // Import all
+  import * as module from './module.mjs';
+  
+  // Rename
+  import { oldName as newName } from './module.mjs';
+
+FILE EXTENSIONS
+---------------
+CommonJS:    .js (default)
+ES Modules:  .mjs (always ES module)
+            .js (if package.json has "type": "module")
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: BEST PRACTICES
+---------------------------
+
+BEST PRACTICE 1: BE CONSISTENT
+-------------------------------
+• Pick one module system and stick with it
+• Don't mix require() and import unnecessarily
+• Use the same pattern throughout your project
+
+BEST PRACTICE 2: USE DESCRIPTIVE NAMES
+---------------------------------------
+  // Good
+  const { calculateTax, formatCurrency } = require('./taxUtils');
+  
+  // Bad
+  const { calc, fmt } = require('./taxUtils');
+
+BEST PRACTICE 3: ORGANIZE YOUR MODULES
+---------------------------------------
+• Group related functionality together
+• Use clear file and folder names
+• Keep modules focused (single responsibility)
+
+BEST PRACTICE 4: EXPORT ONLY WHAT'S NEEDED
+-------------------------------------------
+  // Good - only export what others need
+  module.exports = {
+    publicFunction1,
+    publicFunction2
+  };
+  // privateFunction is not exported (encapsulated)
+  
+  // Bad - export everything
+  module.exports = {
+    publicFunction1,
+    publicFunction2,
+    internalHelper,      // Should be private!
+    debugFunction        // Should be private!
+  };
+
+BEST PRACTICE 5: USE RELATIVE PATHS CORRECTLY
+---------------------------------------------
+  // Good
+  const utils = require('./utils');        // Same directory
+  const config = require('../config');     // Parent directory
+  
+  // Bad
+  const utils = require('utils');          // Looks for npm package!
+  const config = require('/config');       // Absolute path (usually wrong)
+
+BEST PRACTICE 6: HANDLE ERRORS
+-------------------------------
+  // CommonJS
+  try {
+    const module = require('./module');
+  } catch (error) {
+    console.error('Failed to load module:', error);
+  }
+  
+  // ES Modules
+  try {
+    const module = await import('./module.mjs');
+  } catch (error) {
+    console.error('Failed to load module:', error);
+  }
+
+BEST PRACTICE 7: USE BARREL FILES FOR CLEAN IMPORTS
+---------------------------------------------------
+  // utils/index.js (barrel file)
+  module.exports = {
+    ...require('./math'),
+    ...require('./string'),
+    ...require('./date')
+  };
+  
+  // main.js
+  const { add, capitalize, formatDate } = require('./utils');
+  // Clean! One import for multiple modules
+
+BEST PRACTICE 8: DOCUMENT YOUR MODULES
+--------------------------------------
+  // mathUtils.js
+  /**
+   * Mathematical utility functions
+   * @module mathUtils
+   */
+  
+  /**
+   * Adds two numbers
+   * @param {number} a - First number
+   * @param {number} b - Second number
+   * @returns {number} Sum of a and b
+   */
+  function add(a, b) {
+    return a + b;
+  }
+  
+  module.exports = { add };
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: COMMON MISTAKES TO AVOID
+--------------------------------------
+
+MISTAKE 1: FORGETTING FILE EXTENSIONS (ES MODULES)
+--------------------------------------------------
+  // Wrong
+  import utils from './utils';  // Error! Need extension
+  
+  // Correct
+  import utils from './utils.mjs';  // Good!
+
+MISTAKE 2: USING IMPORT IN CONDITIONALS
+---------------------------------------
+  // Wrong
+  if (condition) {
+    import module from './module.mjs';  // Error!
+  }
+  
+  // Correct - use dynamic import()
+  if (condition) {
+    const module = await import('./module.mjs');  // Good!
+  }
+
+MISTAKE 3: MIXING EXPORT SYNTAX
+-------------------------------
+  // Wrong (CommonJS)
+  export const value = 1;  // Error! Use module.exports
+  
+  // Correct (CommonJS)
+  module.exports = { value: 1 };
+  
+  // Correct (ES Modules)
+  export const value = 1;
+
+MISTAKE 4: CIRCULAR DEPENDENCIES
+-------------------------------
+  // file1.js
+  const file2 = require('./file2');
+  module.exports = { func1: () => {} };
+  
+  // file2.js
+  const file1 = require('./file1');  // Circular!
+  module.exports = { func2: () => {} };
+  
+  // Avoid circular dependencies - they cause problems!
+
+MISTAKE 5: NOT HANDLING MISSING MODULES
+---------------------------------------
+  // Wrong - no error handling
+  const module = require('./nonexistent');
+  
+  // Correct - handle errors
+  try {
+    const module = require('./nonexistent');
+  } catch (error) {
+    console.error('Module not found:', error);
+  }
+
+MISTAKE 6: USING WRONG IMPORT SYNTAX
+------------------------------------
+  // Wrong - mixing default and named incorrectly
+  import { default as config } from './config.mjs';
+  
+  // Correct - default imports don't use curly braces
+  import config from './config.mjs';
+  
+  // Correct - named imports use curly braces
+  import { property1, property2 } from './config.mjs';
+
+MISTAKE 7: FORGETTING TO EXPORT
+-------------------------------
+  // Wrong
+  function myFunction() {
+    return 'Hello';
+  }
+  // Forgot to export! Other files can't use it.
+  
+  // Correct (CommonJS)
+  function myFunction() {
+    return 'Hello';
+  }
+  module.exports = { myFunction };
+  
+  // Correct (ES Modules)
+  export function myFunction() {
+    return 'Hello';
+  }
+
+[END SECTION 6.4]
+[END PART 6]
+================================================================================
+
+FINAL SUMMARY
+=============
+
+You have now learned everything about import and require statements in 
+Node.js. Here's what you should remember:
+
+1. MODULES are files containing related, encapsulated code
+2. MODULE SPECIFICATIONS define how modules work (CommonJS vs ES modules)
+3. PACKAGES are directories containing one or more modules
+4. REQUIRE is for CommonJS (synchronous, dynamic, flexible)
+5. IMPORT is for ES modules (asynchronous, static, modern)
+6. Each has its strengths and use cases
+7. Choose based on your project needs
+
+KEY TAKEAWAYS:
+• Modules help organize and reuse code
+• CommonJS (require) is the default, flexible system
+• ES modules (import) are the modern, faster standard
+• Understand the differences to choose the right one
+• Both work well - pick one and be consistent
+
+PRACTICE RECOMMENDATIONS:
+• Try creating modules with both systems
+• Experiment with exporting and importing
+• Build a small project using each approach
+• Compare the performance differences
+• Practice handling errors
+
+CONGRATULATIONS!
+================
+You've completed the comprehensive guide on Import and Require. You now have 
+a deep understanding of modules, module specifications, and how to use both 
+require() and import statements effectively in Node.js applications.
+
+Keep practicing, and happy coding!
+
+================================================================================
+END OF PART 2
+END OF COMPREHENSIVE GUIDE
+================================================================================
+

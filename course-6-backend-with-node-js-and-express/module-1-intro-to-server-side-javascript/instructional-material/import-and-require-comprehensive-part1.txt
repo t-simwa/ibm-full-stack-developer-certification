@@ -1,0 +1,1287 @@
+================================================================================
+IMPORT AND REQUIRE
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Import and Require. This comprehensive guide will teach you 
+everything you need to know about modules, module specifications, and how to 
+use import and require statements in Node.js applications. You'll learn the 
+fundamentals, understand the differences, and master both approaches through 
+detailed examples and explanations.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Explain what a module is in Node.js
+• Explain what a module specification is
+• Explain the purpose of import and require statements
+• Differentiate between import and require statements
+• Understand when to use CommonJS vs ES modules
+• Export and import code using both require and import
+• Understand the differences in calling require and import
+• Recognize the performance implications of each approach
+• Apply best practices for module management
+
+OVERVIEW
+--------
+In Node.js, modules are files containing related, encapsulated JavaScript code 
+that serve a specific purpose. Modules can be a single file or a collection of 
+multiple files and folders. Developers rely heavily on modules because of their 
+reusability as well as their ability to break down complex code into manageable 
+chunks. When an external application needs to use the code contained in a 
+module, the application needs to call that module. When the external application 
+calls a module, the module is called using an import() or a require() statement. 
+Which statement is needed depends on the specification.
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of modules and module specifications:
+
+PART 1: UNDERSTANDING MODULES
+  SECTION 1.1: WHAT IS A MODULE?
+  SECTION 1.2: WHY USE MODULES?
+  SECTION 1.3: MODULE STRUCTURE AND ORGANIZATION
+
+PART 2: MODULE SPECIFICATIONS
+  SECTION 2.1: WHAT IS A MODULE SPECIFICATION?
+  SECTION 2.2: WHAT IS A PACKAGE?
+  SECTION 2.3: COMMONJS MODULES
+  SECTION 2.4: ES MODULES (ESM)
+  SECTION 2.5: CHOOSING BETWEEN COMMONJS AND ES MODULES
+
+PART 3: THE REQUIRE STATEMENT (COMMONJS)
+  SECTION 3.1: WHAT IS REQUIRE?
+  SECTION 3.2: HOW REQUIRE WORKS
+  SECTION 3.3: EXPORTING WITH MODULE.EXPORTS
+  SECTION 3.4: IMPORTING WITH REQUIRE
+  SECTION 3.5: REQUIRE EXAMPLES AND PATTERNS
+
+NOTE: Part 2 of this guide covers:
+  • The import statement (ES modules)
+  • Detailed comparison between require and import
+  • Performance considerations
+  • Best practices and recommendations
+  • Summary and quick reference guide
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: UNDERSTANDING MODULES
+================================================================================
+
+SECTION 1.1: WHAT IS A MODULE?
+-------------------------------
+
+DEFINITION
+----------
+In Node.js, modules are files containing related, encapsulated JavaScript code 
+that serve a specific purpose. Modules can be a single file or a collection of 
+multiple files and folders.
+
+DETAILED EXPLANATION
+--------------------
+A module is essentially a self-contained piece of code that:
+• Contains related functionality grouped together
+• Is isolated from other code (encapsulated)
+• Serves a specific, well-defined purpose
+• Can be reused in different parts of your application
+• Can be shared between different applications
+
+Think of a module like a toolbox. Each toolbox (module) contains tools 
+(functions, variables, classes) that are related to a specific task. For 
+example, you might have a "math toolbox" with tools for calculations, or a 
+"database toolbox" with tools for database operations.
+
+KEY CHARACTERISTICS OF MODULES:
+• Encapsulation: Code inside a module is protected and doesn't pollute the 
+  global scope
+• Reusability: Write once, use many times
+• Organization: Breaks complex code into manageable chunks
+• Maintainability: Easier to find, fix, and update code
+• Testability: Can test modules independently
+
+REAL-WORLD ANALOGY
+------------------
+Think of modules like books in a library:
+• Each book (module) contains related information (code)
+• Books are organized by topic (purpose)
+• You can check out (import) a book when you need it
+• You don't need to own every book - just use what you need
+• Books can reference other books (modules can import other modules)
+• The library (Node.js) manages all the books (modules)
+
+MODULE STRUCTURE EXAMPLES
+--------------------------
+A module can be:
+
+1. A SINGLE FILE:
+   mathUtils.js
+   ├── Contains: add, subtract, multiply, divide functions
+   └── Purpose: Mathematical operations
+
+2. MULTIPLE FILES IN A FOLDER:
+   database/
+   ├── connection.js    (database connection logic)
+   ├── queries.js      (database query functions)
+   └── models.js       (data models)
+
+3. A COMPLETE PACKAGE:
+   express/
+   ├── lib/            (core library files)
+   ├── node_modules/   (dependencies)
+   └── package.json    (package configuration)
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: WHY USE MODULES?
+------------------------------
+
+THE BENEFITS OF MODULAR CODE
+-----------------------------
+Developers rely heavily on modules because of their reusability as well as 
+their ability to break down complex code into manageable chunks.
+
+BENEFIT 1: REUSABILITY
+----------------------
+Write code once and use it in multiple places:
+• Don't repeat yourself (DRY principle)
+• Save time and effort
+• Ensure consistency across your application
+• Update code in one place, changes apply everywhere
+
+EXAMPLE:
+--------
+Instead of writing this function in every file:
+  // In file1.js
+  function calculateTax(price) {
+    return price * 0.1;
+  }
+  
+  // In file2.js (duplicated!)
+  function calculateTax(price) {
+    return price * 0.1;
+  }
+  
+  // In file3.js (duplicated again!)
+  function calculateTax(price) {
+    return price * 0.1;
+  }
+
+You create one module:
+  // taxUtils.js
+  function calculateTax(price) {
+    return price * 0.1;
+  }
+  module.exports = { calculateTax };
+
+And use it everywhere:
+  // file1.js, file2.js, file3.js
+  const { calculateTax } = require('./taxUtils');
+  const tax = calculateTax(100);
+
+BENEFIT 2: BREAKING DOWN COMPLEXITY
+-----------------------------------
+Complex code into manageable chunks:
+• Large applications become easier to understand
+• Each module has a single responsibility
+• Easier to find and fix bugs
+• Easier to add new features
+• Team members can work on different modules simultaneously
+
+EXAMPLE:
+--------
+Instead of one giant file with 10,000 lines:
+  // app.js (10,000 lines - overwhelming!)
+  // User management code
+  // Product management code
+  // Order processing code
+  // Payment processing code
+  // Email sending code
+  // ... and more
+
+You break it into focused modules:
+  // userService.js (200 lines - focused on users)
+  // productService.js (300 lines - focused on products)
+  // orderService.js (400 lines - focused on orders)
+  // paymentService.js (300 lines - focused on payments)
+  // emailService.js (200 lines - focused on emails)
+
+BENEFIT 3: ENCAPSULATION
+------------------------
+Code is protected and isolated:
+• Variables and functions don't leak into global scope
+• Prevents naming conflicts
+• Better security (private implementation details)
+• Clear public interface (what others can use)
+
+EXAMPLE:
+--------
+  // mathUtils.js
+  // Private variable (not exported)
+  const PI = 3.14159;
+  
+  // Private function (not exported)
+  function validateNumber(num) {
+    return typeof num === 'number' && !isNaN(num);
+  }
+  
+  // Public function (exported)
+  function calculateCircleArea(radius) {
+    if (!validateNumber(radius)) {
+      throw new Error('Invalid radius');
+    }
+    return PI * radius * radius;
+  }
+  
+  module.exports = { calculateCircleArea };
+  // PI and validateNumber are hidden from other files!
+
+BENEFIT 4: MAINTAINABILITY
+--------------------------
+Easier to maintain and update:
+• Find code quickly (know which module to check)
+• Update without breaking other parts
+• Test modules independently
+• Version control is cleaner (smaller, focused files)
+
+BENEFIT 5: COLLABORATION
+------------------------
+Better for team development:
+• Multiple developers can work on different modules
+• Less merge conflicts
+• Clear ownership of code
+• Easier code reviews
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: MODULE STRUCTURE AND ORGANIZATION
+-----------------------------------------------
+
+HOW MODULES ARE ORGANIZED
+--------------------------
+Modules can be a single file or a collection of multiple files and folders. 
+The structure depends on the complexity and purpose of the module.
+
+SINGLE FILE MODULE
+------------------
+A simple module contained in one file:
+
+  // greeting.js
+  function sayHello(name) {
+    return `Hello, ${name}!`;
+  }
+  
+  function sayGoodbye(name) {
+    return `Goodbye, ${name}!`;
+  }
+  
+  module.exports = {
+    sayHello,
+    sayGoodbye
+  };
+
+CHARACTERISTICS:
+• All related code in one file
+• Simple and straightforward
+• Easy to understand
+• Good for small, focused functionality
+
+MULTI-FILE MODULE (PACKAGE)
+---------------------------
+A complex module spread across multiple files:
+
+  myPackage/
+  ├── index.js          (main entry point)
+  ├── utils.js          (utility functions)
+  ├── config.js         (configuration)
+  └── helpers/
+      ├── helper1.js
+      └── helper2.js
+
+CHARACTERISTICS:
+• Organized into logical files
+• Can have subdirectories
+• Better for larger functionality
+• More maintainable for complex code
+
+EXAMPLE STRUCTURE:
+------------------
+  // myPackage/index.js
+  const utils = require('./utils');
+  const config = require('./config');
+  const helper1 = require('./helpers/helper1');
+  
+  module.exports = {
+    ...utils,
+    ...config,
+    helper1
+  };
+
+MODULE ENTRY POINTS
+-------------------
+When you import a module, Node.js looks for:
+1. The exact file you specified: require('./myFile.js')
+2. A file named index.js in a folder: require('./myFolder')
+3. The main entry point in package.json
+
+EXAMPLE:
+--------
+  // If you have:
+  myModule/
+  ├── index.js
+  ├── utils.js
+  └── package.json
+  
+  // You can import it as:
+  const myModule = require('./myModule');
+  // Node.js automatically looks for index.js
+
+[END SECTION 1.3]
+[END PART 1]
+================================================================================
+
+PART 2: MODULE SPECIFICATIONS
+================================================================================
+
+SECTION 2.1: WHAT IS A MODULE SPECIFICATION?
+---------------------------------------------
+
+DEFINITION
+----------
+Module specifications are the conventions and standards used to create 
+packages in JavaScript code for Node.js applications.
+
+DETAILED EXPLANATION
+--------------------
+A module specification is like a "rulebook" that defines:
+• How to structure your code as a module
+• How to export code from a module
+• How to import code into your application
+• What syntax to use
+• How modules are loaded and executed
+
+Think of it like different languages or dialects. Just as English and Spanish 
+have different grammar rules, CommonJS and ES modules have different rules for 
+how you write and use modules.
+
+WHY DO SPECIFICATIONS EXIST?
+----------------------------
+• Standardization: Everyone follows the same rules
+• Compatibility: Code works across different environments
+• Predictability: You know how modules will behave
+• Tooling support: Build tools and bundlers understand the format
+
+THE TWO MAIN SPECIFICATIONS
+---------------------------
+The most commonly used module specifications for Node.js applications are:
+1. CommonJS (CJS) - The traditional, default system
+2. ES Modules (ESM) - The modern, standardized system
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: WHAT IS A PACKAGE?
+--------------------------------
+
+DEFINITION
+----------
+A directory with one or more modules bundled together is called a package.
+
+DETAILED EXPLANATION
+--------------------
+A package is a collection of related modules organized together. It's like a 
+folder that contains:
+• One or more module files
+• A package.json file (describes the package)
+• Sometimes dependencies (other packages it needs)
+• Documentation and configuration files
+
+REAL-WORLD ANALOGY
+------------------
+Think of a package like a software application box:
+• The box (directory/folder) contains everything
+• Inside are the components (modules)
+• There's a manual (package.json) explaining what's inside
+• Sometimes there are other boxes inside (dependencies)
+
+PACKAGE STRUCTURE
+-----------------
+A typical package looks like:
+
+  my-package/
+  ├── package.json       (package information)
+  ├── index.js           (main module)
+  ├── lib/               (additional modules)
+  │   ├── utils.js
+  │   └── helpers.js
+  ├── node_modules/      (dependencies)
+  └── README.md          (documentation)
+
+PACKAGE.JSON
+------------
+The package.json file describes your package:
+
+  {
+    "name": "my-package",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "commonjs"  // or "module" for ES modules
+  }
+
+KEY FIELDS:
+• name: The package name
+• version: The version number
+• main: The entry point file
+• type: "commonjs" (default) or "module" (for ES modules)
+
+LOCAL VS NPM PACKAGES
+---------------------
+1. LOCAL PACKAGE: A folder in your project
+   require('./myLocalPackage')
+
+2. NPM PACKAGE: Installed from npm registry
+   require('express')
+   require('lodash')
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: COMMONJS MODULES
+------------------------------
+
+DEFINITION
+----------
+CommonJS is the default module system in Node.js. By default, Node.js treats 
+JavaScript code as a CommonJS module.
+
+DETAILED EXPLANATION
+--------------------
+CommonJS (often abbreviated as CJS) is the module system that Node.js was 
+originally built on. It's been the standard for Node.js since the beginning 
+and is still the default today.
+
+KEY CHARACTERISTICS:
+• Default system: No special configuration needed
+• Uses require() to import modules
+• Uses module.exports to export code
+• Synchronous loading: Modules load one at a time
+• Dynamic: Can be called conditionally
+
+HOW COMMONJS WORKS
+------------------
+1. You write code in a file
+2. You export what you want to share using module.exports
+3. Other files import it using require()
+4. Node.js loads the module synchronously
+5. The module is cached (loaded once, reused)
+
+COMMONJS FILE EXTENSION
+-----------------------
+CommonJS modules typically use the .js extension:
+  myModule.js
+  utils.js
+  config.js
+
+No special extension needed - .js files are CommonJS by default.
+
+COMMONJS SYNTAX OVERVIEW
+------------------------
+EXPORTING:
+  module.exports = value;
+  module.exports.property = value;
+  exports.property = value;
+
+IMPORTING:
+  const module = require('./path/to/module');
+  const { property } = require('./path/to/module');
+
+We'll see detailed examples in the next sections.
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: ES MODULES (ESM)
+------------------------------
+
+DEFINITION
+----------
+ES modules (ESM) are the modern, standardized module system based on the 
+ECMAScript specification. Library authors can easily enable ES modules in a 
+Node.js package by simply changing the package file extension from .js to .mjs.
+
+DETAILED EXPLANATION
+--------------------
+ES modules are the official JavaScript module system defined in the ECMAScript 
+specification. They're the same module system used in modern browsers and are 
+now fully supported in Node.js.
+
+KEY CHARACTERISTICS:
+• Modern standard: Part of JavaScript language specification
+• Uses import to import modules
+• Uses export to export code
+• Asynchronous loading: Modules can load in parallel
+• Static: Must be at top level, analyzed at compile time
+
+HOW TO ENABLE ES MODULES
+------------------------
+There are two ways to use ES modules in Node.js:
+
+METHOD 1: USE .MJS EXTENSION
+-----------------------------
+Simply change the file extension from .js to .mjs:
+
+  // Old: myModule.js (CommonJS)
+  module.exports = { myFunction };
+  
+  // New: myModule.mjs (ES Module)
+  export { myFunction };
+
+METHOD 2: SET TYPE IN PACKAGE.JSON
+----------------------------------
+Add "type": "module" to your package.json:
+
+  {
+    "name": "my-package",
+    "type": "module"  // All .js files become ES modules
+  }
+
+ES MODULE FILE EXTENSIONS
+-------------------------
+ES modules can use:
+• .mjs extension (always ES module, regardless of package.json)
+• .js extension (if package.json has "type": "module")
+
+ES MODULE SYNTAX OVERVIEW
+-------------------------
+EXPORTING:
+  export const value = ...;
+  export function myFunction() { ... }
+  export default value;
+
+IMPORTING:
+  import module from './path/to/module.mjs';
+  import { property } from './path/to/module.mjs';
+  import * as module from './path/to/module.mjs';
+
+We'll see detailed examples in Part 2.
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: CHOOSING BETWEEN COMMONJS AND ES MODULES
+------------------------------------------------------
+
+WHEN TO USE COMMONJS
+--------------------
+Use CommonJS when:
+• Working with existing Node.js projects (default)
+• Need dynamic imports (require can be conditional)
+• Working with older Node.js versions
+• Using many npm packages that are CommonJS
+• Prefer synchronous, straightforward loading
+
+WHEN TO USE ES MODULES
+----------------------
+Use ES modules when:
+• Starting a new project (modern standard)
+• Need better performance with many modules
+• Want static analysis benefits (compile-time checking)
+• Building for browsers too (same syntax)
+• Want tree-shaking (removing unused code)
+• Working with modern tooling (bundlers, etc.)
+
+MIXING COMMONJS AND ES MODULES
+------------------------------
+You can use both in the same project, but:
+• CommonJS can require() ES modules (with limitations)
+• ES modules can import() CommonJS modules
+• It's generally better to pick one and stick with it
+• Mixing can be confusing and cause issues
+
+RECOMMENDATION
+--------------
+For new projects: Consider ES modules (they're the future)
+For existing projects: Stick with CommonJS unless you have a good reason to 
+migrate
+
+[END SECTION 2.5]
+[END PART 2]
+================================================================================
+
+PART 3: THE REQUIRE STATEMENT (COMMONJS)
+================================================================================
+
+SECTION 3.1: WHAT IS REQUIRE?
+------------------------------
+
+DEFINITION
+----------
+CommonJS modules use the require() statement to import modules. The require() 
+function is used to load and execute a module, making its exports available in 
+the current file.
+
+DETAILED EXPLANATION
+--------------------
+require() is a function provided by Node.js that:
+• Loads a module from a file or package
+• Executes the module's code
+• Returns the module's exports
+• Caches the module (loads once, reuses the result)
+• Works synchronously (blocks until loaded)
+
+HOW REQUIRE WORKS
+-----------------
+When you call require('./myModule'), Node.js:
+1. Resolves the path to find the file
+2. Checks if the module is already cached
+3. If not cached, reads and executes the file
+4. Returns the module.exports value
+5. Caches the result for future use
+
+REAL-WORLD ANALOGY
+------------------
+Think of require() like ordering from a restaurant:
+• You call require() (place an order)
+• The restaurant (Node.js) finds your dish (module)
+• They prepare it (execute the code)
+• They bring it to you (return the exports)
+• If you order again, they remember (cache)
+
+BASIC SYNTAX
+------------
+  const module = require('module-name');
+  const module = require('./relative/path');
+  const module = require('../parent/path');
+  const module = require('/absolute/path');
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: HOW REQUIRE WORKS
+-------------------------------
+
+REQUIRE RESOLUTION PROCESS
+--------------------------
+Node.js follows a specific process to find modules:
+
+STEP 1: CHECK IF IT'S A CORE MODULE
+------------------------------------
+Core modules are built into Node.js (fs, path, http, etc.):
+  const fs = require('fs');        // Core module
+  const path = require('path');    // Core module
+
+STEP 2: CHECK IF IT'S A LOCAL FILE
+-----------------------------------
+If it starts with ./ or ../, it's a relative path:
+  const utils = require('./utils');           // Same directory
+  const config = require('../config');     // Parent directory
+  const helper = require('./helpers/helper'); // Subdirectory
+
+STEP 3: CHECK NODE_MODULES
+--------------------------
+If not a core module or local file, check node_modules:
+  const express = require('express');  // Looks in node_modules/express
+  const lodash = require('lodash');    // Looks in node_modules/lodash
+
+STEP 4: CHECK PARENT DIRECTORIES
+---------------------------------
+If not found, Node.js looks in parent directories' node_modules:
+  project/
+  ├── node_modules/        (checked first)
+  ├── src/
+  │   └── app.js          (your file)
+  └── parent/
+      └── node_modules/   (checked if not found above)
+
+MODULE CACHING
+--------------
+Once a module is loaded, it's cached:
+• First require() loads and executes the module
+• Subsequent require() calls return the cached result
+• Module code only runs once
+• This improves performance
+
+EXAMPLE:
+--------
+  // First time - module executes
+  const module1 = require('./myModule');  // Executes myModule.js
+  
+  // Second time - returns cached result
+  const module2 = require('./myModule');  // No execution, uses cache
+  
+  // module1 and module2 are the same object!
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: EXPORTING WITH MODULE.EXPORTS
+------------------------------------------
+
+DEFINITION
+----------
+When a module is needed outside of its own file, it must be exported first. 
+The module.exports statement should be used with CommonJS.
+
+DETAILED EXPLANATION
+--------------------
+module.exports is a special object that determines what gets returned when 
+someone requires your module. Whatever you assign to module.exports becomes 
+the value returned by require().
+
+BASIC EXPORT SYNTAX
+-------------------
+  // Export a single value
+  module.exports = value;
+  
+  // Export an object with multiple properties
+  module.exports = {
+    property1: value1,
+    property2: value2
+  };
+  
+  // Export by adding properties
+  module.exports.property1 = value1;
+  module.exports.property2 = value2;
+
+EXAMPLE 1: EXPORTING A SINGLE FUNCTION
+--------------------------------------
+  // message.js
+  function getMessage() {
+    return "Hello programmers";
+  }
+  
+  module.exports = getMessage;
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: function getMessage() {
+        • Defines a function named getMessage
+        • This function returns the string "Hello programmers"
+        
+Line 2: return "Hello programmers";
+        • Returns the string when the function is called
+        
+Line 3: }
+        • Closes the function definition
+        
+Line 4: (empty line for readability)
+        
+Line 5: module.exports = getMessage;
+        • module.exports - The special object that holds what gets exported
+        • = - Assignment operator
+        • getMessage - The function we want to export
+        • This makes getMessage available when someone requires this file
+
+HOW TO USE THIS EXPORT:
+-----------------------
+  // main.js
+  const getMessage = require('./message');
+  console.log(getMessage());  // Output: "Hello programmers"
+
+EXAMPLE 2: EXPORTING AN OBJECT
+------------------------------
+  // message.js (from the original file)
+  module.exports = "Hello programmers";
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: module.exports = "Hello programmers";
+        • module.exports - The export object
+        • = - Assignment operator
+        • "Hello programmers" - A string value
+        • This exports the string directly (not a function)
+
+HOW TO USE THIS EXPORT:
+-----------------------
+  // main.js
+  const msg = require('./message');
+  console.log(msg);  // Output: "Hello programmers"
+  // Note: msg is a string, not a function, so no () needed
+
+EXAMPLE 3: EXPORTING MULTIPLE VALUES
+------------------------------------
+  // mathUtils.js
+  function add(a, b) {
+    return a + b;
+  }
+  
+  function subtract(a, b) {
+    return a - b;
+  }
+  
+  function multiply(a, b) {
+    return a * b;
+  }
+  
+  module.exports = {
+    add,
+    subtract,
+    multiply
+  };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: function add(a, b) { return a + b; }
+          • Defines an addition function
+          • Takes two parameters: a and b
+          • Returns their sum
+          
+Lines 5-7: function subtract(a, b) { return a - b; }
+          • Defines a subtraction function
+          • Takes two parameters: a and b
+          • Returns their difference
+          
+Lines 9-11: function multiply(a, b) { return a * b; }
+           • Defines a multiplication function
+           • Takes two parameters: a and b
+           • Returns their product
+           
+Line 13: module.exports = {
+        • Starts exporting an object
+        • The object will contain multiple properties
+        
+Lines 14-16: add, subtract, multiply
+           • Shorthand syntax: add is the same as add: add
+           • These are the three functions we're exporting
+           • Each becomes a property of the exported object
+           
+Line 17: };
+        • Closes the object and completes the export
+
+HOW TO USE THIS EXPORT:
+-----------------------
+  // main.js
+  const math = require('./mathUtils');
+  console.log(math.add(5, 3));        // Output: 8
+  console.log(math.subtract(10, 4));  // Output: 6
+  console.log(math.multiply(2, 7));   // Output: 14
+  
+  // Or using destructuring:
+  const { add, subtract, multiply } = require('./mathUtils');
+  console.log(add(5, 3));        // Output: 8
+  console.log(subtract(10, 4));  // Output: 6
+  console.log(multiply(2, 7));   // Output: 14
+
+EXAMPLE 4: EXPORTING WITH EXPORTS SHORTHAND
+--------------------------------------------
+  // utils.js
+  exports.sayHello = function(name) {
+    return `Hello, ${name}!`;
+  };
+  
+  exports.sayGoodbye = function(name) {
+    return `Goodbye, ${name}!`;
+  };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: exports.sayHello = function(name) {
+        • exports - Shorthand for module.exports
+        • .sayHello - Adds a property named sayHello
+        • = - Assignment operator
+        • function(name) - Defines an anonymous function with one parameter
+        • This is equivalent to: module.exports.sayHello = function(name) {
+        
+Line 2: return `Hello, ${name}!`;
+        • Returns a template string (string interpolation)
+        • ${name} is replaced with the actual name value
+        
+Line 3: };
+        • Closes the function definition
+        
+Line 5-7: Similar pattern for sayGoodbye function
+
+NOTE: exports vs module.exports
+-------------------------------
+• exports is a reference to module.exports
+• You can use exports.property = value
+• But if you do module.exports = something, exports no longer works
+• Best practice: Use module.exports for consistency
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: IMPORTING WITH REQUIRE
+------------------------------------
+
+DEFINITION
+----------
+To import a module into your application, you use the require() statement. 
+The result of require() is assigned to a variable, which holds the exported 
+value from the module.
+
+DETAILED EXPLANATION
+--------------------
+When you call require(), Node.js:
+1. Finds and loads the module
+2. Executes the module's code
+3. Returns whatever was assigned to module.exports
+4. You store this returned value in a variable
+
+BASIC IMPORT SYNTAX
+-------------------
+  const variableName = require('./path/to/module');
+  const { property1, property2 } = require('./path/to/module');
+  const module = require('package-name');
+
+EXAMPLE 1: IMPORTING A SINGLE EXPORT
+------------------------------------
+This example shows how to import the message.js module into the main 
+application.
+
+  // message.js
+  module.exports = "Hello programmers";
+  
+  // main.js
+  const msg = require('./message');
+  console.log(msg);
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: message.js
+----------------
+Line 1: module.exports = "Hello programmers";
+        • Exports the string "Hello programmers"
+        • This is what will be returned when someone requires this file
+
+FILE: main.js
+-------------
+Line 1: const msg = require('./message');
+        • const - Declares a constant variable (cannot be reassigned)
+        • msg - The variable name we're creating
+        • = - Assignment operator
+        • require() - The function that loads modules
+        • './message' - The path to the module
+        •   - . means current directory
+        •   - /message means the message.js file
+        •   - Node.js automatically adds .js extension
+        • This loads message.js and stores its exports in msg
+        
+Line 2: console.log(msg);
+        • console.log() - Function that prints to the console
+        • msg - The variable containing "Hello programmers"
+        • This will output: Hello programmers
+
+EXAMPLE 2: IMPORTING WITH DESTRUCTURING
+----------------------------------------
+  // mathUtils.js
+  module.exports = {
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    multiply: (a, b) => a * b
+  };
+  
+  // main.js
+  const { add, subtract } = require('./mathUtils');
+  console.log(add(5, 3));        // Output: 8
+  console.log(subtract(10, 4));  // Output: 6
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: mathUtils.js
+-------------------
+Lines 1-5: module.exports = { add: ..., subtract: ..., multiply: ... };
+          • Exports an object with three functions
+          • Each function is an arrow function (shorthand syntax)
+
+FILE: main.js
+-------------
+Line 1: const { add, subtract } = require('./mathUtils');
+        • { add, subtract } - Destructuring syntax
+        • This extracts only the add and multiply properties
+        • We're not importing multiply (we don't need it)
+        • require('./mathUtils') - Loads the module
+        • The destructuring extracts add and subtract from the returned object
+        
+Line 2: console.log(add(5, 3));
+        • Calls the add function with arguments 5 and 3
+        • Outputs: 8
+        
+Line 3: console.log(subtract(10, 4));
+        • Calls the subtract function with arguments 10 and 4
+        • Outputs: 6
+
+EXAMPLE 3: IMPORTING THE ENTIRE MODULE
+--------------------------------------
+  // mathUtils.js (same as above)
+  module.exports = {
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    multiply: (a, b) => a * b
+  };
+  
+  // main.js
+  const math = require('./mathUtils');
+  console.log(math.add(5, 3));        // Output: 8
+  console.log(math.subtract(10, 4));  // Output: 6
+  console.log(math.multiply(2, 7));   // Output: 14
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+FILE: main.js
+-------------
+Line 1: const math = require('./mathUtils');
+        • math - Variable that holds the entire exported object
+        • require('./mathUtils') - Loads the module
+        • math now contains: { add, subtract, multiply }
+        
+Line 2: console.log(math.add(5, 3));
+        • math.add - Accesses the add property from the math object
+        • (5, 3) - Calls the function with arguments
+        • Outputs: 8
+        
+Line 3: console.log(math.subtract(10, 4));
+        • Similar pattern for subtract
+        • Outputs: 6
+        
+Line 4: console.log(math.multiply(2, 7));
+        • Similar pattern for multiply
+        • Outputs: 14
+
+EXAMPLE 4: IMPORTING NPM PACKAGES
+---------------------------------
+  // main.js
+  const express = require('express');
+  const fs = require('fs');
+  const path = require('path');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: const express = require('express');
+        • express - Variable name (can be anything)
+        • require('express') - Loads the express package
+        • No ./ means it's not a local file
+        • Node.js looks in node_modules/express
+        
+Line 2: const fs = require('fs');
+        • fs - File system module (core Node.js module)
+        • Core modules don't need installation
+        • Built into Node.js
+        
+Line 3: const path = require('path');
+        • path - Path utility module (core Node.js module)
+        • Used for working with file paths
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: REQUIRE EXAMPLES AND PATTERNS
+-------------------------------------------
+
+COMPLETE WORKING EXAMPLE
+------------------------
+Let's create a complete example with multiple files:
+
+FILE STRUCTURE:
+---------------
+  project/
+  ├── message.js
+  ├── calculator.js
+  └── main.js
+
+FILE 1: message.js
+------------------
+  // message.js
+  function getGreeting(name) {
+    return `Hello, ${name}!`;
+  }
+  
+  function getFarewell(name) {
+    return `Goodbye, ${name}!`;
+  }
+  
+  module.exports = {
+    getGreeting,
+    getFarewell
+  };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: function getGreeting(name) { return `Hello, ${name}!`; }
+          • Defines a function that creates a greeting message
+          • Uses template literal syntax for string interpolation
+          
+Lines 5-7: function getFarewell(name) { return `Goodbye, ${name}!`; }
+          • Defines a function that creates a farewell message
+          
+Lines 9-11: module.exports = { getGreeting, getFarewell };
+           • Exports both functions as an object
+           • Shorthand: { getGreeting } is same as { getGreeting: getGreeting }
+
+FILE 2: calculator.js
+---------------------
+  // calculator.js
+  function add(a, b) {
+    return a + b;
+  }
+  
+  function subtract(a, b) {
+    return a - b;
+  }
+  
+  function multiply(a, b) {
+    return a * b;
+  }
+  
+  function divide(a, b) {
+    if (b === 0) {
+      throw new Error('Cannot divide by zero');
+    }
+    return a / b;
+  }
+  
+  module.exports = {
+    add,
+    subtract,
+    multiply,
+    divide
+  };
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: function add(a, b) { return a + b; }
+          • Simple addition function
+          
+Lines 5-7: function subtract(a, b) { return a - b; }
+          • Simple subtraction function
+          
+Lines 9-11: function multiply(a, b) { return a * b; }
+           • Simple multiplication function
+           
+Lines 13-18: function divide(a, b) { ... }
+            • Division function with error checking
+            • if (b === 0) - Checks if divisor is zero
+            • throw new Error() - Throws an error if dividing by zero
+            • return a / b - Returns the division result if valid
+            
+Lines 20-25: module.exports = { add, subtract, multiply, divide };
+            • Exports all four functions
+
+FILE 3: main.js
+---------------
+  // main.js
+  const { getGreeting, getFarewell } = require('./message');
+  const calc = require('./calculator');
+  
+  // Use message functions
+  console.log(getGreeting('Alice'));    // Output: Hello, Alice!
+  console.log(getFarewell('Bob'));      // Output: Goodbye, Bob!
+  
+  // Use calculator functions
+  console.log(calc.add(10, 5));         // Output: 15
+  console.log(calc.subtract(10, 5));    // Output: 5
+  console.log(calc.multiply(10, 5));   // Output: 50
+  console.log(calc.divide(10, 5));     // Output: 2
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: const { getGreeting, getFarewell } = require('./message');
+        • Destructures and imports two functions from message.js
+        • Only imports what we need (not the entire module)
+        
+Line 2: const calc = require('./calculator');
+        • Imports the entire calculator module
+        • Stores it in a variable named calc
+        
+Lines 4-5: console.log statements for messages
+        • Uses the imported functions directly (no prefix needed)
+        • getGreeting('Alice') calls the function with 'Alice' as argument
+        
+Lines 7-10: console.log statements for calculations
+        • Uses calc. prefix to access functions from the calc object
+        • Each function is called with two numbers
+
+COMMON PATTERNS
+---------------
+
+PATTERN 1: DEFAULT EXPORT
+-------------------------
+  // config.js
+  const config = {
+    apiUrl: 'https://api.example.com',
+    timeout: 5000
+  };
+  
+  module.exports = config;
+  
+  // main.js
+  const config = require('./config');
+  console.log(config.apiUrl);
+
+PATTERN 2: NAMED EXPORTS
+------------------------
+  // utils.js
+  module.exports.add = (a, b) => a + b;
+  module.exports.subtract = (a, b) => a - b;
+  
+  // main.js
+  const { add, subtract } = require('./utils');
+
+PATTERN 3: MIXED EXPORTS
+------------------------
+  // data.js
+  const users = ['Alice', 'Bob', 'Charlie'];
+  
+  function getUser(index) {
+    return users[index];
+  }
+  
+  module.exports = {
+    users,
+    getUser
+  };
+  
+  // main.js
+  const { users, getUser } = require('./data');
+  console.log(users);           // ['Alice', 'Bob', 'Charlie']
+  console.log(getUser(0));      // 'Alice'
+
+PATTERN 4: CONDITIONAL REQUIRE
+------------------------------
+  // main.js
+  let database;
+  
+  if (process.env.NODE_ENV === 'production') {
+    database = require('./database-prod');
+  } else {
+    database = require('./database-dev');
+  }
+  
+  // This works because require() can be called conditionally!
+
+[END SECTION 3.5]
+[END PART 3]
+================================================================================
+
+This is Part 1 of the comprehensive guide. Part 2 will cover:
+  • The import statement (ES modules) in detail
+  • Complete comparison between require and import
+  • Performance considerations
+  • Best practices and recommendations
+  • Summary and quick reference guide
+
+================================================================================
+END OF PART 1
+================================================================================
+
