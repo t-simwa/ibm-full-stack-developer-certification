@@ -1,0 +1,1227 @@
+================================================================================
+CREATING A WEB SERVER WITH NODE.JS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This part covers the practical implementation of creating web servers with 
+Node.js, including detailed code examples and explanations.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: CREATING A WEB SERVER
+  SECTION 4.1: THE CREATESERVER FUNCTION
+  SECTION 4.2: UNDERSTANDING THE SERVER OBJECT
+  SECTION 4.3: THE CALLBACK FUNCTION IN CREATESERVER
+  SECTION 4.4: REQUEST AND RESPONSE OBJECTS
+
+PART 5: MAKING THE SERVER LISTEN
+  SECTION 5.1: THE LISTEN FUNCTION
+  SECTION 5.2: UNDERSTANDING PORTS
+  SECTION 5.3: COMPLETE WEB SERVER EXAMPLE
+
+PART 6: COMPLETE EXAMPLES AND PATTERNS
+  SECTION 6.1: BASIC WEB SERVER EXAMPLE
+  SECTION 6.2: SERVER WITH DIFFERENT ROUTES
+  SECTION 6.3: SERVER WITH HTML RESPONSE
+  SECTION 6.4: HANDLING DIFFERENT HTTP METHODS
+
+PART 7: SUMMARY AND KEY TAKEAWAYS
+  SECTION 7.1: CONCEPT SUMMARY
+  SECTION 7.2: KEY DEFINITIONS
+  SECTION 7.3: QUICK REFERENCE GUIDE
+  SECTION 7.4: COMMON PATTERNS
+
+================================================================================
+PART 4: CREATING A WEB SERVER
+================================================================================
+
+SECTION 4.1: THE CREATESERVER FUNCTION
+---------------------------------------
+
+DEFINITION
+----------
+To create an instance of a web server, use the HTTP.createServer function. 
+The web server is stored in a variable called "server."
+
+DETAILED EXPLANATION
+--------------------
+createServer is a function provided by the HTTP module that creates a new 
+web server instance. This server can:
+• Listen for incoming HTTP requests
+• Process requests
+• Send HTTP responses
+• Handle multiple clients
+
+BASIC SYNTAX
+------------
+  const http = require('http');
+  const server = http.createServer();
+
+WHAT CREATESERVER RETURNS:
+-------------------------
+createServer returns a Server object that represents your web server. This 
+object has methods like:
+• listen() - Makes the server listen on a port
+• close() - Stops the server
+• And other server-related methods
+
+STORING THE SERVER:
+-------------------
+The web server is stored in a variable called "server." You can name this 
+variable anything, but "server" is a common and clear choice.
+
+EXAMPLE:
+--------
+  const http = require('http');
+  const server = http.createServer();
+  
+  // Now 'server' contains the Server object
+  // You can use server.listen(), server.close(), etc.
+
+WHY STORE IT IN A VARIABLE?
+---------------------------
+Storing the server in a variable allows you to:
+• Call methods on it (like listen())
+• Reference it later
+• Control the server (start, stop, configure)
+• Pass it to other functions if needed
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: UNDERSTANDING THE SERVER OBJECT
+---------------------------------------------
+
+WHAT IS THE SERVER OBJECT?
+---------------------------
+The server object is an instance of the HTTP Server class. It represents 
+your web server and provides methods to control it.
+
+KEY METHODS OF THE SERVER OBJECT:
+---------------------------------
+1. server.listen()
+   • Makes the server start listening for requests
+   • Takes a port number as parameter
+   • Required to make the server active
+
+2. server.close()
+   • Stops the server from accepting new connections
+   • Allows existing connections to finish
+   • Useful for graceful shutdown
+
+3. server.on()
+   • Registers event listeners
+   • Can listen to various server events
+   • Advanced usage
+
+BASIC USAGE:
+------------
+  const http = require('http');
+  const server = http.createServer();
+  
+  // Start listening
+  server.listen(3000);
+  
+  // Stop server (later)
+  // server.close();
+
+EVENTS THE SERVER CAN EMIT:
+---------------------------
+The server object can emit events like:
+• 'request' - When a request is received
+• 'connection' - When a connection is established
+• 'close' - When server closes
+• 'error' - When an error occurs
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: THE CALLBACK FUNCTION IN CREATESERVER
+----------------------------------------------------
+
+DEFINITION
+----------
+The createServer function takes in an optional callback function as a 
+parameter. This callback function handles the incoming request message and 
+provides an appropriate response message. The callback function shown here is 
+anonymous.
+
+DETAILED EXPLANATION
+--------------------
+A callback function is a function passed as an argument to another function. 
+In the case of createServer, this callback function:
+• Runs every time the server receives a request
+• Receives two parameters: request and response objects
+• Handles the request and sends a response
+• Can be anonymous (no name) or named
+
+WHAT "OPTIONAL" MEANS:
+---------------------
+The callback function is optional, meaning:
+• You can call createServer() without a callback
+• But you won't be able to handle requests without it
+• In practice, you almost always provide a callback
+
+WHAT "ANONYMOUS" MEANS:
+-----------------------
+An anonymous function is a function without a name. It's defined inline 
+where it's used.
+
+SYNTAX WITH CALLBACK:
+---------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(request, response) {
+    // This is an anonymous callback function
+    // Handle request and send response here
+  });
+
+BREAKDOWN:
+----------
+• createServer() - Function that creates a server
+• function(request, response) - Anonymous callback function
+• request - Object containing request information
+• response - Object for sending responses
+• { } - Function body (where you write your code)
+
+ALTERNATIVE SYNTAX (ARROW FUNCTION):
+------------------------------------
+  const server = http.createServer((request, response) => {
+    // Arrow function syntax (ES6)
+    // Same functionality, different syntax
+  });
+
+ALTERNATIVE SYNTAX (NAMED FUNCTION):
+------------------------------------
+  function requestHandler(request, response) {
+    // Named function
+    // Handle request and send response
+  }
+  
+  const server = http.createServer(requestHandler);
+  
+  // Or define it separately
+  const server = http.createServer(function requestHandler(req, res) {
+    // Handle request
+  });
+
+WHEN THE CALLBACK RUNS:
+-----------------------
+The callback function runs:
+• Every time the server receives an HTTP request
+• Once per request
+• Asynchronously (doesn't block other requests)
+• With request and response objects as parameters
+
+EXAMPLE FLOW:
+-------------
+1. Client sends request → Server receives it
+2. Server calls your callback function
+3. Callback processes the request
+4. Callback sends response using response object
+5. Response sent to client
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: REQUEST AND RESPONSE OBJECTS
+------------------------------------------
+
+THE CALLBACK FUNCTION HANDLES THE INCOMING REQUEST MESSAGE AND PROVIDES AN 
+APPROPRIATE RESPONSE MESSAGE.
+
+THE REQUEST OBJECT (REQ):
+-------------------------
+The request object (often abbreviated as 'req') contains information about 
+the incoming HTTP request.
+
+KEY PROPERTIES OF REQUEST OBJECT:
+---------------------------------
+1. req.url
+   • The URL path requested
+   • Example: '/index.html', '/api/users'
+   • Used to determine what the client wants
+
+2. req.method
+   • HTTP method (GET, POST, PUT, DELETE, etc.)
+   • Example: 'GET', 'POST'
+   • Indicates the type of request
+
+3. req.headers
+   • Object containing HTTP headers
+   • Example: { 'user-agent': '...', 'accept': '...' }
+   • Metadata about the request
+
+4. req.httpVersion
+   • HTTP version used
+   • Example: '1.1'
+
+EXAMPLE OF USING REQUEST OBJECT:
+--------------------------------
+  const server = http.createServer(function(req, res) {
+    console.log('Request URL:', req.url);
+    console.log('Request Method:', req.method);
+    console.log('Request Headers:', req.headers);
+    
+    // Handle request based on URL
+    if (req.url === '/') {
+      res.end('Home page');
+    } else if (req.url === '/about') {
+      res.end('About page');
+    } else {
+      res.end('Page not found');
+    }
+  });
+
+THE RESPONSE OBJECT (RES):
+--------------------------
+The response object (often abbreviated as 'res') is used to send HTTP 
+responses back to the client.
+
+KEY METHODS OF RESPONSE OBJECT:
+--------------------------------
+1. res.writeHead(statusCode, headers)
+   • Sets the status code and headers
+   • Must be called before res.end()
+   • Example: res.writeHead(200, { 'Content-Type': 'text/html' })
+
+2. res.write(data)
+   • Writes data to the response
+   • Can be called multiple times
+   • Example: res.write('Hello')
+
+3. res.end(data)
+   • Ends the response and sends it
+   • Can include data to send
+   • Must be called to complete the response
+   • Example: res.end('Hello World')
+
+4. res.statusCode
+   • Sets the status code
+   • Alternative to writeHead for status only
+   • Example: res.statusCode = 404
+
+EXAMPLE OF USING RESPONSE OBJECT:
+---------------------------------
+  const server = http.createServer(function(req, res) {
+    // Set status code and headers
+    res.writeHead(200, {
+      'Content-Type': 'text/plain'
+    });
+    
+    // Send response
+    res.end('Hello World!');
+  });
+
+COMPLETE EXAMPLE WITH BOTH OBJECTS:
+-----------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    // Use request object to get information
+    console.log('Requested URL:', req.url);
+    console.log('Request Method:', req.method);
+    
+    // Use response object to send response
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello from Node.js!');
+  });
+
+LINE-BY-LINE BREAKDOWN:
+-----------------------
+  const http = require('http');
+  • Imports the HTTP module
+  • Makes http object available
+
+  const server = http.createServer(function(req, res) {
+  • Creates a server instance
+  • Stores it in 'server' variable
+  • Provides callback function
+  • req = request object (incoming request)
+  • res = response object (outgoing response)
+
+    console.log('Requested URL:', req.url);
+  • Logs the URL that was requested
+  • req.url contains the path (e.g., '/index.html')
+
+    console.log('Request Method:', req.method);
+  • Logs the HTTP method used
+  • req.method contains method (e.g., 'GET', 'POST')
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets HTTP status code to 200 (OK)
+  • Sets Content-Type header to 'text/plain'
+  • Headers tell browser how to interpret the response
+
+    res.end('Hello from Node.js!');
+  • Ends the response
+  • Sends 'Hello from Node.js!' to the client
+  • Completes the response (must be called)
+
+  });
+  • Closes the callback function
+
+[END SECTION 4.4]
+[END PART 4]
+================================================================================
+
+PART 5: MAKING THE SERVER LISTEN
+================================================================================
+
+SECTION 5.1: THE LISTEN FUNCTION
+--------------------------------
+
+DEFINITION
+----------
+After you create an instance of the server object, you can set the server to 
+listen to a specific port; for example, call the HTTP.listen function with 
+a parameter of 8080 as the port to set the server to listen on 8080.
+
+DETAILED EXPLANATION
+--------------------
+The listen() function makes your server start listening for incoming 
+requests on a specific port. Without calling listen(), your server won't 
+accept any requests.
+
+IMPORTANT NOTE:
+---------------
+The original text says "HTTP.listen function" but it's actually 
+"server.listen()" - the listen method is called on the server object, not 
+on the HTTP module directly.
+
+CORRECT SYNTAX:
+---------------
+  server.listen(port);
+
+NOT:
+  http.listen(port); // This is incorrect
+
+BASIC SYNTAX:
+-------------
+  const http = require('http');
+  const server = http.createServer(function(req, res) {
+    // Handle requests
+  });
+  
+  server.listen(8080);
+
+WHAT HAPPENS WHEN YOU CALL LISTEN:
+----------------------------------
+1. Server starts listening on the specified port
+2. Server becomes active and can accept requests
+3. Server waits for incoming connections
+4. When a request arrives, the callback function runs
+
+EXAMPLE:
+--------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Server is running!');
+  });
+  
+  server.listen(8080);
+  console.log('Server listening on port 8080');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+  • Imports the HTTP module
+
+  const server = http.createServer(function(req, res) {
+  • Creates server with callback function
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets response status and headers
+
+    res.end('Server is running!');
+  • Sends response to client
+
+  });
+  • Closes callback function
+
+  server.listen(8080);
+  • Makes server listen on port 8080
+  • Server becomes active
+  • Can now accept requests
+
+  console.log('Server listening on port 8080');
+  • Logs message to console
+  • Confirms server started
+  • Helps with debugging
+
+ADDITIONAL LISTEN OPTIONS:
+--------------------------
+You can also provide a callback to listen():
+
+  server.listen(8080, function() {
+    console.log('Server started on port 8080');
+  });
+
+Or specify a hostname:
+
+  server.listen(8080, 'localhost', function() {
+    console.log('Server started on localhost:8080');
+  });
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: UNDERSTANDING PORTS
+---------------------------------
+
+WHAT IS A PORT?
+---------------
+A port is like a door number for network communication. It's a number that 
+identifies a specific service on a computer.
+
+REAL-WORLD ANALOGY
+------------------
+Think of a port like an apartment number:
+• IP address = Building address (where the server is)
+• Port = Apartment number (which service you want)
+• Multiple services can run on the same server using different ports
+
+COMMON PORTS:
+-------------
+• Port 80 - Default HTTP (web traffic)
+• Port 443 - Default HTTPS (secure web traffic)
+• Port 3000 - Common for development servers
+• Port 8080 - Common alternative HTTP port
+• Port 8000 - Another common development port
+
+WHY USE PORT 8080?
+------------------
+Port 8080 is often used because:
+• Port 80 might require administrator privileges
+• Port 8080 is commonly available
+• Easy to remember
+• Good for development and testing
+
+HOW TO ACCESS YOUR SERVER:
+--------------------------
+Once your server is listening on port 8080, you can access it:
+• In browser: http://localhost:8080
+• localhost = your own computer
+• 8080 = the port your server is listening on
+
+EXAMPLE:
+--------
+  server.listen(8080);
+  
+  // Access at: http://localhost:8080
+  // Or: http://127.0.0.1:8080
+
+WHAT IF PORT IS ALREADY IN USE?
+-------------------------------
+If port 8080 is already in use, you'll get an error:
+
+  Error: listen EADDRINUSE: address already in use :::8080
+
+Solutions:
+• Use a different port (e.g., 3000, 8000)
+• Stop the program using port 8080
+• Let Node.js choose a port automatically
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: COMPLETE WEB SERVER EXAMPLE
+-----------------------------------------
+
+COMPLETE BASIC EXAMPLE:
+-----------------------
+Here's a complete example combining everything we've learned:
+
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World!');
+  });
+  
+  server.listen(8080);
+  console.log('Server running at http://localhost:8080');
+
+COMPLETE LINE-BY-LINE EXPLANATION:
+----------------------------------
+  const http = require('http');
+  • const - Declares a constant variable
+  • http - Variable name for the HTTP module
+  • require('http') - Imports the built-in HTTP module
+  • This gives us access to http.createServer() and other HTTP functions
+
+  const server = http.createServer(function(req, res) {
+  • const server - Creates a constant to store the server instance
+  • http.createServer() - Calls the createServer function from HTTP module
+  • function(req, res) - Anonymous callback function
+  • req - Request object (contains info about incoming request)
+  • res - Response object (used to send response back)
+  • This callback runs every time a request is received
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • res.writeHead() - Method to set HTTP status and headers
+  • 200 - HTTP status code (200 = OK, request successful)
+  • { 'Content-Type': 'text/plain' } - Headers object
+  • 'Content-Type' - Header name
+  • 'text/plain' - Tells browser this is plain text
+  • Must be called before res.end()
+
+    res.end('Hello World!');
+  • res.end() - Ends and sends the response
+  • 'Hello World!' - The data to send to the client
+  • This completes the response
+  • Must be called for every request
+
+  });
+  • Closes the callback function
+  • Closes the createServer() call
+
+  server.listen(8080);
+  • server.listen() - Makes server start listening
+  • 8080 - Port number to listen on
+  • Server becomes active and can accept requests
+  • Without this, server won't work
+
+  console.log('Server running at http://localhost:8080');
+  • console.log() - Outputs message to console
+  • Helps confirm server started successfully
+  • Shows where to access the server
+
+HOW TO RUN THIS SERVER:
+----------------------
+1. Save the code to a file (e.g., server.js)
+2. Open terminal/command prompt
+3. Navigate to the file's directory
+4. Run: node server.js
+5. You should see: "Server running at http://localhost:8080"
+6. Open browser and visit: http://localhost:8080
+7. You should see: "Hello World!"
+
+TO STOP THE SERVER:
+-------------------
+Press Ctrl+C in the terminal where the server is running.
+
+[END SECTION 5.3]
+[END PART 5]
+================================================================================
+
+PART 6: COMPLETE EXAMPLES AND PATTERNS
+================================================================================
+
+SECTION 6.1: BASIC WEB SERVER EXAMPLE
+---------------------------------------
+
+EXAMPLE 1: SIMPLE HELLO WORLD SERVER
+--------------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World from Node.js!');
+  });
+  
+  server.listen(3000, function() {
+    console.log('Server started on port 3000');
+  });
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+  • Imports HTTP module
+
+  const server = http.createServer(function(req, res) {
+  • Creates server with request handler callback
+
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets status 200 (success) and content type
+
+    res.end('Hello World from Node.js!');
+  • Sends response and ends connection
+
+  });
+  • Closes callback
+
+  server.listen(3000, function() {
+  • Starts server on port 3000
+  • Second parameter is callback that runs when server starts
+
+    console.log('Server started on port 3000');
+  • Logs confirmation message
+
+  });
+  • Closes listen callback
+
+EXAMPLE 2: SERVER WITH REQUEST LOGGING
+---------------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    // Log request information
+    console.log('Request received!');
+    console.log('URL:', req.url);
+    console.log('Method:', req.method);
+    
+    // Send response
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Request logged!');
+  });
+  
+  server.listen(8080);
+  console.log('Server listening on port 8080');
+
+WHAT THIS DOES:
+---------------
+• Logs each request to the console
+• Shows the URL and method used
+• Sends a simple response
+• Useful for debugging and learning
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: SERVER WITH DIFFERENT ROUTES
+------------------------------------------
+
+EXAMPLE: HANDLING DIFFERENT URLS
+---------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    // Check the URL and respond accordingly
+    if (req.url === '/') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('Welcome to the home page!');
+    } else if (req.url === '/about') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('This is the about page!');
+    } else if (req.url === '/contact') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('Contact us at: email@example.com');
+    } else {
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+      res.end('Page not found!');
+    }
+  });
+  
+  server.listen(8080);
+  console.log('Server running on port 8080');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+  • Imports HTTP module
+
+  const server = http.createServer(function(req, res) {
+  • Creates server with callback
+
+    if (req.url === '/') {
+  • Checks if requested URL is root path (/)
+  • req.url contains the path part of the URL
+  • === checks for exact equality
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets success status (200) and content type
+
+      res.end('Welcome to the home page!');
+  • Sends home page message
+
+    } else if (req.url === '/about') {
+  • Checks if URL is /about
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets success status
+
+      res.end('This is the about page!');
+  • Sends about page message
+
+    } else if (req.url === '/contact') {
+  • Checks if URL is /contact
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets success status
+
+      res.end('Contact us at: email@example.com');
+  • Sends contact page message
+
+    } else {
+  • If URL doesn't match any of the above
+
+      res.writeHead(404, { 'Content-Type': 'text/plain' });
+  • Sets 404 status (Not Found)
+  • Browser will show this as an error page
+
+      res.end('Page not found!');
+  • Sends error message
+
+    }
+  • Closes if-else statement
+
+  });
+  • Closes callback function
+
+  server.listen(8080);
+  • Starts server on port 8080
+
+  console.log('Server running on port 8080');
+  • Logs server start message
+
+TESTING THIS SERVER:
+--------------------
+• http://localhost:8080/ → "Welcome to the home page!"
+• http://localhost:8080/about → "This is the about page!"
+• http://localhost:8080/contact → "Contact us at: email@example.com"
+• http://localhost:8080/anything → "Page not found!"
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: SERVER WITH HTML RESPONSE
+--------------------------------------
+
+EXAMPLE: SENDING HTML CONTENT
+------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end(`
+      <html>
+        <head>
+          <title>My Node.js Server</title>
+        </head>
+        <body>
+          <h1>Hello from Node.js!</h1>
+          <p>This is HTML content sent from the server.</p>
+        </body>
+      </html>
+    `);
+  });
+  
+  server.listen(8080);
+  console.log('Server running on port 8080');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+  • Imports HTTP module
+
+  const server = http.createServer(function(req, res) {
+  • Creates server
+
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+  • Sets status 200
+  • 'Content-Type': 'text/html' - Tells browser this is HTML
+  • Browser will render it as a webpage, not plain text
+
+    res.end(`
+  • Starts sending HTML content
+  • Backticks (`) allow multi-line strings in JavaScript
+
+      <html>
+  • Opening HTML tag
+
+        <head>
+  • HTML head section (metadata)
+
+          <title>My Node.js Server</title>
+  • Page title (shows in browser tab)
+
+        </head>
+  • Closes head section
+
+        <body>
+  • HTML body section (visible content)
+
+          <h1>Hello from Node.js!</h1>
+  • Heading 1 (large heading)
+
+          <p>This is HTML content sent from the server.</p>
+  • Paragraph text
+
+        </body>
+  • Closes body section
+
+      </html>
+  • Closes HTML tag
+
+    `);
+  • Closes the HTML string
+  • Sends the complete HTML to browser
+
+  });
+  • Closes callback
+
+  server.listen(8080);
+  • Starts server
+
+  console.log('Server running on port 8080');
+  • Logs confirmation
+
+WHAT HAPPENS:
+-------------
+• Browser receives HTML content
+• Browser renders it as a webpage
+• User sees formatted HTML, not plain text
+• This is how real websites work!
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: HANDLING DIFFERENT HTTP METHODS
+---------------------------------------------
+
+EXAMPLE: RESPONDING TO GET AND POST REQUESTS
+---------------------------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    // Check the HTTP method
+    if (req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('This is a GET request');
+    } else if (req.method === 'POST') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('This is a POST request');
+    } else {
+      res.writeHead(405, { 'Content-Type': 'text/plain' });
+      res.end('Method not allowed');
+    }
+  });
+  
+  server.listen(8080);
+  console.log('Server running on port 8080');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+  • Imports HTTP module
+
+  const server = http.createServer(function(req, res) {
+  • Creates server
+
+    if (req.method === 'GET') {
+  • Checks if HTTP method is GET
+  • GET is used to retrieve data
+  • Most common method for web pages
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets success status
+
+      res.end('This is a GET request');
+  • Sends response for GET requests
+
+    } else if (req.method === 'POST') {
+  • Checks if HTTP method is POST
+  • POST is used to send data to server
+  • Common for forms and API calls
+
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+  • Sets success status
+
+      res.end('This is a POST request');
+  • Sends response for POST requests
+
+    } else {
+  • If method is neither GET nor POST
+
+      res.writeHead(405, { 'Content-Type': 'text/plain' });
+  • Sets 405 status (Method Not Allowed)
+  • Indicates the method isn't supported
+
+      res.end('Method not allowed');
+  • Sends error message
+
+    }
+  • Closes if-else
+
+  });
+  • Closes callback
+
+  server.listen(8080);
+  • Starts server
+
+COMMON HTTP METHODS:
+-------------------
+• GET - Retrieve data (most common)
+• POST - Send/create data
+• PUT - Update data
+• DELETE - Delete data
+• PATCH - Partial update
+
+[END SECTION 6.4]
+[END PART 6]
+================================================================================
+
+PART 7: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 7.1: CONCEPT SUMMARY
+------------------------------
+
+WHAT YOU LEARNED:
+----------------
+In this video, you learned that:
+
+1. NODE.JS IS A SINGLE-THREADED APPLICATION ENVIRONMENT
+   • Uses one main thread for JavaScript execution
+   • Handles I/O operations through events
+   • Non-blocking and efficient
+
+2. EVERY JAVASCRIPT FILE IS A MODULE IN NODE.JS
+   • Each file is a module
+   • Modules can export and import code
+   • Helps organize code
+
+3. WITH THE HTTP NODE.JS MODULE, YOU CAN DEVELOP AN APPLICATION THAT LISTENS 
+   TO HTTP REQUESTS AND RETURNS HTTP RESPONSE MESSAGES
+   • HTTP module is built-in
+   • Can create web servers
+   • Handles HTTP protocol
+
+KEY CONCEPTS:
+-------------
+• Node.js = Server-side JavaScript framework
+• Single-threaded = One main execution thread
+• Event-driven = Handles operations through events
+• Non-blocking I/O = Doesn't wait for operations
+• Callback functions = Functions called when operations complete
+• Modules = JavaScript files that can export/import code
+• HTTP module = Built-in module for web servers
+• createServer = Function to create web servers
+• listen = Method to make server accept requests
+• Port = Number identifying a service
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: KEY DEFINITIONS
+-----------------------------
+
+NODE.JS
+-------
+Node.js is a server-side programming framework that uses JavaScript as its 
+programming language. Many developers are already familiar with the JavaScript 
+language. It is built with a heavy emphasis on concurrent programming with a 
+lightweight language.
+
+SINGLE-THREADED APPLICATION ENVIRONMENT
+----------------------------------------
+Node.js is a single-threaded application environment that handles 
+input/output (I/O) operations through events. Instead of blocking on 
+asynchronous I/O operations, you write callback functions to handle results 
+when they complete.
+
+CALLBACK FUNCTIONS
+------------------
+Instead of blocking on asynchronous I/O operations, you write callback 
+functions to handle results when they complete. A callback function is a 
+function passed as an argument to another function and executed later.
+
+EVENT LOOP
+----------
+Node.js uses the Node.js runtime event loop to manage asynchronous 
+operations. The event loop continuously checks for events and executes 
+callback functions when events occur.
+
+MODULES
+-------
+Every JavaScript file is a module in Node.js. A module corresponds to a 
+script file. A package can contain one or more modules.
+
+HTTP MODULE
+----------
+With the HTTP Node.js module, you can develop an application that listens to 
+HTTP requests and returns HTTP response messages. The Node.js runtime is 
+packaged with many utility modules that you can use to create and extend your 
+applications.
+
+CREATESERVER FUNCTION
+----------------------
+To create an instance of a web server, use the HTTP.createServer function. 
+The web server is stored in a variable called "server." The createServer 
+function takes in an optional callback function as a parameter. This callback 
+function handles the incoming request message and provides an appropriate 
+response message. The callback function shown here is anonymous.
+
+LISTEN FUNCTION
+---------------
+After you create an instance of the server object, you can set the server to 
+listen to a specific port; for example, call the server.listen function with 
+a parameter of 8080 as the port to set the server to listen on 8080.
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: QUICK REFERENCE GUIDE
+------------------------------------
+
+BASIC WEB SERVER TEMPLATE:
+---------------------------
+  const http = require('http');
+  
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World!');
+  });
+  
+  server.listen(8080);
+  console.log('Server running on port 8080');
+
+STEP-BY-STEP CHECKLIST:
+------------------------
+1. Import HTTP module: const http = require('http');
+2. Create server: const server = http.createServer(callback);
+3. Handle requests in callback: function(req, res) { ... }
+4. Set response headers: res.writeHead(status, headers);
+5. Send response: res.end(data);
+6. Start listening: server.listen(port);
+
+COMMON STATUS CODES:
+---------------------
+• 200 - OK (success)
+• 404 - Not Found
+• 500 - Internal Server Error
+• 405 - Method Not Allowed
+
+COMMON CONTENT TYPES:
+---------------------
+• 'text/plain' - Plain text
+• 'text/html' - HTML content
+• 'application/json' - JSON data
+• 'text/css' - CSS stylesheets
+
+COMMON PORTS:
+-------------
+• 3000 - Development server
+• 8080 - Alternative HTTP port
+• 8000 - Another common port
+• 80 - Default HTTP (requires admin)
+
+REQUEST OBJECT PROPERTIES:
+--------------------------
+• req.url - Requested URL path
+• req.method - HTTP method (GET, POST, etc.)
+• req.headers - HTTP headers object
+
+RESPONSE OBJECT METHODS:
+------------------------
+• res.writeHead(status, headers) - Set status and headers
+• res.write(data) - Write data to response
+• res.end(data) - End and send response
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: COMMON PATTERNS
+-----------------------------
+
+PATTERN 1: BASIC SERVER
+-----------------------
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello!');
+  });
+  server.listen(3000);
+
+PATTERN 2: SERVER WITH ROUTING
+------------------------------
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    if (req.url === '/') {
+      res.end('Home');
+    } else if (req.url === '/about') {
+      res.end('About');
+    } else {
+      res.writeHead(404);
+      res.end('Not Found');
+    }
+  });
+  server.listen(3000);
+
+PATTERN 3: SERVER WITH HTML
+---------------------------
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.end('<h1>Hello</h1>');
+  });
+  server.listen(3000);
+
+PATTERN 4: SERVER WITH LOGGING
+------------------------------
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    console.log(`${req.method} ${req.url}`);
+    res.writeHead(200);
+    res.end('OK');
+  });
+  server.listen(3000);
+
+PATTERN 5: SERVER WITH ERROR HANDLING
+-------------------------------------
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    try {
+      res.writeHead(200);
+      res.end('Success');
+    } catch (error) {
+      res.writeHead(500);
+      res.end('Error');
+    }
+  });
+  server.listen(3000, () => {
+    console.log('Server started');
+  });
+
+[END SECTION 7.4]
+[END PART 7]
+================================================================================
+
+FINAL NOTES
+-----------
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• Node.js is a single-threaded, event-driven JavaScript runtime
+• Every JavaScript file is a module in Node.js
+• The HTTP module allows you to create web servers
+• createServer() creates a server instance
+• The callback function handles requests and sends responses
+• listen() makes the server accept requests on a port
+• Request object contains incoming request information
+• Response object is used to send responses back
+• Ports identify which service to connect to
+
+You now have a comprehensive understanding of creating web servers with Node.js. 
+These concepts are fundamental to backend development with Node.js.
+
+Next Steps:
+• Practice creating different types of servers
+• Experiment with different routes and responses
+• Learn about handling different HTTP methods
+• Explore reading request data
+• Learn about serving static files
+• Study Express.js (a framework built on Node.js HTTP module)
+
+Good luck with your Node.js journey!
+
+================================================================================
+END OF PART 2
+END OF COMPREHENSIVE GUIDE
+================================================================================
+
+Original Content Maintained
+----------------------------
+All original definitions, explanations, and concepts from the source material 
+have been preserved and expanded upon in this comprehensive guide.
+

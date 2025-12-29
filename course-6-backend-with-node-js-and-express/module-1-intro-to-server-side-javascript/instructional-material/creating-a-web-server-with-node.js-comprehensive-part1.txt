@@ -1,0 +1,1133 @@
+================================================================================
+CREATING A WEB SERVER WITH NODE.JS
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Creating a Web Server with Node.js. This comprehensive guide will 
+teach you everything you need to know about Node.js and how to create web 
+servers, from the basics to practical implementation.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Describe the characteristics of Node.js
+• Understand what Node.js is and why it's used
+• Explain how Node.js handles I/O operations
+• Understand the concept of modules in Node.js
+• Describe the HTTP module and its purpose
+• Write a simple web server with Node.js
+• Understand how to use createServer function
+• Understand how to make a server listen on a port
+• Explain callback functions and their role in Node.js
+• Understand the event loop and concurrent programming
+
+OVERVIEW
+--------
+Node.js is a server-side programming framework that uses JavaScript as its 
+programming language. Many developers are already familiar with the JavaScript 
+language. It is built with a heavy emphasis on concurrent programming with a 
+lightweight language. Node.js is a single-threaded application environment that 
+handles input/output (I/O) operations through events. Instead of blocking on 
+asynchronous I/O operations, you write callback functions to handle results when 
+they complete. Node.js is suited for developers who want to build scalable and 
+concurrent server applications by using features like callback functions and 
+the Node.js runtime event loop. These features of the JavaScript language and 
+the Node.js runtime enable quick development with a minimal set of tools.
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of Node.js and web server creation:
+
+PART 1: INTRODUCTION TO NODE.JS
+  SECTION 1.1: WHAT IS NODE.JS?
+  SECTION 1.2: CHARACTERISTICS OF NODE.JS
+  SECTION 1.3: WHY USE NODE.JS?
+  SECTION 1.4: HOW NODE.JS HANDLES I/O OPERATIONS
+
+PART 2: UNDERSTANDING NODE.JS MODULES
+  SECTION 2.1: WHAT ARE MODULES IN NODE.JS?
+  SECTION 2.2: EVERY JAVASCRIPT FILE IS A MODULE
+  SECTION 2.3: PACKAGES AND MODULES
+  SECTION 2.4: UTILITY MODULES IN NODE.JS
+
+PART 3: THE HTTP MODULE
+  SECTION 3.1: WHAT IS THE HTTP MODULE?
+  SECTION 3.2: WHAT CAN YOU DO WITH THE HTTP MODULE?
+  SECTION 3.3: IMPORTING THE HTTP MODULE
+
+NOTE: Part 2 of this guide covers:
+  • Creating web servers with createServer
+  • Understanding callback functions
+  • Making servers listen on ports
+  • Complete examples with detailed code explanations
+  • Summary and key takeaways
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO NODE.JS
+================================================================================
+
+SECTION 1.1: WHAT IS NODE.JS?
+------------------------------
+
+DEFINITION
+----------
+Node.js is a server-side programming framework that uses JavaScript as its 
+programming language. Many developers are already familiar with the JavaScript 
+language.
+
+DETAILED EXPLANATION
+--------------------
+Node.js allows you to write server-side code using JavaScript, the same 
+language you use for client-side web development. This means:
+
+• You can use JavaScript on both the frontend (browser) and backend (server)
+• You don't need to learn a different language for server-side development
+• Code can be shared between frontend and backend
+• Many developers already know JavaScript, making Node.js easier to learn
+
+REAL-WORLD ANALOGY
+------------------
+Think of Node.js like a translator that allows JavaScript (originally designed 
+for browsers) to work outside the browser. Just like a universal translator 
+allows people who speak different languages to communicate, Node.js allows 
+JavaScript to "speak" to servers, file systems, databases, and other 
+server-side resources.
+
+KEY POINTS
+----------
+• Server-side: Runs on the server, not in the browser
+• Programming framework: Provides tools and structure for building applications
+• Uses JavaScript: Same language as frontend development
+• Familiar language: Many developers already know JavaScript
+
+WHAT MAKES NODE.JS SPECIAL
+---------------------------
+1. JavaScript Everywhere
+   • Same language for frontend and backend
+   • Easier to maintain and understand
+   • Faster development
+
+2. Built on Chrome's V8 Engine
+   • V8 is the JavaScript engine that powers Google Chrome
+   • Very fast execution
+   • Constantly improved by Google
+
+3. Large Ecosystem
+   • npm (Node Package Manager) has millions of packages
+   • Huge community support
+   • Many ready-made solutions available
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: CHARACTERISTICS OF NODE.JS
+-----------------------------------------
+
+CHARACTERISTIC 1: SINGLE-THREADED APPLICATION ENVIRONMENT
+--------------------------------------------------------
+Node.js is a single-threaded application environment. This means:
+
+WHAT "SINGLE-THREADED" MEANS:
+-----------------------------
+• A thread is like a worker that can do one task at a time
+• Single-threaded means Node.js uses one main thread to execute JavaScript code
+• Unlike some languages that use multiple threads, Node.js uses one thread
+
+WHY THIS MATTERS:
+-----------------
+• Simpler programming model (no need to manage multiple threads)
+• No thread synchronization issues
+• Less memory overhead
+• But still handles many requests efficiently (through events)
+
+REAL-WORLD ANALOGY
+------------------
+Think of a single-threaded application like a restaurant with one waiter. The 
+waiter can only do one thing at a time, but they're very efficient at 
+switching between tasks. When one table needs something, the waiter takes the 
+order, then moves to another table while the kitchen prepares the food. The 
+waiter doesn't wait around - they keep moving and handling multiple tables 
+efficiently.
+
+CHARACTERISTIC 2: HANDLES I/O OPERATIONS THROUGH EVENTS
+-------------------------------------------------------
+Node.js handles input/output (I/O) operations through events. This means:
+
+WHAT ARE I/O OPERATIONS?
+------------------------
+I/O (Input/Output) operations include:
+• Reading from or writing to files
+• Sending or receiving network requests
+• Database queries
+• Reading user input
+• Any operation that involves external resources
+
+WHAT "THROUGH EVENTS" MEANS:
+----------------------------
+• Instead of waiting for I/O to complete, Node.js continues with other tasks
+• When I/O completes, an event is triggered
+• Event handlers (callback functions) respond to these events
+• This allows Node.js to handle many operations efficiently
+
+EXAMPLE:
+--------
+Traditional (blocking) approach:
+  Read file → Wait for file to be read → Process data → Continue
+
+Node.js (non-blocking) approach:
+  Start reading file → Continue with other tasks → When file is ready, 
+  trigger event → Handle event with callback function
+
+CHARACTERISTIC 3: USES CALLBACK FUNCTIONS
+------------------------------------------
+Instead of blocking on asynchronous I/O operations, you write callback 
+functions to handle results when they complete.
+
+WHAT ARE CALLBACK FUNCTIONS?
+-----------------------------
+A callback function is a function that is passed as an argument to another 
+function and is executed later, usually after some operation completes.
+
+SIMPLE EXAMPLE:
+---------------
+  function greet(name, callback) {
+    console.log('Hello, ' + name);
+    callback(); // Call the callback function
+  }
+  
+  greet('John', function() {
+    console.log('Callback executed!');
+  });
+  
+  // Output:
+  // Hello, John
+  // Callback executed!
+
+IN NODE.JS:
+-----------
+When you perform an I/O operation (like reading a file), you provide a 
+callback function. Node.js starts the operation and continues with other 
+tasks. When the operation completes, Node.js calls your callback function 
+with the results.
+
+EXAMPLE:
+--------
+  const fs = require('fs');
+  
+  // Read file asynchronously
+  fs.readFile('data.txt', 'utf8', function(error, data) {
+    // This callback runs when file reading completes
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      console.log('File content:', data);
+    }
+  });
+  
+  // This line runs immediately, before file reading completes
+  console.log('This runs first!');
+
+OUTPUT:
+-------
+  This runs first!
+  File content: [content of data.txt]
+
+CHARACTERISTIC 4: CONCURRENT PROGRAMMING WITH LIGHTWEIGHT LANGUAGE
+-------------------------------------------------------------------
+Node.js is built with a heavy emphasis on concurrent programming with a 
+lightweight language.
+
+WHAT IS CONCURRENT PROGRAMMING?
+--------------------------------
+Concurrent programming means handling multiple tasks at the same time. In 
+Node.js, this doesn't mean executing multiple tasks simultaneously on 
+different threads. Instead, it means:
+
+• Starting multiple I/O operations
+• Switching between tasks efficiently
+• Handling many requests without blocking
+• Processing tasks as they become ready
+
+WHAT "LIGHTWEIGHT LANGUAGE" MEANS:
+-----------------------------------
+JavaScript is considered lightweight because:
+• Simple syntax
+• Easy to learn
+• Doesn't require complex setup
+• Fast to write and execute
+• Minimal overhead
+
+HOW NODE.JS ACHIEVES CONCURRENCY:
+---------------------------------
+Node.js achieves concurrency through:
+• Event loop (manages all events and callbacks)
+• Non-blocking I/O (doesn't wait for operations)
+• Callback functions (handle results when ready)
+• Single thread (avoids thread management complexity)
+
+REAL-WORLD ANALOGY
+------------------
+Think of Node.js like a smart receptionist at a busy office:
+• The receptionist (single thread) handles multiple phone calls (requests)
+• When one caller needs to check something (I/O operation), the receptionist 
+  puts them on hold and takes another call
+• When the first caller's information is ready (event), the receptionist 
+  returns to them (callback)
+• The receptionist efficiently handles many calls without waiting around
+
+CHARACTERISTIC 5: EVENT LOOP
+------------------------------
+Node.js uses the Node.js runtime event loop to manage asynchronous operations.
+
+WHAT IS THE EVENT LOOP?
+-----------------------
+The event loop is a mechanism that:
+• Continuously checks for events
+• Executes callback functions when events occur
+• Manages the order of execution
+• Ensures non-blocking behavior
+
+HOW IT WORKS:
+-------------
+1. JavaScript code executes (synchronous code)
+2. When an async operation starts, it's handed off to the system
+3. Event loop continues checking for completed operations
+4. When an operation completes, its callback is added to a queue
+5. Event loop executes callbacks when JavaScript is idle
+6. Process repeats
+
+VISUAL REPRESENTATION:
+---------------------
+  [JavaScript Code]
+        |
+        | Starts async operation
+        v
+  [Event Loop] ← Checks for completed operations
+        |
+        | Operation completes
+        v
+  [Callback Queue] ← Callbacks waiting to execute
+        |
+        | JavaScript is idle
+        v
+  [Execute Callback] ← Callback function runs
+        |
+        v
+  [Continue with next operation]
+
+WHY THE EVENT LOOP MATTERS:
+---------------------------
+• Enables non-blocking I/O
+• Allows handling many requests efficiently
+• Makes Node.js suitable for scalable applications
+• Provides the foundation for Node.js concurrency
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: WHY USE NODE.JS?
+------------------------------
+
+NODE.JS IS SUITED FOR DEVELOPERS WHO WANT TO BUILD SCALABLE AND CONCURRENT 
+SERVER APPLICATIONS BY USING FEATURES LIKE CALLBACK FUNCTIONS AND THE NODE.JS 
+RUNTIME EVENT LOOP.
+
+WHAT DOES "SCALABLE" MEAN?
+---------------------------
+Scalable means the application can handle:
+• More users as your application grows
+• More requests without slowing down significantly
+• Increased load without major code changes
+• Growth in data and traffic
+
+WHY NODE.JS IS SCALABLE:
+------------------------
+1. Non-blocking I/O
+   • Can handle many requests simultaneously
+   • Doesn't waste resources waiting
+   • Efficient use of server resources
+
+2. Event-driven Architecture
+   • Responds to events as they occur
+   • Handles many connections efficiently
+   • Low memory footprint per connection
+
+3. Single Thread
+   • Less memory overhead
+   • No thread management complexity
+   • Simpler programming model
+
+WHAT DOES "CONCURRENT" MEAN?
+-----------------------------
+Concurrent means handling multiple tasks at the same time. Node.js achieves 
+this through:
+• Starting multiple I/O operations
+• Not waiting for operations to complete
+• Processing results as they arrive
+• Efficient task switching
+
+BENEFITS OF USING NODE.JS:
+--------------------------
+1. QUICK DEVELOPMENT
+   • These features of the JavaScript language and the Node.js runtime enable 
+     quick development with a minimal set of tools.
+   • Same language for frontend and backend
+   • Large ecosystem of packages
+   • Fast prototyping
+
+2. EFFICIENT RESOURCE USAGE
+   • Single thread uses less memory
+   • Non-blocking I/O doesn't waste CPU
+   • Can handle many connections on one server
+
+3. REAL-TIME APPLICATIONS
+   • Great for chat applications
+   • WebSocket support
+   • Real-time data updates
+   • Interactive applications
+
+4. JAVASCRIPT EVERYWHERE
+   • One language for full-stack development
+   • Code sharing between frontend and backend
+   • Easier team collaboration
+   • Faster development cycles
+
+USE CASES FOR NODE.JS:
+----------------------
+• Web servers and APIs
+• Real-time applications (chat, gaming)
+• Microservices
+• Command-line tools
+• Data streaming applications
+• IoT applications
+• Serverless functions
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: HOW NODE.JS HANDLES I/O OPERATIONS
+------------------------------------------------
+
+INSTEAD OF BLOCKING ON ASYNCHRONOUS I/O OPERATIONS, YOU WRITE CALLBACK 
+FUNCTIONS TO handle results when they complete.
+
+WHAT IS BLOCKING?
+-----------------
+Blocking means the program stops and waits for an operation to complete before 
+continuing. This is inefficient because:
+
+• CPU sits idle while waiting
+• Can't handle other requests
+• Wastes resources
+• Slows down the application
+
+EXAMPLE OF BLOCKING CODE:
+-------------------------
+  // Blocking approach (NOT how Node.js works)
+  const data = readFileSync('large-file.txt'); // Waits here
+  console.log(data); // Only runs after file is read
+  console.log('This waits too'); // Also waits
+
+WHAT IS NON-BLOCKING?
+---------------------
+Non-blocking means the program doesn't wait for operations to complete. 
+Instead:
+
+• Starts the operation
+• Continues with other tasks
+• Handles results when ready (via callbacks)
+• Efficient use of resources
+
+EXAMPLE OF NON-BLOCKING CODE:
+------------------------------
+  // Non-blocking approach (How Node.js works)
+  readFile('large-file.txt', function(error, data) {
+    // This runs when file reading completes
+    console.log(data);
+  });
+  
+  // This runs immediately, doesn't wait
+  console.log('This runs first!');
+
+HOW NODE.JS HANDLES I/O:
+------------------------
+1. START OPERATION
+   • You call a function to start an I/O operation
+   • Node.js starts the operation in the background
+   • Control returns immediately to your code
+
+2. CONTINUE EXECUTION
+   • Your code continues running
+   • Other operations can start
+   • No waiting or blocking
+
+3. OPERATION COMPLETES
+   • The I/O operation finishes in the background
+   • An event is triggered
+   • Callback function is queued
+
+4. CALLBACK EXECUTES
+   • Event loop executes the callback
+   • Your callback function receives the results
+   • You process the results
+
+VISUAL FLOW:
+------------
+  [Your Code]
+      |
+      | Start I/O operation
+      v
+  [Node.js] → Starts operation in background
+      |
+      | Returns immediately
+      v
+  [Your Code] → Continues executing
+      |
+      | (Other code runs here)
+      |
+      v
+  [I/O Completes] → Event triggered
+      |
+      | Callback queued
+      v
+  [Event Loop] → Executes callback
+      |
+      | Callback runs
+      v
+  [Your Callback Function] → Processes results
+
+BENEFITS OF NON-BLOCKING I/O:
+------------------------------
+1. EFFICIENCY
+   • Server can handle many requests
+   • No wasted CPU time
+   • Better resource utilization
+
+2. SCALABILITY
+   • Can handle more concurrent connections
+   • Better performance under load
+   • Suitable for high-traffic applications
+
+3. RESPONSIVENESS
+   • Application stays responsive
+   • Can process multiple requests
+   • Better user experience
+
+EXAMPLE COMPARISON:
+------------------
+BLOCKING APPROACH (Inefficient):
+  Request 1: Read file → Wait → Process → Respond (5 seconds)
+  Request 2: Wait for Request 1 → Read file → Wait → Process → Respond (10 seconds total)
+  Request 3: Wait for Request 1 & 2 → Read file → Wait → Process → Respond (15 seconds total)
+
+NON-BLOCKING APPROACH (Efficient):
+  Request 1: Start read → Continue → Process when ready (5 seconds)
+  Request 2: Start read → Continue → Process when ready (5 seconds)
+  Request 3: Start read → Continue → Process when ready (5 seconds)
+  All complete in ~5 seconds instead of 15!
+
+[END SECTION 1.4]
+[END PART 1]
+================================================================================
+
+PART 2: UNDERSTANDING NODE.JS MODULES
+================================================================================
+
+SECTION 2.1: WHAT ARE MODULES IN NODE.JS?
+-----------------------------------------
+
+DEFINITION
+----------
+Every JavaScript file is a module in Node.js. A module corresponds to a script 
+file.
+
+DETAILED EXPLANATION
+--------------------
+In Node.js, modules are a way to organize code. Think of a module as a 
+container that holds related code together. Each JavaScript file you create 
+becomes a module that can:
+
+• Export code (make it available to other files)
+• Import code (use code from other modules)
+• Keep code organized and separated
+• Prevent naming conflicts
+
+REAL-WORLD ANALOGY
+------------------
+Think of modules like chapters in a book:
+• Each chapter (module) contains related information
+• Chapters can reference other chapters
+• You can read chapters independently
+• Together, all chapters make up the complete book (application)
+
+WHY MODULES MATTER:
+------------------
+1. ORGANIZATION
+   • Keeps code organized
+   • Separates concerns
+   • Easier to find and maintain code
+
+2. REUSABILITY
+   • Write code once, use it many times
+   • Share code between files
+   • Build on existing code
+
+3. NAMESPACE MANAGEMENT
+   • Avoids naming conflicts
+   • Each module has its own scope
+   • Variables don't interfere with each other
+
+4. MAINTAINABILITY
+   • Easier to update code
+   • Easier to test
+   • Easier to debug
+
+BASIC MODULE EXAMPLE:
+---------------------
+  // math.js (a module)
+  function add(a, b) {
+    return a + b;
+  }
+  
+  function subtract(a, b) {
+    return a - b;
+  }
+  
+  // Export functions to make them available
+  module.exports = {
+    add: add,
+    subtract: subtract
+  };
+  
+  // app.js (another module)
+  const math = require('./math');
+  
+  console.log(math.add(5, 3)); // 8
+  console.log(math.subtract(5, 3)); // 2
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: EVERY JAVASCRIPT FILE IS A MODULE
+-----------------------------------------------
+
+DEFINITION
+----------
+Every JavaScript file is a module in Node.js. A module corresponds to a script 
+file.
+
+WHAT THIS MEANS:
+----------------
+When you create a JavaScript file in Node.js:
+• It automatically becomes a module
+• It has its own scope (variables don't leak to other files)
+• It can export code for other files to use
+• It can import code from other modules
+
+SCOPE IN MODULES:
+-----------------
+Each module has its own scope. This means:
+
+  // file1.js
+  const message = 'Hello from file1';
+  // message is only available in file1.js
+  
+  // file2.js
+  const message = 'Hello from file2';
+  // This is a different variable, no conflict!
+  // Each module has its own scope
+
+EXPORTING FROM A MODULE:
+------------------------
+To make code available to other modules, you export it:
+
+  // calculator.js
+  function add(a, b) {
+    return a + b;
+  }
+  
+  function multiply(a, b) {
+    return a * b;
+  }
+  
+  // Export the functions
+  module.exports = {
+    add: add,
+    multiply: multiply
+  };
+
+IMPORTING FROM A MODULE:
+------------------------
+To use code from another module, you import it:
+
+  // app.js
+  const calculator = require('./calculator');
+  
+  const result = calculator.add(5, 3);
+  console.log(result); // 8
+
+MODERN SYNTAX (ES6 MODULES):
+----------------------------
+Node.js also supports ES6 module syntax:
+
+  // calculator.js (ES6)
+  export function add(a, b) {
+    return a + b;
+  }
+  
+  export function multiply(a, b) {
+    return a * b;
+  }
+  
+  // app.js (ES6)
+  import { add, multiply } from './calculator.js';
+  
+  const result = add(5, 3);
+  console.log(result); // 8
+
+NOTE: For ES6 modules, you need to either:
+• Use .mjs extension, or
+• Set "type": "module" in package.json
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: PACKAGES AND MODULES
+----------------------------------
+
+DEFINITION
+----------
+A package can contain one or more modules.
+
+DETAILED EXPLANATION
+--------------------
+A package is a collection of related modules organized together. Think of it 
+this way:
+
+• Module = A single JavaScript file
+• Package = A folder containing one or more modules (and other files)
+
+PACKAGE STRUCTURE:
+-----------------
+A typical package structure looks like:
+
+  my-package/
+  ├── package.json          # Package configuration
+  ├── index.js             # Main module (entry point)
+  ├── utils.js             # Utility module
+  ├── config.js            # Configuration module
+  └── README.md            # Documentation
+
+WHAT IS PACKAGE.JSON?
+---------------------
+package.json is a file that describes your package:
+• Name and version
+• Dependencies (other packages it needs)
+• Scripts (commands you can run)
+• Entry point (main file)
+
+EXAMPLE PACKAGE.JSON:
+---------------------
+  {
+    "name": "my-web-server",
+    "version": "1.0.0",
+    "description": "A simple web server",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.0"
+    }
+  }
+
+RELATIONSHIP BETWEEN MODULES AND PACKAGES:
+------------------------------------------
+• A module is a single file
+• A package contains one or more modules
+• Packages can depend on other packages
+• npm (Node Package Manager) manages packages
+
+EXAMPLE:
+--------
+  my-project/
+  ├── package.json
+  ├── server.js           # Module 1
+  ├── routes/
+  │   ├── users.js        # Module 2
+  │   └── products.js     # Module 3
+  └── utils/
+      └── helpers.js      # Module 4
+
+This package contains 4 modules organized in a folder structure.
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: UTILITY MODULES IN NODE.JS
+---------------------------------------
+
+DEFINITION
+----------
+The Node.js runtime is packaged with many utility modules that you can use to 
+create and extend your applications.
+
+DETAILED EXPLANATION
+--------------------
+Node.js comes with built-in modules (also called "core modules") that provide 
+common functionality. You don't need to install these - they're included with 
+Node.js.
+
+COMMON BUILT-IN MODULES:
+------------------------
+1. HTTP MODULE
+   • Create web servers
+   • Make HTTP requests
+   • Handle HTTP responses
+
+2. FS MODULE (File System)
+   • Read and write files
+   • Work with directories
+   • File operations
+
+3. PATH MODULE
+   • Work with file paths
+   • Join path segments
+   • Get file extensions
+
+4. OS MODULE
+   • Get operating system information
+   • System resources
+   • Platform details
+
+5. URL MODULE
+   • Parse URLs
+   • Work with URL components
+   • URL manipulation
+
+6. EVENTS MODULE
+   • Create custom events
+   • Event emitters
+   • Event handling
+
+HOW TO USE BUILT-IN MODULES:
+-----------------------------
+You use the require() function to import built-in modules:
+
+  const http = require('http');      // HTTP module
+  const fs = require('fs');          // File system module
+  const path = require('path');      // Path module
+
+EXAMPLE: USING THE FS MODULE
+----------------------------
+  const fs = require('fs');
+  
+  // Read a file
+  fs.readFile('data.txt', 'utf8', function(error, data) {
+    if (error) {
+      console.log('Error:', error);
+    } else {
+      console.log('File content:', data);
+    }
+  });
+
+EXAMPLE: USING THE PATH MODULE
+------------------------------
+  const path = require('path');
+  
+  // Join path segments
+  const fullPath = path.join(__dirname, 'data', 'file.txt');
+  console.log(fullPath); // /current/directory/data/file.txt
+  
+  // Get file extension
+  const ext = path.extname('document.pdf');
+  console.log(ext); // .pdf
+
+WHY BUILT-IN MODULES MATTER:
+----------------------------
+• No installation needed
+• Well-tested and reliable
+• Part of Node.js core
+• Fast and efficient
+• Standardized API
+
+THIRD-PARTY MODULES:
+-------------------
+In addition to built-in modules, you can install third-party modules using npm:
+
+  npm install express
+  
+  // Then use it
+  const express = require('express');
+
+Third-party modules extend Node.js functionality and are created by the 
+community.
+
+[END SECTION 2.4]
+[END PART 2]
+================================================================================
+
+PART 3: THE HTTP MODULE
+================================================================================
+
+SECTION 3.1: WHAT IS THE HTTP MODULE?
+-------------------------------------
+
+DEFINITION
+----------
+With the HTTP Node.js module, you can develop an application that listens to 
+HTTP requests and returns HTTP response messages.
+
+DETAILED EXPLANATION
+--------------------
+The HTTP module is a built-in Node.js module that provides functionality to:
+• Create web servers
+• Make HTTP requests
+• Handle HTTP responses
+• Work with HTTP protocol
+
+WHAT IS HTTP?
+-------------
+HTTP (HyperText Transfer Protocol) is the protocol used for communication 
+between web browsers and servers. When you:
+• Visit a website → Browser sends HTTP request → Server sends HTTP response
+• Click a link → HTTP request → HTTP response
+• Submit a form → HTTP request → HTTP response
+
+REAL-WORLD ANALOGY
+------------------
+Think of HTTP like a conversation:
+• Request = Question (browser asks server for something)
+• Response = Answer (server responds with the requested information)
+• HTTP module = The translator that helps Node.js understand and respond to 
+  these conversations
+
+WHAT THE HTTP MODULE PROVIDES:
+------------------------------
+The HTTP module provides:
+• Server creation (createServer)
+• Request handling
+• Response creation
+• HTTP methods (GET, POST, etc.)
+• Headers management
+• Status codes
+
+WHY USE THE HTTP MODULE?
+------------------------
+• Built-in (no installation needed)
+• Core functionality for web servers
+• Full control over HTTP communication
+• Foundation for web applications
+• Learning tool for understanding HTTP
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: WHAT CAN YOU DO WITH THE HTTP MODULE?
+---------------------------------------------------
+
+WITH THE HTTP NODE.JS MODULE, YOU CAN DEVELOP AN APPLICATION THAT LISTENS TO 
+HTTP REQUESTS AND RETURNS HTTP RESPONSE MESSAGES.
+
+LISTENING TO HTTP REQUESTS:
+---------------------------
+A web server listens for HTTP requests. This means:
+• Server waits for requests from clients (browsers, apps, etc.)
+• When a request arrives, server processes it
+• Server can handle multiple requests
+
+WHAT ARE HTTP REQUESTS?
+-----------------------
+An HTTP request is a message sent by a client to a server asking for 
+something. It contains:
+• Method (GET, POST, PUT, DELETE, etc.)
+• URL (the resource being requested)
+• Headers (metadata about the request)
+• Body (optional data)
+
+EXAMPLE HTTP REQUEST:
+--------------------
+  GET /index.html HTTP/1.1
+  Host: www.example.com
+  User-Agent: Mozilla/5.0
+  Accept: text/html
+
+RETURNING HTTP RESPONSE MESSAGES:
+---------------------------------
+An HTTP response is a message sent by the server back to the client. It 
+contains:
+• Status code (200 OK, 404 Not Found, etc.)
+• Headers (metadata about the response)
+• Body (the actual content)
+
+EXAMPLE HTTP RESPONSE:
+----------------------
+  HTTP/1.1 200 OK
+  Content-Type: text/html
+  Content-Length: 1234
+  
+  <html>
+    <body>Hello World!</body>
+  </html>
+
+HOW IT WORKS TOGETHER:
+---------------------
+1. CLIENT SENDS REQUEST
+   • Browser or app sends HTTP request
+   • Request goes to server's IP address and port
+
+2. SERVER RECEIVES REQUEST
+   • HTTP module receives the request
+   • Server processes the request
+
+3. SERVER SENDS RESPONSE
+   • Server creates HTTP response
+   • Response sent back to client
+
+4. CLIENT RECEIVES RESPONSE
+   • Client receives and displays response
+   • User sees the result
+
+VISUAL FLOW:
+------------
+  [Browser/Client]
+      |
+      | HTTP Request: GET /index.html
+      v
+  [Network]
+      |
+      | Request arrives
+      v
+  [Node.js Server with HTTP Module]
+      |
+      | Process request
+      | Create response
+      v
+  [Network]
+      |
+      | HTTP Response: 200 OK + HTML content
+      v
+  [Browser/Client]
+      |
+      | Display content
+      v
+  [User sees webpage]
+
+WHAT YOU CAN BUILD:
+-------------------
+With the HTTP module, you can build:
+• Web servers
+• REST APIs
+• Microservices
+• Proxy servers
+• Static file servers
+• Web applications
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: IMPORTING THE HTTP MODULE
+---------------------------------------
+
+HOW TO IMPORT THE HTTP MODULE:
+-------------------------------
+To use the HTTP module, you need to import it using require():
+
+  const http = require('http');
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+  const http = require('http');
+
+• const - Declares a constant variable (can't be reassigned)
+• http - Variable name (you can use any name, but 'http' is conventional)
+• = - Assignment operator
+• require('http') - Function that imports the HTTP module
+• 'http' - String specifying which module to import
+• ; - Statement terminator
+
+WHAT HAPPENS WHEN YOU REQUIRE HTTP:
+-----------------------------------
+• Node.js looks for the built-in 'http' module
+• Loads the module
+• Returns an object containing HTTP module functions
+• Stores it in the http variable
+
+WHAT'S IN THE HTTP MODULE:
+--------------------------
+The http object contains functions like:
+• http.createServer() - Creates a web server
+• http.request() - Makes HTTP requests
+• http.get() - Makes GET requests
+• Constants for status codes
+• Other HTTP-related utilities
+
+EXAMPLE: CHECKING WHAT'S AVAILABLE
+----------------------------------
+  const http = require('http');
+  
+  // See what's available (for learning purposes)
+  console.log(typeof http); // 'object'
+  console.log(http.createServer); // [Function: createServer]
+
+COMPLETE IMPORT EXAMPLE:
+-----------------------
+  // server.js
+  const http = require('http');
+  
+  // Now you can use http.createServer(), etc.
+  const server = http.createServer(function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello World!');
+  });
+  
+  server.listen(3000);
+
+MODERN SYNTAX (ES6 MODULES):
+----------------------------
+If using ES6 modules (with "type": "module" in package.json):
+
+  import http from 'http';
+  
+  // Or with named imports (if supported)
+  import { createServer } from 'http';
+
+However, for this guide, we'll use the CommonJS syntax (require) as it's 
+more commonly used and doesn't require additional configuration.
+
+[END SECTION 3.3]
+[END PART 3]
+================================================================================
+
+This is Part 1 of the comprehensive guide. Part 2 will cover:
+  • Creating web servers with createServer
+  • Understanding callback functions in detail
+  • Making servers listen on ports
+  • Complete examples with detailed line-by-line code explanations
+  • Summary and key takeaways
+
+================================================================================
+END OF PART 1
+================================================================================
+
