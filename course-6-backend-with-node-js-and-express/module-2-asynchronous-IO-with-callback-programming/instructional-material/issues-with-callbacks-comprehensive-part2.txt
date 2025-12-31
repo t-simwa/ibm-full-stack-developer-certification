@@ -1,0 +1,1362 @@
+================================================================================
+ISSUES WITH CALLBACKS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This part continues from Part 1 and covers inversion of control, trust issues 
+with third-party code, and strategies for mitigating callback problems. Make 
+sure you've read Part 1 before proceeding.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 3: INVERSION OF CONTROL
+  SECTION 3.1: WHAT IS INVERSION OF CONTROL?
+  SECTION 3.2: HOW INVERSION OF CONTROL OCCURS WITH CALLBACKS
+  SECTION 3.3: TRUST ISSUES WITH THIRD-PARTY CODE
+  SECTION 3.4: DIFFICULTIES WITH INVERSION OF CONTROL
+  SECTION 3.5: REAL-WORLD EXAMPLES OF INVERSION OF CONTROL
+
+PART 4: MITIGATION STRATEGIES
+  SECTION 4.1: WRITING COMMENTS
+  SECTION 4.2: SPLITTING FUNCTIONS INTO SMALLER FUNCTIONS
+  SECTION 4.3: USING PROMISES (OVERVIEW)
+  SECTION 4.4: USING ASYNC/AWAIT (OVERVIEW)
+  SECTION 4.5: COMBINING STRATEGIES
+
+PART 5: SUMMARY AND KEY TAKEAWAYS
+  SECTION 5.1: CONCEPT SUMMARY
+  SECTION 5.2: KEY PROBLEMS REMEMBERED
+  SECTION 5.3: MITIGATION STRATEGIES SUMMARY
+  SECTION 5.4: QUICK REFERENCE GUIDE
+
+================================================================================
+PART 3: INVERSION OF CONTROL
+================================================================================
+
+SECTION 3.1: WHAT IS INVERSION OF CONTROL?
+--------------------------------------------
+
+DEFINITION
+----------
+Another issue with callbacks is inversion of control, also called IoC. 
+Inversion of control happens when the flow of control, such as the execution 
+of instructions, is external to your code.
+
+DETAILED EXPLANATION
+--------------------
+In normal programming, you control when functions are called. You write the 
+code, and you decide when to execute it. With inversion of control, you give 
+up that control. You pass a function to another piece of code, and that code 
+decides when (or if) to call your function.
+
+NORMAL CONTROL FLOW (YOU CONTROL):
+----------------------------------
+  function myFunction() {
+    console.log("I control when this runs");
+  }
+  
+  myFunction();  // You decide when to call it
+  myFunction();  // You decide again
+  // You have full control
+
+INVERSION OF CONTROL (SOMEONE ELSE CONTROLS):
+---------------------------------------------
+  function myCallback() {
+    console.log("I don't control when this runs");
+  }
+  
+  thirdPartyFunction(myCallback);  // You give up control
+  // thirdPartyFunction decides when/if to call myCallback
+  // You have no control
+
+REAL-WORLD ANALOGY
+------------------
+Think of inversion of control like ordering food at a restaurant:
+• You place your order (pass a callback)
+• The kitchen (third-party code) decides when to prepare it
+• You wait and trust the kitchen will call you when ready
+• You don't control the timing or process
+• If the kitchen has problems, you're affected
+
+KEY CHARACTERISTICS
+-------------------
+1. YOU GIVE UP CONTROL
+   • You pass a function to another piece of code
+   • That code controls when your function runs
+   • You can't force it to run
+
+2. EXTERNAL EXECUTION
+   • Your code doesn't directly call the function
+   • An external system calls it
+   • The timing is out of your hands
+
+3. TRUST REQUIRED
+   • You must trust the external code
+   • You assume it will call your callback correctly
+   • You can't guarantee it will work as expected
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: HOW INVERSION OF CONTROL OCCURS WITH CALLBACKS
+-------------------------------------------------------------
+
+THE MECHANISM
+-------------
+Many times, callbacks hand the control over to a third party. When you pass 
+a callback function to another function (especially third-party code), you're 
+giving that function control over when and how your callback executes.
+
+EXAMPLE: BASIC INVERSION OF CONTROL
+------------------------------------
+  function myCallback(data) {
+    console.log("Received:", data);
+  }
+  
+  function thirdPartyFunction(callback) {
+    // This function controls when callback runs
+    setTimeout(() => {
+      const result = "Some data";
+      callback(result);  // Third party decides when to call
+    }, 2000);
+  }
+  
+  thirdPartyFunction(myCallback);
+  // You've given up control - thirdPartyFunction decides when myCallback runs
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: function myCallback(data) {
+        • Defines your callback function
+        • This is the function you want to run
+        • You define what it does
+
+Line 2: console.log("Received:", data);
+        • What your callback does when called
+        • Prints the data it receives
+
+Line 3: }
+        • Closes your callback function
+
+Line 4: (empty line)
+
+Line 5: function thirdPartyFunction(callback) {
+        • This is the third-party function
+        • It receives your callback as a parameter
+        • It now has control over your callback
+
+Line 6: // This function controls when callback runs
+        • Comment explaining the control issue
+        • The third-party function decides timing
+
+Line 7: setTimeout(() => {
+        • Sets up a delay
+        • The third party controls this timing
+        • You don't know when it will execute
+
+Line 8: const result = "Some data";
+        • Creates some data
+        • This happens inside third-party code
+        • You don't control this
+
+Line 9: callback(result);  // Third party decides when to call
+        • The third party calls your callback
+        • It decides when (after 2 seconds)
+        • It decides what data to pass
+        • You have no control here
+
+Line 10: }, 2000);
+         • Waits 2 seconds
+         • Timing controlled by third party
+
+Line 11: }
+         • Closes thirdPartyFunction
+
+Line 12: (empty line)
+
+Line 13: thirdPartyFunction(myCallback);
+         • You pass your callback to third-party code
+         • You give up control at this point
+         • You can't force myCallback to run
+         • You must wait and trust
+
+WHAT HAPPENS:
+------------
+1. You define myCallback (your function)
+2. You pass it to thirdPartyFunction
+3. Control transfers to thirdPartyFunction
+4. thirdPartyFunction decides when to call myCallback
+5. You wait and hope it calls correctly
+
+EXAMPLE: API CALL WITH INVERSION OF CONTROL
+--------------------------------------------
+  function handleUserData(error, userData) {
+    if (error) {
+      console.error("Error:", error);
+      return;
+    }
+    console.log("User data:", userData);
+  }
+  
+  // Third-party library function
+  api.getUser(123, handleUserData);
+  // You've given api.getUser control over when handleUserData runs
+  // You don't know:
+  //   - When it will be called
+  //   - How many times it might be called
+  //   - What arguments it will receive
+  //   - If it will be called at all
+
+EXPLANATION:
+------------
+• api.getUser is third-party code (you didn't write it)
+• You pass handleUserData as a callback
+• api.getUser controls:
+  - When handleUserData is called
+  - What arguments it receives
+  - How many times it's called
+  - Whether it's called at all
+• You have no direct control over these aspects
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: TRUST ISSUES WITH THIRD-PARTY CODE
+------------------------------------------------
+
+THE TRUST PROBLEM
+-----------------
+But issues and errors with that third-party code can be difficult to catch. 
+You are forced to trust the third-party code, or you must write additional 
+code that ensures the third-party code does not:
+• Get called too many times or too few times
+• Get called too early or too late
+• Lose context
+• Pass back incorrect arguments
+
+WHY TRUST IS REQUIRED
+---------------------
+When you pass a callback to third-party code, you're making assumptions:
+1. The third-party code will call your callback
+2. It will call it the correct number of times
+3. It will call it at the right time
+4. It will pass the correct arguments
+5. It will maintain proper context
+
+But you can't guarantee any of these!
+
+EXAMPLE: PAYMENT PROCESSING WITH TRUST ISSUES
+---------------------------------------------
+For example, say the third-party code has a bug where it gets called multiple 
+times when the user mistakenly clicks a button more than once.
+
+  let paymentProcessed = false;
+  
+  function processPayment(amount, callback) {
+    if (paymentProcessed) {
+      console.log("Payment already processed");
+      return;
+    }
+    
+    // Third-party payment service
+    paymentGateway.charge(amount, (error, receipt) => {
+      paymentProcessed = true;
+      callback(error, receipt);
+    });
+  }
+  
+  function handlePaymentResult(error, receipt) {
+    if (error) {
+      console.error("Payment failed:", error);
+      return;
+    }
+    console.log("Payment successful:", receipt);
+  }
+  
+  // User clicks button multiple times
+  processPayment(100, handlePaymentResult);
+  processPayment(100, handlePaymentResult);  // Clicked again!
+  processPayment(100, handlePaymentResult);  // Clicked again!
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: let paymentProcessed = false;
+        • Flag to track if payment was processed
+        • Attempts to prevent duplicate charges
+        • Starts as false (no payment yet)
+
+Line 2: (empty line)
+
+Line 3: function processPayment(amount, callback) {
+        • Function to process a payment
+        • amount - How much to charge
+        • callback - Function to call when done
+
+Line 4: if (paymentProcessed) {
+        • Checks if payment already happened
+        • Tries to prevent duplicate processing
+
+Line 5: console.log("Payment already processed");
+        • Prints message if already processed
+        • Supposed to prevent duplicate charges
+
+Line 6: return;
+        • Exits function if already processed
+        • Should prevent second charge
+
+Line 7: }
+        • Closes the if statement
+
+Line 8: (empty line)
+
+Line 9: // Third-party payment service
+        • Comment indicating third-party code
+        • This is code you don't control
+
+Line 10: paymentGateway.charge(amount, (error, receipt) => {
+         • Calls third-party payment gateway
+         • Passes amount and a callback
+         • You give control to paymentGateway
+
+Line 11: paymentProcessed = true;
+         • Sets flag to true after charge
+         • Assumes callback runs only once
+         • But what if callback runs multiple times?
+
+Line 12: callback(error, receipt);
+         • Calls your callback with result
+         • Assumes this happens once
+         • But third-party might call multiple times!
+
+Line 13: });
+         • Closes the callback function
+
+Line 14: }
+         • Closes processPayment function
+
+Line 15: (empty line)
+
+Line 16: function handlePaymentResult(error, receipt) {
+         • Your callback function
+         • Handles payment result
+
+Line 17: if (error) {
+         • Checks for errors
+
+Line 18: console.error("Payment failed:", error);
+         • Prints error if payment failed
+
+Line 19: return;
+         • Exits on error
+
+Line 20: }
+         • Closes error check
+
+Line 21: console.log("Payment successful:", receipt);
+         • Prints success message
+         • Assumes this runs once per payment
+
+Line 22: }
+         • Closes handlePaymentResult
+
+Line 23: (empty line)
+
+Line 24: // User clicks button multiple times
+         • Comment explaining scenario
+
+Line 25-27: Multiple calls to processPayment
+         • User clicks button 3 times quickly
+         • Each click calls processPayment
+         • But paymentProcessed flag might not help!
+
+THE PROBLEM:
+-----------
+If paymentGateway.charge has a bug and calls the callback multiple times:
+1. First call: paymentProcessed = false → charges card → sets flag to true
+2. Second call: paymentProcessed = true → should skip, but...
+3. If third-party calls callback again → charges card AGAIN!
+4. User gets charged multiple times!
+
+You may try to solve this issue with a boolean flag. When the flag is false, 
+and the button is clicked, the card gets charged and the flag is turned to 
+true. So now, when the flag is true, and the button gets clicked again, the 
+branching logic doesn't charge the customer's card another time.
+
+BUT THEN WHAT IF THE CALLBACK NEVER GETS CALLED?
+-------------------------------------------------
+But then what if the callback never gets called at all? That flag remains 
+false, and now there is yet another use case you have to account for.
+
+EXAMPLE: CALLBACK NEVER CALLED
+--------------------------------
+  let paymentProcessed = false;
+  
+  function processPayment(amount, callback) {
+    if (paymentProcessed) {
+      return;  // Already processed
+    }
+    
+    paymentGateway.charge(amount, (error, receipt) => {
+      paymentProcessed = true;  // Set flag when callback runs
+      callback(error, receipt);
+    });
+    
+    // What if paymentGateway.charge has a bug and never calls the callback?
+    // paymentProcessed stays false forever
+    // User thinks payment failed, but it might have succeeded
+    // Or user thinks payment succeeded, but it never happened
+    // You can't tell!
+  }
+
+PROBLEMS:
+---------
+1. If callback never runs:
+   - Flag never gets set to true
+   - Can't tell if payment succeeded
+   - User experience is broken
+   - No way to recover
+
+2. If callback runs multiple times:
+   - Flag gets set, but callback runs again
+   - User gets charged multiple times
+   - Financial damage occurs
+
+3. If callback runs with wrong arguments:
+   - Receives incorrect error or receipt
+   - Wrong information displayed
+   - User confused
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: DIFFICULTIES WITH INVERSION OF CONTROL
+-----------------------------------------------------
+
+PROBLEM 1: CALLED TOO MANY TIMES
+----------------------------------
+The third-party code might call your callback more times than expected. This 
+can lead to:
+• Duplicate operations (like charging a card twice)
+• Incorrect state updates
+• Resource leaks
+• Unexpected behavior
+
+EXAMPLE: MULTIPLE CALLBACK CALLS
+---------------------------------
+  let count = 0;
+  
+  function updateCounter(value) {
+    count = value;
+    console.log("Counter updated to:", count);
+  }
+  
+  // Third-party function with a bug
+  function buggyThirdParty(callback) {
+    callback(1);  // Calls once
+    callback(2);  // Calls again (bug!)
+    callback(3);  // Calls again (bug!)
+  }
+  
+  buggyThirdParty(updateCounter);
+  // Counter ends up as 3, but you expected 1
+  // Each call overwrites the previous value
+  // You can't prevent this
+
+PROBLEM 2: CALLED TOO FEW TIMES (OR NEVER)
+-------------------------------------------
+The third-party code might not call your callback at all, or call it fewer 
+times than expected. This leads to:
+• Operations that never complete
+• Hanging applications
+• Unresolved promises (if using promises)
+• User confusion
+
+EXAMPLE: CALLBACK NEVER CALLED
+--------------------------------
+  function handleData(data) {
+    console.log("Processing data:", data);
+    // Important work here
+  }
+  
+  function unreliableThirdParty(callback) {
+    // Has a bug - sometimes doesn't call callback
+    if (Math.random() > 0.5) {
+      callback("data");  // Sometimes calls
+    }
+    // Sometimes doesn't call at all!
+  }
+  
+  unreliableThirdParty(handleData);
+  // You have no way to know if handleData will run
+  // Your important work might never happen
+  // No error, no indication - just silence
+
+PROBLEM 3: CALLED TOO EARLY
+----------------------------
+The third-party code might call your callback before prerequisites are met. 
+This can cause:
+• Race conditions
+• Using uninitialized data
+• Accessing resources before they're ready
+• Incorrect results
+
+EXAMPLE: CALLBACK CALLED TOO EARLY
+-----------------------------------
+  let dataReady = false;
+  let importantData = null;
+  
+  function processData() {
+    if (!dataReady) {
+      console.error("Data not ready yet!");
+      return;
+    }
+    console.log("Processing:", importantData);
+  }
+  
+  function thirdPartyFunction(callback) {
+    // Bug: calls callback immediately, before setup
+    callback();  // Called too early!
+    
+    // Setup happens after
+    setTimeout(() => {
+      dataReady = true;
+      importantData = "some data";
+    }, 1000);
+  }
+  
+  thirdPartyFunction(processData);
+  // processData runs before data is ready
+  // Error occurs, but you can't prevent it
+
+PROBLEM 4: CALLED TOO LATE
+--------------------------
+The third-party code might call your callback much later than expected, or 
+not at all. This causes:
+• Delayed user feedback
+• Timeout issues
+• Poor user experience
+• Unpredictable behavior
+
+EXAMPLE: CALLBACK CALLED TOO LATE
+----------------------------------
+  function showResult(result) {
+    console.log("Result:", result);
+  }
+  
+  function slowThirdParty(callback) {
+    // Takes much longer than expected
+    setTimeout(() => {
+      callback("result");
+    }, 60000);  // 60 seconds - way too long!
+  }
+  
+  slowThirdParty(showResult);
+  // User waits 60 seconds
+  // No feedback, no indication
+  // User thinks app is broken
+
+PROBLEM 5: LOSING CONTEXT
+-------------------------
+The third-party code might call your callback with the wrong context (the 
+`this` value). This can cause:
+• Accessing wrong object properties
+• Calling methods on wrong objects
+• Undefined behavior
+• Runtime errors
+
+EXAMPLE: CONTEXT LOST
+---------------------
+  const myObject = {
+    name: "My Object",
+    process: function(data) {
+      console.log(this.name, "processing:", data);
+      // 'this' should refer to myObject
+    }
+  };
+  
+  function thirdPartyFunction(callback) {
+    // Calls callback without proper context
+    callback("data");  // 'this' is undefined or wrong!
+  }
+  
+  thirdPartyFunction(myObject.process);
+  // this.name is undefined
+  // Context is lost
+  // Error occurs
+
+PROBLEM 6: INCORRECT ARGUMENTS
+-------------------------------
+The third-party code might pass incorrect arguments to your callback. This 
+leads to:
+• Wrong data being processed
+• Type errors
+• Logic errors
+• Unexpected behavior
+
+EXAMPLE: WRONG ARGUMENTS
+------------------------
+  function handleUser(user) {
+    console.log("User name:", user.name);
+    console.log("User age:", user.age);
+  }
+  
+  function thirdPartyFunction(callback) {
+    // Passes wrong arguments
+    callback("not an object");  // Should be an object!
+    callback(null);  // Should be a user object!
+    callback({ wrong: "property" });  // Missing name and age!
+  }
+  
+  thirdPartyFunction(handleUser);
+  // Errors occur because arguments are wrong
+  // You can't control what gets passed
+
+TO CATCH THESE SORTS OF ERRORS
+-------------------------------
+To catch these sorts of errors, your code becomes riddled with extraneous 
+code to ensure third-party code doesn't fail.
+
+EXAMPLE: DEFENSIVE PROGRAMMING
+--------------------------------
+  let callbackCalled = false;
+  let callbackCount = 0;
+  const maxCalls = 1;
+  
+  function defensiveCallback(data) {
+    // Check if called too many times
+    callbackCount++;
+    if (callbackCount > maxCalls) {
+      console.error("Callback called too many times!");
+      return;
+    }
+    
+    // Check if data is valid
+    if (!data) {
+      console.error("Callback received invalid data!");
+      return;
+    }
+    
+    // Check if data has required properties
+    if (typeof data !== 'object') {
+      console.error("Callback received wrong type!");
+      return;
+    }
+    
+    // Check if required properties exist
+    if (!data.name || !data.age) {
+      console.error("Callback received incomplete data!");
+      return;
+    }
+    
+    // Finally, do the actual work
+    console.log("Processing:", data.name, data.age);
+  }
+  
+  function thirdPartyFunction(callback) {
+    // You have no control over this
+    callback({ name: "John", age: 30 });
+  }
+  
+  thirdPartyFunction(defensiveCallback);
+
+PROBLEMS WITH DEFENSIVE CODE:
+------------------------------
+1. Lots of extra code just to handle third-party bugs
+2. Code becomes harder to read
+3. Performance overhead from checks
+4. Still can't prevent all issues
+5. Maintenance burden increases
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: REAL-WORLD EXAMPLES OF INVERSION OF CONTROL
+---------------------------------------------------------
+
+EXAMPLE 1: EVENT LISTENERS
+---------------------------
+  function handleClick(event) {
+    console.log("Button clicked");
+    // Do something important
+  }
+  
+  // Third-party library attaches event listener
+  thirdPartyLibrary.on('click', handleClick);
+  
+  // Problems:
+  // - You don't control when handleClick is called
+  // - Third-party might call it multiple times
+  // - Third-party might not remove it properly
+  // - Event object might be wrong or missing
+
+EXAMPLE 2: DATABASE QUERIES
+----------------------------
+  function handleQueryResult(error, results) {
+    if (error) {
+      console.error("Query failed:", error);
+      return;
+    }
+    console.log("Results:", results);
+  }
+  
+  // Third-party database library
+  db.query("SELECT * FROM users", handleQueryResult);
+  
+  // Problems:
+  // - You don't control when callback runs
+  // - Database might call it multiple times
+  // - Error might be in wrong format
+  // - Results might be incomplete
+
+EXAMPLE 3: FILE OPERATIONS
+---------------------------
+  function handleFileRead(error, data) {
+    if (error) {
+      console.error("Read failed:", error);
+      return;
+    }
+    console.log("File data:", data);
+  }
+  
+  // Third-party file system library
+  fs.readFile('data.txt', 'utf8', handleFileRead);
+  
+  // Problems:
+  // - You don't control timing
+  // - File system might not call callback
+  // - Error format might be unexpected
+  // - Data encoding might be wrong
+
+EXAMPLE 4: HTTP REQUESTS
+------------------------
+  function handleResponse(error, response, body) {
+    if (error) {
+      console.error("Request failed:", error);
+      return;
+    }
+    console.log("Response:", body);
+  }
+  
+  // Third-party HTTP library
+  http.get('https://api.example.com/data', handleResponse);
+  
+  // Problems:
+  // - Network timing is unpredictable
+  // - Callback might never be called (network failure)
+  // - Response format might be wrong
+  // - Error handling is complex
+
+[END SECTION 3.5]
+[END PART 3]
+================================================================================
+
+PART 4: MITIGATION STRATEGIES
+================================================================================
+
+SECTION 4.1: WRITING COMMENTS
+------------------------------
+
+OVERVIEW
+--------
+There are a number of ways to mitigate callback hell and trust issues. One 
+simple strategy is writing comments to explain what's happening in nested 
+callback code.
+
+WHY COMMENTS HELP
+-----------------
+Comments can help by:
+• Explaining the flow of nested callbacks
+• Documenting what each callback does
+• Clarifying dependencies between steps
+• Making the code easier to understand later
+
+EXAMPLE: COMMENTED CALLBACK CODE
+---------------------------------
+  // Step 1: Get user data from database
+  getUserData(userId, (err1, user) => {
+    if (err1) {
+      console.error("Failed to get user:", err1);
+      return;
+    }
+    
+    // Step 2: Get user's permissions (depends on Step 1)
+    getUserPermissions(user.id, (err2, permissions) => {
+      if (err2) {
+        console.error("Failed to get permissions:", err2);
+        return;
+      }
+      
+      // Step 3: Create session (depends on Step 1)
+      createSession(user.id, (err3, session) => {
+        if (err3) {
+          console.error("Failed to create session:", err3);
+          return;
+        }
+        
+        // Step 4: Log activity (depends on Step 1, but not critical)
+        logUserActivity(user.id, 'login', (err4) => {
+          if (err4) {
+            // Non-critical error, just log it
+            console.warn("Failed to log activity:", err4);
+          }
+          
+          // Final step: Return all data
+          return { user, permissions, session };
+        });
+      });
+    });
+  });
+
+BENEFITS:
+---------
+• Makes the flow clearer
+• Documents dependencies
+• Helps other developers understand
+• Makes maintenance easier
+
+LIMITATIONS:
+------------
+• Comments don't fix the structural problems
+• Code is still hard to read
+• Comments can become outdated
+• Doesn't solve trust issues
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: SPLITTING FUNCTIONS INTO SMALLER FUNCTIONS
+---------------------------------------------------------
+
+OVERVIEW
+--------
+Another way to mitigate callback hell is splitting functions into smaller 
+functions. This breaks down the nested structure into more manageable pieces.
+
+WHY SPLITTING HELPS
+-------------------
+Splitting functions helps by:
+• Reducing nesting levels
+• Making each function focused on one task
+• Improving readability
+• Making code easier to test
+• Enabling code reuse
+
+EXAMPLE: BEFORE (NESTED CALLBACKS)
+-----------------------------------
+  function processOrder(orderId, callback) {
+    getOrderDetails(orderId, (err1, order) => {
+      if (err1) {
+        callback(err1);
+        return;
+      }
+      
+      checkInventory(order.items, (err2, available) => {
+        if (err2) {
+          callback(err2);
+          return;
+        }
+        
+        calculateTotal(order.items, (err3, total) => {
+          if (err3) {
+            callback(err3);
+            return;
+          }
+          
+          processPayment(order.paymentMethod, total, (err4, receipt) => {
+            if (err4) {
+              callback(err4);
+              return;
+            }
+            
+            callback(null, { order, receipt });
+          });
+        });
+      });
+    });
+  }
+
+EXAMPLE: AFTER (SPLIT FUNCTIONS)
+----------------------------------
+  // Step 1: Get order details
+  function getOrder(orderId, callback) {
+    getOrderDetails(orderId, (err, order) => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      callback(null, order);
+    });
+  }
+  
+  // Step 2: Check inventory
+  function checkItemsAvailable(order, callback) {
+    checkInventory(order.items, (err, available) => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      if (!available) {
+        callback(new Error("Items out of stock"));
+        return;
+      }
+      callback(null, order);
+    });
+  }
+  
+  // Step 3: Calculate total
+  function calculateOrderTotal(order, callback) {
+    calculateTotal(order.items, (err, total) => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      callback(null, { order, total });
+    });
+  }
+  
+  // Step 4: Process payment
+  function payForOrder(orderData, callback) {
+    processPayment(orderData.order.paymentMethod, orderData.total, (err, receipt) => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      callback(null, { order: orderData.order, receipt });
+    });
+  }
+  
+  // Main function using split functions
+  function processOrder(orderId, callback) {
+    getOrder(orderId, (err1, order) => {
+      if (err1) return callback(err1);
+      
+      checkItemsAvailable(order, (err2, checkedOrder) => {
+        if (err2) return callback(err2);
+        
+        calculateOrderTotal(checkedOrder, (err3, orderData) => {
+          if (err3) return callback(err3);
+          
+          payForOrder(orderData, callback);
+        });
+      });
+    });
+  }
+
+LINE-BY-LINE EXPLANATION (SPLIT VERSION)
+----------------------------------------
+Lines 1-9: getOrder function
+        • Extracts order retrieval logic
+        • Single responsibility: get order
+        • Reduces nesting in main function
+        • Can be tested independently
+
+Lines 11-22: checkItemsAvailable function
+        • Extracts inventory checking logic
+        • Single responsibility: check availability
+        • Handles its own errors
+        • Returns order if available
+
+Lines 24-33: calculateOrderTotal function
+        • Extracts total calculation logic
+        • Single responsibility: calculate total
+        • Combines order and total in result
+        • Cleaner than nested version
+
+Lines 35-44: payForOrder function
+        • Extracts payment processing logic
+        • Single responsibility: process payment
+        • Final step in the chain
+        • Returns final result
+
+Lines 46-58: processOrder function (main)
+        • Orchestrates the flow
+        • Still has some nesting, but less
+        • Each step is clearer
+        • Easier to understand flow
+
+BENEFITS:
+---------
+• Each function has a single purpose
+• Functions can be tested independently
+• Code is more readable
+• Easier to modify individual steps
+• Can reuse functions elsewhere
+
+LIMITATIONS:
+------------
+• Still has some nesting
+• More functions to manage
+• Doesn't solve trust issues
+• Still uses callbacks
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: USING PROMISES (OVERVIEW)
+---------------------------------------
+
+OVERVIEW
+--------
+Promises and async/await will be discussed in upcoming videos. However, it's 
+important to know that Promises are a powerful way to mitigate callback hell 
+and some inversion of control issues.
+
+WHAT ARE PROMISES?
+-----------------
+Promises provide a cleaner way to handle asynchronous operations. Instead of 
+nesting callbacks, you chain operations together.
+
+CALLBACK VERSION (CALLBACK HELL):
+----------------------------------
+  step1((err1, result1) => {
+    if (err1) return handleError(err1);
+    step2(result1, (err2, result2) => {
+      if (err2) return handleError(err2);
+      step3(result2, (err3, result3) => {
+        if (err3) return handleError(err3);
+        // Finally done
+      });
+    });
+  });
+
+PROMISE VERSION (FLATTER):
+--------------------------
+  step1()
+    .then(result1 => step2(result1))
+    .then(result2 => step3(result2))
+    .catch(error => handleError(error));
+
+BENEFITS OF PROMISES:
+---------------------
+• Flatter code structure (less nesting)
+• Better error handling (single catch)
+• Can chain operations easily
+• More readable flow
+• Better control over execution
+
+LIMITATIONS:
+------------
+• Still requires trust in promise implementation
+• Can still have issues if promises are created incorrectly
+• Need to understand promise concepts
+• Not all libraries support promises
+
+NOTE: Promises will be covered in detail in upcoming videos. This is just 
+an overview to show they are a mitigation strategy.
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: USING ASYNC/AWAIT (OVERVIEW)
+-------------------------------------------
+
+OVERVIEW
+--------
+Async/await is another way to mitigate callback hell. It makes asynchronous 
+code look more like synchronous code.
+
+CALLBACK VERSION (CALLBACK HELL):
+----------------------------------
+  function processData(input, callback) {
+    readFile(input, (err1, data1) => {
+      if (err1) return callback(err1);
+      parseData(data1, (err2, data2) => {
+        if (err2) return callback(err2);
+        validateData(data2, (err3, data3) => {
+          if (err3) return callback(err3);
+          callback(null, data3);
+        });
+      });
+    });
+  }
+
+ASYNC/AWAIT VERSION (FLAT):
+---------------------------
+  async function processData(input) {
+    try {
+      const data1 = await readFile(input);
+      const data2 = await parseData(data1);
+      const data3 = await validateData(data2);
+      return data3;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+BENEFITS OF ASYNC/AWAIT:
+------------------------
+• Looks like synchronous code
+• No nesting required
+• Easier to read and understand
+• Better error handling with try/catch
+• More intuitive for many developers
+
+LIMITATIONS:
+------------
+• Requires understanding of async/await
+• Still uses promises under the hood
+• Need to mark functions as async
+• Some libraries don't support it directly
+
+NOTE: Async/await will be covered in detail in upcoming videos. This is just 
+an overview to show it's a mitigation strategy.
+
+[END SECTION 4.4]
+================================================================================
+
+SECTION 4.5: COMBINING STRATEGIES
+----------------------------------
+
+BEST PRACTICE
+-------------
+The best approach is often to combine multiple strategies:
+• Write clear comments
+• Split functions into smaller pieces
+• Use Promises or async/await when possible
+• Add defensive programming for critical operations
+
+EXAMPLE: COMBINED APPROACH
+---------------------------
+  // Step 1: Get user data
+  // This function retrieves user information from the database
+  async function getUserData(userId) {
+    try {
+      const user = await db.getUser(userId);
+      return user;
+    } catch (error) {
+      throw new Error(`Failed to get user: ${error.message}`);
+    }
+  }
+  
+  // Step 2: Get user permissions
+  // Depends on: User data from Step 1
+  async function getUserPermissions(userId) {
+    try {
+      const permissions = await db.getPermissions(userId);
+      return permissions;
+    } catch (error) {
+      throw new Error(`Failed to get permissions: ${error.message}`);
+    }
+  }
+  
+  // Step 3: Create session
+  // Depends on: User data from Step 1
+  async function createUserSession(userId) {
+    try {
+      const session = await db.createSession(userId);
+      return session;
+    } catch (error) {
+      throw new Error(`Failed to create session: ${error.message}`);
+    }
+  }
+  
+  // Main function: Orchestrates user login flow
+  // Combines all steps in a readable way
+  async function loginUser(userId) {
+    try {
+      // Get user data first
+      const user = await getUserData(userId);
+      
+      // Get permissions and create session in parallel (both depend on user)
+      const [permissions, session] = await Promise.all([
+        getUserPermissions(user.id),
+        createUserSession(user.id)
+      ]);
+      
+      return { user, permissions, session };
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
+  }
+
+BENEFITS OF COMBINING:
+---------------------
+• Uses async/await for flat structure
+• Functions are split and focused
+• Comments explain the flow
+• Error handling is clear
+• Can run independent operations in parallel
+
+[END SECTION 4.5]
+[END PART 4]
+================================================================================
+
+PART 5: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 5.1: CONCEPT SUMMARY
+-----------------------------
+
+CALLBACKS
+---------
+• Callbacks are functions passed as arguments to other functions
+• They execute only after a result is produced
+• They enable asynchronous programming
+• They ensure functions don't run before prerequisites complete
+
+NESTED CALLBACKS
+----------------
+• Occur when tasks depend on each other and must run sequentially
+• Each callback depends on and waits for the previous callback
+• Creates a pyramid structure in code
+
+CALLBACK HELL
+-------------
+• Refers to nested callback functions
+• Also called "The Pyramid of Doom"
+• Affects readability and maintainability
+• Makes code hard to debug and modify
+
+INVERSION OF CONTROL
+--------------------
+• Happens when flow of control is external to your code
+• Callbacks hand control over to third parties
+• You must trust third-party code
+• Difficult to catch errors and issues
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: KEY PROBLEMS REMEMBERED
+--------------------------------------
+
+PROBLEM 1: CALLBACK HELL
+-------------------------
+The need for nested callback functions can occur when several of the callback 
+tasks are dependent on each other and need to be completed sequentially. The 
+term "callback hell" refers to nested callback functions.
+
+DIFFICULTIES:
+• Hard to read and understand
+• Difficult to maintain and modify
+• Error handling is repetitive
+• Debugging is challenging
+• Testing is complex
+
+PROBLEM 2: INVERSION OF CONTROL
+--------------------------------
+When using third-party code, you often have inversion of control issues where 
+you cannot trust the third-party code.
+
+DIFFICULTIES:
+• Callback might be called too many times
+• Callback might be called too few times (or never)
+• Callback might be called too early
+• Callback might be called too late
+• Context might be lost
+• Arguments might be incorrect
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: MITIGATION STRATEGIES SUMMARY
+--------------------------------------------
+
+STRATEGY 1: WRITING COMMENTS
+----------------------------
+• Explain the flow of nested callbacks
+• Document what each callback does
+• Clarify dependencies
+• Makes code easier to understand
+
+STRATEGY 2: SPLITTING FUNCTIONS
+--------------------------------
+• Break nested callbacks into smaller functions
+• Each function has a single responsibility
+• Reduces nesting levels
+• Improves readability and testability
+
+STRATEGY 3: USING PROMISES
+----------------------------
+• Provides flatter code structure
+• Better error handling
+• Easier to chain operations
+• More readable flow
+
+STRATEGY 4: USING ASYNC/AWAIT
+-------------------------------
+• Makes async code look synchronous
+• No nesting required
+• Better error handling with try/catch
+• More intuitive for many developers
+
+STRATEGY 5: COMBINING STRATEGIES
+---------------------------------
+• Use multiple strategies together
+• Comments + split functions + async/await
+• Best results come from combination
+• Adapt to your specific situation
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: QUICK REFERENCE GUIDE
+-----------------------------------
+
+CALLBACK HELL IDENTIFIERS
+--------------------------
+✓ Multiple levels of nesting (3+ levels)
+✓ Code indents further and further right
+✓ Each callback depends on previous
+✓ Error handling repeated at each level
+✓ Hard to see overall flow
+
+INVERSION OF CONTROL IDENTIFIERS
+---------------------------------
+✓ Passing callbacks to third-party code
+✓ No control over when callback executes
+✓ Must trust external code
+✓ Defensive programming required
+✓ Multiple error scenarios to handle
+
+MITIGATION CHECKLIST
+--------------------
+□ Add comments explaining flow
+□ Split large functions into smaller ones
+□ Consider using Promises
+□ Consider using async/await
+□ Add defensive checks for critical operations
+□ Combine multiple strategies
+
+COMMON PATTERNS TO AVOID
+------------------------
+✗ Deep nesting (4+ levels)
+✗ Passing callbacks to untrusted code without checks
+✗ No error handling at callback levels
+✗ Mixing concerns in single callback
+✗ No documentation of callback flow
+
+[END SECTION 5.4]
+[END PART 5]
+================================================================================
+
+FINAL NOTES
+-----------
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• Callbacks enable asynchronous programming but can lead to problems
+• Callback hell makes code hard to read and maintain
+• Inversion of control creates trust issues with third-party code
+• Multiple strategies exist to mitigate these issues
+• Combining strategies often yields the best results
+• Promises and async/await are powerful modern alternatives
+
+Understanding these issues is crucial for writing better asynchronous 
+JavaScript code. As you progress, you'll learn about Promises and async/await, 
+which provide more elegant solutions to these problems.
+
+Good luck with your asynchronous programming journey!
+
+================================================================================
+END OF PART 2
+================================================================================
+

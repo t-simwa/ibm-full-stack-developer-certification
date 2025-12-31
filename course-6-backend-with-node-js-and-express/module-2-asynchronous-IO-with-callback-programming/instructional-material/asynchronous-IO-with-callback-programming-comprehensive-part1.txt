@@ -1,0 +1,1696 @@
+================================================================================
+ASYNCHRONOUS I/O WITH CALLBACK PROGRAMMING
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Asynchronous I/O with Callback Programming. This comprehensive guide 
+will teach you everything you need to know about asynchronous operations, 
+callback functions, and handling HTTP requests in Node.js. You'll learn how 
+Node.js handles network operations efficiently and how to write code that 
+doesn't block your application.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Explain the concept of asynchronous callback functions
+• Understand the difference between blocking and non-blocking operations
+• Handle inbound HTTP method calls for a server resource
+• Use HTTP.request and HTTPS.request functions effectively
+• Handle events in Node.js (data, end, error, close)
+• Write proper error handling for network operations
+• Understand how Node.js processes asynchronous operations
+• Create custom Node.js modules that make HTTP requests
+• Explain the sequence of events in asynchronous operations
+
+OVERVIEW
+--------
+Network operations run in an asynchronous manner. For example, the response 
+from a web service call might not return immediately. When an application 
+blocks (or waits) for a network operation to complete, that application wastes 
+processing time on the server. Node.js makes all network operations in a 
+non-blocking manner. Every network operation returns immediately. To handle 
+the result from a network call, write a callback function that Node.js calls 
+when the network operation completes.
+
+This guide will teach you how to work with asynchronous operations in Node.js, 
+understand callback functions, and handle HTTP requests properly.
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of asynchronous I/O:
+
+PART 1: INTRODUCTION TO ASYNCHRONOUS I/O
+  SECTION 1.1: WHAT IS ASYNCHRONOUS I/O?
+  SECTION 1.2: BLOCKING VS NON-BLOCKING OPERATIONS
+  SECTION 1.3: WHY NODE.JS USES ASYNCHRONOUS OPERATIONS
+  SECTION 1.4: UNDERSTANDING CALLBACK FUNCTIONS
+
+PART 2: HTTP REQUESTS IN NODE.JS
+  SECTION 2.1: THE HTTP.REQUEST FUNCTION
+  SECTION 2.2: UNDERSTANDING THE OPTIONS PARAMETER
+  SECTION 2.3: THE CALLBACK FUNCTION PARAMETER
+  SECTION 2.4: THE RESPONSE OBJECT
+
+PART 3: EVENT HANDLING IN NODE.JS
+  SECTION 3.1: UNDERSTANDING EVENTS
+  SECTION 3.2: THE 'DATA' EVENT
+  SECTION 3.3: THE 'END' EVENT
+  SECTION 3.4: ERROR HANDLING WITH 'ERROR' AND 'CLOSE' EVENTS
+
+NOTE: Part 2 of this guide covers:
+  • Complete practical examples with detailed code explanations
+  • Custom Node.js modules
+  • HTTPS requests
+  • Advanced patterns and best practices
+  • Summary and quick reference guide
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO ASYNCHRONOUS I/O
+================================================================================
+
+SECTION 1.1: WHAT IS ASYNCHRONOUS I/O?
+---------------------------------------
+
+DEFINITION
+----------
+Asynchronous I/O (Input/Output) is a programming pattern where operations 
+don't block the execution of your program. Instead of waiting for an operation 
+to complete before moving to the next line of code, your program continues 
+executing, and the result is handled later through a callback function.
+
+DETAILED EXPLANATION
+--------------------
+In traditional synchronous programming, when you make a network request, your 
+program stops and waits for the response:
+
+  Synchronous (Blocking):
+  1. Make HTTP request
+  2. WAIT... (program is frozen)
+  3. Receive response
+  4. Continue with next line
+
+In asynchronous programming, your program doesn't wait:
+
+  Asynchronous (Non-blocking):
+  1. Make HTTP request
+  2. Continue immediately to next line
+  3. (Later) When response arrives, handle it with callback
+
+REAL-WORLD ANALOGY
+------------------
+Think of synchronous operations like ordering food at a restaurant where you 
+must wait at the counter until your food is ready before you can do anything 
+else. Asynchronous operations are like ordering food for delivery - you place 
+your order, continue with other activities, and the delivery person (callback) 
+brings your food when it's ready.
+
+KEY CHARACTERISTICS OF ASYNCHRONOUS I/O
+----------------------------------------
+• Operations return immediately (don't wait for completion)
+• Results are handled later through callbacks
+• Multiple operations can run concurrently
+• More efficient use of server resources
+• Better performance for I/O-bound operations
+
+NETWORK OPERATIONS ARE ASYNCHRONOUS
+------------------------------------
+Network operations run in an asynchronous manner. For example, the response 
+from a web service call might not return immediately. This is because:
+• Network latency varies (could be milliseconds or seconds)
+• Servers may take time to process requests
+• Network conditions can be unpredictable
+• Multiple requests might be in progress simultaneously
+
+WHY THIS MATTERS
+----------------
+When an application blocks (or waits) for a network operation to complete, 
+that application wastes processing time on the server. Instead of doing useful 
+work, the server is just waiting. Node.js solves this by making all network 
+operations non-blocking.
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: BLOCKING VS NON-BLOCKING OPERATIONS
+------------------------------------------------
+
+BLOCKING OPERATIONS
+-------------------
+A blocking operation stops the execution of your program until the operation 
+completes. During this time, your program cannot do anything else.
+
+EXAMPLE OF BLOCKING BEHAVIOR:
+------------------------------
+Imagine you're making a phone call:
+
+  Blocking Approach:
+  1. Dial the number
+  2. Wait on the line (can't do anything else)
+  3. Person answers
+  4. Have conversation
+  5. Hang up
+  6. Now you can do other things
+
+During steps 2-4, you're blocked - you can't make other calls or do other work.
+
+PROBLEMS WITH BLOCKING OPERATIONS
+----------------------------------
+When an application blocks for a network operation to complete, that 
+application wastes processing time on the server:
+
+1. SERVER RESOURCES WASTED
+   • CPU sits idle while waiting
+   • Memory is tied up
+   • Can't handle other requests
+   • Poor scalability
+
+2. POOR USER EXPERIENCE
+   • Application appears frozen
+   • Can't process multiple requests
+   • Slow response times
+   • Limited concurrency
+
+3. INEFFICIENT RESOURCE USAGE
+   • One operation blocks everything
+   • Can't utilize server fully
+   • Wastes server capacity
+
+NON-BLOCKING OPERATIONS
+-----------------------
+A non-blocking operation starts the operation and immediately returns, allowing 
+your program to continue executing. The result is handled later through a 
+callback function.
+
+EXAMPLE OF NON-BLOCKING BEHAVIOR:
+----------------------------------
+Using the same phone call analogy:
+
+  Non-Blocking Approach:
+  1. Dial the number
+  2. Put phone on speaker (continue with other work)
+  3. When person answers, handle the call (callback)
+  4. Meanwhile, you can make other calls, send emails, etc.
+
+During the wait, you're not blocked - you can do other work!
+
+NODE.JS MAKES ALL NETWORK OPERATIONS NON-BLOCKING
+--------------------------------------------------
+Node.js makes all network operations in a non-blocking manner. Every network 
+operation returns immediately. This means:
+
+• HTTP requests return immediately
+• File operations return immediately
+• Database queries return immediately
+• Network calls return immediately
+
+The key is: they return immediately, but the actual work happens in the 
+background. When the work completes, Node.js calls your callback function.
+
+HOW NON-BLOCKING WORKS
+----------------------
+1. Your code calls a network operation
+2. Node.js starts the operation and returns immediately
+3. Your code continues to the next line
+4. Node.js handles the network operation in the background
+5. When complete, Node.js calls your callback function
+6. Your callback handles the result
+
+BENEFITS OF NON-BLOCKING OPERATIONS
+-----------------------------------
+1. EFFICIENT RESOURCE USAGE
+   • Server can handle multiple requests simultaneously
+   • CPU isn't idle waiting
+   • Better utilization of server capacity
+
+2. BETTER PERFORMANCE
+   • Can process many requests concurrently
+   • Faster overall throughput
+   • Better scalability
+
+3. IMPROVED USER EXPERIENCE
+   • Application remains responsive
+   • Can handle multiple operations
+   • Better concurrency
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: WHY NODE.JS USES ASYNCHRONOUS OPERATIONS
+------------------------------------------------------
+
+THE NODE.JS PHILOSOPHY
+----------------------
+Node.js is designed around the principle that I/O operations (network requests, 
+file system access, database queries) are slow compared to CPU operations. 
+Instead of waiting for these slow operations, Node.js continues processing 
+other code and handles the results when they arrive.
+
+WHY ASYNCHRONOUS OPERATIONS MATTER FOR SERVERS
+----------------------------------------------
+Servers need to handle many requests simultaneously. If each request blocks the 
+server, you can only handle one request at a time. With asynchronous 
+operations, a single server can handle thousands of concurrent requests.
+
+EXAMPLE SCENARIO
+----------------
+Imagine a web server handling user requests:
+
+  Blocking Server (Synchronous):
+  Request 1: [Wait 2 seconds] → Response
+  Request 2: [Wait 2 seconds] → Response  (starts after Request 1)
+  Request 3: [Wait 2 seconds] → Response  (starts after Request 2)
+  Total time: 6 seconds for 3 requests
+
+  Non-Blocking Server (Asynchronous):
+  Request 1: [Wait 2 seconds] → Response
+  Request 2: [Wait 2 seconds] → Response  (starts immediately)
+  Request 3: [Wait 2 seconds] → Response  (starts immediately)
+  Total time: ~2 seconds for 3 requests (all handled concurrently)
+
+THE EVENT LOOP
+--------------
+Node.js uses an event loop to manage asynchronous operations:
+
+1. Your code runs (call stack)
+2. Async operations are sent to the background
+3. Event loop checks for completed operations
+4. When complete, callbacks are added to the callback queue
+5. Callbacks are executed when the call stack is empty
+
+This allows Node.js to handle many operations concurrently with a single thread.
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: UNDERSTANDING CALLBACK FUNCTIONS
+----------------------------------------------
+
+DEFINITION
+----------
+A callback function is a function that is passed as an argument to another 
+function and is executed later, typically when an asynchronous operation 
+completes. To handle the result from a network call, write a callback function 
+that Node.js calls when the network operation completes.
+
+DETAILED EXPLANATION
+--------------------
+Callbacks are the mechanism Node.js uses to handle asynchronous operations. 
+Instead of waiting for a result, you provide a function (callback) that 
+Node.js will call when the operation finishes.
+
+BASIC CALLBACK PATTERN
+-----------------------
+  function doSomething(callback) {
+    // Do some work
+    // When done, call the callback
+    callback(result);
+  }
+
+  doSomething(function(result) {
+    // This function is the callback
+    // It runs when doSomething is finished
+    console.log('Result:', result);
+  });
+
+REAL-WORLD ANALOGY
+------------------
+Think of a callback like leaving your phone number with a restaurant. You 
+don't wait at the restaurant - you go do other things. When your order is 
+ready, they call you (the callback) to let you know. The callback is like 
+that phone call - it happens later, when the work is done.
+
+CALLBACKS IN NODE.JS NETWORK OPERATIONS
+----------------------------------------
+When you make an HTTP request in Node.js:
+
+1. You call HTTP.request() with a callback function
+2. HTTP.request() starts the network operation and returns immediately
+3. Your code continues executing
+4. When the HTTP response arrives, Node.js calls your callback function
+5. Your callback receives the response and handles it
+
+EXAMPLE STRUCTURE
+-----------------
+  const http = require('http');
+
+  // Make HTTP request
+  http.request(options, function(response) {
+    // This is the callback function
+    // It runs when the response arrives
+    // 'response' is the HTTP response object
+  });
+
+  // This line runs immediately, before the response arrives
+  console.log('Request sent, continuing...');
+
+ANONYMOUS VS NAMED CALLBACKS
+----------------------------
+Callbacks can be anonymous functions (defined inline) or named functions:
+
+  // Anonymous callback (defined inline)
+  http.request(options, function(response) {
+    // Handle response
+  });
+
+  // Named callback (defined separately)
+  function handleResponse(response) {
+    // Handle response
+  }
+  
+  http.request(options, handleResponse);
+
+Both approaches work the same way. Anonymous callbacks are common for simple 
+cases, while named callbacks are better for complex logic or reusability.
+
+CALLBACK EXECUTION TIMING
+-------------------------
+It's important to understand when callbacks execute:
+
+  console.log('1. Before request');
+  
+  http.request(options, function(response) {
+    console.log('3. In callback (response received)');
+  });
+  
+  console.log('2. After request (but before response)');
+
+The output will be:
+  1. Before request
+  2. After request (but before response)
+  3. In callback (response received)
+
+Notice that line 2 runs before the callback! This demonstrates the 
+non-blocking nature of the operation.
+
+[END SECTION 1.4]
+[END PART 1]
+================================================================================
+
+PART 2: HTTP REQUESTS IN NODE.JS
+================================================================================
+
+SECTION 2.1: THE HTTP.REQUEST FUNCTION
+---------------------------------------
+
+DEFINITION
+----------
+The HTTP.request function is a Node.js method that makes HTTP requests to 
+remote servers. This function makes a call to the remote web server and 
+requests the web service. It takes an options object and a callback function, 
+and returns immediately without waiting for the response.
+
+DETAILED EXPLANATION
+--------------------
+HTTP.request is the primary way to make HTTP requests in Node.js. It's part 
+of the built-in 'http' module. The function starts an HTTP request and returns 
+a ClientRequest object immediately, before the response is received.
+
+BASIC SYNTAX
+------------
+  const http = require('http');
+
+  const request = http.request(options, callback);
+
+BREAKDOWN:
+----------
+• http - The HTTP module (built into Node.js)
+• request - Function to make HTTP requests
+• options - Object containing request configuration (hostname, path, method, etc.)
+• callback - Function called when response is received
+• Returns - ClientRequest object (represents the request in progress)
+
+WHAT HTTP.REQUEST DOES
+-----------------------
+1. Creates an HTTP request to the specified server
+2. Sends the request over the network
+3. Returns immediately (doesn't wait for response)
+4. When response arrives, calls your callback function
+5. Your callback receives the response object
+
+IMMEDIATE RETURN BEHAVIOR
+--------------------------
+Before the Node.js framework receives the HTTP response message from the remote 
+web server, it immediately returns a result for the HTTP.request function call. 
+This result simply indicates that the request message was sent successfully. 
+It does not say anything about the response message.
+
+This means:
+• HTTP.request() returns immediately
+• The return value is a ClientRequest object
+• This object represents the request, not the response
+• The actual response comes later via the callback
+
+EXAMPLE: BASIC HTTP REQUEST
+----------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  const request = http.request(options, function(response) {
+    // This callback runs when response arrives
+    console.log('Response received!');
+  });
+
+  // This runs immediately, before response arrives
+  console.log('Request sent!');
+  request.end(); // Actually sends the request
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • require('http') - Loads the built-in HTTP module
+        • const http - Stores the module in a constant
+        • The HTTP module provides functions for making HTTP requests
+
+Line 2: (empty line for readability)
+
+Line 3: const options = {
+        • Creates an options object
+        • This object configures the HTTP request
+        • Contains information about where to send the request
+
+Line 4: hostname: 'www.example.com',
+        • hostname - The domain name or IP address of the server
+        • 'www.example.com' - The server we want to connect to
+        • This tells Node.js which server to contact
+
+Line 5: path: '/api/data',
+        • path - The URL path on the server
+        • '/api/data' - The specific resource we want to access
+        • This is the part after the domain name in a URL
+
+Line 6: method: 'GET'
+        • method - The HTTP method to use
+        • 'GET' - Requests data from the server
+        • Other common methods: POST, PUT, DELETE, PATCH
+
+Line 7: };
+        • Closes the options object
+
+Line 8: (empty line)
+
+Line 9: const request = http.request(options, function(response) {
+        • http.request() - Calls the request function
+        • options - Passes the configuration object
+        • function(response) { - Defines the callback function
+        • response - Parameter that will contain the HTTP response
+        • This function will be called when the response arrives
+        • const request - Stores the ClientRequest object
+
+Line 10: // This callback runs when response arrives
+         • Comment explaining when this code runs
+         • This code doesn't run immediately!
+
+Line 11: console.log('Response received!');
+         • Logs a message when response arrives
+         • This executes later, not when http.request() is called
+
+Line 12: });
+         • Closes the callback function
+
+Line 13: (empty line)
+
+Line 14: // This runs immediately, before response arrives
+         • Comment explaining timing
+         • This code runs right away
+
+Line 15: console.log('Request sent!');
+         • Logs immediately
+         • This runs before the callback above
+
+Line 16: request.end();
+         • request.end() - Actually sends the HTTP request
+         • Without this, the request wouldn't be sent!
+         • This must be called to complete the request
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: UNDERSTANDING THE OPTIONS PARAMETER
+------------------------------------------------
+
+DEFINITION
+----------
+The first parameter in the HTTP request function is an options variable. The 
+options variable includes at least two variables: the hostname of the remote 
+server, and a uniform resource locator (URL) resource path that you want to 
+act upon.
+
+DETAILED EXPLANATION
+--------------------
+The options object configures your HTTP request. It tells Node.js:
+• Where to send the request (hostname, port)
+• What resource to access (path)
+• How to send it (method, headers)
+• Other connection settings
+
+REQUIRED OPTIONS
+----------------
+At minimum, you need:
+
+1. HOSTNAME
+   The hostname of the remote server. This is the domain name or IP address 
+   where you want to send the request.
+
+   Example:
+     hostname: 'www.example.com'
+     hostname: 'api.github.com'
+     hostname: '192.168.1.1'
+
+2. PATH (or URL)
+   A uniform resource locator (URL) resource path that you want to act upon. 
+   This is the specific endpoint or resource on the server.
+
+   Example:
+     path: '/api/users'
+     path: '/weather/data'
+     path: '/products/123'
+
+COMPLETE OPTIONS OBJECT
+-----------------------
+  const options = {
+    // Required: Where to connect
+    hostname: 'www.example.com',  // Server address
+    path: '/api/data',            // Resource path
+    
+    // Optional but commonly used
+    method: 'GET',                // HTTP method (GET, POST, PUT, DELETE)
+    port: 80,                     // Port number (80 for HTTP, 443 for HTTPS)
+    headers: {                    // HTTP headers
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer token123'
+    },
+    
+    // Advanced options
+    timeout: 5000,                 // Request timeout in milliseconds
+    agent: false                   // Use default agent or custom
+  };
+
+COMMON OPTIONS EXPLAINED
+------------------------
+
+1. HOSTNAME
+   The server to connect to.
+   
+   Example:
+     hostname: 'api.weather.gov'
+
+2. PATH
+   The resource path on the server.
+   
+   Example:
+     path: '/stations/KJFK/observations/current'
+
+3. METHOD
+   The HTTP method. Default is 'GET'.
+   
+   Examples:
+     method: 'GET'    // Retrieve data
+     method: 'POST'   // Send data
+     method: 'PUT'   // Update data
+     method: 'DELETE' // Delete data
+
+4. PORT
+   The port number. Default is 80 for HTTP, 443 for HTTPS.
+   
+   Examples:
+     port: 80   // HTTP
+     port: 443  // HTTPS
+     port: 3000 // Custom port
+
+5. HEADERS
+   HTTP headers to send with the request.
+   
+   Example:
+     headers: {
+       'Content-Type': 'application/json',
+       'User-Agent': 'MyApp/1.0',
+       'Authorization': 'Bearer abc123'
+     }
+
+PRACTICAL EXAMPLE: WEATHER SERVICE
+-----------------------------------
+The original content mentions making a call to the US National Weather Service 
+to retrieve weather observation from San Francisco International Airport (KSFO).
+
+  const http = require('http');
+
+  const options = {
+    hostname: 'api.weather.gov',           // Weather service hostname
+    path: '/stations/KSFO/observations/current',  // KSFO airport path
+    method: 'GET'                           // GET request to retrieve data
+  };
+
+  http.request(options, function(response) {
+    // Handle weather data
+  }).end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads the HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object for the request
+
+Line 4: hostname: 'api.weather.gov',
+        • hostname - Sets the server to 'api.weather.gov'
+        • This is the US National Weather Service API server
+        • This tells Node.js which server to contact
+
+Line 5: path: '/stations/KSFO/observations/current',
+        • path - Sets the resource path
+        • '/stations/KSFO/observations/current' - Specific endpoint
+        • KSFO is the airport code for San Francisco International Airport
+        • This path requests current weather observations for that airport
+        • This is the uniform resource locator (URL) resource path we want to act upon
+
+Line 6: method: 'GET'
+        • method - Sets HTTP method to GET
+        • GET is used to retrieve data (not send data)
+        • This requests the weather observation data
+
+Line 7: };
+        • Closes the options object
+
+Line 8: (empty line)
+
+Line 9: http.request(options, function(response) {
+        • Makes the HTTP request with our options
+        • The callback will receive the response
+
+Line 10: // Handle weather data
+         • Placeholder for handling the response
+         • We'll see how to handle this in the next sections
+
+Line 11: }).end();
+         • .end() - Actually sends the request
+         • This is method chaining - calling end() on the returned request object
+
+URL AND OPTIONS MERGING
+-----------------------
+The HTTP.request function takes in a URL and a set of options. If both are 
+passed, the two are merged, with options taking precedence. This means you can 
+pass a URL string, an options object, or both.
+
+  // Option 1: Just options object
+  http.request({ hostname: 'example.com', path: '/api' }, callback);
+
+  // Option 2: URL string (Node.js parses it)
+  http.request('http://example.com/api', callback);
+
+  // Option 3: Both (options override URL properties)
+  http.request('http://example.com/api', { port: 8080 }, callback);
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: THE CALLBACK FUNCTION PARAMETER
+---------------------------------------------
+
+DEFINITION
+----------
+The second parameter of the HTTP request function is a callback function. In 
+this case, it is an anonymous function that receives one parameter: the 
+response object. When the Node.js framework receives an HTTP response message 
+from the remote server, it calls the callback function that you defined during 
+the HTTP.request function call. This function handles the HTTP response message.
+
+DETAILED EXPLANATION
+--------------------
+The callback function is how you handle the HTTP response. It's called by 
+Node.js when the response arrives from the remote server. The callback receives 
+the response object, which contains information about the HTTP response and 
+allows you to read the response data.
+
+CALLBACK FUNCTION SIGNATURE
+---------------------------
+  function(response) {
+    // Handle the response here
+    // 'response' is an IncomingMessage object
+  }
+
+The callback function has the response object as the first parameter. This 
+response object contains:
+• Response status code (200, 404, 500, etc.)
+• Response headers
+• Response body (the actual data)
+• Methods to read the response data
+
+WHEN THE CALLBACK IS CALLED
+----------------------------
+When the Node.js framework receives an HTTP response message from the remote 
+server, it calls the callback function that you defined during the 
+HTTP.request function call. This happens:
+
+1. You call http.request() with a callback
+2. Node.js sends the HTTP request
+3. Your code continues (doesn't wait)
+4. Remote server processes the request
+5. Remote server sends HTTP response
+6. Node.js receives the response
+7. Node.js calls your callback function
+8. Your callback handles the response
+
+TIMING EXAMPLE
+--------------
+  console.log('1. Before http.request');
+
+  http.request(options, function(response) {
+    console.log('3. Callback executed (response received)');
+    console.log('Status:', response.statusCode);
+  });
+
+  console.log('2. After http.request (but before response)');
+
+Output:
+  1. Before http.request
+  2. After http.request (but before response)
+  3. Callback executed (response received)
+  Status: 200
+
+Notice the callback runs later, after the response arrives!
+
+ANONYMOUS CALLBACK FUNCTION
+---------------------------
+In the examples, we use an anonymous function (a function without a name):
+
+  http.request(options, function(response) {
+    // This is an anonymous function
+    // It's defined inline, not given a name
+  });
+
+You can also use a named function:
+
+  function handleResponse(response) {
+    // This is a named function
+    // It has a name: handleResponse
+  }
+
+  http.request(options, handleResponse);
+
+Both approaches work the same way. Anonymous functions are common for simple 
+cases, while named functions are better for complex logic or reusability.
+
+COMPLETE EXAMPLE WITH CALLBACK
+-------------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  const request = http.request(options, function(response) {
+    // This callback runs when response arrives
+    console.log('Response status:', response.statusCode);
+    console.log('Response headers:', response.headers);
+    
+    // Handle response data (we'll learn this in next section)
+  });
+
+  request.end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads the HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object
+        • Configures the HTTP request
+
+Line 4-6: hostname, path, method
+        • Sets up where and how to make the request
+
+Line 7: };
+        • Closes options object
+
+Line 8: (empty line)
+
+Line 9: const request = http.request(options, function(response) {
+        • http.request() - Makes the HTTP request
+        • options - First parameter: configuration
+        • function(response) { - Second parameter: callback function
+        • response - The callback receives the response object
+        • This is an anonymous function (no name)
+        • const request - Stores the ClientRequest object
+
+Line 10: // This callback runs when response arrives
+         • Comment explaining timing
+         • This code doesn't run immediately
+
+Line 11: console.log('Response status:', response.statusCode);
+         • response.statusCode - HTTP status code (200, 404, etc.)
+         • Logs the status when response arrives
+
+Line 12: console.log('Response headers:', response.headers);
+         • response.headers - HTTP response headers
+         • Logs headers when response arrives
+
+Line 13: // Handle response data (we'll learn this in next section)
+         • Comment about handling data (covered in next section)
+
+Line 14: });
+         • Closes the callback function
+
+Line 15: (empty line)
+
+Line 16: request.end();
+         • Actually sends the request
+         • Without this, the request wouldn't be sent
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE RESPONSE OBJECT
+----------------------------------
+
+DEFINITION
+----------
+The response object is passed into the callback function of the HTTP.request 
+call. When HTTP.request calls the callback function, it passes a response 
+object in the first parameter of the callback function. This callback function 
+has the response object as the first parameter.
+
+DETAILED EXPLANATION
+--------------------
+The response object (type: IncomingMessage) contains all information about 
+the HTTP response. It includes status codes, headers, and methods to read the 
+response body. You use this object to access the data sent back from the server.
+
+RESPONSE OBJECT PROPERTIES
+---------------------------
+
+1. STATUS CODE
+   response.statusCode - The HTTP status code (200, 404, 500, etc.)
+   
+   Example:
+     if (response.statusCode === 200) {
+       console.log('Success!');
+     }
+
+2. STATUS MESSAGE
+   response.statusMessage - The HTTP status message ('OK', 'Not Found', etc.)
+
+3. HEADERS
+   response.headers - Object containing all response headers
+   
+   Example:
+     console.log(response.headers['content-type']);
+     console.log(response.headers['content-length']);
+
+4. HTTP VERSION
+   response.httpVersion - HTTP version used ('1.1', '2.0', etc.)
+
+ACCESSING RESPONSE DATA
+-----------------------
+The response object is a readable stream. To read the actual data (response 
+body), you need to listen for 'data' and 'end' events. We'll cover this in 
+detail in the next part.
+
+BASIC RESPONSE HANDLING
+-----------------------
+  http.request(options, function(response) {
+    // Access response properties
+    console.log('Status Code:', response.statusCode);
+    console.log('Status Message:', response.statusMessage);
+    console.log('Headers:', response.headers);
+    console.log('HTTP Version:', response.httpVersion);
+    
+    // Response is a stream - need to read data (covered next)
+  });
+
+EXAMPLE: CHECKING STATUS CODE
+-----------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  http.request(options, function(response) {
+    // Check if request was successful
+    if (response.statusCode === 200) {
+      console.log('Request successful!');
+    } else if (response.statusCode === 404) {
+      console.log('Resource not found');
+    } else {
+      console.log('Error:', response.statusCode);
+    }
+    
+    // Log response headers
+    console.log('Content-Type:', response.headers['content-type']);
+  }).end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object
+
+Line 4-6: hostname, path, method
+        • Configures the request
+
+Line 7: };
+        • Closes options
+
+Line 8: (empty line)
+
+Line 9: http.request(options, function(response) {
+        • Makes request with callback
+        • response - The response object
+
+Line 10: // Check if request was successful
+         • Comment explaining next code
+
+Line 11: if (response.statusCode === 200) {
+         • response.statusCode - Gets the HTTP status code
+         • === 200 - Checks if status is 200 (success)
+         • 200 means the request was successful
+
+Line 12: console.log('Request successful!');
+         • Logs success message if status is 200
+
+Line 13: } else if (response.statusCode === 404) {
+         • Checks if status is 404 (not found)
+         • 404 means the resource doesn't exist
+
+Line 14: console.log('Resource not found');
+         • Logs error message for 404
+
+Line 15: } else {
+         • Handles any other status codes
+
+Line 16: console.log('Error:', response.statusCode);
+         • Logs the error status code
+
+Line 17: }
+         • Closes the if-else block
+
+Line 18: (empty line)
+
+Line 19: // Log response headers
+         • Comment about headers
+
+Line 20: console.log('Content-Type:', response.headers['content-type']);
+         • response.headers - Object containing all headers
+         • ['content-type'] - Accesses specific header
+         • Logs the content type of the response
+
+Line 21: }).end();
+         • Closes callback and sends request
+
+[END SECTION 2.4]
+[END PART 2]
+================================================================================
+
+PART 3: EVENT HANDLING IN NODE.JS
+================================================================================
+
+SECTION 3.1: UNDERSTANDING EVENTS
+---------------------------------
+
+DEFINITION
+----------
+The Node.js framework emits several events during the course of the request 
+function. You can listen to these events by using the object.on() method and 
+passing in the event name as the first parameter.
+
+DETAILED EXPLANATION
+--------------------
+Node.js uses an event-driven architecture. Many objects in Node.js are 
+EventEmitters, which means they can emit events that you can listen to. The 
+response object from HTTP requests is one such object - it emits events as 
+data arrives.
+
+EVENT-DRIVEN PROGRAMMING
+-------------------------
+In event-driven programming, instead of continuously checking for data, you 
+register event listeners. When an event occurs, your listener function is 
+called automatically.
+
+REAL-WORLD ANALOGY
+------------------
+Think of events like a doorbell. Instead of constantly checking if someone is 
+at the door, you install a doorbell (register an event listener). When someone 
+presses it (event occurs), the bell rings (your callback is called). You don't 
+need to check - you're notified when it happens.
+
+THE .ON() METHOD
+----------------
+You can listen to these events by using the object.on() method and passing in 
+the event name as the first parameter:
+
+  response.on('eventName', callbackFunction);
+
+BREAKDOWN:
+----------
+• response - The object emitting events (response object)
+• .on() - Method to register an event listener
+• 'eventName' - String name of the event to listen for
+• callbackFunction - Function to call when event occurs
+
+COMMON HTTP RESPONSE EVENTS
+----------------------------
+The response object emits several events:
+
+1. 'data' - Emitted when response data arrives
+2. 'end' - Emitted when response is complete
+3. 'error' - Emitted when an error occurs
+4. 'close' - Emitted when connection closes
+
+EXAMPLE: LISTENING TO EVENTS
+-----------------------------
+  http.request(options, function(response) {
+    // Listen for 'data' event
+    response.on('data', function(chunk) {
+      console.log('Data received:', chunk);
+    });
+    
+    // Listen for 'end' event
+    response.on('end', function() {
+      console.log('Response complete');
+    });
+  });
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: THE 'DATA' EVENT
+------------------------------
+
+DEFINITION
+----------
+If the request is successful, a 'data' event is emitted on the response object 
+every time data comes in. When the Node.js module calls the anonymous function, 
+events occur while it is receiving parts of the HTTP response object. In this 
+example, there are two specific events: a 'data' event and an 'end' event.
+
+DETAILED EXPLANATION
+--------------------
+The 'data' event is emitted whenever a chunk of data arrives from the server. 
+HTTP responses can be large, so they're sent in pieces (chunks). Each time a 
+chunk arrives, the 'data' event fires, and your callback receives that chunk.
+
+HOW DATA ARRIVES
+----------------
+HTTP responses don't arrive all at once. They come in chunks:
+
+  Chunk 1 arrives → 'data' event → Your callback
+  Chunk 2 arrives → 'data' event → Your callback
+  Chunk 3 arrives → 'data' event → Your callback
+  ... (more chunks)
+  No more data → 'end' event → Your callback
+
+Each chunk is a Buffer object containing part of the response body.
+
+LISTENING TO THE 'DATA' EVENT
+------------------------------
+For the 'data' event, you define a callback function to handle each event type:
+
+  response.on('data', function(chunk) {
+    // Handle each chunk of data
+    // 'chunk' is a Buffer containing part of the response
+  });
+
+COMPLETE EXAMPLE: READING RESPONSE DATA
+----------------------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  http.request(options, function(response) {
+    let data = '';  // Store all chunks
+    
+    // Listen for 'data' event
+    response.on('data', function(chunk) {
+      // Each chunk is a Buffer
+      // Convert to string and append
+      data += chunk.toString();
+    });
+    
+    // Listen for 'end' event (covered next)
+    response.on('end', function() {
+      console.log('Complete response:', data);
+    });
+  }).end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object
+
+Line 4-6: hostname, path, method
+        • Configures request
+
+Line 7: };
+        • Closes options
+
+Line 8: (empty line)
+
+Line 9: http.request(options, function(response) {
+        • Makes request with callback
+        • response - Response object
+
+Line 10: let data = '';
+         • let data - Variable to store all response data
+         • '' - Starts as empty string
+         • We'll accumulate chunks here
+
+Line 11: (empty line)
+
+Line 12: // Listen for 'data' event
+         • Comment explaining next code
+
+Line 13: response.on('data', function(chunk) {
+         • response.on() - Registers event listener
+         • 'data' - Event name (when data chunk arrives)
+         • function(chunk) { - Callback for data event
+         • chunk - Buffer containing part of response
+         • This callback runs every time data arrives
+
+Line 14: // Each chunk is a Buffer
+         • Comment explaining chunk type
+
+Line 15: // Convert to string and append
+         • Comment explaining what we'll do
+
+Line 16: data += chunk.toString();
+         • chunk.toString() - Converts Buffer to string
+         • += - Appends to data variable
+         • data - Accumulates all chunks
+         • Each time data arrives, we add it to our string
+
+Line 17: });
+         • Closes the 'data' event callback
+
+Line 18: (empty line)
+
+Line 19: // Listen for 'end' event (covered next)
+         • Comment about next event
+
+Line 20: response.on('end', function() {
+         • Listens for 'end' event
+         • This fires when all data is received
+
+Line 21: console.log('Complete response:', data);
+         • Logs the complete response
+         • data now contains all chunks combined
+
+Line 22: });
+         • Closes 'end' event callback
+
+Line 23: }).end();
+         • Closes main callback and sends request
+
+WHY MULTIPLE 'DATA' EVENTS?
+----------------------------
+Large responses are sent in chunks to:
+• Avoid memory issues (don't load entire response at once)
+• Allow processing data as it arrives (streaming)
+• Handle network interruptions gracefully
+• Support efficient memory usage
+
+Your callback may be called many times, once for each chunk!
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: THE 'END' EVENT
+------------------------------
+
+DEFINITION
+----------
+When the response finishes, an 'end' event is emitted. The purpose of the 
+callback function is to handle two events: request.on('data') and 
+request.on('end'). In this case, the callback function simply prints the HTTP 
+response message body to the console log.
+
+DETAILED EXPLANATION
+--------------------
+The 'end' event signals that all data has been received. No more 'data' events 
+will fire after 'end'. This is when you know the response is complete and you 
+can process the full response.
+
+WHEN 'END' FIRES
+----------------
+The 'end' event is emitted when:
+• All response data has been received
+• The response stream is closed
+• No more 'data' events will occur
+
+This is your signal that the response is complete!
+
+LISTENING TO THE 'END' EVENT
+------------------------------
+For the 'end' event, you define a callback function to handle it:
+
+  response.on('end', function() {
+    // All data has been received
+    // Process the complete response here
+  });
+
+COMPLETE EXAMPLE: DATA AND END EVENTS
+--------------------------------------
+The original content mentions that the callback function handles two events: 
+request.on('data') and request.on('end'), and in this case, the callback 
+function simply prints the HTTP response message body to the console log.
+
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  http.request(options, function(response) {
+    let responseBody = '';  // Accumulate response data
+    
+    // Handle 'data' event - receives chunks
+    response.on('data', function(chunk) {
+      responseBody += chunk.toString();
+    });
+    
+    // Handle 'end' event - all data received
+    response.on('end', function() {
+      // This callback function simply prints the HTTP response message body
+      console.log('Response body:', responseBody);
+    });
+  }).end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object
+
+Line 4-6: hostname, path, method
+        • Configures request
+
+Line 7: };
+        • Closes options
+
+Line 8: (empty line)
+
+Line 9: http.request(options, function(response) {
+        • Makes request
+        • response - Response object
+
+Line 10: let responseBody = '';
+         • let responseBody - Variable to store complete response
+         • '' - Starts empty
+         • Will accumulate all chunks
+
+Line 11: (empty line)
+
+Line 12: // Handle 'data' event - receives chunks
+         • Comment explaining data event
+
+Line 13: response.on('data', function(chunk) {
+         • Listens for 'data' event
+         • Fires every time a chunk arrives
+         • chunk - Part of the response data
+
+Line 14: responseBody += chunk.toString();
+         • chunk.toString() - Converts Buffer to string
+         • += - Appends chunk to responseBody
+         • Accumulates all chunks into one string
+
+Line 15: });
+         • Closes 'data' event handler
+
+Line 16: (empty line)
+
+Line 17: // Handle 'end' event - all data received
+         • Comment explaining end event
+
+Line 18: response.on('end', function() {
+         • Listens for 'end' event
+         • Fires when all data is received
+         • No more 'data' events will occur
+
+Line 19: // This callback function simply prints the HTTP response message body
+         • Comment from original content
+         • Explains what we're doing
+
+Line 20: console.log('Response body:', responseBody);
+         • console.log() - Prints to console
+         • 'Response body:' - Label for output
+         • responseBody - The complete response data
+         • This prints the HTTP response message body to the console log
+         • At this point, responseBody contains all chunks combined
+
+Line 21: });
+         • Closes 'end' event handler
+
+Line 22: }).end();
+         • Closes main callback and sends request
+
+SEQUENCE OF EVENTS
+------------------
+Here's what happens in order:
+
+1. http.request() is called
+2. Request is sent (returns immediately)
+3. Response starts arriving
+4. 'data' event fires (chunk 1) → callback adds to responseBody
+5. 'data' event fires (chunk 2) → callback adds to responseBody
+6. 'data' event fires (chunk 3) → callback adds to responseBody
+7. ... (more data events if needed)
+8. 'end' event fires → callback prints responseBody
+9. Done!
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: ERROR HANDLING WITH 'ERROR' AND 'CLOSE' EVENTS
+-------------------------------------------------------------
+
+DEFINITION
+----------
+If the request fails, there is an 'error' event followed by the 'close' event. 
+The request method returns an object of type HTTP.ClientRequest. This object 
+represents the request in progress. You can append to the request body, make 
+changes to the headers, and listen for error events.
+
+DETAILED EXPLANATION
+--------------------
+Network operations can fail for many reasons:
+• Server is down
+• Network connection lost
+• Timeout
+• Invalid URL
+• DNS resolution failure
+
+Node.js emits 'error' and 'close' events when things go wrong. You should 
+always handle these events to prevent your application from crashing.
+
+THE 'ERROR' EVENT
+-----------------
+If the request fails, there is an 'error' event. This event is emitted when:
+• Connection cannot be established
+• Network error occurs
+• Request times out
+• Other request-related errors happen
+
+LISTENING FOR ERRORS ON THE REQUEST
+------------------------------------
+The request method returns an object of type HTTP.ClientRequest. This object 
+represents the request in progress. You can listen for error events as shown here:
+
+  const request = http.request(options, callback);
+  
+  request.on('error', function(error) {
+    // Handle the error
+    console.error('Request error:', error);
+  });
+  
+  request.end();
+
+COMPLETE ERROR HANDLING EXAMPLE
+---------------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  const request = http.request(options, function(response) {
+    let data = '';
+    
+    response.on('data', function(chunk) {
+      data += chunk.toString();
+    });
+    
+    response.on('end', function() {
+      console.log('Response:', data);
+    });
+  });
+
+  // Handle request errors
+  request.on('error', function(error) {
+    // The code simply outputs the error message if there is an error
+    console.error('Error occurred:', error.message);
+  });
+
+  request.end();
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Loads HTTP module
+
+Line 2: (empty line)
+
+Line 3: const options = {
+        • Creates options object
+
+Line 4-6: hostname, path, method
+        • Configures request
+
+Line 7: };
+        • Closes options
+
+Line 8: (empty line)
+
+Line 9: const request = http.request(options, function(response) {
+        • Makes request
+        • const request - Stores the ClientRequest object
+        • This object represents the request in progress
+        • We need this to listen for error events
+
+Line 10: let data = '';
+         • Variable to store response data
+
+Line 11: (empty line)
+
+Line 12: response.on('data', function(chunk) {
+         • Listens for data chunks
+
+Line 13: data += chunk.toString();
+         • Accumulates chunks
+
+Line 14: });
+         • Closes data handler
+
+Line 15: (empty line)
+
+Line 16: response.on('end', function() {
+         • Listens for end event
+
+Line 17: console.log('Response:', data);
+         • Prints complete response
+
+Line 18: });
+         • Closes end handler
+
+Line 19: });
+         • Closes main callback
+
+Line 20: (empty line)
+
+Line 21: // Handle request errors
+         • Comment explaining error handling
+
+Line 22: request.on('error', function(error) {
+         • request.on() - Listens for events on the request object
+         • 'error' - Event name (when error occurs)
+         • function(error) { - Callback receives error object
+         • error - Object containing error information
+         • This handles errors that occur during the request
+
+Line 23: // The code simply outputs the error message if there is an error
+         • Comment from original content
+         • Explains what we're doing
+
+Line 24: console.error('Error occurred:', error.message);
+         • console.error() - Prints error (different from console.log)
+         • 'Error occurred:' - Label
+         • error.message - The error message
+         • The code simply outputs the error message if there is an error
+
+Line 25: });
+         • Closes error handler
+
+Line 26: (empty line)
+
+Line 27: request.end();
+         • Actually sends the request
+         • To end the request, call clientRequest.end()
+         • This must be called to complete the request
+
+THE 'CLOSE' EVENT
+-----------------
+After an error, the 'close' event is emitted. This signals that the connection 
+is closed. You can listen for it:
+
+  request.on('close', function() {
+    console.log('Connection closed');
+  });
+
+RESPONSE ERROR HANDLING
+-----------------------
+You should also handle errors on the response object:
+
+  http.request(options, function(response) {
+    // Handle response errors
+    response.on('error', function(error) {
+      console.error('Response error:', error);
+    });
+    
+    // ... rest of response handling
+  });
+
+COMPLETE ERROR HANDLING PATTERN
+-------------------------------
+  const http = require('http');
+
+  const options = {
+    hostname: 'www.example.com',
+    path: '/api/data',
+    method: 'GET'
+  };
+
+  const request = http.request(options, function(response) {
+    let data = '';
+    
+    // Handle response errors
+    response.on('error', function(error) {
+      console.error('Response error:', error);
+    });
+    
+    response.on('data', function(chunk) {
+      data += chunk.toString();
+    });
+    
+    response.on('end', function() {
+      console.log('Response:', data);
+    });
+  });
+
+  // Handle request errors
+  request.on('error', function(error) {
+    console.error('Request error:', error.message);
+  });
+
+  request.end();
+
+BEST PRACTICES FOR ERROR HANDLING
+----------------------------------
+1. Always listen for 'error' events on both request and response
+2. Handle errors gracefully (don't let them crash your app)
+3. Provide meaningful error messages
+4. Log errors for debugging
+5. Consider retry logic for transient errors
+
+[END SECTION 3.4]
+[END PART 3]
+================================================================================
+
+SUMMARY OF PART 1
+------------------
+In this part, you learned:
+
+1. ASYNCHRONOUS I/O
+   • Network operations are asynchronous
+   • Node.js makes all network operations non-blocking
+   • Operations return immediately, results handled via callbacks
+
+2. HTTP.REQUEST FUNCTION
+   • Makes HTTP requests to remote servers
+   • Takes options object and callback function
+   • Returns immediately (doesn't wait for response)
+   • Response handled via callback function
+
+3. OPTIONS PARAMETER
+   • Requires hostname and path at minimum
+   • Can include method, port, headers, etc.
+   • Configures where and how to make the request
+
+4. CALLBACK FUNCTION
+   • Receives response object when response arrives
+   • Handles the HTTP response message
+   • Executes asynchronously (after response arrives)
+
+5. RESPONSE OBJECT
+   • Contains status code, headers, etc.
+   • Is a readable stream
+   • Emits events as data arrives
+
+6. EVENT HANDLING
+   • 'data' event - fires when data chunks arrive
+   • 'end' event - fires when response is complete
+   • 'error' event - fires when errors occur
+   • 'close' event - fires when connection closes
+
+7. ERROR HANDLING
+   • Always listen for error events
+   • Handle both request and response errors
+   • Provide meaningful error messages
+
+================================================================================
+END OF PART 1
+================================================================================
+
+Part 2 will cover:
+  • Complete practical examples with custom Node.js modules
+  • HTTPS requests
+  • Advanced patterns and best practices
+  • Sequence diagrams and flow explanations
+  • Summary and quick reference guide
+
+================================================================================
+

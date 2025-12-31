@@ -1,0 +1,1576 @@
+================================================================================
+CREATING CALLBACK FUNCTIONS IN NODE.JS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+This is Part 2 of the comprehensive guide. Part 1 covered:
+• Introduction to callback functions
+• The error-first callback pattern
+• Callback functions with HTTP requests
+
+This part covers:
+• Passing callbacks between modules and main applications
+• Nested callback patterns
+• Complete weather API example
+• Summary and best practices
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: PASSING CALLBACKS BETWEEN MODULES AND APPLICATIONS
+  SECTION 4.1: THE PROBLEM: RETURNING RESULTS FROM MODULES
+  SECTION 4.2: THE SOLUTION: PASSING CALLBACKS TO MODULES
+  SECTION 4.3: HOW CALLBACKS CONNECT MODULES AND APPLICATIONS
+  SECTION 4.4: CREATING CUSTOM MODULES WITH CALLBACKS
+
+PART 5: NESTED CALLBACK PATTERNS
+  SECTION 5.1: WHAT ARE NESTED CALLBACKS?
+  SECTION 5.2: WHY NESTED CALLBACKS ARE NEEDED
+  SECTION 5.3: UNDERSTANDING THE CALLBACK CHAIN
+  SECTION 5.4: CALLBACK FLOW DIAGRAMS
+
+PART 6: COMPLETE WEATHER API EXAMPLE
+  SECTION 6.1: OVERVIEW OF THE WEATHER EXAMPLE
+  SECTION 6.2: MAIN APPLICATION CODE
+  SECTION 6.3: CUSTOM MODULE CODE
+  SECTION 6.4: COMPLETE CODE WITH DETAILED EXPLANATIONS
+  SECTION 6.5: ERROR HANDLING IN THE EXAMPLE
+
+PART 7: SUMMARY AND BEST PRACTICES
+  SECTION 7.1: KEY CONCEPTS SUMMARY
+  SECTION 7.2: BEST PRACTICES
+  SECTION 7.3: COMMON PATTERNS
+  SECTION 7.4: QUICK REFERENCE GUIDE
+
+================================================================================
+PART 4: PASSING CALLBACKS BETWEEN MODULES AND APPLICATIONS
+================================================================================
+
+SECTION 4.1: THE PROBLEM: RETURNING RESULTS FROM MODULES
+----------------------------------------------------------
+
+THE CHALLENGE
+-------------
+When a Node.js module makes an asynchronous operation (like an HTTP request), 
+it cannot simply return the result using a return statement. The operation 
+happens asynchronously, so by the time the result is available, the function 
+has already returned.
+
+THE PROBLEM WITH RETURN
+-----------------------
+If you use a return function, Node.js might call the callback function after 
+the HTTP request call completes. However, there is no connection between the 
+callback function and the main application.
+
+EXAMPLE OF THE PROBLEM
+----------------------
+  // customModule.js
+  const http = require('http');
+  
+  function getWeather(location) {
+    http.get('http://api.weather.com/data', function(response) {
+      // Response arrives here, but how do we return it?
+      // return response; // This won't work!
+    });
+    // Function returns here, before response arrives!
+  }
+  
+  // main.js
+  const weather = require('./customModule');
+  const result = weather.getWeather('airport');
+  console.log(result); // undefined! Response hasn't arrived yet
+
+WHY RETURN DOESN'T WORK
+-----------------------
+1. HTTP request is sent
+2. Function returns immediately (before response arrives)
+3. Response arrives later (but function has already returned)
+4. No way to get the response back to the caller
+
+THE ASYNCHRONOUS TIMELINE
+-------------------------
+  Time 0:    Function called
+  Time 0:    HTTP request sent
+  Time 0:    Function returns (undefined)
+  Time 100:  HTTP response arrives (too late!)
+
+The response arrives after the function has already returned, so there's no 
+way to return it using a normal return statement.
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: THE SOLUTION: PASSING CALLBACKS TO MODULES
+---------------------------------------------------------
+
+THE PATTERN
+----------
+The pattern is that when one Node.js application calls a module in a 
+non-blocking manner, the application provides a callback function to process 
+the result. If the main application calls a function that calls HTTP request, 
+there are two callback functions.
+
+HOW IT WORKS
+------------
+1. Main application calls module function
+2. Main application passes a callback function
+3. Module receives the callback function
+4. Module makes HTTP request (or other async operation)
+5. When response arrives, module calls the callback
+6. Callback executes in main application context
+
+VISUAL FLOW
+-----------
+  Main Application
+       |
+       | calls getWeather('airport', callback)
+       v
+  Custom Module
+       |
+       | makes http.get(...)
+       v
+  HTTP Request (async)
+       |
+       | (time passes...)
+       v
+  HTTP Response arrives
+       |
+       | calls callback(response)
+       v
+  Main Application Callback
+       |
+       | processes result
+       v
+  Done!
+
+EXAMPLE
+-------
+  // customModule.js
+  function getWeather(location, callback) {
+    http.get('http://api.weather.com/data', function(response) {
+      // When response arrives, call the callback
+      callback(response);
+    });
+  }
+  
+  // main.js
+  const weather = require('./customModule');
+  
+  weather.getWeather('airport', function(response) {
+    // This callback executes when response arrives!
+    console.log('Weather data:', response);
+  });
+
+Now the main application receives the response through the callback function!
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: HOW CALLBACKS CONNECT MODULES AND APPLICATIONS
+-------------------------------------------------------------
+
+THE CONNECTION
+--------------
+Having one callback function invoke another callback function is the only way 
+to pass a message from the Node.js module to the main application when the 
+Node.js module receives a response message.
+
+THE TWO-LEVEL CALLBACK PATTERN
+-------------------------------
+If the main application calls HTTP request, it must provide a callback handler 
+to process the HTTP response message. If the main application calls a function 
+that calls HTTP request, there are two callback functions:
+
+1. MODULE-LEVEL CALLBACK
+   • Handles HTTP response from http.request
+   • Defined in the custom module
+   • Receives response from remote server
+
+2. APPLICATION-LEVEL CALLBACK
+   • Processes result for main application
+   • Defined in main application
+   • Receives processed result from module
+
+HOW THEY CONNECT
+----------------
+The module-level callback calls the application-level callback:
+
+  // Module receives application callback
+  function moduleFunction(data, applicationCallback) {
+    // Module makes async operation
+    asyncOperation(data, function(result) {
+      // Module callback receives result
+      // Module callback calls application callback
+      applicationCallback(result);
+    });
+  }
+
+FLOW DIAGRAM
+------------
+  1. Application calls: moduleFunction(data, appCallback)
+                          |
+                          v
+  2. Module receives: appCallback parameter
+                          |
+                          v
+  3. Module makes: asyncOperation(data, moduleCallback)
+                          |
+                          v
+  4. Async operation completes
+                          |
+                          v
+  5. Module callback executes: moduleCallback(result)
+                          |
+                          v
+  6. Module callback calls: appCallback(result)
+                          |
+                          v
+  7. Application callback executes with result!
+
+COMPLETE EXAMPLE
+----------------
+  // customModule.js
+  const http = require('http');
+  
+  function getData(url, resultCallback) {
+    // Module-level callback (handles HTTP response)
+    http.get(url, function(response) {
+      let data = '';
+      response.on('data', function(chunk) {
+        data += chunk;
+      });
+      response.on('end', function() {
+        // Call application-level callback with result
+        resultCallback(data);
+      });
+    });
+  }
+  
+  module.exports = { getData };
+  
+  // main.js
+  const myModule = require('./customModule');
+  
+  // Application-level callback (processes result)
+  myModule.getData('http://api.example.com', function(result) {
+    console.log('Received:', result);
+  });
+
+LINE-BY-LINE EXPLANATION
+------------------------
+CUSTOM MODULE (customModule.js):
+
+Line 1: const http = require('http');
+        • Imports HTTP module for making requests
+
+Line 3: function getData(url, resultCallback) {
+        • Defines function that gets data from URL
+        • url: the URL to request
+        • resultCallback: callback function from main application
+        • This is how the application passes its callback to the module
+
+Line 4: http.get(url, function(response) {
+        • Makes HTTP GET request
+        • Passes module-level callback to handle response
+        • response: HTTP response object
+
+Line 5: let data = '';
+        • Variable to accumulate response data
+
+Line 6: response.on('data', function(chunk) {
+        • Listens for data chunks
+        • Collects response data as it arrives
+
+Line 7: data += chunk;
+        • Adds each chunk to data variable
+
+Line 8: });
+        • Closes 'data' event handler
+
+Line 9: response.on('end', function() {
+        • Listens for end of response
+        • Executes when all data is received
+
+Line 10: resultCallback(data);
+        • Calls the application-level callback
+        • Passes the complete response data
+        • This connects the module to the application!
+        • resultCallback is the function passed from main application
+
+Line 11: });
+        • Closes 'end' event handler
+
+Line 12: });
+        • Closes http.get callback
+
+Line 13: }
+        • Closes getData function
+
+Line 15: module.exports = { getData };
+        • Exports getData function so it can be used in other files
+
+MAIN APPLICATION (main.js):
+
+Line 1: const myModule = require('./customModule');
+        • Imports the custom module
+        • myModule now has access to getData function
+
+Line 3: myModule.getData('http://api.example.com', function(result) {
+        • Calls getData function from module
+        • Passes URL and application-level callback
+        • callback function will receive the result
+        • This is the application-level callback
+
+Line 4: console.log('Received:', result);
+        • Processes the result when callback executes
+        • result contains the data from HTTP response
+        • This only runs after HTTP response is received and processed
+
+Line 5: });
+        • Closes application-level callback
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: CREATING CUSTOM MODULES WITH CALLBACKS
+-----------------------------------------------------
+
+CREATING A MODULE THAT EXPORTS A FUNCTION
+------------------------------------------
+When creating a custom Node.js module that uses callbacks, you:
+1. Define a function that accepts a callback parameter
+2. Perform asynchronous operations inside
+3. Call the callback when operation completes
+4. Export the function
+
+BASIC STRUCTURE
+---------------
+  // myModule.js
+  const http = require('http');
+  
+  function myFunction(input, callback) {
+    // Perform async operation
+    http.get('url', function(response) {
+      // Process response
+      // Call callback with result
+      callback(null, result);
+    });
+  }
+  
+  module.exports = { myFunction };
+
+USING THE MODULE
+----------------
+  // main.js
+  const myModule = require('./myModule');
+  
+  myModule.myFunction('input', function(error, result) {
+    if (error) {
+      // Handle error
+    } else {
+      // Use result
+    }
+  });
+
+COMPLETE EXAMPLE: WEATHER MODULE
+----------------------------------
+This example shows a Node.js module that returns a result to the main 
+application with a callback function. Here, a function is defined for the 
+property named current. This property will be exported as part of the module.
+
+  // weather.js (Custom Module)
+  const http = require('http');
+  
+  const weather = {
+    current: function(location, resultCallback) {
+      // This is how you pass a reference to the main application's 
+      // callback function to the Node.js module's callback function.
+      // The resultCallback parameter stores the anonymous callback 
+      // function from the main application.
+      
+      const url = `http://api.weather.com/current?location=${location}`;
+      
+      http.get(url, function(response) {
+        let data = '';
+        
+        response.on('data', function(chunk) {
+          data += chunk;
+        });
+        
+        response.on('end', function() {
+          // Parse the weather data
+          const weatherData = JSON.parse(data);
+          const tempF = weatherData.temperature.fahrenheit;
+          
+          // Call the application's callback with the result
+          // This is how you pass a value from one callback handler to another.
+          resultCallback(null, tempF);
+        });
+        
+        response.on('error', function(error) {
+          // Pass error to application callback
+          resultCallback(error, null);
+        });
+      }).on('error', function(error) {
+        // Pass request error to application callback
+        resultCallback(error, null);
+      });
+    }
+  };
+  
+  module.exports = weather;
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Imports HTTP module for making requests
+
+Line 3: const weather = {
+        • Creates an object to hold weather functions
+        • This object will be exported as the module
+
+Line 4: current: function(location, resultCallback) {
+        • Defines current property as a function
+        • location: input parameter (e.g., airport name)
+        • resultCallback: callback function from main application
+        • This anonymous function takes a parameter named resultCallback 
+          from the main application
+        • This is how you pass a reference to the main application's 
+          callback function to the Node.js module's callback function
+        • The resultCallback parameter stores the anonymous callback 
+          function from the main application
+
+Line 6: const url = `http://api.weather.com/current?location=${location}`;
+        • Constructs the API URL
+        • Uses template literal (backticks) for string interpolation
+        • ${location} inserts the location parameter into the URL
+
+Line 8: http.get(url, function(response) {
+        • Makes HTTP GET request to weather API
+        • Passes callback to handle HTTP response
+        • This is the module-level callback
+
+Line 9: let data = '';
+        • Variable to accumulate response data
+
+Line 11: response.on('data', function(chunk) {
+        • Listens for data chunks from HTTP response
+        • Collects response data as it arrives
+
+Line 12: data += chunk;
+        • Adds each chunk to data variable
+        • Builds complete response
+
+Line 13: });
+        • Closes 'data' event handler
+
+Line 15: response.on('end', function() {
+        • Listens for end of HTTP response
+        • A response.on('end') event handler handles the transmission 
+          of the HTTP response message
+        • When the remote server finishes sending back the response 
+          message, this executes
+
+Line 16: const weatherData = JSON.parse(data);
+        • Parses JSON response into JavaScript object
+        • data contains the JSON string from HTTP response
+
+Line 17: const tempF = weatherData.temperature.fahrenheit;
+        • Extracts temperature in Fahrenheit from parsed data
+        • Accesses nested properties of weatherData object
+
+Line 19: resultCallback(null, tempF);
+        • Calls the application's callback with the result
+        • null as first parameter (no error)
+        • tempF as second parameter (the result)
+        • The code makes a call to resultCallback and passes it the 
+          current weather reading in degrees Fahrenheit
+        • This is how you pass a value from one callback handler to another
+
+Line 20: });
+        • Closes 'end' event handler
+
+Line 22: response.on('error', function(error) {
+        • Handles errors in response stream
+        • Listens for errors while receiving response
+
+Line 23: resultCallback(error, null);
+        • Passes error to application callback
+        • error as first parameter (error-first pattern)
+        • null as second parameter (no result when error)
+
+Line 24: });
+        • Closes response 'error' event handler
+
+Line 25: }).on('error', function(error) {
+        • Chains error handler to http.get()
+        • Handles errors in making the request itself
+
+Line 26: resultCallback(error, null);
+        • Passes request error to application callback
+        • Follows error-first callback pattern
+
+Line 27: });
+        • Closes request 'error' event handler
+
+Line 28: }
+        • Closes current function
+
+Line 29: };
+        • Closes weather object
+
+Line 31: module.exports = weather;
+        • Exports weather object
+        • Makes it available to other files that require this module
+        • This property will be exported as part of the module
+
+[END SECTION 4.4]
+[END PART 4]
+================================================================================
+
+PART 5: NESTED CALLBACK PATTERNS
+================================================================================
+
+SECTION 5.1: WHAT ARE NESTED CALLBACKS?
+------------------------------------------
+
+DEFINITION
+----------
+Nested callbacks occur when one callback function calls another callback 
+function. This pattern is essential for passing results from asynchronous 
+operations through multiple layers (module → application).
+
+THE PATTERN
+-----------
+  Level 1: Application calls module function
+            ↓
+  Level 2: Module makes async operation (HTTP request)
+            ↓
+  Level 3: Async operation completes, calls module callback
+            ↓
+  Level 4: Module callback calls application callback
+            ↓
+  Level 5: Application callback processes result
+
+VISUAL REPRESENTATION
+---------------------
+  Application
+    └─> Module Function
+          └─> HTTP Request
+                └─> Module Callback (handles HTTP response)
+                      └─> Application Callback (processes result)
+
+EXAMPLE
+-------
+  // Application level
+  weather.current('airport', function(tempF) {
+    // Application callback (Level 4)
+    console.log('Temperature:', tempF);
+  });
+  
+  // Inside weather.current (Module level)
+  http.get(url, function(response) {
+    // Module callback (Level 3)
+    response.on('end', function() {
+      // Nested callback (Level 4)
+      resultCallback(tempF); // Calls application callback
+    });
+  });
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: WHY NESTED CALLBACKS ARE NEEDED
+-----------------------------------------------
+
+THE REQUIREMENT
+---------------
+Having one callback function invoke another callback function is the only way 
+to pass a message from the Node.js module to the main application when the 
+Node.js module receives a response message.
+
+WHY NOT JUST RETURN?
+--------------------
+• Async operations complete later
+• Function returns before operation completes
+• Need callback to receive result when ready
+• Callback must call another callback to pass result up
+
+THE FLOW
+--------
+1. Application calls module function with callback
+2. Module makes async operation (doesn't wait)
+3. Module function returns (before operation completes)
+4. Operation completes later
+5. Module's callback executes
+6. Module's callback calls application's callback
+7. Application's callback processes result
+
+EXAMPLE FLOW
+------------
+  Time 0:   Application: weather.current('airport', appCallback)
+  Time 0:   Module: http.get(url, moduleCallback) [starts request]
+  Time 0:   Module function returns (request sent, waiting for response)
+  Time 50:  HTTP response arrives
+  Time 50:  Module callback executes (moduleCallback)
+  Time 50:  Module callback calls: appCallback(result)
+  Time 50:  Application callback executes (appCallback)
+  Time 50:  Result is processed!
+
+Without nested callbacks, the application would never receive the result!
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: UNDERSTANDING THE CALLBACK CHAIN
+-----------------------------------------------
+
+THE CHAIN
+---------
+A callback chain connects multiple levels:
+• Application → Module → HTTP → Module Callback → Application Callback
+
+EACH LEVEL HAS A PURPOSE
+------------------------
+1. APPLICATION LEVEL
+   • Calls module function
+   • Provides callback to receive result
+   • Processes final result
+
+2. MODULE LEVEL
+   • Receives application callback
+   • Makes async operation
+   • Provides callback for async operation
+   • Calls application callback when done
+
+3. ASYNC OPERATION LEVEL
+   • Performs the actual work (HTTP request, file read, etc.)
+   • Calls module callback when complete
+
+4. MODULE CALLBACK LEVEL
+   • Receives result from async operation
+   • Processes/transforms result
+   • Calls application callback with result
+
+5. APPLICATION CALLBACK LEVEL
+   • Receives final result
+   • Does something with it (display, process, etc.)
+
+COMPLETE CHAIN EXAMPLE
+----------------------
+  // Level 1: Application
+  weather.current('airport', function(tempF) {
+    // Level 5: Application Callback
+    console.log('Temperature:', tempF);
+  });
+  
+  // Inside weather.current module:
+  function current(location, resultCallback) {
+    // Level 2: Module Function
+    
+    http.get(url, function(response) {
+      // Level 3: Module Callback (for HTTP)
+      
+      response.on('end', function() {
+        // Level 4: Nested Callback (for response end)
+        const tempF = extractTemperature(data);
+        resultCallback(tempF); // Level 4 calls Level 5
+      });
+    });
+  }
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: CALLBACK FLOW DIAGRAMS
+-------------------------------------
+
+DIAGRAM 1: SIMPLE FLOW
+-----------------------
+  [Main Application]
+        |
+        | 1. Calls: weather.current('airport', callback)
+        |
+        v
+  [Custom Module]
+        |
+        | 2. Makes: http.get(url, moduleCallback)
+        |
+        v
+  [HTTP Request]
+        |
+        | 3. (time passes...)
+        |
+        v
+  [HTTP Response Arrives]
+        |
+        | 4. Executes: moduleCallback(response)
+        |
+        v
+  [Module Callback]
+        |
+        | 5. Calls: resultCallback(tempF)
+        |
+        v
+  [Application Callback]
+        |
+        | 6. Processes: console.log(tempF)
+        |
+        v
+  [Done!]
+
+DIAGRAM 2: WITH ERROR HANDLING
+------------------------------
+  [Main Application]
+        |
+        | Calls: weather.current('airport', callback)
+        |
+        v
+  [Custom Module]
+        |
+        | Makes: http.get(url, moduleCallback)
+        |
+        v
+  [HTTP Request]
+        |
+        |---[Success]---> [Module Callback] ---> [Application Callback]
+        |                                           (with result)
+        |
+        |---[Error]-----> [Module Callback] ---> [Application Callback]
+                                                      (with error)
+
+[END SECTION 5.4]
+[END PART 5]
+================================================================================
+
+PART 6: COMPLETE WEATHER API EXAMPLE
+================================================================================
+
+SECTION 6.1: OVERVIEW OF THE WEATHER EXAMPLE
+---------------------------------------------
+
+THE SCENARIO
+------------
+We'll create a complete example where:
+• Main application calls a weather module
+• Weather module makes HTTP request to weather API
+• Module receives response and processes it
+• Module calls application callback with temperature
+• Application displays temperature in browser
+
+THE COMPONENTS
+--------------
+1. MAIN APPLICATION (app.js)
+   • Creates HTTP server
+   • Calls weather module
+   • Sends response to browser
+
+2. WEATHER MODULE (weather.js)
+   • Makes HTTP request to weather API
+   • Processes response
+   • Calls application callback with result
+
+THE FLOW
+--------
+1. Browser requests weather
+2. Server receives request
+3. Server calls weather.current()
+4. Weather module makes HTTP request
+5. Weather API responds
+6. Module processes response
+7. Module calls server callback
+8. Server sends response to browser
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: MAIN APPLICATION CODE
+------------------------------------
+
+COMPLETE MAIN APPLICATION
+--------------------------
+The codes are in the main app, which has a weather object, the Node.js module, 
+that calls the weather's current function. The location is an input parameter, 
+in this example, an airport.
+
+  // app.js (Main Application)
+  const http = require('http');
+  const weather = require('./weather');
+  
+  const server = http.createServer(function(request, response) {
+    // Get location from URL (simplified - in real app, parse URL properly)
+    const location = 'airport'; // In this example, an airport
+    
+    // Call weather module with location and callback
+    weather.current(location, function(error, tempF) {
+      if (error) {
+        // If error is defined, print the error message
+        response.writeHead(500, { 'Content-Type': 'text/plain' });
+        response.end('Error: ' + error.message);
+        return;
+      }
+      
+      // Otherwise, the weather.current function call completed successfully
+      // Print the result from the function call
+      // To print tempF in the browser, we can use response.end
+      // The current weather reading is ${tempF} degrees
+      response.writeHead(200, { 'Content-Type': 'text/plain' });
+      response.end(`The current weather reading is ${tempF} degrees.`);
+    });
+  });
+  
+  server.listen(3000, function() {
+    console.log('Server running on http://localhost:3000');
+  });
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Imports HTTP module for creating server
+
+Line 2: const weather = require('./weather');
+        • Imports custom weather module
+        • The main app has a weather object, the Node.js module
+
+Line 4: const server = http.createServer(function(request, response) {
+        • Creates HTTP server
+        • Callback function handles each incoming request
+        • request: incoming HTTP request
+        • response: outgoing HTTP response
+
+Line 5: const location = 'airport';
+        • Sets location parameter
+        • The location is an input parameter, in this example, an airport
+        • In a real application, you'd parse this from the URL
+
+Line 7: weather.current(location, function(error, tempF) {
+        • Calls the weather's current function
+        • Passes location and callback function
+        • This is the application-level callback
+        • error: will be Error object or null (error-first pattern)
+        • tempF: will be temperature in Fahrenheit or undefined
+
+Line 8: if (error) {
+        • Checks if error occurred
+        • If error is defined, the callback function handles the error
+
+Line 9: response.writeHead(500, { 'Content-Type': 'text/plain' });
+        • Sets HTTP response status to 500 (server error)
+        • Sets content type to plain text
+        • This is sent to browser if error occurs
+
+Line 10: response.end('Error: ' + error.message);
+        • Sends error message to browser and closes response
+        • If error is defined, print the error message
+        • error.message contains the error description
+
+Line 11: return;
+        • Exits callback function early
+        • Prevents success code from running when there's an error
+
+Line 13: // Otherwise, the weather.current function call completed successfully
+        • Comment explaining success case
+        • This code only runs if no error occurred
+
+Line 14: // Print the result from the function call
+        • Comment about printing result
+
+Line 15: // To print tempF in the browser, we can use response.end
+        • Comment explaining how to send data to browser
+        • response.end sends data and closes the response
+
+Line 16: // The current weather reading is ${tempF} degrees
+        • Comment showing what will be sent
+
+Line 17: response.writeHead(200, { 'Content-Type': 'text/plain' });
+        • Sets HTTP response status to 200 (success)
+        • Sets content type to plain text
+        • This is sent to browser on success
+
+Line 18: response.end(`The current weather reading is ${tempF} degrees.`);
+        • Sends temperature to browser and closes response
+        • Uses template literal (backticks) for string interpolation
+        • ${tempF} inserts the temperature value
+        • The current weather reading is ${tempF} degrees
+
+Line 19: });
+        • Closes the weather.current callback function
+
+Line 20: });
+        • Closes the http.createServer callback
+
+Line 22: server.listen(3000, function() {
+        • Starts server listening on port 3000
+        • Callback executes when server starts
+
+Line 23: console.log('Server running on http://localhost:3000');
+        • Prints message when server is ready
+
+Line 24: });
+        • Closes server.listen callback
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: CUSTOM MODULE CODE
+--------------------------------
+
+COMPLETE WEATHER MODULE
+-----------------------
+Now you can see a Node.js module that returns a result to the main application 
+with a callback function. Here, a function is defined for the property named 
+current. This property will be exported as part of the module.
+
+  // weather.js (Custom Node.js Module)
+  const http = require('http');
+  
+  const weather = {
+    current: function(location, resultCallback) {
+      // The anonymous function takes a parameter named resultCallback 
+      // from the main application. This is how you pass a reference 
+      // to the main application's callback function to the Node.js 
+      // module's callback function. The resultCallback parameter stores 
+      // the anonymous callback function from the main application.
+      
+      const url = `http://api.weather.com/current?location=${location}`;
+      
+      http.get(url, function(response) {
+        // This is the module-level callback that handles HTTP response
+        
+        let data = '';
+        
+        response.on('data', function(chunk) {
+          data += chunk;
+        });
+        
+        response.on('end', function() {
+          // A response.on('end') event handler handles the transmission 
+          // of the HTTP response message. When the remote server finishes 
+          // sending back the response message, the code makes a call to 
+          // resultCallback and passes it the current weather reading in 
+          // degrees Fahrenheit. This is how you pass a value from one 
+          // callback handler to another.
+          
+          try {
+            const weatherData = JSON.parse(data);
+            const tempF = weatherData.temperature.fahrenheit;
+            
+            // Call application callback with result (no error)
+            resultCallback(null, tempF);
+          } catch (parseError) {
+            // If JSON parsing fails, pass error to application callback
+            resultCallback(parseError, null);
+          }
+        });
+        
+        response.on('error', function(error) {
+          // Handle response stream errors
+          resultCallback(error, null);
+        });
+      }).on('error', function(error) {
+        // Handle HTTP request errors
+        // Instead of printing the result in the console, you call the 
+        // resultCallback callback function with the error object. You pass 
+        // back the error object to the resultCallback callback function 
+        // of the main application.
+        resultCallback(error, null);
+      });
+    }
+  };
+  
+  module.exports = weather;
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const http = require('http');
+        • Imports HTTP module for making requests
+
+Line 3: const weather = {
+        • Creates weather object to hold functions
+        • This object will be exported
+
+Line 4: current: function(location, resultCallback) {
+        • Defines current property as a function
+        • Here, a function is defined for the property named current
+        • This property will be exported as part of the module
+        • location: input parameter (e.g., airport name)
+        • resultCallback: callback function from main application
+        • The anonymous function takes a parameter named resultCallback 
+          from the main application
+        • This is how you pass a reference to the main application's 
+          callback function to the Node.js module's callback function
+        • The resultCallback parameter stores the anonymous callback 
+          function from the main application
+
+Line 6: const url = `http://api.weather.com/current?location=${location}`;
+        • Constructs API URL with location parameter
+        • Uses template literal for string interpolation
+
+Line 8: http.get(url, function(response) {
+        • Makes HTTP GET request
+        • Passes module-level callback to handle response
+        • This callback handler will process the HTTP response message
+
+Line 9: let data = '';
+        • Variable to accumulate response data
+
+Line 11: response.on('data', function(chunk) {
+        • Listens for data chunks
+        • Collects response data as it arrives
+
+Line 12: data += chunk;
+        • Adds each chunk to data variable
+
+Line 13: });
+        • Closes 'data' event handler
+
+Line 15: response.on('end', function() {
+        • Listens for end of response
+        • A response.on('end') event handler handles the transmission 
+          of the HTTP response message
+        • When the remote server finishes sending back the response 
+          message, this executes
+
+Line 16: try {
+        • Starts try block for error handling
+        • JSON.parse can throw an error if data is invalid JSON
+
+Line 17: const weatherData = JSON.parse(data);
+        • Parses JSON response into JavaScript object
+        • data contains the JSON string from HTTP response
+
+Line 18: const tempF = weatherData.temperature.fahrenheit;
+        • Extracts temperature in Fahrenheit
+        • Accesses nested property of parsed data
+
+Line 20: resultCallback(null, tempF);
+        • Calls application callback with success
+        • null as first parameter (no error)
+        • tempF as second parameter (the result)
+        • The code makes a call to resultCallback and passes it the 
+          current weather reading in degrees Fahrenheit
+        • This is how you pass a value from one callback handler to another
+
+Line 21: } catch (parseError) {
+        • Catches errors from JSON.parse
+        • parseError contains the error information
+
+Line 22: resultCallback(parseError, null);
+        • Passes parsing error to application callback
+        • parseError as first parameter (error-first pattern)
+        • null as second parameter (no result when error)
+
+Line 23: }
+        • Closes catch block
+
+Line 24: });
+        • Closes 'end' event handler
+
+Line 26: response.on('error', function(error) {
+        • Handles errors in response stream
+        • Listens for errors while receiving response
+
+Line 27: resultCallback(error, null);
+        • Passes response error to application callback
+        • Follows error-first callback pattern
+
+Line 28: });
+        • Closes response 'error' event handler
+
+Line 29: }).on('error', function(error) {
+        • Chains error handler to http.get()
+        • Handles errors in making the request itself
+        • This is the callback handler that processes HTTP response errors
+
+Line 30: // Instead of printing the result in the console, you call the 
+        • Comment explaining error handling pattern
+        • Instead of printing, we call the callback
+
+Line 31: // resultCallback callback function with the error object
+        • Comment continues explanation
+
+Line 32: // You pass back the error object to the resultCallback callback 
+        • Comment continues explanation
+
+Line 33: // function of the main application.
+        • Comment continues explanation
+        • You pass back the error object to the resultCallback callback 
+          function of the main application
+
+Line 34: resultCallback(error, null);
+        • Calls application callback with error
+        • error as first parameter (error-first pattern)
+        • null as second parameter (no result when error)
+        • If no error occurred, you can call the resultCallback function 
+          with null as the first parameter
+
+Line 35: });
+        • Closes request 'error' event handler
+
+Line 36: }
+        • Closes current function
+
+Line 37: };
+        • Closes weather object
+
+Line 39: module.exports = weather;
+        • Exports weather object
+        • Makes it available to other files
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: COMPLETE CODE WITH DETAILED EXPLANATIONS
+-------------------------------------------------------
+
+PUTTING IT ALL TOGETHER
+-----------------------
+Here's how the complete flow works with both files:
+
+EXECUTION FLOW:
+---------------
+1. Server starts and listens on port 3000
+2. Browser makes request to server
+3. Server receives request in createServer callback
+4. Server calls weather.current('airport', callback)
+5. Weather module makes http.get() request
+6. http.get() returns immediately (doesn't wait)
+7. Server callback continues (but doesn't send response yet)
+8. HTTP response arrives from weather API
+9. Module's response.on('end') callback executes
+10. Module calls resultCallback(null, tempF)
+11. Application's callback executes
+12. Application sends response to browser
+13. Browser displays temperature
+
+THE COMPLETE INTERACTION
+-------------------------
+When the main application calls weather.current, it passes an anonymous 
+callback function to process the result from the call. In this case, the 
+anonymous function takes in one input parameter, tempF (actually two: error 
+and tempF following error-first pattern). The purpose of this callback 
+function is to take the weather reading in degrees Fahrenheit and send it 
+to the browser.
+
+The resultCallback callback function in the function of the custom Node.js 
+module links to the anonymous callback function (function with error and 
+tempF parameters) of the weather object's current function in the main 
+application.
+
+VISUAL FLOW WITH CODE
+---------------------
+  [Browser] 
+    |
+    | HTTP Request
+    v
+  [app.js - createServer callback]
+    |
+    | weather.current('airport', function(error, tempF) { ... })
+    v
+  [weather.js - current function]
+    |
+    | http.get(url, function(response) { ... })
+    v
+  [HTTP Request to Weather API]
+    |
+    | (network delay...)
+    v
+  [HTTP Response Arrives]
+    |
+    | response.on('end', function() { ... })
+    v
+  [weather.js - 'end' callback]
+    |
+    | resultCallback(null, tempF)
+    v
+  [app.js - weather.current callback]
+    |
+    | response.end(`The current weather reading is ${tempF} degrees.`)
+    v
+  [Browser receives response]
+
+[END SECTION 6.4]
+================================================================================
+
+SECTION 6.5: ERROR HANDLING IN THE EXAMPLE
+-------------------------------------------
+
+ERROR SCENARIOS
+---------------
+The example handles several error scenarios:
+
+1. HTTP REQUEST ERRORS
+   • Network failures
+   • Invalid URLs
+   • Connection refused
+   • Handled by: }).on('error', function(error) { ... })
+
+2. RESPONSE STREAM ERRORS
+   • Problems receiving response
+   • Connection interrupted
+   • Handled by: response.on('error', function(error) { ... })
+
+3. JSON PARSING ERRORS
+   • Invalid JSON in response
+   • Malformed data
+   • Handled by: try/catch around JSON.parse()
+
+4. APPLICATION ERRORS
+   • All errors passed to application callback
+   • Application handles and sends error to browser
+
+ERROR FLOW
+----------
+  [Error Occurs]
+    |
+    v
+  [Module Detects Error]
+    |
+    | resultCallback(error, null)
+    v
+  [Application Callback Receives Error]
+    |
+    | if (error) { ... }
+    v
+  [Application Sends Error Response to Browser]
+
+ALL ERRORS FOLLOW ERROR-FIRST PATTERN
+--------------------------------------
+Every error is passed as the first parameter to the callback:
+
+  // In module
+  resultCallback(error, null);  // Error case
+  resultCallback(null, tempF);  // Success case
+  
+  // In application
+  weather.current(location, function(error, tempF) {
+    if (error) {
+      // Handle error
+    } else {
+      // Use tempF
+    }
+  });
+
+This ensures consistent error handling throughout the application.
+
+[END SECTION 6.5]
+[END PART 6]
+================================================================================
+
+PART 7: SUMMARY AND BEST PRACTICES
+================================================================================
+
+SECTION 7.1: KEY CONCEPTS SUMMARY
+----------------------------------
+
+WHAT YOU LEARNED
+----------------
+In this guide, you learned that:
+
+1. NODE.JS USES CALLBACKS EXTENSIVELY
+   • Node.js makes extensive use of callback functions to return the results 
+     to the calling function
+   • Callbacks are essential for asynchronous operations
+   • They allow non-blocking code execution
+
+2. ERROR-FIRST CALLBACK CONVENTION
+   • Node.js modules in the SDK pass an error object as the first parameter 
+     in a callback function
+   • If error is defined, handle it and clean up
+   • If error is not defined, process the result
+   • This convention ensures consistent error handling
+
+3. CALLBACKS CONNECT MODULES AND APPLICATIONS
+   • Having one callback function invoke another callback function is the 
+     only way to pass a message from the Node.js module to the main 
+     application when the Node.js module receives a response message
+   • The application provides a callback to the module
+   • The module calls that callback when the operation completes
+
+4. ONE CALLBACK AT EACH LEVEL
+   • If the main application calls HTTP request, it provides one callback
+   • If the main application calls a function that calls HTTP request, there 
+     are two callback functions
+   • There is one callback function at each level
+
+KEY DEFINITIONS
+---------------
+• CALLBACK FUNCTION: A function passed as an argument to another function, 
+  executed when an operation completes
+
+• ERROR-FIRST CALLBACK: A callback pattern where the first parameter is always 
+  an error object (or null if no error)
+
+• MODULE-LEVEL CALLBACK: Callback function that handles the result of an 
+  async operation within a module
+
+• APPLICATION-LEVEL CALLBACK: Callback function provided by the main 
+  application to receive results from a module
+
+• NESTED CALLBACKS: Pattern where one callback function calls another callback 
+  function to pass results through multiple layers
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: BEST PRACTICES
+----------------------------
+
+PRACTICE 1: ALWAYS USE ERROR-FIRST PATTERN
+-------------------------------------------
+✅ DO:
+  function myFunction(input, callback) {
+    asyncOperation(input, function(error, result) {
+      if (error) {
+        callback(error, null);
+      } else {
+        callback(null, result);
+      }
+    });
+  }
+
+❌ DON'T:
+  function myFunction(input, callback) {
+    asyncOperation(input, function(result) {
+      callback(result); // No error handling!
+    });
+  }
+
+PRACTICE 2: ALWAYS CHECK FOR ERRORS FIRST
+------------------------------------------
+✅ DO:
+  myFunction(input, function(error, result) {
+    if (error) {
+      // Handle error first
+      return;
+    }
+    // Then process result
+    processResult(result);
+  });
+
+❌ DON'T:
+  myFunction(input, function(error, result) {
+    processResult(result); // Might fail if error exists!
+    if (error) {
+      // Too late!
+    }
+  });
+
+PRACTICE 3: CLEAN UP RESOURCES ON ERROR
+----------------------------------------
+✅ DO:
+  function queryDatabase(query, callback) {
+    const connection = openConnection();
+    connection.query(query, function(error, results) {
+      if (error) {
+        connection.close(); // Clean up!
+        callback(error, null);
+        return;
+      }
+      connection.close(); // Clean up on success too!
+      callback(null, results);
+    });
+  }
+
+PRACTICE 4: USE DESCRIPTIVE CALLBACK PARAMETER NAMES
+-----------------------------------------------------
+✅ DO:
+  function getData(url, resultCallback) {
+    // Clear what the callback is for
+  }
+
+❌ DON'T:
+  function getData(url, cb) {
+    // Unclear what cb does
+  }
+
+PRACTICE 5: DOCUMENT YOUR CALLBACKS
+------------------------------------
+✅ DO:
+  /**
+   * Gets weather data for a location
+   * @param {string} location - The location to get weather for
+   * @param {function} callback - Callback function(error, temperature)
+   *   - error: Error object or null
+   *   - temperature: Temperature in Fahrenheit or undefined
+   */
+  function getWeather(location, callback) {
+    // ...
+  }
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: COMMON PATTERNS
+------------------------------
+
+PATTERN 1: BASIC ASYNC FUNCTION WITH CALLBACK
+----------------------------------------------
+  function asyncFunction(input, callback) {
+    // Perform async operation
+    asyncOperation(input, function(error, result) {
+      if (error) {
+        callback(error, null);
+        return;
+      }
+      callback(null, result);
+    });
+  }
+
+PATTERN 2: HTTP REQUEST WITH CALLBACK
+-------------------------------------
+  function makeRequest(url, callback) {
+    http.get(url, function(response) {
+      let data = '';
+      response.on('data', function(chunk) {
+        data += chunk;
+      });
+      response.on('end', function() {
+        callback(null, data);
+      });
+      response.on('error', function(error) {
+        callback(error, null);
+      });
+    }).on('error', function(error) {
+      callback(error, null);
+    });
+  }
+
+PATTERN 3: MODULE EXPORTING FUNCTION WITH CALLBACK
+--------------------------------------------------
+  // myModule.js
+  const myModule = {
+    myFunction: function(input, callback) {
+      // Async operation
+      asyncOp(input, function(error, result) {
+        callback(error, result);
+      });
+    }
+  };
+  
+  module.exports = myModule;
+
+PATTERN 4: USING MODULE IN APPLICATION
+---------------------------------------
+  // app.js
+  const myModule = require('./myModule');
+  
+  myModule.myFunction('input', function(error, result) {
+    if (error) {
+      console.error('Error:', error.message);
+      return;
+    }
+    console.log('Result:', result);
+  });
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: QUICK REFERENCE GUIDE
+------------------------------------
+
+ERROR-FIRST CALLBACK PATTERN
+-----------------------------
+  // Defining a function with error-first callback
+  function myFunction(input, callback) {
+    asyncOperation(input, function(error, result) {
+      callback(error, result); // error first, result second
+    });
+  }
+  
+  // Using error-first callback
+  myFunction('input', function(error, result) {
+    if (error) {
+      // Handle error
+      return;
+    }
+    // Use result
+  });
+
+HTTP REQUEST WITH CALLBACK
+---------------------------
+  const http = require('http');
+  
+  http.get(url, function(response) {
+    let data = '';
+    response.on('data', function(chunk) {
+      data += chunk;
+    });
+    response.on('end', function() {
+      callback(null, data);
+    });
+    response.on('error', function(error) {
+      callback(error, null);
+    });
+  }).on('error', function(error) {
+    callback(error, null);
+  });
+
+MODULE WITH CALLBACK
+--------------------
+  // module.js
+  const myModule = {
+    myFunction: function(input, callback) {
+      // Async operation
+      asyncOp(input, function(error, result) {
+        callback(error, result);
+      });
+    }
+  };
+  module.exports = myModule;
+  
+  // app.js
+  const myModule = require('./module');
+  myModule.myFunction('input', function(error, result) {
+    if (error) {
+      // Handle error
+    } else {
+      // Use result
+    }
+  });
+
+KEY RULES
+---------
+1. ✅ Always pass error as first parameter
+2. ✅ Always check for error first in callbacks
+3. ✅ Always clean up resources on error
+4. ✅ Use callbacks to return results from async operations
+5. ✅ One callback function at each level
+6. ✅ Module callbacks call application callbacks to pass results
+
+[END SECTION 7.4]
+[END PART 7]
+================================================================================
+
+FINAL NOTES
+-----------
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• Node.js makes extensive use of callback functions for asynchronous operations
+• The error-first callback convention is standard in Node.js
+• Callbacks are the only way to return results from async operations
+• Nested callbacks connect modules and applications
+• Always check for errors first in callbacks
+• Always clean up resources when errors occur
+• There is one callback function at each level
+
+You now have a comprehensive understanding of creating callback functions in 
+Node.js, particularly for HTTP requests and custom modules. These concepts 
+are fundamental to building Node.js applications.
+
+Good luck with your Node.js callback journey!
+
+================================================================================
+END OF PART 2
+================================================================================
+
+Original Content Maintained
+----------------------------
+All original definitions, explanations, and code examples from the source 
+material have been preserved and expanded upon in this comprehensive guide.
+
