@@ -1,0 +1,2328 @@
+================================================================================
+AUTHENTICATION AND AUTHORIZATION IN NODE.JS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+CONTINUATION FROM PART 1
+------------------------
+This is Part 2 of the comprehensive guide on authentication and authorization in 
+Node.js. Part 1 covered:
+• Introduction to authentication and authorization
+• Session-based authentication
+• Express implementation examples
+
+Part 2 covers:
+• Token-based authentication and authorization
+• JSON Web Tokens (JWTs)
+• Passwordless authentication
+• Public and private key encryption
+• Complete code examples
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 3: TOKEN-BASED AUTHENTICATION AND AUTHORIZATION
+  SECTION 3.1: WHAT IS TOKEN-BASED SECURITY?
+  SECTION 3.2: TOKEN-BASED AUTHENTICATION
+  SECTION 3.3: TOKEN-BASED AUTHORIZATION
+  SECTION 3.4: JSON WEB TOKENS (JWTs)
+  SECTION 3.5: JWT STRUCTURE AND COMPONENTS
+  SECTION 3.6: IMPLEMENTING TOKEN-BASED AUTHENTICATION IN EXPRESS
+
+PART 4: PASSWORDLESS AUTHENTICATION
+  SECTION 4.1: WHAT IS PASSWORDLESS AUTHENTICATION?
+  SECTION 4.2: METHODS OF PASSWORDLESS AUTHENTICATION
+  SECTION 4.3: PUBLIC AND PRIVATE KEY ENCRYPTION
+  SECTION 4.4: HOW PASSWORDLESS AUTHENTICATION WORKS
+  SECTION 4.5: IMPLEMENTING PASSWORDLESS AUTHENTICATION IN EXPRESS
+
+PART 5: SUMMARY AND COMPARISON
+  SECTION 5.1: COMPARING AUTHENTICATION METHODS
+  SECTION 5.2: WHEN TO USE EACH METHOD
+  SECTION 5.3: KEY TAKEAWAYS
+  SECTION 5.4: SECURITY BEST PRACTICES
+
+================================================================================
+PART 3: TOKEN-BASED AUTHENTICATION AND AUTHORIZATION
+================================================================================
+
+SECTION 3.1: WHAT IS TOKEN-BASED SECURITY?
+-------------------------------------------
+
+DEFINITION
+----------
+Token-based security includes two key concepts: authentication and authorization. 
+Authentication is when you provide credentials and receive a token that validates 
+your user credentials. Authorization is when you use the token to access resources, 
+ensuring the resource server knows which resources you're permitted to access.
+
+DETAILED EXPLANATION
+--------------------
+Token-based authentication is a stateless authentication method where the server 
+doesn't store session information. Instead, the server generates a token (a 
+string of characters) that contains encoded information about the user. This token 
+is sent to the client, which stores it and sends it with each subsequent request.
+
+HOW IT DIFFERS FROM SESSION-BASED
+----------------------------------
+• SESSION-BASED: Server stores session data, client has session ID
+• TOKEN-BASED: Server doesn't store state, client has token with embedded data
+• SESSION-BASED: Stateful (server remembers sessions)
+• TOKEN-BASED: Stateless (server doesn't remember, token contains everything)
+
+KEY CHARACTERISTICS
+-------------------
+1. STATELESS
+   Server doesn't store session data - all information is in the token
+
+2. PORTABLE
+   Token can be used across different servers and domains
+
+3. SELF-CONTAINED
+   Token contains all necessary information (user ID, permissions, etc.)
+
+4. VERIFIABLE
+   Server can verify token without database lookup
+
+5. EXPIRABLE
+   Tokens have expiration times for security
+
+REAL-WORLD ANALOGY
+------------------
+Think of token-based authentication like a concert wristband:
+• You show your ticket (credentials) at the entrance
+• Security gives you a special wristband (token) with your seat info encoded
+• The wristband itself contains all your information (no need to check a list)
+• You show your wristband to access different areas
+• Security can verify the wristband without checking a database
+• The wristband expires at the end of the concert
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: TOKEN-BASED AUTHENTICATION
+---------------------------------------
+
+DEFINITION
+----------
+Authentication is when you provide credentials and receive a token that validates 
+your user credentials.
+
+DETAILED EXPLANATION
+--------------------
+Token-based authentication is the process of verifying a user's identity and 
+issuing a token that represents their authenticated state. This token is then 
+used for subsequent requests instead of sending credentials each time.
+
+HOW TOKEN-BASED AUTHENTICATION WORKS
+-------------------------------------
+STEP 1: USER PROVIDES CREDENTIALS
+----------------------------------
+The user sends their username and password to the authentication server.
+
+  User sends:
+  • Username: "john_doe"
+  • Password: "mySecurePassword123"
+
+STEP 2: SERVER VALIDATES CREDENTIALS
+-------------------------------------
+The authentication server validates the credentials against a database.
+
+  Server checks:
+  • Does this username exist?
+  • Is the password correct?
+  • Is the account active?
+
+STEP 3: SERVER GENERATES TOKEN
+------------------------------
+If credentials are valid, the server generates a token containing user information.
+
+  Server creates:
+  • Token with user ID, username, permissions
+  • Token is signed with a secret key
+  • Token has an expiration time
+
+STEP 4: TOKEN IS SENT TO CLIENT
+--------------------------------
+The server sends the token back to the client.
+
+  Response includes:
+  • ID token (authentication token)
+  • Token type (usually "Bearer")
+  • Expiration time
+
+STEP 5: CLIENT STORES TOKEN
+---------------------------
+The client stores the token, typically in:
+• Browser localStorage
+• Browser sessionStorage
+• Secure HTTP-only cookie
+• Mobile app secure storage
+
+STEP 6: CLIENT SENDS TOKEN WITH REQUESTS
+-----------------------------------------
+On subsequent requests, the client includes the token in the request headers.
+
+  Request includes:
+  • Authorization header: "Bearer <token>"
+  • Server uses token to identify user
+
+STEP 7: SERVER VALIDATES TOKEN
+------------------------------
+The server validates the token without checking a database.
+
+  Server checks:
+  • Is the token signature valid?
+  • Has the token expired?
+  • Is the token format correct?
+
+STEP 8: ACCESS IS GRANTED
+-------------------------
+If the token is valid, the server processes the request.
+
+  Server actions:
+  • Extracts user information from token
+  • Grants access to requested resource
+  • Processes the request
+
+VISUAL FLOW DIAGRAM
+-------------------
+  1. User Login (Credentials)
+     |
+     v
+  2. Server Validates Credentials
+     |
+     v
+  3. Server Generates Token
+     |
+     v
+  4. Token Sent to Client
+     |
+     v
+  5. Client Stores Token
+     |
+     v
+  6. Client Makes Request with Token
+     |
+     v
+  7. Server Validates Token
+     |
+     v
+  8. Access Granted/Denied
+
+TOKEN STORAGE OPTIONS
+---------------------
+1. LOCALSTORAGE
+   • Pros: Persists across browser sessions
+   • Cons: Vulnerable to XSS attacks
+   • Use for: Non-sensitive data
+
+2. SESSIONSTORAGE
+   • Pros: Cleared when tab closes
+   • Cons: Vulnerable to XSS attacks
+   • Use for: Temporary sessions
+
+3. HTTP-ONLY COOKIE
+   • Pros: Protected from JavaScript access
+   • Cons: Vulnerable to CSRF attacks
+   • Use for: Maximum security
+
+4. MEMORY (JavaScript variable)
+   • Pros: Most secure, cleared on refresh
+   • Cons: Lost on page refresh
+   • Use for: Single-page applications
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: TOKEN-BASED AUTHORIZATION
+---------------------------------------
+
+DEFINITION
+----------
+Authorization is when you use the token to access resources, ensuring the 
+resource server knows which resources you're permitted to access.
+
+DETAILED EXPLANATION
+--------------------
+Token-based authorization occurs when a web application requests access to a 
+protected resource, such as an API. During this process, the user authenticates 
+with the authorization server, which then generates an access token that is sent 
+back to the client and stored. With each HTTP request, the token is passed to the 
+resource API server, carrying embedded permission details, eliminating the need 
+to query the authorization server. Even if stolen, the token doesn't expose 
+credentials due to encryption.
+
+HOW TOKEN-BASED AUTHORIZATION WORKS
+------------------------------------
+STEP 1: AUTHENTICATED USER REQUESTS RESOURCE
+--------------------------------------------
+A user who has already authenticated requests access to a protected resource.
+
+  User has:
+  • Valid authentication token
+  • Wants to access: /api/user/profile
+
+STEP 2: CLIENT SENDS TOKEN WITH REQUEST
+---------------------------------------
+The client includes the token in the Authorization header.
+
+  Request includes:
+  • Authorization: "Bearer <access_token>"
+  • Resource URL: /api/user/profile
+
+STEP 3: RESOURCE SERVER VALIDATES TOKEN
+---------------------------------------
+The resource server validates the token and extracts permission information.
+
+  Server checks:
+  • Token signature is valid
+  • Token hasn't expired
+  • Token contains required permissions
+
+STEP 4: SERVER EXTRACTS PERMISSIONS FROM TOKEN
+----------------------------------------------
+The server reads the permissions embedded in the token.
+
+  Token contains:
+  • User ID
+  • User roles (admin, user, guest)
+  • Permissions (read, write, delete)
+  • Resource access rights
+
+STEP 5: SERVER CHECKS AUTHORIZATION
+------------------------------------
+The server verifies the user has permission for the requested resource.
+
+  Authorization check:
+  • Does user have access to this resource?
+  • Does user have required permissions?
+  • Is user's role sufficient?
+
+STEP 6: ACCESS IS GRANTED OR DENIED
+------------------------------------
+Based on the authorization check:
+
+  If authorized:
+  • Request is processed
+  • Resource is returned
+  • User gains access
+
+  If not authorized:
+  • Request is denied
+  • 403 Forbidden error is returned
+  • User is blocked from resource
+
+BENEFITS OF TOKEN-BASED AUTHORIZATION
+-------------------------------------
+1. NO DATABASE QUERY NEEDED
+   Permissions are in the token, so no need to query the authorization server 
+   for each request.
+
+2. FAST PERFORMANCE
+   Token validation is faster than database lookups.
+
+3. SCALABLE
+   Multiple servers can validate tokens without shared database.
+
+4. SECURE
+   Even if stolen, the token doesn't expose credentials due to encryption.
+
+5. DECENTRALIZED
+   Resource servers can authorize without contacting authorization server.
+
+REAL-WORLD ANALOGY
+------------------
+Think of token-based authorization like a hotel key card:
+• You check in and get a key card (token) with your room number encoded
+• The card contains your access level (which floors you can access)
+• You use the card to access your room (authorized resource)
+• The card reader checks the card's permissions (token validation)
+• You can't access other rooms (unauthorized resources)
+• The card expires when you check out (token expiration)
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: JSON WEB TOKENS (JWTs)
+------------------------------------
+
+DEFINITION
+----------
+Tokens, often in the form of JSON Web Tokens, JWT, consist of three parts. 
+Header contains the token type and the algorithm used. Payload includes user 
+attributes, known as claims, such as permissions and expiration times. Signature 
+ensures the token's integrity during transit.
+
+JWT, pronounced "jot" and written as JWT, is an internet standard for creating 
+signed JSON payload data.
+
+DETAILED EXPLANATION
+--------------------
+JSON Web Token (JWT) is a compact, URL-safe means of representing claims to be 
+transferred between two parties. It's an open standard (RFC 7519) that defines 
+a way to securely transmit information as a JSON object.
+
+WHAT IS A JWT?
+--------------
+A JWT is a string that contains three parts separated by dots (.):
+
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+Breaking it down:
+• Part 1 (Header): eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+• Part 2 (Payload): eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ
+• Part 3 (Signature): SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+KEY CHARACTERISTICS
+------------------
+1. COMPACT
+   JWTs are small and can be sent via URL, POST parameter, or HTTP header.
+
+2. SELF-CONTAINED
+   All necessary information is in the token - no database lookup needed.
+
+3. VERIFIABLE
+   Signature ensures token hasn't been tampered with.
+
+4. STANDARDIZED
+   Based on open standards (RFC 7519).
+
+5. WIDELY SUPPORTED
+   Libraries available for most programming languages.
+
+WHY USE JWTs?
+-------------
+1. STATELESS AUTHENTICATION
+   Server doesn't need to store session data.
+
+2. SCALABILITY
+   Works across multiple servers without shared session store.
+
+3. MOBILE-FRIENDLY
+   Works well with mobile applications and APIs.
+
+4. CROSS-DOMAIN
+   Can be used across different domains and services.
+
+5. STANDARD FORMAT
+   Widely recognized and supported format.
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: JWT STRUCTURE AND COMPONENTS
+-----------------------------------------
+
+JWT STRUCTURE OVERVIEW
+----------------------
+A JWT consists of three parts separated by dots (.):
+
+  header.payload.signature
+
+Each part is Base64Url encoded.
+
+PART 1: HEADER
+--------------
+The header contains the token type and the algorithm used.
+
+STRUCTURE:
+  {
+    "alg": "HS256",
+    "typ": "JWT"
+  }
+
+EXPLANATION:
+• alg (algorithm): Specifies the signing algorithm (HS256, RS256, etc.)
+• typ (type): Specifies that this is a JWT token
+
+COMMON ALGORITHMS:
+• HS256: HMAC with SHA-256 (symmetric - same secret for signing and verifying)
+• RS256: RSA with SHA-256 (asymmetric - private key signs, public key verifies)
+• ES256: ECDSA with P-256 and SHA-256
+
+ENCODED EXAMPLE:
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+
+PART 2: PAYLOAD
+---------------
+The payload includes user attributes, known as claims, such as permissions and 
+expiration times.
+
+STRUCTURE:
+  {
+    "sub": "1234567890",
+    "name": "John Doe",
+    "iat": 1516239022,
+    "exp": 1516242622
+  }
+
+TYPES OF CLAIMS:
+1. REGISTERED CLAIMS (Standard claims defined in JWT spec)
+   • iss (issuer): Who issued the token
+   • sub (subject): Who the token is about (usually user ID)
+   • aud (audience): Who the token is intended for
+   • exp (expiration): When the token expires (Unix timestamp)
+   • nbf (not before): Token not valid before this time
+   • iat (issued at): When the token was issued
+   • jti (JWT ID): Unique identifier for the token
+
+2. PUBLIC CLAIMS (Custom claims you define)
+   • username: User's username
+   • role: User's role (admin, user, etc.)
+   • permissions: Array of permissions
+   • email: User's email address
+
+3. PRIVATE CLAIMS (Custom claims agreed upon between parties)
+   • company_id: Company identifier
+   • department: User's department
+
+ENCODED EXAMPLE:
+  eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ
+
+PART 3: SIGNATURE
+-----------------
+The signature ensures the token's integrity during transit.
+
+HOW IT'S CREATED:
+  HMACSHA256(
+    base64UrlEncode(header) + "." + base64UrlEncode(payload),
+    secret
+  )
+
+EXPLANATION:
+• Takes the encoded header and payload
+• Signs them with a secret key using the algorithm specified in header
+• Ensures token hasn't been tampered with
+• Verifies the token came from the expected issuer
+
+ENCODED EXAMPLE:
+  SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+COMPLETE JWT EXAMPLE
+--------------------
+Decoded JWT:
+
+HEADER:
+  {
+    "alg": "HS256",
+    "typ": "JWT"
+  }
+
+PAYLOAD:
+  {
+    "sub": "1234567890",
+    "name": "John Doe",
+    "admin": true,
+    "iat": 1516239022,
+    "exp": 1516242622
+  }
+
+SIGNATURE:
+  (Created using secret key "your-secret-key")
+
+ENCODED JWT:
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMiwiZXhwIjoxNTE2MjQyNjIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+HOW JWT VERIFICATION WORKS
+--------------------------
+1. SERVER RECEIVES TOKEN
+   Client sends: Authorization: Bearer <token>
+
+2. SERVER SPLITS TOKEN
+   Separates header, payload, and signature
+
+3. SERVER RECREATES SIGNATURE
+   Uses secret key to recreate signature from header + payload
+
+4. SERVER COMPARES SIGNATURES
+   Compares recreated signature with received signature
+
+5. SERVER CHECKS EXPIRATION
+   Verifies exp claim hasn't passed
+
+6. SERVER EXTRACTS DATA
+   If valid, extracts user data from payload
+
+7. SERVER GRANTS ACCESS
+   Uses extracted data for authorization
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: IMPLEMENTING TOKEN-BASED AUTHENTICATION IN EXPRESS
+---------------------------------------------------------------
+
+OVERVIEW
+--------
+Next, you'll see a token-based authentication example in an Express application. 
+In this example, the code performs the following functions:
+• First, the code configures an Express application with middleware, like BodyParser, 
+  to parse JSON requests
+• Then, the code handles POST requests for user login
+• If credentials are valid, it generates a JWT or token containing the username
+• Checks for a JWT in the authorization header of incoming requests
+• If present, the code verifies the token and extracts the username to grant access
+
+COMPLETE CODE EXAMPLE
+---------------------
+  const express = require('express');
+  const jwt = require('jsonwebtoken');
+  const app = express();
+
+  // Secret key for signing tokens (should be in environment variable)
+  const SECRET_KEY = 'your-secret-key-change-this-in-production';
+
+  // Middleware to parse JSON requests
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  // Mock user database
+  const users = [
+    { id: 1, username: 'john', password: 'password123' },
+    { id: 2, username: 'jane', password: 'password456' }
+  ];
+
+  // Login route - generates JWT token
+  app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Find user in database
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
+      // Generate JWT token
+      const token = jwt.sign(
+        { 
+          id: user.id, 
+          username: user.username 
+        },
+        SECRET_KEY,
+        { expiresIn: '24h' } // Token expires in 24 hours
+      );
+
+      res.json({ 
+        message: 'Login successful',
+        token: token 
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' });
+    }
+  });
+
+  // Middleware to verify JWT token
+  const verifyToken = (req, res, next) => {
+    // Get token from authorization header
+    const authHeader = req.headers['authorization'];
+    
+    if (authHeader) {
+      // Extract token from "Bearer <token>"
+      const token = authHeader.split(' ')[1];
+      
+      if (token) {
+        // Verify token
+        jwt.verify(token, SECRET_KEY, (err, decoded) => {
+          if (err) {
+            return res.status(403).json({ message: 'Invalid or expired token' });
+          }
+          
+          // Add decoded user info to request object
+          req.user = decoded;
+          next(); // Continue to next middleware/route
+        });
+      } else {
+        res.status(401).json({ message: 'Token not provided' });
+      }
+    } else {
+      res.status(401).json({ message: 'Authorization header missing' });
+    }
+  };
+
+  // Protected route - requires valid JWT token
+  app.get('/dashboard', verifyToken, (req, res) => {
+    // User is authenticated (verified by verifyToken middleware)
+    res.json({ 
+      message: `Welcome, ${req.user.username}!`,
+      user: req.user
+    });
+  });
+
+  // Another protected route
+  app.get('/profile', verifyToken, (req, res) => {
+    res.json({ 
+      message: 'User profile',
+      userId: req.user.id,
+      username: req.user.username
+    });
+  });
+
+  // Start server
+  const PORT = 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const express = require('express');
+        • Imports the Express framework
+        • Express provides web server functionality
+
+Line 2: const jwt = require('jsonwebtoken');
+        • Imports the jsonwebtoken library
+        • This library creates and verifies JWT tokens
+        • Install with: npm install jsonwebtoken
+
+Line 3: const app = express();
+        • Creates Express application instance
+        • This is our web server
+
+Line 4: (empty line)
+
+Line 5: // Secret key for signing tokens (should be in environment variable)
+        • Comment explaining the secret key
+        • In production, use process.env.SECRET_KEY
+
+Line 6: const SECRET_KEY = 'your-secret-key-change-this-in-production';
+        • Defines secret key for signing/verifying tokens
+        • This must be kept secret and never shared
+        • Used to create and verify token signatures
+        • Should be a long, random string in production
+
+Line 7: (empty line)
+
+Line 8: // Middleware to parse JSON requests
+        • Comment explaining middleware setup
+
+Line 9: app.use(express.json());
+        • express.json() - Middleware to parse JSON request bodies
+        • Allows Express to understand JSON data
+        • Makes req.body available with parsed JSON
+
+Line 10: app.use(express.urlencoded({ extended: true }));
+         • express.urlencoded() - Middleware to parse URL-encoded data
+         • Handles form data from HTML forms
+         • extended: true - Uses qs library for parsing
+
+Line 11: (empty line)
+
+Line 12: // Mock user database
+         • Comment explaining this is example data
+
+Line 13: const users = [
+         • Creates array of user objects
+         • In production, this would be a database query
+
+Line 14: { id: 1, username: 'john', password: 'password123' },
+         • First user object
+         • id - Unique identifier
+         • username - Login username
+         • password - User password (should be hashed in production!)
+
+Line 15: { id: 2, username: 'jane', password: 'password456' }
+         • Second user object
+         • Another example user
+
+Line 16: ];
+         • Closes users array
+
+Line 17: (empty line)
+
+Line 18: // Login route - generates JWT token
+         • Comment explaining login route
+
+Line 19: app.post('/login', (req, res) => {
+         • Defines POST route for login
+         • '/login' - URL path
+         • (req, res) => { - Request handler function
+
+Line 20: const { username, password } = req.body;
+         • Destructures username and password from request body
+         • Extracts credentials from login request
+
+Line 21: (empty line)
+
+Line 22: // Find user in database
+         • Comment explaining user lookup
+
+Line 23: const user = users.find(u => u.username === username && u.password === password);
+         • Searches users array for matching credentials
+         • Returns user object if found, undefined if not found
+         • In production, would query database
+
+Line 24: (empty line)
+
+Line 25: if (user) {
+         • Checks if user was found (credentials valid)
+
+Line 26: // Generate JWT token
+         • Comment explaining token generation
+
+Line 27: const token = jwt.sign(
+         • jwt.sign() - Creates a JWT token
+         • Takes payload, secret key, and options
+
+Line 28: { 
+         • Starts payload object
+         • This data will be encoded in the token
+
+Line 29: id: user.id, 
+         • User ID included in token
+         • Can be used to identify user later
+
+Line 30: username: user.username 
+         • Username included in token
+         • Can be displayed or used for authorization
+
+Line 31: },
+         • Closes payload object
+
+Line 32: SECRET_KEY,
+         • Secret key used to sign the token
+         • Must be same key used for verification
+
+Line 33: { expiresIn: '24h' } // Token expires in 24 hours
+         • Options object
+         • expiresIn: '24h' - Token valid for 24 hours
+         • After 24 hours, token becomes invalid
+         • Can use: '1h', '7d', '30 days', or seconds
+
+Line 34: );
+         • Closes jwt.sign() function call
+         • Token is now created and signed
+
+Line 35: (empty line)
+
+Line 36: res.json({ 
+         • Sends JSON response
+         • Includes success message and token
+
+Line 37: message: 'Login successful',
+         • Success message for client
+
+Line 38: token: token 
+         • The JWT token
+         • Client should store this and send with requests
+
+Line 39: });
+         • Closes response object
+
+Line 40: } else {
+         • If credentials are invalid
+
+Line 41: res.status(401).json({ message: 'Invalid credentials' });
+         • Sends 401 Unauthorized error
+         • Indicates authentication failed
+
+Line 42: }
+         • Closes if-else block
+
+Line 43: });
+         • Closes login route handler
+
+Line 44: (empty line)
+
+Line 45: // Middleware to verify JWT token
+         • Comment explaining verification middleware
+
+Line 46: const verifyToken = (req, res, next) => {
+         • Creates middleware function
+         • verifyToken - Function name
+         • (req, res, next) - Express middleware signature
+         • next - Function to call next middleware/route
+
+Line 47: // Get token from authorization header
+         • Comment explaining token extraction
+
+Line 48: const authHeader = req.headers['authorization'];
+         • Gets Authorization header from request
+         • req.headers - Object containing all request headers
+         • ['authorization'] - Gets Authorization header (case-insensitive)
+         • Format: "Bearer <token>"
+
+Line 49: (empty line)
+
+Line 50: if (authHeader) {
+         • Checks if Authorization header exists
+
+Line 51: // Extract token from "Bearer <token>"
+         • Comment explaining token extraction
+
+Line 52: const token = authHeader.split(' ')[1];
+         • Splits header by space
+         • "Bearer <token>" becomes ["Bearer", "<token>"]
+         • [1] - Gets second element (the token)
+         • Removes "Bearer " prefix
+
+Line 53: (empty line)
+
+Line 54: if (token) {
+         • Checks if token exists
+
+Line 55: // Verify token
+         • Comment explaining token verification
+
+Line 56: jwt.verify(token, SECRET_KEY, (err, decoded) => {
+         • jwt.verify() - Verifies token signature and expiration
+         • token - The token to verify
+         • SECRET_KEY - Secret key used to verify signature
+         • (err, decoded) => { - Callback function
+         • err - Error if verification fails
+         • decoded - Decoded payload if verification succeeds
+
+Line 57: if (err) {
+         • Checks if verification failed
+
+Line 58: return res.status(403).json({ message: 'Invalid or expired token' });
+         • Sends 403 Forbidden error
+         • Token is invalid or expired
+         • return - Exits function early
+
+Line 59: }
+         • Closes error check
+
+Line 60: (empty line)
+
+Line 61: // Add decoded user info to request object
+         • Comment explaining next step
+
+Line 62: req.user = decoded;
+         • Adds decoded payload to request object
+         • decoded contains: { id, username, iat, exp }
+         • Available in route handlers via req.user
+
+Line 63: next(); // Continue to next middleware/route
+         • Calls next middleware/route handler
+         • Allows request to continue processing
+         • Without this, request would hang
+
+Line 64: });
+         • Closes jwt.verify callback
+
+Line 65: } else {
+         • If token doesn't exist
+
+Line 66: res.status(401).json({ message: 'Token not provided' });
+         • Sends 401 Unauthorized error
+         • Token missing from header
+
+Line 67: }
+         • Closes token check
+
+Line 68: } else {
+         • If Authorization header doesn't exist
+
+Line 69: res.status(401).json({ message: 'Authorization header missing' });
+         • Sends 401 Unauthorized error
+         • No Authorization header in request
+
+Line 70: }
+         • Closes authHeader check
+
+Line 71: };
+         • Closes verifyToken middleware function
+
+Line 72: (empty line)
+
+Line 73: // Protected route - requires valid JWT token
+         • Comment explaining protected route
+
+Line 74: app.get('/dashboard', verifyToken, (req, res) => {
+         • Defines GET route for dashboard
+         • '/dashboard' - URL path
+         • verifyToken - Middleware that runs before route handler
+         • If verifyToken fails, route handler never runs
+         • (req, res) => { - Route handler function
+
+Line 75: // User is authenticated (verified by verifyToken middleware)
+         • Comment explaining user is authenticated
+
+Line 76: res.json({ 
+         • Sends JSON response
+
+Line 77: message: `Welcome, ${req.user.username}!`,
+         • Welcome message with username
+         • req.user.username - From decoded token payload
+         • Template literal for string interpolation
+
+Line 78: user: req.user
+         • Includes user object in response
+         • Contains id, username, and token claims
+
+Line 79: });
+         • Closes response object
+
+Line 80: });
+         • Closes dashboard route handler
+
+Line 81: (empty line)
+
+Line 81: // Another protected route
+         • Comment explaining another example
+
+Line 82: app.get('/profile', verifyToken, (req, res) => {
+         • Defines GET route for profile
+         • '/profile' - URL path
+         • verifyToken - Same middleware, protects this route too
+         • Reusable middleware for multiple routes
+
+Line 83: res.json({ 
+         • Sends JSON response
+
+Line 84: message: 'User profile',
+         • Response message
+
+Line 85: userId: req.user.id,
+         • User ID from token
+         • Can be used to fetch user data from database
+
+Line 86: username: req.user.username
+         • Username from token
+
+Line 87: });
+         • Closes response object
+
+Line 88: });
+         • Closes profile route handler
+
+Line 89: (empty line)
+
+Line 90: // Start server
+         • Comment explaining server startup
+
+Line 91: const PORT = 3000;
+         • Defines port number
+
+Line 92: app.listen(PORT, () => {
+         • Starts server listening on port
+         • () => { - Callback when server starts
+
+Line 93: console.log(`Server running on http://localhost:${PORT}`);
+         • Logs server URL to console
+         • Helpful for developers
+
+Line 94: });
+         • Closes listen callback
+
+Line 95: });
+         • Closes entire file
+
+WHAT THIS CODE DOES - SUMMARY
+------------------------------
+1. CONFIGURES EXPRESS APPLICATION
+   • Sets up Express server
+   • Configures JSON parsing middleware
+   • Prepares for handling requests
+
+2. HANDLES LOGIN REQUESTS
+   • Receives username and password
+   • Validates credentials
+   • Generates JWT token if valid
+   • Returns token to client
+
+3. VERIFIES TOKENS
+   • Middleware extracts token from Authorization header
+   • Verifies token signature and expiration
+   • Extracts user data from token
+   • Adds user data to request object
+
+4. PROTECTS ROUTES
+   • Uses verifyToken middleware on protected routes
+   • Only allows access with valid token
+   • Provides user data to route handlers
+
+HOW TO USE THIS CODE
+--------------------
+1. INSTALL DEPENDENCIES
+   npm install express jsonwebtoken
+
+2. SAVE THE CODE
+   Save as server.js
+
+3. RUN THE SERVER
+   node server.js
+
+4. TEST WITH HTTP REQUESTS
+   
+   Login (get token):
+   POST http://localhost:3000/login
+   Body: { "username": "john", "password": "password123" }
+   Response: { "message": "Login successful", "token": "..." }
+   
+   Access protected route:
+   GET http://localhost:3000/dashboard
+   Headers: { "Authorization": "Bearer <token>" }
+   Response: { "message": "Welcome, john!", "user": {...} }
+
+SECURITY NOTES
+--------------
+⚠️ IMPORTANT SECURITY CONSIDERATIONS:
+
+1. SECRET KEY
+   • Use environment variable: process.env.SECRET_KEY
+   • Use long, random string (at least 32 characters)
+   • Never commit secret keys to version control
+
+2. TOKEN EXPIRATION
+   • Always set expiration times
+   • Shorter expiration = more secure
+   • Consider refresh tokens for long sessions
+
+3. HTTPS IN PRODUCTION
+   • Always use HTTPS to encrypt tokens in transit
+   • Prevents token interception
+
+4. TOKEN STORAGE
+   • Don't store tokens in localStorage (XSS vulnerability)
+   • Consider HTTP-only cookies
+   • Or use secure storage mechanisms
+
+5. PASSWORD SECURITY
+   • Never store plain text passwords!
+   • Use bcrypt to hash passwords
+   • Compare hashed passwords, not plain text
+
+[END SECTION 3.6]
+[END PART 3]
+================================================================================
+
+PART 4: PASSWORDLESS AUTHENTICATION
+================================================================================
+
+SECTION 4.1: WHAT IS PASSWORDLESS AUTHENTICATION?
+------------------------------------------------
+
+DEFINITION
+----------
+Passwordless authentication eliminates the need for traditional passwords, using 
+methods like biometrics, magic links sent to your email, or one-time passcodes 
+sent to your mobile device. This approach is often used in password recovery 
+systems.
+
+DETAILED EXPLANATION
+--------------------
+Passwordless authentication is a method of verifying a user's identity without 
+requiring them to enter a password. Instead, it uses alternative methods to prove 
+the user's identity, such as:
+• Something the user has (like a mobile device)
+• Something the user is (like biometrics)
+• Something sent to the user (like a magic link or code)
+
+WHY PASSWORDLESS AUTHENTICATION?
+---------------------------------
+1. USER CONVENIENCE
+   • No need to remember passwords
+   • Faster login process
+   • Better user experience
+
+2. SECURITY BENEFITS
+   • No passwords to steal
+   • No password reuse across sites
+   • No weak passwords
+
+3. REDUCED SUPPORT COSTS
+   • No password reset requests
+   • Less account recovery needed
+
+4. MODERN APPROACH
+   • Aligns with mobile-first world
+   • Uses device capabilities
+   • Leverages biometric technology
+
+REAL-WORLD ANALOGY
+------------------
+Think of passwordless authentication like a keyless car entry:
+• Instead of using a key (password), you use your phone (device)
+• Your phone proves you're the owner (authentication)
+• No need to remember or carry a key (password)
+• More convenient and secure
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: METHODS OF PASSWORDLESS AUTHENTICATION
+---------------------------------------------------
+
+METHOD 1: BIOMETRICS
+--------------------
+Using physical characteristics to verify identity.
+
+EXAMPLES:
+• Fingerprint scanning
+• Face recognition
+• Voice recognition
+• Iris scanning
+
+HOW IT WORKS:
+• User registers biometric data during setup
+• Device captures biometric sample
+• System compares sample to stored data
+• Access granted if match
+
+METHOD 2: MAGIC LINKS
+---------------------
+Sending a special link to user's email that grants access.
+
+HOW IT WORKS:
+• User enters email address
+• System sends email with special link
+• Link contains temporary token
+• User clicks link to authenticate
+• Link expires after short time
+
+EXAMPLE FLOW:
+1. User enters email: "user@example.com"
+2. System sends email with link: "https://app.com/auth/verify?token=abc123"
+3. User clicks link
+4. System verifies token
+5. User is authenticated
+
+METHOD 3: ONE-TIME PASSCODES (OTP)
+-----------------------------------
+Sending a code to user's mobile device.
+
+HOW IT WORKS:
+• User requests login
+• System generates 6-digit code
+• Code sent via SMS or authenticator app
+• User enters code to authenticate
+• Code expires after short time
+
+EXAMPLE FLOW:
+1. User enters phone number
+2. System generates code: "123456"
+3. Code sent via SMS
+4. User enters code in app
+5. System verifies code
+6. User is authenticated
+
+METHOD 4: PUBLIC KEY CRYPTOGRAPHY
+---------------------------------
+Using cryptographic key pairs instead of passwords.
+
+HOW IT WORKS:
+• User's device generates key pair (public + private)
+• Public key stored on server
+• Private key stays on device
+• Device proves identity using private key
+• Server verifies using public key
+
+This is the method we'll focus on in detail.
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: PUBLIC AND PRIVATE KEY ENCRYPTION
+-----------------------------------------------
+
+DEFINITION
+----------
+Passwordless authentication relies on public key and private key encryption. 
+When you register, your device generates a private-public key pair linked to 
+your identity. The public key is used to encrypt data and is accessible to 
+anyone, while the private key, securely stored on your device, decrypts data.
+
+DETAILED EXPLANATION
+--------------------
+Public key cryptography (also called asymmetric cryptography) uses a pair of 
+keys: a public key and a private key. These keys are mathematically related but 
+cannot be derived from each other.
+
+THE KEY PAIR
+------------
+1. PUBLIC KEY
+   • Used to encrypt data
+   • Can be shared publicly
+   • Accessible to anyone
+   • Cannot decrypt data (only encrypts)
+
+2. PRIVATE KEY
+   • Used to decrypt data
+   • Must be kept secret
+   • Stored securely on device
+   • Never shared with anyone
+
+KEY CHARACTERISTICS
+-------------------
+1. MATHEMATICALLY RELATED
+   • Keys are generated together
+   • Public key derived from private key
+   • But private key cannot be derived from public key
+
+2. ONE-WAY FUNCTION
+   • Easy to encrypt with public key
+   • Easy to decrypt with private key
+   • Impossible to decrypt without private key
+
+3. DIGITAL SIGNATURES
+   • Private key can sign data
+   • Public key can verify signature
+   • Proves data came from key owner
+
+HOW IT WORKS IN AUTHENTICATION
+------------------------------
+STEP 1: REGISTRATION
+--------------------
+When you register, your device generates a private-public key pair linked to 
+your identity.
+
+  Device actions:
+  • Generates private key (kept secret)
+  • Derives public key from private key
+  • Links key pair to user identity
+  • Sends public key to server
+  • Keeps private key on device
+
+STEP 2: PUBLIC KEY STORAGE
+--------------------------
+The public key is used to encrypt data and is accessible to anyone.
+
+  Server stores:
+  • User's public key
+  • User ID
+  • Registration timestamp
+
+STEP 3: PRIVATE KEY STORAGE
+---------------------------
+The private key, securely stored on your device, decrypts data.
+
+  Device stores:
+  • Private key (encrypted)
+  • Never sent to server
+  • Protected by device security
+
+STEP 4: AUTHENTICATION CHALLENGE
+---------------------------------
+During sign-in, the app creates a login challenge, encrypts it with the public 
+key, and decrypts it with your private key to authorize access.
+
+  Authentication flow:
+  1. Server creates challenge (random data)
+  2. Server encrypts challenge with public key
+  3. Server sends encrypted challenge to device
+  4. Device decrypts challenge with private key
+  5. Device sends decrypted challenge back
+  6. Server verifies decrypted challenge
+  7. Access granted if match
+
+REAL-WORLD ANALOGY
+------------------
+Think of public/private keys like a mailbox:
+• PUBLIC KEY = Mailbox slot (anyone can put mail in)
+• PRIVATE KEY = Mailbox key (only you can open)
+• Anyone can send you mail (encrypt with public key)
+• Only you can read mail (decrypt with private key)
+• You can prove you own mailbox (sign with private key)
+
+SECURITY BENEFITS
+----------------
+1. NO PASSWORDS
+   • No passwords to steal or forget
+   • No password reuse issues
+
+2. STRONG SECURITY
+   • Cryptographically secure
+   • Very difficult to break
+
+3. DEVICE-BOUND
+   • Private key stays on device
+   • Cannot be extracted easily
+
+4. PROVES OWNERSHIP
+   • Only device with private key can authenticate
+   • Proves user owns the device
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: HOW PASSWORDLESS AUTHENTICATION WORKS
+--------------------------------------------------
+
+DETAILED FLOW
+-------------
+Here's how passwordless authentication works step by step:
+
+STEP 1: USER REGISTRATION
+-------------------------
+When a user registers, their device generates a private-public key pair.
+
+  Registration process:
+  • User provides email or phone number
+  • Device generates cryptographic key pair
+  • Public key sent to server
+  • Private key stored securely on device
+  • Server links public key to user account
+
+STEP 2: LOGIN REQUEST
+---------------------
+User initiates login by providing their identifier (email/phone).
+
+  User actions:
+  • Opens app or website
+  • Enters email: "user@example.com"
+  • Clicks "Login" or "Sign In"
+
+STEP 3: SERVER CREATES CHALLENGE
+---------------------------------
+The server creates a login challenge (random data).
+
+  Server actions:
+  • Generates random challenge: "a1b2c3d4e5f6..."
+  • Retrieves user's public key from database
+  • Prepares challenge for encryption
+
+STEP 4: SERVER ENCRYPTS CHALLENGE
+----------------------------------
+The server encrypts the challenge with the public key.
+
+  Server actions:
+  • Uses user's public key
+  • Encrypts challenge data
+  • Creates encrypted challenge
+
+STEP 5: CHALLENGE SENT TO DEVICE
+---------------------------------
+The encrypted challenge is sent to the user's device.
+
+  Transmission:
+  • Encrypted challenge sent to device
+  • Can be sent via push notification
+  • Or displayed as QR code
+  • Or sent via email/SMS
+
+STEP 6: DEVICE DECRYPTS CHALLENGE
+----------------------------------
+The device decrypts the challenge with the private key.
+
+  Device actions:
+  • Receives encrypted challenge
+  • Uses stored private key
+  • Decrypts challenge
+  • Gets original challenge data
+
+STEP 7: DEVICE SENDS RESPONSE
+-----------------------------
+The device sends the decrypted challenge back to the server.
+
+  Device actions:
+  • Sends decrypted challenge
+  • Proves it has the private key
+  • Proves device ownership
+
+STEP 8: SERVER VERIFIES RESPONSE
+---------------------------------
+The server verifies the decrypted challenge matches the original.
+
+  Server actions:
+  • Compares received challenge to original
+  • If match: User is authenticated
+  • If no match: Authentication fails
+
+STEP 9: ACCESS GRANTED
+----------------------
+If verification succeeds, the server grants access.
+
+  Server actions:
+  • Creates session or token
+  • Grants access to resources
+  • User is logged in
+
+VISUAL FLOW DIAGRAM
+-------------------
+  1. User Registration
+     |
+     v
+  2. Device Generates Key Pair
+     |
+     v
+  3. Public Key Sent to Server
+     |
+     v
+  4. User Requests Login
+     |
+     v
+  5. Server Creates Challenge
+     |
+     v
+  6. Server Encrypts with Public Key
+     |
+     v
+  7. Challenge Sent to Device
+     |
+     v
+  8. Device Decrypts with Private Key
+     |
+     v
+  9. Device Sends Response
+     |
+     v
+  10. Server Verifies Response
+     |
+     v
+  11. Access Granted/Denied
+
+[END SECTION 4.4]
+================================================================================
+
+SECTION 4.5: IMPLEMENTING PASSWORDLESS AUTHENTICATION IN EXPRESS
+-------------------------------------------------------------
+
+OVERVIEW
+--------
+Next, you'll see how passwordless authentication is implemented in an Express 
+application. In this example, the code performs the following functions:
+• The code sets up an Express application with middleware to parse JSON requests 
+  or body parser
+• Then, it handles POST requests, where users provide their email to request access
+• And then the code generates a six-digit verification code and stores it in an 
+  in-memory object
+• Next, the code handles POST requests to verify the received code against the 
+  stored code
+• If matched, the code grants access to the user. Otherwise, it denies access
+
+COMPLETE CODE EXAMPLE
+---------------------
+  const express = require('express');
+  const crypto = require('crypto');
+  const app = express();
+
+  // Middleware to parse JSON requests
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+
+  // In-memory storage for verification codes (use database in production)
+  const verificationCodes = {};
+
+  // Generate 6-digit verification code
+  function generateVerificationCode() {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  // Route to request access (send verification code)
+  app.post('/request-access', (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    // Generate six-digit verification code
+    const code = generateVerificationCode();
+
+    // Store code in memory (in production, store in database with expiration)
+    verificationCodes[email] = {
+      code: code,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + (10 * 60 * 1000) // 10 minutes
+    };
+
+    // In production, send code via email or SMS
+    console.log(`Verification code for ${email}: ${code}`);
+
+    res.json({ 
+      message: 'Verification code sent to your email',
+      // In production, don't send code in response!
+      // This is just for demonstration
+    });
+  });
+
+  // Route to verify code and grant access
+  app.post('/verify-code', (req, res) => {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({ message: 'Email and code are required' });
+    }
+
+    // Get stored verification code
+    const stored = verificationCodes[email];
+
+    if (!stored) {
+      return res.status(404).json({ message: 'No verification code found for this email' });
+    }
+
+    // Check if code has expired
+    if (Date.now() > stored.expiresAt) {
+      delete verificationCodes[email];
+      return res.status(401).json({ message: 'Verification code has expired' });
+    }
+
+    // Verify the received code against the stored code
+    if (code === stored.code) {
+      // Code matched - grant access
+      delete verificationCodes[email]; // Remove used code
+
+      // In production, create session or JWT token here
+      const sessionToken = crypto.randomBytes(32).toString('hex');
+
+      res.json({ 
+        message: 'Access granted',
+        token: sessionToken // In production, use proper JWT
+      });
+    } else {
+      // Code doesn't match - deny access
+      res.status(401).json({ message: 'Invalid verification code' });
+    }
+  });
+
+  // Protected route (requires valid token)
+  app.get('/dashboard', (req, res) => {
+    // In production, verify token from Authorization header
+    // For this example, we'll skip token verification
+    res.json({ message: 'Welcome to the dashboard!' });
+  });
+
+  // Start server
+  const PORT = 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const express = require('express');
+        • Imports Express framework
+        • Provides web server functionality
+
+Line 2: const crypto = require('crypto');
+        • Imports Node.js crypto module
+        • Used for generating secure random tokens
+        • Built-in Node.js module (no installation needed)
+
+Line 3: const app = express();
+        • Creates Express application instance
+        • Our web server
+
+Line 4: (empty line)
+
+Line 5: // Middleware to parse JSON requests
+        • Comment explaining middleware setup
+
+Line 6: app.use(express.json());
+        • express.json() - Parses JSON request bodies
+        • Makes req.body available with parsed JSON
+
+Line 7: app.use(express.urlencoded({ extended: true }));
+        • express.urlencoded() - Parses URL-encoded data
+        • Handles form data
+
+Line 8: (empty line)
+
+Line 9: // In-memory storage for verification codes (use database in production)
+        • Comment explaining storage
+        • ⚠️ In production, use Redis or database!
+
+Line 10: const verificationCodes = {};
+         • Creates object to store verification codes
+         • Key: email address
+         • Value: { code, createdAt, expiresAt }
+         • In production, use database with TTL (time-to-live)
+
+Line 11: (empty line)
+
+Line 12: // Generate 6-digit verification code
+         • Comment explaining function purpose
+
+Line 13: function generateVerificationCode() {
+         • Defines function to generate code
+         • Returns 6-digit number as string
+
+Line 14: return Math.floor(100000 + Math.random() * 900000).toString();
+         • Math.random() - Generates random number 0-1
+         • * 900000 - Scales to 0-900000
+         • + 100000 - Shifts to 100000-999999
+         • Math.floor() - Rounds down to integer
+         • .toString() - Converts to string
+         • Result: "123456" to "999999"
+
+Line 15: }
+         • Closes function
+
+Line 16: (empty line)
+
+Line 17: // Route to request access (send verification code)
+         • Comment explaining route purpose
+
+Line 18: app.post('/request-access', (req, res) => {
+         • Defines POST route for access request
+         • '/request-access' - URL path
+         • (req, res) => { - Request handler
+
+Line 19: const { email } = req.body;
+         • Destructures email from request body
+         • Extracts email address from request
+
+Line 20: (empty line)
+
+Line 21: if (!email) {
+         • Checks if email is provided
+         • Validates required field
+
+Line 22: return res.status(400).json({ message: 'Email is required' });
+         • Sends 400 Bad Request error
+         • return - Exits function early
+         • Prevents further execution
+
+Line 23: }
+         • Closes validation check
+
+Line 24: (empty line)
+
+Line 25: // Generate six-digit verification code
+         • Comment explaining code generation
+
+Line 26: const code = generateVerificationCode();
+         • Calls function to generate code
+         • Stores 6-digit code in variable
+         • Example: "456789"
+
+Line 27: (empty line)
+
+Line 28: // Store code in memory (in production, store in database with expiration)
+         • Comment explaining storage
+         • ⚠️ Important production note
+
+Line 29: verificationCodes[email] = {
+         • Stores code in memory object
+         • Uses email as key
+         • Creates object with code and metadata
+
+Line 30: code: code,
+         • Stores the verification code
+         • Will be compared later
+
+Line 31: createdAt: Date.now(),
+         • Stores creation timestamp
+         • Date.now() - Current time in milliseconds
+         • Used for expiration checking
+
+Line 32: expiresAt: Date.now() + (10 * 60 * 1000) // 10 minutes
+         • Calculates expiration time
+         • Date.now() - Current time
+         • + (10 * 60 * 1000) - Adds 10 minutes in milliseconds
+         • 10 minutes = 600,000 milliseconds
+         • Code expires after 10 minutes
+
+Line 33: };
+         • Closes storage object
+
+Line 34: (empty line)
+
+Line 35: // In production, send code via email or SMS
+         • Comment explaining production behavior
+         • ⚠️ Important: Don't log codes in production!
+
+Line 36: console.log(`Verification code for ${email}: ${code}`);
+         • Logs code to console (for demonstration only!)
+         • In production, send via email/SMS service
+         • Never log sensitive codes in production
+
+Line 37: (empty line)
+
+Line 38: res.json({ 
+         • Sends JSON response
+
+Line 39: message: 'Verification code sent to your email',
+         • Success message
+         • Tells user code was sent
+
+Line 40: // In production, don't send code in response!
+         • Comment warning about security
+         • ⚠️ Never send code in API response!
+
+Line 41: // This is just for demonstration
+         • Clarifies this is example code
+
+Line 42: });
+         • Closes response object
+
+Line 43: });
+         • Closes request-access route handler
+
+Line 44: (empty line)
+
+Line 45: // Route to verify code and grant access
+         • Comment explaining verification route
+
+Line 46: app.post('/verify-code', (req, res) => {
+         • Defines POST route for code verification
+         • '/verify-code' - URL path
+         • (req, res) => { - Request handler
+
+Line 47: const { email, code } = req.body;
+         • Destructures email and code from request
+         • Extracts both required fields
+
+Line 48: (empty line)
+
+Line 49: if (!email || !code) {
+         • Validates both fields are provided
+         • Checks if either is missing
+
+Line 50: return res.status(400).json({ message: 'Email and code are required' });
+         • Sends 400 Bad Request error
+         • return - Exits early if validation fails
+
+Line 51: }
+         • Closes validation check
+
+Line 52: (empty line)
+
+Line 53: // Get stored verification code
+         • Comment explaining lookup
+
+Line 54: const stored = verificationCodes[email];
+         • Retrieves stored code for email
+         • Returns object with code and metadata
+         • Returns undefined if not found
+
+Line 55: (empty line)
+
+Line 56: if (!stored) {
+         • Checks if code exists for this email
+         • Validates email was used to request code
+
+Line 57: return res.status(404).json({ message: 'No verification code found for this email' });
+         • Sends 404 Not Found error
+         • No code exists for this email
+         • User must request code first
+
+Line 58: }
+         • Closes stored check
+
+Line 59: (empty line)
+
+Line 60: // Check if code has expired
+         • Comment explaining expiration check
+
+Line 61: if (Date.now() > stored.expiresAt) {
+         • Compares current time to expiration time
+         • Date.now() - Current timestamp
+         • stored.expiresAt - Expiration timestamp
+         • If current time > expiration, code expired
+
+Line 62: delete verificationCodes[email];
+         • Removes expired code from storage
+         • Prevents reuse of expired codes
+         • Cleans up memory
+
+Line 63: return res.status(401).json({ message: 'Verification code has expired' });
+         • Sends 401 Unauthorized error
+         • Code is no longer valid
+         • User must request new code
+
+Line 64: }
+         • Closes expiration check
+
+Line 65: (empty line)
+
+Line 66: // Verify the received code against the stored code
+         • Comment explaining verification
+
+Line 67: if (code === stored.code) {
+         • Compares received code to stored code
+         • === - Strict equality check
+         • If codes match, user is authenticated
+
+Line 68: // Code matched - grant access
+         • Comment for successful verification
+
+Line 69: delete verificationCodes[email]; // Remove used code
+         • Removes code after successful verification
+         • Prevents code reuse
+         • One-time use only
+
+Line 70: (empty line)
+
+Line 71: // In production, create session or JWT token here
+         • Comment explaining production behavior
+         • ⚠️ Important: Use proper authentication
+
+Line 72: const sessionToken = crypto.randomBytes(32).toString('hex');
+         • Generates random session token
+         • crypto.randomBytes(32) - 32 random bytes
+         • .toString('hex') - Converts to hexadecimal string
+         • Example: "a1b2c3d4e5f6..."
+         • In production, use JWT instead!
+
+Line 73: (empty line)
+
+Line 74: res.json({ 
+         • Sends success response
+
+Line 75: message: 'Access granted',
+         • Success message
+         • User is authenticated
+
+Line 76: token: sessionToken // In production, use proper JWT
+         • Sends token to client
+         • Client should store and send with requests
+         • ⚠️ In production, use JWT with proper signing
+
+Line 77: });
+         • Closes response object
+
+Line 78: } else {
+         • If code doesn't match
+
+Line 79: // Code doesn't match - deny access
+         • Comment for failed verification
+
+Line 80: res.status(401).json({ message: 'Invalid verification code' });
+         • Sends 401 Unauthorized error
+         • Code is incorrect
+         • User must try again or request new code
+
+Line 81: }
+         • Closes if-else block
+
+Line 82: });
+         • Closes verify-code route handler
+
+Line 83: (empty line)
+
+Line 84: // Protected route (requires valid token)
+         • Comment explaining protected route
+
+Line 85: app.get('/dashboard', (req, res) => {
+         • Defines GET route for dashboard
+         • '/dashboard' - URL path
+
+Line 86: // In production, verify token from Authorization header
+         • Comment explaining production behavior
+         • ⚠️ This example skips token verification
+
+Line 87: // For this example, we'll skip token verification
+         • Clarifies this is simplified example
+
+Line 88: res.json({ message: 'Welcome to the dashboard!' });
+         • Sends response
+         • In production, verify token first!
+
+Line 89: });
+         • Closes dashboard route handler
+
+Line 90: (empty line)
+
+Line 91: // Start server
+         • Comment explaining server startup
+
+Line 92: const PORT = 3000;
+         • Defines port number
+
+Line 93: app.listen(PORT, () => {
+         • Starts server listening
+         • () => { - Callback when server starts
+
+Line 94: console.log(`Server running on http://localhost:${PORT}`);
+         • Logs server URL
+         • Helpful for developers
+
+Line 95: });
+         • Closes listen callback
+
+Line 96: });
+         • Closes entire file
+
+WHAT THIS CODE DOES - SUMMARY
+------------------------------
+1. SETS UP EXPRESS APPLICATION
+   • Configures Express server
+   • Sets up JSON parsing middleware
+   • Prepares for handling requests
+
+2. HANDLES ACCESS REQUESTS
+   • Receives email address
+   • Generates 6-digit verification code
+   • Stores code with expiration time
+   • Sends code to user (via email/SMS in production)
+
+3. VERIFIES CODES
+   • Receives email and code
+   • Checks if code exists
+   • Checks if code expired
+   • Compares received code to stored code
+   • Grants access if match, denies if not
+
+4. PROTECTS ROUTES
+   • Provides protected route example
+   • In production, would verify token
+
+HOW TO USE THIS CODE
+--------------------
+1. INSTALL DEPENDENCIES
+   npm install express
+
+2. SAVE THE CODE
+   Save as server.js
+
+3. RUN THE SERVER
+   node server.js
+
+4. TEST WITH HTTP REQUESTS
+   
+   Request access:
+   POST http://localhost:3000/request-access
+   Body: { "email": "user@example.com" }
+   Response: { "message": "Verification code sent..." }
+   (Check console for code)
+   
+   Verify code:
+   POST http://localhost:3000/verify-code
+   Body: { "email": "user@example.com", "code": "123456" }
+   Response: { "message": "Access granted", "token": "..." }
+
+SECURITY NOTES
+--------------
+⚠️ IMPORTANT SECURITY CONSIDERATIONS:
+
+1. CODE STORAGE
+   • Use Redis or database with TTL (time-to-live)
+   • Don't use in-memory storage in production
+   • Codes should auto-expire
+
+2. CODE TRANSMISSION
+   • Send codes via secure email/SMS service
+   • Never log codes in production
+   • Never send codes in API responses
+
+3. CODE EXPIRATION
+   • Set short expiration times (5-10 minutes)
+   • Prevent code reuse
+   • Limit attempts per email
+
+4. RATE LIMITING
+   • Limit requests per IP address
+   • Prevent abuse and spam
+   • Use express-rate-limit middleware
+
+5. TOKEN GENERATION
+   • Use JWT for session tokens
+   • Sign tokens with secret key
+   • Set proper expiration times
+
+6. EMAIL/SMS SERVICE
+   • Use reputable services (SendGrid, Twilio)
+   • Verify email/phone ownership
+   • Handle delivery failures
+
+[END SECTION 4.5]
+[END PART 4]
+================================================================================
+
+PART 5: SUMMARY AND COMPARISON
+================================================================================
+
+SECTION 5.1: COMPARING AUTHENTICATION METHODS
+----------------------------------------------
+
+OVERVIEW
+--------
+In this video, you learned that authentication confirms your identity using 
+credentials, by validating who you claim to be. Let's compare the three methods:
+
+COMPARISON TABLE
+----------------
+METHOD                  | SESSION-BASED        | TOKEN-BASED          | PASSWORDLESS
+------------------------|---------------------|---------------------|------------------
+State Management        | Stateful (server)    | Stateless           | Stateless
+Storage Location        | Server database     | Client (token)      | Device (keys)
+Scalability             | Requires shared DB  | Highly scalable     | Highly scalable
+Mobile Friendly         | Moderate            | Excellent           | Excellent
+Password Required       | Yes                 | Yes                 | No
+Security                | Good                | Good                | Excellent
+Complexity              | Moderate            | Moderate            | High
+User Experience         | Good                | Good                | Excellent
+
+SESSION-BASED AUTHENTICATION
+-----------------------------
+• Uses credentials to create a session ID stored in a database and the client's browser
+• When you log out, the session ID is destroyed
+• Server maintains state about each user
+• Requires database for session storage
+• Good for traditional web applications
+
+TOKEN-BASED AUTHENTICATION
+--------------------------
+• Uses access tokens, often JWTs, that get passed between server and client
+• Token contains user information and permissions
+• Server doesn't store state - token is self-contained
+• Excellent for APIs and mobile applications
+• Highly scalable across multiple servers
+
+PASSWORDLESS AUTHENTICATION
+---------------------------
+• Uses public-private key pairs to encrypt and decrypt data
+• No passwords required
+• Device-based authentication
+• Excellent user experience
+• More secure (no passwords to steal)
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: WHEN TO USE EACH METHOD
+-------------------------------------
+
+USE SESSION-BASED WHEN:
+-----------------------
+1. TRADITIONAL WEB APPLICATIONS
+   • Server-rendered applications
+   • Single server or small cluster
+   • Need server-side session management
+
+2. SIMPLE REQUIREMENTS
+   • Basic authentication needs
+   • Don't need cross-domain support
+   • Want simple implementation
+
+3. SERVER-SIDE CONTROL
+   • Need to invalidate sessions server-side
+   • Want centralized session management
+   • Need session data on server
+
+USE TOKEN-BASED WHEN:
+---------------------
+1. API APPLICATIONS
+   • REST APIs
+   • Microservices architecture
+   • Multiple servers/clients
+
+2. MOBILE APPLICATIONS
+   • Native mobile apps
+   • Cross-platform support
+   • Offline capability needed
+
+3. SCALABILITY REQUIRED
+   • Multiple server instances
+   • No shared session store
+   • High traffic applications
+
+4. CROSS-DOMAIN SUPPORT
+   • Different domains/subdomains
+   • Third-party integrations
+   • Single Sign-On (SSO)
+
+USE PASSWORDLESS WHEN:
+----------------------
+1. USER EXPERIENCE PRIORITY
+   • Want fastest login
+   • Reduce friction
+   • Modern user expectations
+
+2. SECURITY FOCUS
+   • Eliminate password risks
+   • Stronger security needed
+   • Compliance requirements
+
+3. MOBILE-FIRST APPLICATIONS
+   • Mobile apps with device capabilities
+   • Biometric support available
+   • Device-bound authentication
+
+4. PASSWORD RECOVERY SYSTEMS
+   • Password reset flows
+   • Account recovery
+   • Temporary access
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: KEY TAKEAWAYS
+---------------------------
+
+AUTHENTICATION FUNDAMENTALS
+---------------------------
+1. AUTHENTICATION VERIFIES IDENTITY
+   • Confirms who you are
+   • Uses credentials (password, token, biometrics)
+   • First step in security
+
+2. AUTHORIZATION DETERMINES PERMISSIONS
+   • Determines what you can do
+   • Happens after authentication
+   • Based on roles and permissions
+
+3. BACKEND HANDLES VERIFICATION
+   • Server validates all credentials
+   • Never trust client-side alone
+   • Security enforced server-side
+
+SESSION-BASED AUTHENTICATION
+----------------------------
+• Server creates session ID after login
+• Session stored in database and cookie
+• Server maintains state
+• Session destroyed on logout
+• Good for traditional web apps
+
+TOKEN-BASED AUTHENTICATION
+--------------------------
+• Server generates token after login
+• Token contains user data (JWT)
+• Server doesn't store state
+• Token sent with each request
+• Excellent for APIs and mobile apps
+
+PASSWORDLESS AUTHENTICATION
+---------------------------
+• No passwords required
+• Uses cryptographic keys or codes
+• Better user experience
+• More secure
+• Device-based or code-based
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: SECURITY BEST PRACTICES
+-------------------------------------
+
+GENERAL SECURITY PRACTICES
+--------------------------
+1. NEVER STORE PLAIN TEXT PASSWORDS
+   • Always hash passwords (bcrypt, argon2)
+   • Use salt for password hashing
+   • Never log passwords
+
+2. USE HTTPS IN PRODUCTION
+   • Encrypt data in transit
+   • Protect credentials and tokens
+   • Required for secure cookies
+
+3. IMPLEMENT RATE LIMITING
+   • Prevent brute force attacks
+   • Limit login attempts
+   • Protect against abuse
+
+4. VALIDATE ALL INPUT
+   • Sanitize user input
+   • Prevent injection attacks
+   • Validate data types
+
+5. USE SECURE SECRET KEYS
+   • Long, random secret keys
+   • Store in environment variables
+   • Never commit to version control
+
+SESSION-BASED SECURITY
+----------------------
+1. USE SECURE COOKIES
+   • HttpOnly flag
+   • Secure flag (HTTPS)
+   • SameSite attribute
+
+2. SET EXPIRATION TIMES
+   • Short session lifetimes
+   • Inactivity timeouts
+   • Absolute expiration
+
+3. USE SECURE SESSION STORES
+   • Redis or database
+   • Not in-memory
+   • Encrypt session data
+
+TOKEN-BASED SECURITY
+--------------------
+1. SET TOKEN EXPIRATION
+   • Short-lived access tokens
+   • Use refresh tokens for long sessions
+   • Validate expiration
+
+2. SIGN TOKENS SECURELY
+   • Use strong secret keys
+   • Use appropriate algorithms (HS256, RS256)
+   • Verify signatures
+
+3. STORE TOKENS SECURELY
+   • HTTP-only cookies (best)
+   • Secure storage on mobile
+   • Never localStorage (XSS risk)
+
+PASSWORDLESS SECURITY
+---------------------
+1. EXPIRING CODES
+   • Short expiration times (5-10 minutes)
+   • One-time use only
+   • Prevent reuse
+
+2. RATE LIMITING
+   • Limit code requests per email/phone
+   • Prevent spam/abuse
+   • Block suspicious activity
+
+3. SECURE TRANSMISSION
+   • Send codes via secure channels
+   • Use reputable email/SMS services
+   • Verify delivery
+
+4. KEY MANAGEMENT
+   • Secure private key storage
+   • Use device secure enclave
+   • Never expose private keys
+
+[END SECTION 5.4]
+[END PART 5]
+================================================================================
+
+FINAL SUMMARY
+------------
+This comprehensive guide has covered:
+
+1. AUTHENTICATION AND AUTHORIZATION BASICS
+   • What authentication is and why it matters
+   • What authorization is and how it works
+   • The role of the backend in security
+
+2. SESSION-BASED AUTHENTICATION
+   • How sessions work
+   • Session ID creation and storage
+   • Session destruction and logout
+   • Express implementation
+
+3. TOKEN-BASED AUTHENTICATION
+   • How tokens work
+   • JSON Web Tokens (JWTs)
+   • Token structure and components
+   • Express implementation
+
+4. PASSWORDLESS AUTHENTICATION
+   • Methods of passwordless auth
+   • Public and private key encryption
+   • How passwordless auth works
+   • Express implementation
+
+5. COMPARISON AND BEST PRACTICES
+   • When to use each method
+   • Security considerations
+   • Best practices for each approach
+
+KEY REMEMBER POINTS
+-------------------
+• Authentication = "Who are you?" (Identity verification)
+• Authorization = "What can you do?" (Permission checking)
+• Session-based = Server stores state, client has session ID
+• Token-based = Stateless, token contains all data
+• Passwordless = No passwords, uses keys or codes
+• Always enforce security on the backend
+• Never store plain text passwords
+• Use HTTPS in production
+• Set proper expiration times
+• Implement rate limiting
+
+You now have a comprehensive understanding of authentication and authorization 
+in Node.js. These concepts are fundamental to building secure web applications.
+
+Good luck with your authentication and authorization journey!
+
+================================================================================
+END OF PART 2
+================================================================================
+
+This completes the comprehensive guide on Authentication and Authorization in Node.js.
+Both Part 1 and Part 2 together provide exhaustive coverage of all concepts,
+definitions, and implementations mentioned in the original content.
+
+================================================================================
+
