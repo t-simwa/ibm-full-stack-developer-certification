@@ -1,0 +1,1722 @@
+================================================================================
+PROMISES, ASYNC/AWAIT, AND AXIOS REQUESTS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This is Part 2 of the comprehensive guide on Promises, Async/Await, and 
+Axios. In Part 1, you learned about:
+• Asynchronous programming fundamentals
+• Promises and how they work
+• Async/await syntax and benefits
+
+In this part, you'll learn about:
+• Axios - A powerful HTTP client library
+• Making GET and POST requests
+• Combining async/await with Axios
+• Complete practical examples
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: INTRODUCTION TO AXIOS
+  SECTION 4.1: WHAT IS AXIOS?
+  SECTION 4.2: KEY FEATURES OF AXIOS
+  SECTION 4.3: INSTALLATION AND SETUP
+
+PART 5: MAKING HTTP REQUESTS WITH AXIOS
+  SECTION 5.1: MAKING GET REQUESTS
+  SECTION 5.2: MAKING POST REQUESTS
+  SECTION 5.3: HANDLING RESPONSES AND ERRORS
+
+PART 6: COMBINING ASYNC/AWAIT WITH AXIOS
+  SECTION 6.1: WHY COMBINE ASYNC/AWAIT WITH AXIOS
+  SECTION 6.2: GET REQUESTS WITH ASYNC/AWAIT
+  SECTION 6.3: POST REQUESTS WITH ASYNC/AWAIT
+  SECTION 6.4: COMPLETE PRACTICAL EXAMPLES
+
+PART 7: SUMMARY AND KEY TAKEAWAYS
+  SECTION 7.1: CONCEPT SUMMARY
+  SECTION 7.2: QUICK REFERENCE GUIDE
+  SECTION 7.3: BEST PRACTICES
+  SECTION 7.4: COMMON PATTERNS
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 4.3:") to quickly jump to any section.
+
+================================================================================
+PART 4: INTRODUCTION TO AXIOS
+================================================================================
+
+SECTION 4.1: WHAT IS AXIOS?
+-----------------------------
+
+DEFINITION
+----------
+Now, it's time to learn about Axios and how it is used. Axios is a 
+Promise-based HTTP client for the browser and Node.js. Axios makes it easy 
+for you to send asynchronous HTTP requests to REST endpoints and perform CRUD 
+operations. Axios automatically transforms JSON data and provides a clean and 
+simple API.
+
+DETAILED EXPLANATION
+--------------------
+Axios is a popular JavaScript library that simplifies making HTTP requests. 
+It's built on top of Promises, which means it works seamlessly with async/await.
+
+WHAT AXIOS DOES
+---------------
+1. SENDS HTTP REQUESTS
+   • GET - Retrieve data from a server
+   • POST - Send data to a server
+   • PUT - Update data on a server
+   • DELETE - Remove data from a server
+   • And more (PATCH, HEAD, OPTIONS)
+
+2. WORKS IN BROWSER AND NODE.JS
+   • Can be used in web browsers (frontend)
+   • Can be used in Node.js (backend)
+   • Same API for both environments
+
+3. AUTOMATIC JSON TRANSFORMATION
+   • Automatically converts JavaScript objects to JSON when sending
+   • Automatically parses JSON responses to JavaScript objects
+   • No need to manually use JSON.stringify() or JSON.parse()
+
+4. CLEAN AND SIMPLE API
+   • Easy to use and understand
+   • Consistent interface for all request types
+   • Well-documented and widely used
+
+REAL-WORLD ANALOGY
+------------------
+Think of Axios like a postal service:
+• You write a letter (prepare request data)
+• You give it to the postal service (Axios)
+• The postal service delivers it (sends HTTP request)
+• You receive a response letter (get response data)
+• The postal service handles all the complexity (routing, delivery, etc.)
+
+WHY USE AXIOS?
+--------------
+Before Axios, making HTTP requests required:
+• Using the built-in fetch() API (more verbose)
+• Using XMLHttpRequest (old, complex)
+• Manual JSON parsing
+• Manual error handling
+• More boilerplate code
+
+Axios simplifies all of this!
+
+COMPARISON: FETCH VS AXIOS
+---------------------------
+FETCH (Built-in, but more verbose):
+  fetch('/api/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name: 'John' })
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+
+AXIOS (Cleaner and simpler):
+  axios.post('/api/users', { name: 'John' })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+Axios is much more concise!
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: KEY FEATURES OF AXIOS
+------------------------------------
+
+OVERVIEW
+--------
+Now, let's take a look at some key features of Axios. Axios offers the 
+following features. It uses Promises for easy async await usage. It 
+transforms JSON data automatically. It allows you to intercept requests or 
+responses to modify them. It supports request cancellation. And it provides 
+comprehensive error handling features.
+
+FEATURE 1: PROMISES FOR EASY ASYNC/AWAIT USAGE
+-----------------------------------------------
+It uses Promises for easy async await usage.
+
+WHAT THIS MEANS:
+---------------
+• All Axios methods return Promises
+• You can use .then()/.catch() with Axios
+• You can use await with Axios
+• Works seamlessly with async/await syntax
+
+EXAMPLE:
+--------
+  // Using .then()/.catch()
+  axios.get('/api/data')
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+  // Using async/await
+  async function fetchData() {
+    try {
+      const response = await axios.get('/api/data');
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+FEATURE 2: AUTOMATIC JSON TRANSFORMATION
+-----------------------------------------
+It transforms JSON data automatically.
+
+WHAT THIS MEANS:
+---------------
+• When you send data, Axios automatically converts objects to JSON
+• When you receive data, Axios automatically parses JSON to objects
+• No need for manual JSON.stringify() or JSON.parse()
+
+EXAMPLE:
+--------
+  // Sending data (Axios handles JSON.stringify automatically)
+  axios.post('/api/users', { name: 'John', age: 30 });
+  // Axios automatically converts { name: 'John', age: 30 } to JSON
+
+  // Receiving data (Axios handles JSON.parse automatically)
+  const response = await axios.get('/api/users');
+  console.log(response.data);  // Already a JavaScript object, not a string!
+
+WITHOUT AXIOS (manual):
+  fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'John', age: 30 })  // Manual conversion
+  })
+    .then(response => response.json())  // Manual parsing
+    .then(data => console.log(data));
+
+FEATURE 3: REQUEST/RESPONSE INTERCEPTORS
+-----------------------------------------
+It allows you to intercept requests or responses to modify them.
+
+WHAT THIS MEANS:
+---------------
+• You can add code that runs before requests are sent
+• You can add code that runs after responses are received
+• Useful for adding authentication tokens, logging, error handling, etc.
+
+EXAMPLE:
+--------
+  // Request interceptor - runs before every request
+  axios.interceptors.request.use((config) => {
+    // Add authentication token to every request
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  });
+
+  // Response interceptor - runs after every response
+  axios.interceptors.response.use(
+    (response) => {
+      // Success - do something with response
+      return response;
+    },
+    (error) => {
+      // Error - handle globally
+      if (error.response?.status === 401) {
+        // Redirect to login if unauthorized
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    }
+  );
+
+FEATURE 4: REQUEST CANCELLATION
+--------------------------------
+It supports request cancellation.
+
+WHAT THIS MEANS:
+---------------
+• You can cancel requests that are in progress
+• Useful when user navigates away or changes their mind
+• Prevents unnecessary network traffic and processing
+
+EXAMPLE:
+--------
+  const source = axios.CancelToken.source();
+
+  axios.get('/api/data', {
+    cancelToken: source.token
+  })
+    .then(response => console.log(response.data))
+    .catch(error => {
+      if (axios.isCancel(error)) {
+        console.log('Request cancelled');
+      }
+    });
+
+  // Cancel the request
+  source.cancel('Operation cancelled by user');
+
+FEATURE 5: COMPREHENSIVE ERROR HANDLING
+--------------------------------------
+And it provides comprehensive error handling features.
+
+WHAT THIS MEANS:
+---------------
+• Detailed error objects with useful information
+• Network errors vs HTTP errors
+• Response data in error objects
+• Status codes and error messages
+• Easy to debug and handle errors
+
+EXAMPLE:
+--------
+  try {
+    const response = await axios.get('/api/users');
+  } catch (error) {
+    if (error.response) {
+      // Server responded with error status (4xx, 5xx)
+      console.error('Status:', error.response.status);
+      console.error('Data:', error.response.data);
+      console.error('Headers:', error.response.headers);
+    } else if (error.request) {
+      // Request made but no response received
+      console.error('No response received');
+    } else {
+      // Error setting up request
+      console.error('Error:', error.message);
+    }
+  }
+
+SUMMARY OF FEATURES
+-------------------
+1. ✅ Promises for async/await
+2. ✅ Automatic JSON transformation
+3. ✅ Request/response interceptors
+4. ✅ Request cancellation
+5. ✅ Comprehensive error handling
+
+These features make Axios a powerful and convenient tool for making HTTP requests!
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: INSTALLATION AND SETUP
+-------------------------------------
+
+INSTALLATION
+------------
+Now let's use Axios to make a GET request in a practical example. As you can 
+see in this code snippet, first, you need to install Axios. Once installed, 
+you can use Axios and see how it simplifies making HTTP GET requests.
+
+STEP-BY-STEP INSTALLATION
+-------------------------
+1. Open your terminal or command prompt
+2. Navigate to your project directory
+3. Install Axios using npm or yarn
+
+USING NPM:
+----------
+  npm install axios
+
+USING YARN:
+-----------
+  yarn add axios
+
+USING PNPM:
+-----------
+  pnpm add axios
+
+VERIFICATION
+------------
+After installation, verify it worked by checking your package.json:
+
+  {
+    "dependencies": {
+      "axios": "^1.6.0"  // Version may vary
+    }
+  }
+
+IMPORTING AXIOS
+---------------
+Once installed, you can import Axios in your code:
+
+IN NODE.JS (CommonJS):
+  const axios = require('axios');
+
+IN NODE.JS OR BROWSER (ES6 Modules):
+  import axios from 'axios';
+
+IN BROWSER (HTML):
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+BASIC USAGE
+-----------
+After importing, you can immediately start using Axios:
+
+  const axios = require('axios');
+
+  // Make a GET request
+  axios.get('https://api.example.com/data')
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+That's it! Axios is ready to use.
+
+[END SECTION 4.3]
+[END PART 4]
+================================================================================
+
+PART 5: MAKING HTTP REQUESTS WITH AXIOS
+================================================================================
+
+SECTION 5.1: MAKING GET REQUESTS
+---------------------------------
+
+OVERVIEW
+--------
+Now let's use Axios to make a GET request in a practical example. As you can 
+see in this code snippet, first, you need to install Axios. Once installed, 
+you can use Axios and see how it simplifies making HTTP GET requests. The 
+axios.get method returns a promise that resolves with the response object. 
+This allows you to access the data.
+
+WHAT IS A GET REQUEST?
+----------------------
+A GET request is used to retrieve data from a server. It's the most common 
+type of HTTP request. Examples:
+• Fetching user information
+• Loading a list of products
+• Getting blog posts
+• Retrieving configuration data
+
+BASIC GET REQUEST SYNTAX
+------------------------
+  axios.get(url)
+    .then(response => {
+      // Handle success
+    })
+    .catch(error => {
+      // Handle error
+    });
+
+BREAKDOWN:
+----------
+• axios.get() - Method for making GET requests
+• url - The endpoint URL to request data from
+• Returns a Promise that resolves with a response object
+• .then() - Handles successful response
+• .catch() - Handles errors
+
+COMPLETE EXAMPLE
+----------------
+  const axios = require('axios');
+
+  axios.get('https://jsonplaceholder.typicode.com/users')
+    .then((response) => {
+      console.log('Status:', response.status);
+      console.log('Data:', response.data);
+      console.log('Headers:', response.headers);
+    })
+    .catch((error) => {
+      console.error('Error:', error.message);
+    });
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const axios = require('axios');
+        • const axios - Creates a constant to hold the Axios library
+        • require('axios') - Imports the Axios module
+        • This makes Axios available in your code
+        • First, you need to install Axios (done via npm/yarn)
+
+Line 2: (empty line for readability)
+
+Line 3: axios.get('https://jsonplaceholder.typicode.com/users')
+        • axios.get() - Method to make a GET request
+        • 'https://jsonplaceholder.typicode.com/users' - The URL to fetch from
+        • This is a test API that returns sample user data
+        • Returns a Promise that will resolve with the response
+        • The axios.get method returns a promise that resolves with the 
+          response object
+
+Line 4: .then((response) => {
+        • .then() - Handles successful response
+        • (response) => { - Receives the response object
+        • This callback runs when the request succeeds
+        • response contains all the information about the HTTP response
+
+Line 5: console.log('Status:', response.status);
+        • console.log() - Prints to console
+        • 'Status:' - Label text
+        • response.status - HTTP status code (200, 404, 500, etc.)
+        • Status 200 means success
+
+Line 6: console.log('Data:', response.data);
+        • console.log() - Prints to console
+        • 'Data:' - Label text
+        • response.data - The actual data from the server
+        • This allows you to access the data
+        • Axios automatically parses JSON, so response.data is a JavaScript 
+          object/array
+
+Line 7: console.log('Headers:', response.headers);
+        • console.log() - Prints to console
+        • 'Headers:' - Label text
+        • response.headers - HTTP response headers
+        • Contains metadata about the response
+
+Line 8: })
+        • Closes the .then() callback
+
+Line 9: .catch((error) => {
+        • .catch() - Handles errors
+        • (error) => { - Receives the error object
+        • This callback runs if the request fails
+        • Handles network errors, 404 errors, 500 errors, etc.
+
+Line 10: console.error('Error:', error.message);
+         • console.error() - Prints error to console (usually in red)
+         • 'Error:' - Label text
+         • error.message - The error message
+         • Logs what went wrong
+
+Line 11: });
+         • Closes the .catch() callback and completes the Promise chain
+
+WHAT THIS CODE DOES
+-------------------
+1. Imports Axios library
+2. Makes a GET request to fetch users from an API
+3. If successful: Logs status, data, and headers
+4. If failed: Logs error message
+5. The axios.get method returns a promise that resolves with the response 
+   object, which allows you to access the data
+
+RESPONSE OBJECT STRUCTURE
+--------------------------
+The response object contains:
+
+  {
+    data: {},           // The response body (parsed JSON)
+    status: 200,        // HTTP status code
+    statusText: 'OK',   // HTTP status message
+    headers: {},        // Response headers
+    config: {},         // Request configuration
+    request: {}        // The request object
+  }
+
+MOST COMMONLY USED:
+-------------------
+• response.data - The actual data you need
+• response.status - HTTP status code
+• response.headers - Response headers
+
+GET REQUEST WITH QUERY PARAMETERS
+----------------------------------
+You can add query parameters to GET requests:
+
+  axios.get('https://api.example.com/users', {
+    params: {
+      page: 1,
+      limit: 10,
+      search: 'john'
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+    });
+
+This makes a request to: https://api.example.com/users?page=1&limit=10&search=john
+
+GET REQUEST WITH HEADERS
+------------------------
+You can add custom headers:
+
+  axios.get('https://api.example.com/data', {
+    headers: {
+      'Authorization': 'Bearer token123',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+    });
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: MAKING POST REQUESTS
+----------------------------------
+
+OVERVIEW
+--------
+Now it's time to learn how to use Axios to make a POST request. Let's look 
+at a code snippet that demonstrates how Axios makes HTTP POST requests and 
+handles responses and errors. This code imports Axios for HTTP requests and 
+creates user data object for POST request. By using axios.post() function, 
+this code sends data to the server. Finally, it logs response data on success 
+and error message on failure.
+
+WHAT IS A POST REQUEST?
+----------------------
+A POST request is used to send data to a server. It's commonly used for:
+• Creating new resources (users, posts, orders)
+• Submitting forms
+• Sending data for processing
+• Uploading files
+
+BASIC POST REQUEST SYNTAX
+-------------------------
+  axios.post(url, data)
+    .then(response => {
+      // Handle success
+    })
+    .catch(error => {
+      // Handle error
+    });
+
+BREAKDOWN:
+----------
+• axios.post() - Method for making POST requests
+• url - The endpoint URL to send data to
+• data - The data to send (object, string, etc.)
+• Returns a Promise that resolves with a response object
+• .then() - Handles successful response
+• .catch() - Handles errors
+
+COMPLETE EXAMPLE
+----------------
+  const axios = require('axios');
+
+  const userData = {
+    name: 'John Doe',
+    email: 'john@example.com',
+    age: 30
+  };
+
+  axios.post('https://jsonplaceholder.typicode.com/users', userData)
+    .then((response) => {
+      console.log('Success!');
+      console.log('Response data:', response.data);
+      console.log('Status:', response.status);
+    })
+    .catch((error) => {
+      console.error('Error:', error.message);
+      if (error.response) {
+        console.error('Status:', error.response.status);
+        console.error('Error data:', error.response.data);
+      }
+    });
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const axios = require('axios');
+        • const axios - Creates a constant to hold the Axios library
+        • require('axios') - Imports the Axios module
+        • This code imports Axios for HTTP requests
+        • Makes Axios available for making requests
+
+Line 2: (empty line for readability)
+
+Line 3: const userData = {
+        • const userData - Creates a constant to hold user data
+        • { - Starts an object literal
+        • This code creates user data object for POST request
+
+Line 4: name: 'John Doe',
+        • name - Property name
+        • 'John Doe' - Property value (user's name)
+        • Comma separates properties
+
+Line 5: email: 'john@example.com',
+        • email - Property name
+        • 'john@example.com' - Property value (user's email)
+        • Comma separates properties
+
+Line 6: age: 30
+        • age - Property name
+        • 30 - Property value (user's age)
+        • No comma (last property)
+
+Line 7: };
+        • Closes the object literal
+        • userData now contains { name: 'John Doe', email: 'john@example.com', 
+          age: 30 }
+        • This is the data we'll send to the server
+
+Line 8: (empty line)
+
+Line 9: axios.post('https://jsonplaceholder.typicode.com/users', userData)
+        • axios.post() - Method to make a POST request
+        • 'https://jsonplaceholder.typicode.com/users' - The URL to send data to
+        • userData - The data object to send
+        • By using axios.post() function, this code sends data to the server
+        • Axios automatically converts userData to JSON
+        • Returns a Promise that will resolve with the response
+
+Line 10: .then((response) => {
+         • .then() - Handles successful response
+         • (response) => { - Receives the response object
+         • This callback runs when the POST request succeeds
+         • It logs response data on success
+
+Line 11: console.log('Success!');
+         • console.log() - Prints success message
+         • 'Success!' - Message indicating the request succeeded
+
+Line 12: console.log('Response data:', response.data);
+         • console.log() - Prints to console
+         • 'Response data:' - Label text
+         • response.data - The data returned by the server
+         • Usually contains the created resource (with ID, timestamps, etc.)
+         • It logs response data on success
+
+Line 13: console.log('Status:', response.status);
+         • console.log() - Prints to console
+         • 'Status:' - Label text
+         • response.status - HTTP status code
+         • Usually 201 (Created) for successful POST requests
+
+Line 14: })
+         • Closes the .then() callback
+
+Line 15: .catch((error) => {
+         • .catch() - Handles errors
+         • (error) => { - Receives the error object
+         • This callback runs if the POST request fails
+         • It logs error message on failure
+
+Line 16: console.error('Error:', error.message);
+         • console.error() - Prints error to console
+         • 'Error:' - Label text
+         • error.message - The error message
+         • It logs error message on failure
+
+Line 17: if (error.response) {
+         • Checks if error has a response property
+         • error.response exists when server responded with an error status
+         • This means the request reached the server but got an error response
+
+Line 18: console.error('Status:', error.response.status);
+         • console.error() - Prints error to console
+         • 'Status:' - Label text
+         • error.response.status - HTTP error status code (400, 404, 500, etc.)
+         • Helps identify what type of error occurred
+
+Line 19: console.error('Error data:', error.response.data);
+         • console.error() - Prints error to console
+         • 'Error data:' - Label text
+         • error.response.data - Error details from the server
+         • May contain validation errors, error messages, etc.
+
+Line 20: }
+         • Closes the if statement
+
+Line 21: });
+         • Closes the .catch() callback and completes the Promise chain
+
+WHAT THIS CODE DOES
+-------------------
+1. Imports Axios library
+2. Creates a userData object with name, email, and age
+3. Makes a POST request to create a new user
+4. Sends userData to the server
+5. If successful: Logs success message and response data
+6. If failed: Logs error message and error details
+7. It logs response data on success and error message on failure
+
+POST REQUEST WITH HEADERS
+-------------------------
+You can add custom headers to POST requests:
+
+  axios.post('https://api.example.com/users', userData, {
+    headers: {
+      'Authorization': 'Bearer token123',
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+    });
+
+POST REQUEST WITH CONFIGURATION
+--------------------------------
+You can configure various aspects of the POST request:
+
+  axios.post('https://api.example.com/users', userData, {
+    headers: {
+      'Authorization': 'Bearer token123'
+    },
+    timeout: 5000,  // 5 second timeout
+    validateStatus: (status) => {
+      return status < 500;  // Accept status codes less than 500
+    }
+  })
+    .then(response => {
+      console.log(response.data);
+    });
+
+DIFFERENCE BETWEEN GET AND POST
+-------------------------------
+GET:
+• Retrieves data from server
+• Data sent in URL (query parameters)
+• Can be cached
+• Should not modify server state
+• Example: Fetching user profile
+
+POST:
+• Sends data to server
+• Data sent in request body
+• Not cached
+• Can modify server state
+• Example: Creating a new user
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: HANDLING RESPONSES AND ERRORS
+--------------------------------------------
+
+UNDERSTANDING RESPONSES
+-----------------------
+When an Axios request succeeds, you receive a response object. Understanding 
+the response structure helps you access the data you need.
+
+RESPONSE OBJECT STRUCTURE
+-------------------------
+  {
+    data: {},              // Response body (most important!)
+    status: 200,           // HTTP status code
+    statusText: 'OK',      // HTTP status message
+    headers: {},           // Response headers
+    config: {},            // Request configuration
+    request: {}            // The request object
+  }
+
+ACCESSING RESPONSE DATA
+-----------------------
+The most important property is response.data:
+
+  axios.get('/api/users')
+    .then((response) => {
+      const users = response.data;  // The actual data
+      console.log(users);
+    });
+
+UNDERSTANDING ERRORS
+--------------------
+When an Axios request fails, you receive an error object. The structure 
+depends on the type of error.
+
+ERROR TYPES
+-----------
+1. NETWORK ERROR
+   • Request couldn't reach the server
+   • No internet connection
+   • Server is down
+   • error.request exists, error.response does not
+
+2. HTTP ERROR
+   • Request reached server but got error response
+   • Status codes: 400, 401, 404, 500, etc.
+   • error.response exists with status and data
+
+3. REQUEST SETUP ERROR
+   • Error in request configuration
+   • Invalid URL
+   • error.message contains details
+
+COMPLETE ERROR HANDLING EXAMPLE
+--------------------------------
+  axios.post('/api/users', userData)
+    .then((response) => {
+      console.log('Success:', response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Server responded with error status
+        console.error('HTTP Error:', error.response.status);
+        console.error('Error Data:', error.response.data);
+        console.error('Error Headers:', error.response.headers);
+      } else if (error.request) {
+        // Request made but no response received
+        console.error('No Response:', error.request);
+      } else {
+        // Error setting up request
+        console.error('Request Error:', error.message);
+      }
+      console.error('Full Error:', error.config);
+    });
+
+COMMON HTTP STATUS CODES
+-------------------------
+• 200 - OK (Success)
+• 201 - Created (POST success)
+• 400 - Bad Request (Invalid data)
+• 401 - Unauthorized (Need authentication)
+• 403 - Forbidden (No permission)
+• 404 - Not Found (Resource doesn't exist)
+• 500 - Internal Server Error (Server problem)
+
+HANDLING SPECIFIC STATUS CODES
+-------------------------------
+  axios.get('/api/users')
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            console.error('Bad Request - Check your data');
+            break;
+          case 401:
+            console.error('Unauthorized - Please login');
+            break;
+          case 404:
+            console.error('Not Found - Resource doesn\'t exist');
+            break;
+          case 500:
+            console.error('Server Error - Try again later');
+            break;
+          default:
+            console.error('Unknown Error');
+        }
+      }
+    });
+
+[END SECTION 5.3]
+[END PART 5]
+================================================================================
+
+PART 6: COMBINING ASYNC/AWAIT WITH AXIOS
+================================================================================
+
+SECTION 6.1: WHY COMBINE ASYNC/AWAIT WITH AXIOS
+------------------------------------------------
+
+THE PERFECT COMBINATION
+-----------------------
+Now it's time to use async await and Axios together to handle HTTP requests. 
+When you combine async await with Axios, it provides a clean approach to 
+handle HTTP requests. In this example, you can see how the code uses await 
+to pause the function execution until the POST request completes. Finally, 
+the result is handled inside the try block.
+
+WHY THEY WORK SO WELL TOGETHER
+-------------------------------
+1. AXIOS RETURNS PROMISES
+   • All Axios methods return Promises
+   • Perfect for use with await
+   • No need for .then()/.catch() chains
+
+2. CLEANER CODE
+   • Looks like synchronous code
+   • Easier to read and understand
+   • Less nesting
+
+3. BETTER ERROR HANDLING
+   • Use try-catch blocks
+   • Familiar syntax
+   • Clear error handling flow
+
+COMPARISON: PROMISES VS ASYNC/AWAIT WITH AXIOS
+------------------------------------------------
+PROMISES (with .then()/.catch()):
+  axios.get('/api/users')
+    .then((response) => {
+      const users = response.data;
+      return axios.get(`/api/posts?userId=${users[0].id}`);
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+ASYNC/AWAIT (cleaner):
+  async function fetchUserPosts() {
+    try {
+      const usersResponse = await axios.get('/api/users');
+      const users = usersResponse.data;
+      const postsResponse = await axios.get(`/api/posts?userId=${users[0].id}`);
+      console.log(postsResponse.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+The async/await version is much more readable!
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: GET REQUESTS WITH ASYNC/AWAIT
+-------------------------------------------
+
+BASIC GET REQUEST
+-----------------
+  const axios = require('axios');
+
+  async function fetchUsers() {
+    try {
+      const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+      console.log('Users:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching users:', error.message);
+      throw error;
+    }
+  }
+
+  fetchUsers();
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const axios = require('axios');
+        • Imports Axios library
+
+Line 2: (empty line)
+
+Line 3: async function fetchUsers() {
+        • async function - Declares an async function
+        • fetchUsers - Function name
+        • This function can use await
+
+Line 4: try {
+        • try block - Attempts to execute code
+        • If error occurs, goes to catch block
+
+Line 5: const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+        • await - Pauses execution until Promise completes
+        • axios.get() - Makes GET request, returns Promise
+        • The code uses await to pause the function execution until the 
+          request completes
+        • response - Receives the response object when Promise resolves
+        • Execution waits here until request finishes
+
+Line 6: console.log('Users:', response.data);
+        • Logs the users data
+        • response.data - Contains the actual data from server
+
+Line 7: return response.data;
+        • Returns the data
+        • This becomes the resolved value of the async function's Promise
+
+Line 8: } catch (error) {
+        • catch block - Handles errors
+        • error - The error object
+        • Runs if axios.get() Promise is rejected
+
+Line 9: console.error('Error fetching users:', error.message);
+        • Logs the error message
+        • error.message - The error message
+
+Line 10: throw error;
+         • Re-throws the error
+         • Allows calling code to handle the error
+
+Line 11: }
+         • Closes the catch block
+
+Line 12: }
+         • Closes the async function
+
+Line 13: (empty line)
+
+Line 14: fetchUsers();
+         • Calls the async function
+         • Starts the request
+
+GET REQUEST WITH QUERY PARAMETERS
+----------------------------------
+  async function searchUsers(query) {
+    try {
+      const response = await axios.get('https://api.example.com/users', {
+        params: {
+          search: query,
+          limit: 10
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Search error:', error.message);
+      throw error;
+    }
+  }
+
+GET REQUEST WITH ERROR HANDLING
+--------------------------------
+  async function fetchUserById(userId) {
+    try {
+      const response = await axios.get(`https://api.example.com/users/${userId}`);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // Server responded with error
+        if (error.response.status === 404) {
+          console.error('User not found');
+        } else {
+          console.error('Server error:', error.response.status);
+        }
+      } else if (error.request) {
+        // No response received
+        console.error('No response from server');
+      } else {
+        // Request setup error
+        console.error('Request error:', error.message);
+      }
+      throw error;
+    }
+  }
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: POST REQUESTS WITH ASYNC/AWAIT
+---------------------------------------------
+
+BASIC POST REQUEST
+-------------------
+  const axios = require('axios');
+
+  async function createUser(userData) {
+    try {
+      const response = await axios.post('https://jsonplaceholder.typicode.com/users', userData);
+      console.log('User created:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating user:', error.message);
+      throw error;
+    }
+  }
+
+  const newUser = {
+    name: 'Jane Doe',
+    email: 'jane@example.com'
+  };
+
+  createUser(newUser);
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+Line 1: const axios = require('axios');
+        • Imports Axios library
+
+Line 2: (empty line)
+
+Line 3: async function createUser(userData) {
+        • async function - Declares an async function
+        • createUser - Function name
+        • userData - Parameter containing user data to send
+        • This function can use await
+
+Line 4: try {
+        • try block - Attempts to execute code
+        • If error occurs, goes to catch block
+
+Line 5: const response = await axios.post('https://jsonplaceholder.typicode.com/users', userData);
+        • await - Pauses execution until Promise completes
+        • axios.post() - Makes POST request, returns Promise
+        • 'https://jsonplaceholder.typicode.com/users' - URL to send data to
+        • userData - The data object to send
+        • The code uses await to pause the function execution until the POST 
+          request completes
+        • response - Receives the response object when Promise resolves
+        • Execution waits here until request finishes
+
+Line 6: console.log('User created:', response.data);
+        • Logs the created user data
+        • response.data - Contains the created user (usually with ID, etc.)
+        • Finally, the result is handled inside the try block
+
+Line 7: return response.data;
+        • Returns the created user data
+        • This becomes the resolved value of the async function's Promise
+
+Line 8: } catch (error) {
+        • catch block - Handles errors
+        • error - The error object
+        • Runs if axios.post() Promise is rejected
+
+Line 9: console.error('Error creating user:', error.message);
+        • Logs the error message
+        • error.message - The error message
+        • Handles errors that occur during the request
+
+Line 10: throw error;
+         • Re-throws the error
+         • Allows calling code to handle the error
+
+Line 11: }
+         • Closes the catch block
+
+Line 12: }
+         • Closes the async function
+
+Line 13: (empty line)
+
+Line 14: const newUser = {
+         • Creates a new user object
+         • Contains the data to send
+
+Line 15: name: 'Jane Doe',
+         • User's name
+
+Line 16: email: 'jane@example.com'
+         • User's email
+
+Line 17: };
+         • Closes the object
+
+Line 18: (empty line)
+
+Line 19: createUser(newUser);
+         • Calls the async function with newUser data
+         • Starts the POST request
+
+POST REQUEST WITH VALIDATION
+-----------------------------
+  async function createUserWithValidation(userData) {
+    try {
+      // Validate data before sending
+      if (!userData.name || !userData.email) {
+        throw new Error('Name and email are required');
+      }
+
+      const response = await axios.post('/api/users', userData);
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        // Server validation errors
+        console.error('Validation errors:', error.response.data);
+      } else {
+        // Other errors
+        console.error('Error:', error.message);
+      }
+      throw error;
+    }
+  }
+
+POST REQUEST WITH HEADERS
+--------------------------
+  async function createUserWithAuth(userData, token) {
+    try {
+      const response = await axios.post('/api/users', userData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        console.error('Unauthorized - Invalid token');
+      }
+      throw error;
+    }
+  }
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: COMPLETE PRACTICAL EXAMPLES
+------------------------------------------
+
+EXAMPLE 1: FETCHING AND DISPLAYING DATA
+----------------------------------------
+  const axios = require('axios');
+
+  async function fetchAndDisplayUsers() {
+    try {
+      console.log('Fetching users...');
+      const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+      
+      console.log(`Found ${response.data.length} users:`);
+      response.data.forEach((user, index) => {
+        console.log(`${index + 1}. ${user.name} - ${user.email}`);
+      });
+      
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch users:', error.message);
+      throw error;
+    }
+  }
+
+  fetchAndDisplayUsers();
+
+EXAMPLE 2: CREATING AND UPDATING RESOURCES
+-------------------------------------------
+  const axios = require('axios');
+
+  async function createAndUpdateUser() {
+    try {
+      // Step 1: Create a new user
+      console.log('Creating user...');
+      const createResponse = await axios.post('https://jsonplaceholder.typicode.com/users', {
+        name: 'John Doe',
+        email: 'john@example.com',
+        phone: '123-456-7890'
+      });
+      
+      const userId = createResponse.data.id;
+      console.log('User created with ID:', userId);
+      
+      // Step 2: Update the user
+      console.log('Updating user...');
+      const updateResponse = await axios.put(`https://jsonplaceholder.typicode.com/users/${userId}`, {
+        name: 'John Smith',
+        email: 'johnsmith@example.com',
+        phone: '123-456-7890'
+      });
+      
+      console.log('User updated:', updateResponse.data);
+      return updateResponse.data;
+    } catch (error) {
+      console.error('Error in create/update process:', error.message);
+      throw error;
+    }
+  }
+
+  createAndUpdateUser();
+
+EXAMPLE 3: CHAINING MULTIPLE REQUESTS
+-------------------------------------
+  const axios = require('axios');
+
+  async function fetchUserAndPosts(userId) {
+    try {
+      // Fetch user first
+      const userResponse = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
+      const user = userResponse.data;
+      console.log('User:', user.name);
+      
+      // Then fetch user's posts
+      const postsResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+      const posts = postsResponse.data;
+      console.log(`Found ${posts.length} posts`);
+      
+      return {
+        user: user,
+        posts: posts
+      };
+    } catch (error) {
+      console.error('Error fetching user and posts:', error.message);
+      throw error;
+    }
+  }
+
+  fetchUserAndPosts(1);
+
+EXAMPLE 4: ERROR HANDLING WITH MULTIPLE REQUESTS
+--------------------------------------------------
+  const axios = require('axios');
+
+  async function fetchUserDataSafely(userId) {
+    try {
+      const userResponse = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
+      const user = userResponse.data;
+      
+      try {
+        const postsResponse = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+        user.posts = postsResponse.data;
+      } catch (postsError) {
+        console.warn('Could not fetch posts, but user data is available');
+        user.posts = [];
+      }
+      
+      return user;
+    } catch (error) {
+      if (error.response?.status === 404) {
+        throw new Error('User not found');
+      }
+      throw error;
+    }
+  }
+
+  fetchUserDataSafely(1)
+    .then(user => console.log('User data:', user))
+    .catch(error => console.error('Error:', error.message));
+
+EXAMPLE 5: EXPRESS SERVER WITH AXIOS
+------------------------------------
+  const express = require('express');
+  const axios = require('axios');
+  const app = express();
+
+  app.use(express.json());
+
+  // Endpoint that uses Axios to fetch external data
+  app.get('/api/external-users', async (req, res) => {
+    try {
+      const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+      res.json(response.data);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch external users' });
+    }
+  });
+
+  // Endpoint that uses Axios to create external resource
+  app.post('/api/proxy-create-user', async (req, res) => {
+    try {
+      const response = await axios.post('https://jsonplaceholder.typicode.com/users', req.body);
+      res.status(201).json(response.data);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create user' });
+    }
+  });
+
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
+  });
+
+This example shows how to use Axios in an Express server to make requests to 
+external APIs and proxy them to your own API endpoints.
+
+[END SECTION 6.4]
+[END PART 6]
+================================================================================
+
+PART 7: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 7.1: CONCEPT SUMMARY
+------------------------------
+
+WHAT YOU'VE LEARNED
+-------------------
+In this comprehensive guide, you learned that:
+
+1. ASYNCHRONOUS PROGRAMMING
+   Asynchronous programming in JavaScript can build responsive and performant 
+   web applications. It allows applications to handle multiple operations 
+   simultaneously without blocking, resulting in better user experiences.
+
+2. PROMISES
+   Promises provide you a way to handle asynchronous operations, making code 
+   more readable and easier to manage by allowing chaining of operations. 
+   Promises represent the eventual completion (or failure) of an asynchronous 
+   operation and its resulting value.
+
+3. ASYNC/AWAIT
+   The async/await syntax builds on promises and enables you to write 
+   asynchronous code that resembles synchronous code, thus simplifying the 
+   handling of asynchronous tasks. It makes code more linear and easier to 
+   understand.
+
+4. AXIOS
+   Axios can be used as an HTTP client to make requests to external APIs and 
+   services, simplifying the process of handling HTTP requests in JavaScript 
+   applications. It provides a clean API, automatic JSON transformation, and 
+   comprehensive error handling.
+
+KEY CONCEPTS
+------------
+• Promises: Objects representing future values (pending, fulfilled, rejected)
+• Async/Await: Syntactic sugar that makes Promises easier to use
+• Axios: Promise-based HTTP client for making API requests
+• Error Handling: Using try-catch with async/await or .catch() with Promises
+• Chaining: Connecting multiple asynchronous operations together
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: QUICK REFERENCE GUIDE
+-----------------------------------
+
+PROMISES QUICK REFERENCE
+------------------------
+  // Creating a Promise
+  const promise = new Promise((resolve, reject) => {
+    if (success) {
+      resolve(value);
+    } else {
+      reject(error);
+    }
+  });
+
+  // Using Promises
+  promise
+    .then((value) => console.log(value))
+    .catch((error) => console.error(error));
+
+ASYNC/AWAIT QUICK REFERENCE
+---------------------------
+  // Async function
+  async function myFunction() {
+    try {
+      const result = await somePromise();
+      return result;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+AXIOS GET REQUEST QUICK REFERENCE
+---------------------------------
+  // With Promises
+  axios.get('/api/users')
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+  // With async/await
+  async function fetchUsers() {
+    try {
+      const response = await axios.get('/api/users');
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+AXIOS POST REQUEST QUICK REFERENCE
+-----------------------------------
+  // With Promises
+  axios.post('/api/users', { name: 'John' })
+    .then(response => console.log(response.data))
+    .catch(error => console.error(error));
+
+  // With async/await
+  async function createUser(userData) {
+    try {
+      const response = await axios.post('/api/users', userData);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: BEST PRACTICES
+----------------------------
+
+BEST PRACTICE 1: ALWAYS HANDLE ERRORS
+-------------------------------------
+Always use try-catch with async/await or .catch() with Promises:
+
+  // Good
+  async function fetchData() {
+    try {
+      const response = await axios.get('/api/data');
+      return response.data;
+    } catch (error) {
+      console.error('Error:', error.message);
+      throw error;
+    }
+  }
+
+  // Bad (no error handling)
+  async function fetchData() {
+    const response = await axios.get('/api/data');
+    return response.data;
+  }
+
+BEST PRACTICE 2: USE ASYNC/AWAIT FOR READABILITY
+------------------------------------------------
+Prefer async/await over .then()/.catch() chains for better readability:
+
+  // Good (async/await)
+  async function processData() {
+    const data = await fetchData();
+    const processed = await processData(data);
+    return processed;
+  }
+
+  // Less readable (.then() chain)
+  function processData() {
+    return fetchData()
+      .then(data => processData(data))
+      .then(processed => processed);
+  }
+
+BEST PRACTICE 3: PROVIDE MEANINGFUL ERROR MESSAGES
+---------------------------------------------------
+Give users and developers helpful error messages:
+
+  // Good
+  catch (error) {
+    if (error.response?.status === 404) {
+      throw new Error('User not found');
+    } else if (error.response?.status === 401) {
+      throw new Error('Unauthorized - Please login');
+    } else {
+      throw new Error('Failed to fetch data');
+    }
+  }
+
+BEST PRACTICE 4: USE APPROPRIATE HTTP METHODS
+---------------------------------------------
+Use the right HTTP method for the operation:
+• GET - Retrieve data
+• POST - Create new resources
+• PUT - Update entire resource
+• PATCH - Update part of resource
+• DELETE - Remove resource
+
+BEST PRACTICE 5: VALIDATE DATA BEFORE SENDING
+----------------------------------------------
+Validate data before making requests:
+
+  async function createUser(userData) {
+    // Validate before sending
+    if (!userData.name || !userData.email) {
+      throw new Error('Name and email are required');
+    }
+    
+    const response = await axios.post('/api/users', userData);
+    return response.data;
+  }
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: COMMON PATTERNS
+------------------------------
+
+PATTERN 1: FETCHING DATA ON COMPONENT MOUNT
+-------------------------------------------
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get('/api/data');
+        setData(response.data);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    fetchData();
+  }, []);
+
+PATTERN 2: HANDLING FORM SUBMISSIONS
+-------------------------------------
+  async function handleSubmit(event) {
+    event.preventDefault();
+    try {
+      const response = await axios.post('/api/users', formData);
+      console.log('User created:', response.data);
+      // Reset form or redirect
+    } catch (error) {
+      setErrors(error.response?.data || {});
+    }
+  }
+
+PATTERN 3: CHAINING DEPENDENT REQUESTS
+---------------------------------------
+  async function fetchUserAndPosts(userId) {
+    try {
+      const user = await axios.get(`/api/users/${userId}`);
+      const posts = await axios.get(`/api/posts?userId=${userId}`);
+      return { user: user.data, posts: posts.data };
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+PATTERN 4: PARALLEL REQUESTS
+-----------------------------
+  async function fetchMultipleUsers(userIds) {
+    try {
+      const promises = userIds.map(id => axios.get(`/api/users/${id}`));
+      const responses = await Promise.all(promises);
+      return responses.map(response => response.data);
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+
+PATTERN 5: RETRY LOGIC
+----------------------
+  async function fetchWithRetry(url, maxRetries = 3) {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const response = await axios.get(url);
+        return response.data;
+      } catch (error) {
+        if (i === maxRetries - 1) throw error;
+        await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+      }
+    }
+  }
+
+[END SECTION 7.4]
+[END PART 7]
+================================================================================
+
+FINAL SUMMARY
+=============
+
+KEY TAKEAWAYS
+-------------
+1. Asynchronous programming is essential for building responsive web 
+   applications
+2. Promises provide a clean way to handle asynchronous operations
+3. Async/await makes asynchronous code look and feel like synchronous code
+4. Axios simplifies making HTTP requests with a clean API
+5. Combining async/await with Axios provides the best developer experience
+
+WHAT YOU CAN DO NOW
+-------------------
+After studying this guide, you can:
+• Create and handle Promises effectively
+• Use async/await to write clean asynchronous code
+• Make GET and POST requests with Axios
+• Handle errors properly in asynchronous code
+• Chain multiple asynchronous operations
+• Build responsive and performant web applications
+
+NEXT STEPS
+----------
+• Practice creating Promises and using async/await
+• Build projects that make HTTP requests with Axios
+• Experiment with error handling patterns
+• Learn about other HTTP methods (PUT, DELETE, PATCH)
+• Explore Axios interceptors and advanced features
+• Study real-world API integrations
+
+Remember: Practice is key to mastering these concepts. Build projects, 
+experiment with code, and don't be afraid to make mistakes. Each error is a 
+learning opportunity!
+
+================================================================================
+END OF PART 2
+================================================================================
+
+This comprehensive guide has covered everything you need to know about 
+Promises, Async/Await, and Axios. You now have the knowledge to build 
+responsive, performant web applications using modern asynchronous programming 
+techniques.
+
+Good luck with your asynchronous programming journey!
+
+================================================================================
+

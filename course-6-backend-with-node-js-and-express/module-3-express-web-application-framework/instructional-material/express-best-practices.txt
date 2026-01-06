@@ -1,0 +1,61 @@
+Welcome to Express Best Practices. After watching this video, you will be able
+to describe the folder structure conventions
+for building an Express application and APIs, and identify commonly followed best practices
+for building Express applications and APIs Web frameworks such as Ruby on Rails, .NET,
+and Django have required directory structures for storing files. Express does not require a pre-defined directory
+structure for its applications. However, defining a directory structure in
+advance is usually a good idea because as the size of the application grows, it can
+be difficult to maintain otherwise. The following folders are conventionally used
+to store files. Within the project folder it is suggested
+you use the following directories: Node modules, config, models, routes, views, and public. Let’s describe the contents of each of these
+folders next. The node modules folder contains the application’s
+modules and packages. It is automatically created after running
+the “npm install” command. Node package manager, or npm, is discussed
+in another video. The “config” folder should contain configuration
+files such as database connection configuration, an environment variables file, and a credentials file containing the API
+keys for external services used by the application under development. The “models” folder contains the data
+models for the application. The files specify the type of datastore, such
+as relational or non-relational, and are defined by an object-relational mapping, or ORM, library. The routes folder is used to specify all of
+the routes for the different entities in different files. It should have one file for each logical set
+of routes, such as one file for one type of resource. The views folder contains template files. A template dynamically writes HTML, CSS, and
+JavaScript to send back to the client. This approach makes it easier to generate
+user-specific user interfaces. The public folder will contain all static
+content such as images, CSS, and JavaScript. It is often helpful to have a sub-folder for
+each type of content. The project folder should also contain a few
+files: app.js, routes.js, and package.json. The app.js file is the main configuration
+file for your application. A routes.js file is a central location to
+access all the routes in the application. This file requires or imports all the files
+in the routes folder and then exports them as a single module which is imported into
+the app.js file. This helps create a single point of entry
+for all the routes in the application. The package.json file contains the metadata
+used to manage the project’s dependencies. When building the folder structure for an
+API, it is quite similar to the project folder. It does not need the views or the public folders. So, the folders should look something like
+this. Node modules, config, models, and routes. And then the following files app.js, routes.js, and package.json. When naming an API route, be sure to use a
+noun as a resource identifier. This table provides examples of HTTP routes
+for post, get, patch, and delete using the word employee in the route. These routes are examples if you are writing
+HTTP methods and API routes to modify employee data. Be sure to use HTTP status codes correctly. A 200s code means everything is ok, a 300s
+code means the resource has been moved, a code in the 400s means there has been a client-side
+error, and a number in the 500s means something went wrong on the side of the API. Another best practice is to black-box test
+your node.js REST APIs. Black-box testing means you test the code
+without looking at its internal structure. The system is tested as a whole without mocked
+or stubbed dependencies. Mocha, which is a JavaScript test framework
+that runs on Node.js, contains a simple module called “supertest.” SuperTest provides you with a way to test
+HTTP requests, which is exactly what you need when you want to black-box test REST APIs. And when your API needs to authenticate, it is
+best practice to use JSON Web Token, or JWT based stateless authentication. Since the REST APIs must be stateless, your
+authentication will need to be as well. Stateless authentication verifies users by
+supplying most of the session information, such as user properties, on the client side. The last best API practice we will emphasize
+here is creating proper API documentation. The whole purpose of an API is so that someone
+else can use them, so you want to provide appropriate documentation for your Node.js
+REST API. Two open-source projects that you might find
+useful to create documentation for your APIs are API Blueprint which can be found at api
+blueprint dot org, and Swagger, which can be found at swagger
+dot I O. There are a number of other helpful tips that
+are widely followed when building an express node.js application. Regarding the use of node package manager,
+or NPM, use the npm init command when initializing a node.js project. When using the npm install command to install
+dependencies, use the dash save or the dash save dash dev attribute. This makes sure that if the application is
+moved to a different platform, the correct dependencies will be installed with it. Never push a node modules repository. And always use npm to install. Stick with the following capitalization conventions. Use all lowercase for file names, use camel case for variables, and npm modules are named in lowercase, separated
+by dashes. And when using the “require” method for npm
+modules, use camel case. In this video, you learned that use a directory structure in both an Express.js
+application and an API that includes node modules config, models, and routes folders. Best practices when developing RESTful APIs
+include: Use a noun as a resource identifier, use HTTP status codes correctly, black-box test REST APIs using SuperTest, and use JWT-based stateless authentication. and include good documentation. Finally, other tips include: Following capitalization conventions, using npm as recommended, and using config files for variables and group similar
+functioning routes into their own files.

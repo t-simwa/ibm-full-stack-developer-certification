@@ -1,0 +1,68 @@
+Welcome to Routing, Middleware, and Templating. After watching this video, you will be able
+to: ​Explain routing in Express. Describe middleware and how it is used. And explain template rendering in Express. Routing is an important aspect of server-side
+scripting. Requests to different routes to the same server must be handled by the server. Requests can be GET, POST, PUT, or DELETE. The server must handle each request to each of the routes or return appropriate error
+messages. Routing can be handled at application level
+or at router level. Here, you are handling each method on each
+route with separate methods at the application level. This is simple when there are fewer
+end points or routes. This App.get handles GET queries to end point
+/user/about/id. This App.post handles POST queries to the
+same end point. This App.get handles GET queries to end point
+/item/about/id. And this App.post also handles POST queries
+to end point /item/about/id. When there are many routes to handle, code
+maintenance is better with routers. A router by itself is used for branching query
+handling and routing each query differently. Here, you are defining two routers. One is for an item and the other is for a
+user. All the requests that come with the item are
+handled by the itemRouter. The /item/about and /item/detail routes are
+handled. All the requests that come with /user are handled by userRouter. Here, /user/about and /user/detail routes
+are handled. Depending on the uniform resource locator (URL), the response changes. Middleware includes functions that have access
+to the request and response objects and the next function. The next parameter determines what is done
+after the function is executed. An Express application can have more than
+one middleware and they can be chained to each other. Middleware is categorized based on purpose,
+use, and source. Five types of middleware are application level,
+router level, error handling, built-in, and third party, Middleware is useful for activities like parsing
+requests, adding authentication, and handling errors. Application-level middleware is bound to the
+application using app.use. All the client requests to this server application
+are routed through this middleware. This routing is useful for activities like
+authentication and checking session information. Here, you are defining middleware that will
+check the password that is passed. If the password is equal to pwd123, then it will log the time and chain to the
+next logical action which is processing the request. If it is not, then the response status will be set to 402
+and a message will appear saying that the user cannot log in. Consider application-level middleware as a
+gatekeeper. No request to the application
+server can go past it. Router-level middleware is not bound to the
+application. Instead, it is bound to an instance
+of express.Router(). You can use a specific middleware for a specific
+route instead of having all requests going through the same middleware. Here, if the route is /user, then you want
+the request to go through the user router and if the route is /item, then you want it
+to go through the item router. You define the two routers, define the middleware
+function that the routers will use and what happens next, and then you bind the application
+routes to each router. The response will vary depending on the request
+route in the client side. Error-handling middleware can be bound to
+either the entire application or to specific routers. Error-handling middleware always takes four arguments,
+which are error, request, response, and the next function that it needs to be chained
+to. Even if you don’t use the next parameter,
+you still have to define it in the method signature. This is an example of application-level error-handling
+middleware. If the user id 1 is accessed, then an error
+is thrown saying that it is the admin user. This error is handled by the middleware, which
+returns a response with a 500 status code. For all other users, the request is seamlessly
+processed and a Hello User Id message is displayed. Built-in middleware can be bound to either
+the entire application or to specific routers. Built-in middleware is useful for activities
+such as rendering hypertext markup language (HTML) pages from the server, parsing JavaScript
+Object Notation (JSON) input from the front end, and parsing cookies. This is an example of static middleware that
+is used to render static HTML pages and the images from the server side. Here at application level, you are defining
+that static files can be rendered from the cad220_staticfiles directory. On the right
+you see the HTML being rendered from that directory. Notice that the URL has only the server address
+and the port number followed by the filename. You can also define your own middleware or
+use third-party middleware, which can be made available through npm install. Because Node.js is open source, there are
+plenty available to install and use. Creating middleware is simple. It is a function that takes three parameters,
+which are request, response, and next. You can define a method that takes these three
+parameters and then bind it with app.use or router.use. The order in which the middleware
+is chained depends on the order in which the .use method is used to bind them. Here, you are creating middleware named myLogger
+and making the application use it. The output rendered includes the time the
+request is received. Template rendering is the ability of the server
+to fill in dynamic content in the HTML template. This example uses express-react-views, which
+renders React components from the server. You set the view engine property, which
+is responsible for creating HTML from your views. Views are JSX code. The views are in a directory named myviews. The view engine will look for a JSX file named
+index in the myviews directory and pass the property name to it. The output rendered will have the name of
+the user. This example shows the output for two users. In this video you learned that: Routers are used for branching query handling. Five types of middleware are application level,
+router level, error handling, built-in, and third party. Template rendering is the ability of the server
+to fill in dynamic content in the HTML template.
