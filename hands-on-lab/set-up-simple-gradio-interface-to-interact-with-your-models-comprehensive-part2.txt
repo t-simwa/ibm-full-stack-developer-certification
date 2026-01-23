@@ -1,0 +1,2187 @@
+================================================================================
+SET UP A SIMPLE GRADIO INTERFACE TO INTERACT WITH YOUR MODELS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+CONTINUATION FROM PART 1
+------------------------
+In Part 1, we learned:
+• What Gradio is and why it's useful
+• How to set up virtual environments
+• How to install required libraries
+• How to create basic Gradio interfaces
+• How to build a sum calculator demo
+
+In Part 2, we'll build on that foundation to:
+• Understand LLMs and IBM watsonx.ai
+• Create a simple LLM application (without Gradio first)
+• Integrate Gradio with LLMs
+• Build a complete chatbot interface
+• Add advanced features and customization
+• Complete exercises and extensions
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: UNDERSTANDING LLMs AND IBM WATSONX.AI
+  SECTION 4.1: WHAT ARE LARGE LANGUAGE MODELS (LLMs)?
+  SECTION 4.2: INTRODUCTION TO IBM WATSONX.AI
+  SECTION 4.3: AVAILABLE MODELS IN WATSONX.AI
+  SECTION 4.4: UNDERSTANDING LLM PARAMETERS
+
+PART 5: BUILDING A SIMPLE LLM APPLICATION
+  SECTION 5.1: CREATING THE SIMPLE LLM SCRIPT
+  SECTION 5.2: UNDERSTANDING THE IMPORTS
+  SECTION 5.3: CONFIGURING THE MODEL
+  SECTION 5.4: SETTING UP MODEL PARAMETERS
+  SECTION 5.5: INITIALIZING THE LLM
+  SECTION 5.6: CREATING THE INTERACTION LOOP
+  SECTION 5.7: RUNNING AND TESTING THE APPLICATION
+
+PART 6: INTEGRATING GRADIO WITH LLMs
+  SECTION 6.1: WHY INTEGRATE GRADIO WITH LLMs?
+  SECTION 6.2: UNDERSTANDING THE INTEGRATION APPROACH
+  SECTION 6.3: CREATING THE LLM CHAT APPLICATION
+  SECTION 6.4: UNDERSTANDING THE CHATBOT CODE
+  SECTION 6.5: LAUNCHING AND TESTING THE CHATBOT
+  SECTION 6.6: COMPARING MODELS
+
+PART 7: ADVANCED FEATURES AND EXERCISES
+  SECTION 7.1: UNDERSTANDING INCOMPLETE RESPONSES
+  SECTION 7.2: FIXING INCOMPLETE RESPONSES
+  SECTION 7.3: CUSTOMIZING THE INTERFACE
+  SECTION 7.4: ADDITIONAL EXERCISES
+  SECTION 7.5: BEST PRACTICES AND TIPS
+
+================================================================================
+PART 4: UNDERSTANDING LLMs AND IBM WATSONX.AI
+================================================================================
+
+Before we integrate Gradio with LLMs, it's important to understand what LLMs are, 
+how they work, and how IBM watsonx.ai provides access to them.
+
+SECTION 4.1: WHAT ARE LARGE LANGUAGE MODELS (LLMs)?
+----------------------------------------------------
+
+OVERVIEW
+--------
+Large Language Models (LLMs) are AI systems trained on vast amounts of text data 
+to understand and generate human-like text. They power modern chatbots, 
+translation services, content generation, and many other AI applications.
+
+DEFINITION
+----------
+A Large Language Model (LLM) is a type of artificial intelligence model that 
+has been trained on enormous amounts of text data to understand language patterns, 
+context, and relationships. These models can generate text, answer questions, 
+translate languages, summarize documents, and perform many other language-related 
+tasks.
+
+KEY CHARACTERISTICS
+-------------------
+
+1. SIZE
+   • "Large" refers to the number of parameters (weights) in the model
+   • Modern LLMs have billions or even trillions of parameters
+   • More parameters generally mean better performance (but also more resources)
+
+2. TRAINING DATA
+   • Trained on vast amounts of text from the internet, books, articles, etc.
+   • Learns patterns, grammar, facts, reasoning, and style
+   • The training data determines what the model knows
+
+3. CAPABILITIES
+   • Text generation (creating new text)
+   • Question answering (responding to queries)
+   • Translation (converting between languages)
+   • Summarization (condensing long text)
+   • Classification (categorizing text)
+   • And many more language tasks
+
+4. CONTEXT UNDERSTANDING
+   • Can understand context from surrounding text
+   • Maintains conversation context
+   • Can follow instructions and prompts
+
+HOW LLMs WORK (SIMPLIFIED)
+---------------------------
+1. INPUT: You provide text (a prompt or question)
+2. PROCESSING: The model processes the text through its neural network
+3. PREDICTION: The model predicts what text should come next
+4. OUTPUT: The model generates text based on its predictions
+
+Think of it like a very advanced autocomplete that:
+• Understands context
+• Can answer questions
+• Can generate creative content
+• Learns from billions of examples
+
+REAL-WORLD ANALOGY
+-------------------
+Think of an LLM like a very knowledgeable librarian:
+
+• Training = Years of reading books, articles, and documents
+• Knowledge = Understanding of language, facts, and patterns
+• Input (your question) = A question you ask the librarian
+• Processing = The librarian thinks about your question
+• Output (response) = The librarian provides an answer
+
+Just like a librarian uses their knowledge to answer questions, an LLM uses its 
+training to generate responses.
+
+COMMON LLM USE CASES
+---------------------
+• Chatbots and virtual assistants
+• Content generation (articles, stories, code)
+• Language translation
+• Text summarization
+• Question answering systems
+• Code generation and explanation
+• Sentiment analysis
+• And many more!
+
+LIMITATIONS OF LLMs
+-------------------
+• Knowledge cutoff: Only knows information from training data
+• Can hallucinate: May generate incorrect or made-up information
+• No real-time updates: Doesn't know about events after training
+• Context limits: Can only process limited amounts of text at once
+• Cost: Running large models requires significant computational resources
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: INTRODUCTION TO IBM WATSONX.AI
+--------------------------------------------
+
+OVERVIEW
+--------
+IBM watsonx.ai is a platform that provides access to various Large Language 
+Models through an API. It allows developers to use powerful AI models without 
+needing to train or host them themselves.
+
+WHAT IS IBM WATSONX.AI?
+-----------------------
+IBM watsonx.ai is a platform that provides:
+• Access to various foundation models (LLMs)
+• API endpoints for interacting with models
+• Tools for fine-tuning and customizing models
+• Enterprise-grade security and compliance
+• Integration with IBM Cloud services
+
+KEY FEATURES
+------------
+
+1. MULTIPLE MODEL OPTIONS
+   • Access to various models (IBM's Granite, Mistral, Llama, etc.)
+   • Can switch between models easily
+   • Each model has different strengths
+
+2. API-BASED ACCESS
+   • Access models through REST APIs
+   • No need to download or host models
+   • Pay for what you use
+
+3. EASY INTEGRATION
+   • Python SDK for easy integration
+   • Works with LangChain
+   • Compatible with various frameworks
+
+4. ENTERPRISE FEATURES
+   • Security and compliance
+   • Monitoring and logging
+   • Scalability
+
+WHY USE IBM WATSONX.AI?
+-----------------------
+• No need to train models yourself (saves time and money)
+• Access to state-of-the-art models
+• Enterprise-grade reliability
+• Easy to integrate into applications
+• Can try different models to find the best fit
+
+HOW IT WORKS
+------------
+1. You sign up for IBM watsonx.ai (or use the skills-network project ID)
+2. You get API credentials (or use the provided project ID)
+3. You use the Python SDK to connect to the API
+4. You send prompts to the API
+5. The API returns generated text
+6. You use the response in your application
+
+REAL-WORLD ANALOGY
+-------------------
+Think of IBM watsonx.ai like a cloud computing service:
+
+• Instead of buying a server, you rent computing power
+• Instead of training an LLM, you use IBM's trained models
+• You pay for what you use
+• IBM handles the infrastructure
+• You focus on building your application
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: AVAILABLE MODELS IN WATSONX.AI
+--------------------------------------------
+
+OVERVIEW
+--------
+IBM watsonx.ai provides access to multiple LLM models. Each model has different 
+characteristics, strengths, and use cases. Understanding the available models 
+helps you choose the right one for your application.
+
+MODELS WE'LL USE IN THIS LAB
+-----------------------------
+
+1. IBM GRANITE 3.3 8B INSTRUCT
+   Model ID: 'ibm/granite-3-3-8b-instruct'
+   
+   Characteristics:
+   • Developed by IBM
+   • 8 billion parameters (relatively smaller, faster)
+   • Instruction-tuned (good at following instructions)
+   • Optimized for efficiency
+   
+   Best for:
+   • General question answering
+   • Instruction following
+   • Applications needing fast responses
+   • Cost-effective applications
+   
+   Example use cases:
+   • Customer support chatbots
+   • Content generation
+   • Text summarization
+
+2. MISTRAL AI MIXTRAL 8X7B INSTRUCT
+   Model ID: 'mistralai/mistral-small-3-1-24b-instruct-2503'
+   
+   Characteristics:
+   • Developed by Mistral AI
+   • Mixture of Experts architecture (8 experts, 7B each)
+   • Instruction-tuned
+   • High-quality responses
+   
+   Best for:
+   • Complex reasoning tasks
+   • High-quality text generation
+   • Applications requiring detailed responses
+   
+   Example use cases:
+   • Advanced Q&A systems
+   • Creative writing
+   • Technical documentation
+
+SWITCHING BETWEEN MODELS
+-------------------------
+One of the great features of watsonx.ai is how easy it is to switch between 
+models. You simply change the model_id parameter:
+
+```python
+# Use Granite model
+model_id = 'ibm/granite-3-3-8b-instruct'
+
+# Or use Mistral model (just change the model_id)
+# model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503'
+```
+
+This flexibility allows you to:
+• Test different models for your use case
+• Choose the best model for specific tasks
+• Switch models without changing much code
+• Compare model performance
+
+HOW TO CHOOSE A MODEL
+---------------------
+Consider these factors:
+
+1. SPEED REQUIREMENTS
+   • Smaller models (like Granite 8B) are faster
+   • Larger models may be slower but higher quality
+
+2. QUALITY REQUIREMENTS
+   • Some tasks need higher quality (use Mistral)
+   • Some tasks are fine with good-enough quality (use Granite)
+
+3. COST CONSIDERATIONS
+   • Smaller models typically cost less
+   • Consider your usage volume
+
+4. TASK COMPLEXITY
+   • Simple tasks: Smaller models work well
+   • Complex tasks: May need larger models
+
+5. EXPERIMENTATION
+   • Try different models
+   • Compare results
+   • Choose what works best for your use case
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: UNDERSTANDING LLM PARAMETERS
+-------------------------------------------
+
+OVERVIEW
+--------
+LLMs have various parameters that control how they generate text. Understanding 
+these parameters helps you get the best results from your models.
+
+KEY PARAMETERS
+--------------
+
+1. MAX_NEW_TOKENS
+   What it does: Controls the maximum number of tokens (words/characters) the 
+   model will generate in its response.
+   
+   Example values: 256, 512, 1024, 2048
+   
+   How it works:
+   • Tokens are pieces of text (words or parts of words)
+   • Setting max_new_tokens=256 means the response won't exceed 256 tokens
+   • If the model wants to generate more, it stops at the limit
+   
+   Why it matters:
+   • Too low: Responses might be cut off mid-sentence
+   • Too high: Wastes tokens and may generate unnecessary text
+   • Need to balance based on your use case
+   
+   Real-world analogy:
+   Think of it like a word limit for an essay. You set a maximum, and the model 
+   won't exceed it, even if it wants to say more.
+   
+   In our code:
+   ```python
+   GenParams.MAX_NEW_TOKENS: 256
+   ```
+   This sets the maximum to 256 tokens.
+
+2. TEMPERATURE
+   What it does: Controls the randomness or creativity of the model's responses.
+   
+   Range: 0.0 to 2.0 (typically 0.0 to 1.0)
+   
+   How it works:
+   • Lower temperature (0.0-0.3): More deterministic, focused, consistent
+   • Medium temperature (0.4-0.7): Balanced creativity and consistency
+   • Higher temperature (0.8-1.0+): More creative, diverse, sometimes less coherent
+   
+   Examples:
+   • Temperature 0.1: Very predictable, almost always the same answer
+   • Temperature 0.5: Balanced - our default in this lab
+   • Temperature 0.9: Very creative, different answers each time
+   
+   When to use different values:
+   • Low (0.1-0.3): Factual Q&A, technical answers, consistent responses
+   • Medium (0.4-0.7): General conversation, balanced responses
+   • High (0.8-1.0): Creative writing, brainstorming, diverse ideas
+   
+   Real-world analogy:
+   Think of temperature like a creativity dial:
+   • Turn it down (low): The model is conservative and sticks to what it knows
+   • Turn it up (high): The model is more adventurous and creative
+   
+   In our code:
+   ```python
+   GenParams.TEMPERATURE: 0.5
+   ```
+   This sets a balanced temperature of 0.5.
+
+OTHER PARAMETERS (NOT USED IN THIS LAB)
+----------------------------------------
+• top_p: Controls diversity via nucleus sampling
+• top_k: Limits the number of top tokens to consider
+• repetition_penalty: Reduces repetition in generated text
+• stop_sequences: Stops generation at specific sequences
+
+UNDERSTANDING TOKENS
+--------------------
+What is a token?
+• A token is a piece of text the model processes
+• Can be a word, part of a word, or punctuation
+• Example: "Hello world" might be 2 tokens: ["Hello", " world"]
+
+Why tokens matter:
+• Models process text as tokens, not words
+• Token limits affect response length
+• Pricing often based on tokens used
+• Need to balance between completeness and cost
+
+Estimating tokens:
+• Roughly: 1 token ≈ 0.75 words (English)
+• "Hello world" ≈ 2 tokens
+• A 256-token response ≈ 192 words
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: BUILDING A SIMPLE LLM APPLICATION
+================================================================================
+
+Before integrating with Gradio, let's build a simple LLM application that runs 
+in the terminal. This will help us understand how to work with LLMs before 
+adding the interface layer.
+
+SECTION 5.1: CREATING THE SIMPLE LLM SCRIPT
+--------------------------------------------
+
+OVERVIEW
+--------
+We'll create a simple Python script that uses IBM watsonx.ai to answer questions. 
+This will run in the terminal (command line) first, then we'll add a Gradio 
+interface later.
+
+STEP 1: CREATE THE FILE
+-----------------------
+Create a new file named "simple_llm.py" in your project directory.
+
+STEP 2: UNDERSTANDING WHAT WE'LL BUILD
+---------------------------------------
+This script will:
+• Connect to IBM watsonx.ai
+• Configure a model (Granite 3.3 8B)
+• Ask the user for a question (in the terminal)
+• Send the question to the LLM
+• Display the response in the terminal
+
+This is simpler than the Gradio version because:
+• No web interface needed
+• Direct terminal interaction
+• Easier to understand the LLM interaction
+• Good foundation before adding Gradio
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: UNDERSTANDING THE IMPORTS
+---------------------------------------
+
+OVERVIEW
+--------
+Let's understand what we need to import and why. The imports connect us to IBM 
+watsonx.ai and LangChain.
+
+THE COMPLETE IMPORT SECTION
+----------------------------
+```python
+# Import the necessary packages
+from ibm_watsonx.ai.foundation_models import ModelInference
+from ibm_watsonx.ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx.ai import Credentials
+from langchain_ibm import WatsonxLLM
+```
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+
+LINE 1: # Import the necessary packages
+-----------------------------------------
+• # = Comment (for human readers)
+• Explains what this section does
+• Good practice to add comments
+
+LINE 2: from ibm_watsonx.ai.foundation_models import ModelInference
+--------------------------------------------------------------------
+• from ... import = Import specific component
+• ibm_watsonx.ai = The IBM watsonx.ai package
+• foundation_models = Submodule for foundation models
+• ModelInference = Class for model inference (getting responses)
+
+What ModelInference does:
+• Provides low-level access to watsonx.ai models
+• Can be used directly (but we'll use LangChain wrapper instead)
+• Useful for advanced use cases
+
+Note: We import this but don't use it directly in our code. It's included for 
+reference or future use.
+
+LINE 3: from ibm_watsonx.ai.metanames import GenTextParamsMetaNames as GenParams
+---------------------------------------------------------------------------------
+• from ... import ... as = Import with an alias
+• ibm_watsonx.ai.metanames = Submodule containing parameter names
+• GenTextParamsMetaNames = Class with parameter name constants
+• as GenParams = Short alias for easier use
+
+What GenParams does:
+• Contains constants for parameter names
+• Instead of typing "GenTextParamsMetaNames.MAX_NEW_TOKENS", we use "GenParams.MAX_NEW_TOKENS"
+• Makes code more readable
+• Prevents typos in parameter names
+
+Example usage:
+• GenParams.MAX_NEW_TOKENS (instead of the long name)
+• GenParams.TEMPERATURE (instead of typing the full path)
+
+Why use constants?
+• Prevents typos: "MAX_NEW_TOKENS" vs "max_new_tokens" vs "MaxNewTokens"
+• IDE autocomplete works better
+• Clearer what parameters are available
+
+LINE 4: from ibm_watsonx.ai import Credentials
+-----------------------------------------------
+• from ... import = Import specific component
+• ibm_watsonx.ai = The main package
+• Credentials = Class for managing authentication credentials
+
+What Credentials does:
+• Handles authentication to watsonx.ai
+• Manages API keys and tokens
+• Required for accessing watsonx.ai services
+
+Note: In this lab, we use the "skills-network" project_id which provides free 
+access without needing separate credentials. In production, you'd use Credentials 
+to manage your API keys securely.
+
+LINE 5: from langchain_ibm import WatsonxLLM
+---------------------------------------------
+• from ... import = Import specific component
+• langchain_ibm = The LangChain-IBM integration package
+• WatsonxLLM = Class that wraps IBM watsonx.ai models for LangChain
+
+What WatsonxLLM does:
+• Wraps IBM watsonx.ai models in a LangChain-compatible interface
+• Allows us to use watsonx.ai models with LangChain
+• Provides a consistent interface across different LLM providers
+• Makes it easy to switch between models
+
+Why use WatsonxLLM?
+• LangChain provides useful abstractions
+• Easier to work with than raw API calls
+• Consistent interface if we switch to other LLM providers
+• Integrates well with other LangChain components
+
+REAL-WORLD ANALOGY
+-------------------
+Think of these imports like tools in a toolbox:
+
+• ModelInference = A basic tool (we have it but use a better one)
+• GenParams = A reference guide (tells us parameter names)
+• Credentials = A key (for authentication, but we have a master key)
+• WatsonxLLM = The main tool we'll use (combines everything we need)
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: CONFIGURING THE MODEL
+-----------------------------------
+
+OVERVIEW
+--------
+Now we'll configure which model to use and set up the basic parameters. This 
+section shows how to select and configure an LLM model.
+
+THE MODEL CONFIGURATION CODE
+------------------------------
+```python
+# Specify the model and project settings
+# (make sure the model you wish to use is commented out, and other models are commented)
+#model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503' # Specify the Mixtral 8x7B model
+model_id = 'ibm/granite-3-3-8b-instruct' # Specify IBM's Granite 3.3 8B model
+```
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+
+LINE 1: # Specify the model and project settings
+--------------------------------------------------
+• Comment explaining what this section does
+• Helps readers understand the code
+
+LINE 2: # (make sure the model you wish to use is commented out...
+---------------------------------------------------------------
+• Important instruction in a comment
+• Explains how to switch between models
+• The model you want to use should NOT be commented (no #)
+• Other models SHOULD be commented (with #)
+
+LINE 3: #model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503'...
+-----------------------------------------------------------------------
+• # = Commented out (not active)
+• This line is ignored by Python
+• This is the Mistral model option
+• Currently disabled (commented)
+
+What this line would do if uncommented:
+• Sets model_id to the Mistral model
+• Would use Mistral instead of Granite
+• To use it, remove the # and comment out the Granite line
+
+LINE 4: model_id = 'ibm/granite-3-3-8b-instruct' # Specify IBM's Granite...
+----------------------------------------------------------------------------
+• model_id = Variable name to store the model identifier
+• = = Assignment operator
+• 'ibm/granite-3-3-8b-instruct' = The model ID string
+• # Specify... = Comment explaining which model this is
+
+What this does:
+• Creates a variable called model_id
+• Stores the string 'ibm/granite-3-3-8b-instruct'
+• This tells watsonx.ai which model we want to use
+• The model ID is like an address - it tells the system which model to access
+
+UNDERSTANDING MODEL IDs
+-----------------------
+Model IDs are strings that identify specific models:
+• Format: 'provider/model-name'
+• 'ibm/granite-3-3-8b-instruct' = IBM's Granite model
+• 'mistralai/mistral-small-3-1-24b-instruct-2503' = Mistral's model
+
+Why strings?
+• Easy to change: Just change the string
+• Can be stored in configuration files
+• Can be passed as parameters
+• Human-readable
+
+SWITCHING MODELS
+----------------
+To switch models, you simply:
+1. Comment out the current model (add #)
+2. Uncomment the model you want (remove #)
+
+Example - switching to Mistral:
+```python
+model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503' # Mistral model
+#model_id = 'ibm/granite-3-3-8b-instruct' # Granite model (now commented)
+```
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: SETTING UP MODEL PARAMETERS
+-----------------------------------------
+
+OVERVIEW
+--------
+Now we'll configure the parameters that control how the model generates responses. 
+These parameters affect the quality, length, and style of the responses.
+
+THE PARAMETERS CODE
+--------------------
+```python
+# Set the necessary parameters
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 256, # Specify the max tokens you want to generate
+    GenParams.TEMPERATURE: 0.5, # This randomness or creativity of the model's responses
+}
+project_id = "skills-network"
+```
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+
+LINE 1: # Set the necessary parameters
+---------------------------------------
+• Comment explaining the section
+• Helps readers understand what's happening
+
+LINE 2: parameters = {
+------------------------
+• parameters = Variable name for our parameter dictionary
+• = = Assignment
+• { = Start of a Python dictionary
+
+What is a dictionary?
+• A dictionary stores key-value pairs
+• Keys are like labels, values are the actual data
+• Example: {'name': 'John', 'age': 30}
+• In our case: {GenParams.MAX_NEW_TOKENS: 256, ...}
+
+Why use a dictionary?
+• Groups related parameters together
+• Easy to pass to functions
+• Clear what each parameter is
+• Can be modified or extended easily
+
+LINE 3: GenParams.MAX_NEW_TOKENS: 256, # Specify the max tokens...
+-------------------------------------------------------------------
+• GenParams.MAX_NEW_TOKENS = The key (parameter name constant)
+• : = Separates key from value in dictionary
+• 256 = The value (maximum tokens to generate)
+• , = Separates this entry from the next
+• # Specify... = Comment explaining what this does
+
+What this does:
+• Sets the maximum response length to 256 tokens
+• The model won't generate more than 256 tokens
+• If it wants to generate more, it stops at 256
+
+Why 256?
+• Good balance for most use cases
+• Not too short (won't cut off important info)
+• Not too long (won't waste tokens)
+• Can be adjusted based on needs
+
+LINE 4: GenParams.TEMPERATURE: 0.5, # This randomness or creativity...
+----------------------------------------------------------------------
+• GenParams.TEMPERATURE = The key (parameter name)
+• : = Separates key from value
+• 0.5 = The value (temperature setting)
+• , = Separates entries (last one, but comma is fine)
+• # This randomness... = Comment explaining temperature
+
+What this does:
+• Sets temperature to 0.5 (balanced)
+• Controls creativity/randomness of responses
+• 0.5 is a good middle ground
+
+Why 0.5?
+• Balanced between consistency and creativity
+• Good for general Q&A
+• Not too predictable, not too random
+• Can be adjusted: lower = more consistent, higher = more creative
+
+LINE 5: } 
+----------
+• Closes the dictionary
+• Completes the parameters definition
+
+LINE 6: project_id = "skills-network"
+---------------------------------------
+• project_id = Variable name
+• = = Assignment
+• "skills-network" = The project ID string
+
+What this does:
+• Sets the project ID to "skills-network"
+• This provides free access to watsonx.ai in the lab environment
+• In production, you'd use your own project ID
+
+Why "skills-network"?
+• Special project ID for educational purposes
+• Provides free access without registration
+• Only works in the lab environment
+• For local use, you'd need your own IBM Cloud account
+
+UNDERSTANDING THE DICTIONARY STRUCTURE
+--------------------------------------
+Our parameters dictionary looks like this:
+```python
+{
+    GenParams.MAX_NEW_TOKENS: 256,
+    GenParams.TEMPERATURE: 0.5
+}
+```
+
+This is equivalent to:
+```python
+{
+    'max_new_tokens': 256,
+    'temperature': 0.5
+}
+```
+
+But using GenParams constants is better because:
+• Prevents typos
+• IDE autocomplete works
+• Clearer what parameters are available
+• Consistent with watsonx.ai documentation
+
+[END SECTION 5.4]
+================================================================================
+
+SECTION 5.5: INITIALIZING THE LLM
+----------------------------------
+
+OVERVIEW
+--------
+Now we'll create the WatsonxLLM object that connects to IBM watsonx.ai and 
+configures it with our model and parameters.
+
+THE LLM INITIALIZATION CODE
+----------------------------
+```python
+# Wrap up the model into WatsonxLLM inference
+watsonx_llm = WatsonxLLM(
+    model_id = model_id,
+    url = "https://us-south.ml.cloud.ibm.com",
+    project_id=project_id,
+    params=parameters,
+)
+```
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+
+LINE 1: # Wrap up the model into WatsonxLLM inference
+-----------------------------------------------------
+• Comment explaining what we're doing
+• "Wrap up" means to package or encapsulate
+• We're creating a LangChain-compatible wrapper
+
+LINE 2: watsonx_llm = WatsonxLLM(
+----------------------------------
+• watsonx_llm = Variable name to store our LLM object
+• = = Assignment
+• WatsonxLLM( = Creating a new WatsonxLLM object
+• ( = Start of parameters
+
+What WatsonxLLM does:
+• Creates a LangChain-compatible LLM object
+• Connects to IBM watsonx.ai
+• Handles API calls automatically
+• Provides a simple interface to use the model
+
+Why store it in a variable?
+• We'll use it later to generate responses
+• Can reuse the same object multiple times
+• Keeps our code organized
+
+LINE 3: model_id = model_id,
+-----------------------------
+• model_id = Parameter name (keyword argument)
+• = = Assignment within parameter
+• model_id = The variable we defined earlier (the value)
+• , = Separates parameters
+
+What this does:
+• Tells WatsonxLLM which model to use
+• Passes our model_id variable ('ibm/granite-3-3-8b-instruct')
+• The model_id parameter tells watsonx.ai which model to access
+
+LINE 4: url = "https://us-south.ml.cloud.ibm.com",
+-----------------------------------------------
+• url = Parameter name
+• = = Assignment
+• "https://us-south.ml.cloud.ibm.com" = The API endpoint URL
+• , = Separates parameters
+
+What this does:
+• Specifies the watsonx.ai API endpoint
+• "us-south" means US South region
+• This is where the API server is located
+• Different regions have different URLs
+
+Why specify the URL?
+• IBM has servers in different regions
+• You might want to use a region closer to you
+• Different regions might have different models available
+• For this lab, us-south works fine
+
+LINE 5: project_id=project_id,
+-------------------------------
+• project_id = Parameter name
+• = = Assignment
+• project_id = Our variable ("skills-network")
+• , = Separates parameters
+
+What this does:
+• Provides the project ID for authentication
+• Uses our "skills-network" project ID
+• This gives us access to the API
+• Required for all API calls
+
+LINE 6: params=parameters,
+---------------------------
+• params = Parameter name
+• = = Assignment
+• parameters = Our parameters dictionary
+• , = Separates parameters
+
+What this does:
+• Passes our parameter settings to the model
+• Includes MAX_NEW_TOKENS: 256
+• Includes TEMPERATURE: 0.5
+• These control how the model generates responses
+
+LINE 7: )
+----------
+• Closes the WatsonxLLM() constructor
+• Completes the object creation
+
+WHAT HAPPENS WHEN THIS RUNS
+----------------------------
+1. WatsonxLLM constructor is called
+2. It connects to IBM watsonx.ai API
+3. Configures the specified model
+4. Sets up authentication with project_id
+5. Applies the parameters we specified
+6. Returns a ready-to-use LLM object
+7. We store it in watsonx_llm variable
+
+NOW WE CAN USE IT
+-----------------
+After this code runs, watsonx_llm is ready to use. We can call methods on it to 
+generate text. The object handles all the API communication behind the scenes.
+
+[END SECTION 5.5]
+================================================================================
+
+SECTION 5.6: CREATING THE INTERACTION LOOP
+-------------------------------------------
+
+OVERVIEW
+--------
+Now we'll create the code that interacts with the user, gets their question, 
+sends it to the LLM, and displays the response.
+
+THE INTERACTION CODE
+---------------------
+```python
+# Get the query from the user input
+query = input("Please enter your query: ")
+
+# Print the generated response
+print(watsonx_llm.invoke(query))
+```
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+
+LINE 1: # Get the query from the user input
+--------------------------------------------
+• Comment explaining what we're doing
+• Helps readers understand the code
+
+LINE 2: query = input("Please enter your query: ")
+--------------------------------------------------
+• query = Variable to store the user's question
+• = = Assignment
+• input( = Python function to get user input
+• "Please enter your query: " = Prompt text shown to user
+• ) = Closes the input() function call
+
+What input() does:
+• Displays the prompt text to the user
+• Waits for the user to type something
+• Reads what the user types
+• Returns it as a string
+
+How it works:
+1. Program displays: "Please enter your query: "
+2. User types their question (e.g., "How to be a good data scientist?")
+3. User presses Enter
+4. input() returns the typed text
+5. We store it in the query variable
+
+Example:
+• User sees: "Please enter your query: "
+• User types: "What is Python?"
+• query variable now contains: "What is Python?"
+
+LINE 3: # Print the generated response
+---------------------------------------
+• Comment explaining what we're doing
+• Helps readers understand
+
+LINE 4: print(watsonx_llm.invoke(query))
+----------------------------------------
+• print( = Python function to display output
+• watsonx_llm = Our LLM object
+• . = Dot notation (accesses methods)
+• invoke( = Method to generate a response
+• query = The user's question (parameter)
+• ) = Closes invoke() call
+• ) = Closes print() call
+
+What invoke() does:
+• Sends the query to the LLM
+• Waits for the model to generate a response
+• Returns the generated text
+• Handles all API communication automatically
+
+How it works:
+1. invoke(query) is called with the user's question
+2. WatsonxLLM sends the question to watsonx.ai API
+3. The model processes the question
+4. The model generates a response
+5. The API returns the response
+6. invoke() returns the response text
+7. print() displays it to the user
+
+What print() does:
+• Takes the response text
+• Displays it in the terminal
+• User can read the answer
+
+COMPLETE FLOW
+-------------
+1. Program starts
+2. LLM is initialized (watsonx_llm created)
+3. Program displays: "Please enter your query: "
+4. User types a question
+5. Question is stored in query variable
+6. watsonx_llm.invoke(query) is called
+7. Question is sent to watsonx.ai
+8. Model generates response
+9. Response is returned
+10. print() displays the response
+11. Program ends
+
+EXAMPLE INTERACTION
+-------------------
+Terminal output:
+```
+Please enter your query: How to be a good data scientist?
+```
+
+Then the model's response appears:
+```
+Data Scientists are the new stars of the tech world. They are in high demand 
+and are well paid. But what does it take to be a good data scientist?
+
+First, you need to have a strong foundation in mathematics and statistics...
+```
+
+[END SECTION 5.6]
+================================================================================
+
+SECTION 5.7: RUNNING AND TESTING THE APPLICATION
+------------------------------------------------
+
+OVERVIEW
+--------
+Now let's run our simple LLM application and see it in action. This will help 
+us understand how the LLM works before we add the Gradio interface.
+
+STEP 1: VERIFY YOUR ENVIRONMENT
+--------------------------------
+Open your terminal and verify that you are operating within the virtual 
+environment (my_env) you previously established.
+
+Your prompt should show:
+(my_env) user@computer:~/project$
+
+If not activated:
+• Linux/Mac: source my_env/bin/activate
+• Windows: my_env\Scripts\activate
+
+STEP 2: RUN THE APPLICATION
+----------------------------
+Run the following command in the terminal:
+
+Command:
+python3.11 simple_llm.py
+
+WHAT HAPPENS:
+• Python executes the script
+• LLM is initialized (this may take a moment)
+• Program displays: "Please enter your query: "
+• Program waits for your input
+
+STEP 3: ENTER YOUR QUERY
+-------------------------
+After the code successfully runs, you can input the following query in the 
+terminal. The app then generates a response.
+
+Example query:
+How to be a good data scientist?
+
+Or try your own questions:
+• What is artificial intelligence?
+• Explain machine learning in simple terms
+• How does a neural network work?
+
+STEP 4: VIEW THE RESPONSE
+--------------------------
+The model will generate a response and display it in the terminal.
+
+EXAMPLE OUTPUT
+--------------
+```
+(my_env) user@computer:~/project$ python3.11 simple_llm.py
+Please enter your query: How to be a good data scientist?
+
+Data Scientists are the new stars of the tech world. They are in high demand 
+and are well paid. But what does it take to be a good data scientist?
+
+First, you need to have a strong foundation in mathematics and statistics. 
+You should be comfortable with concepts like probability, linear algebra, and 
+calculus. You should also be familiar with statistical methods like regression 
+analysis, hypothesis testing, and experimental design.
+
+Second, you need to have programming skills. Python is the most popular 
+language for data science, but R, SQL, and Java are also commonly used. You 
+should be able to write clean, efficient code and be familiar with data 
+structures, algorithms, and software engineering principles.
+
+Third, you need to have a deep understanding of the domain you are working in. 
+This means knowing the business problems you are trying to solve, the data you 
+are working with, and the tools and techniques that are commonly used in the 
+field.
+
+Fourth, you need to be able to communicate effectively. Data scientists need 
+to be able to explain complex concepts to non-technical stakeholders, present 
+findings in a clear and concise manner, and work well in a team.
+
+Fifth, you need...
+```
+
+UNDERSTANDING THE OUTPUT
+-------------------------
+• The response is generated by the LLM
+• It's based on the model's training data
+• The quality depends on the model and parameters
+• Responses may vary slightly each time (due to temperature)
+
+OBSERVATIONS
+------------
+You might notice:
+• The response is informative and detailed
+• It's formatted as paragraphs
+• It may be cut off if it exceeds max_new_tokens
+• The style matches the question asked
+
+IMPORTANT NOTES
+---------------
+In the code, you used "skills-network" as project_id to gain immediate, free 
+access to the API without the need for initial registration.
+
+Important! This access method is exclusive to this cloud IDE environment. If 
+you are interested in using the model/API in a local environment, detailed 
+instructions and further information are available in tutorials.
+
+Moreover, note that, by default, this app uses IBM's Granite 3.3 8B model. In 
+order to use Mistral AI's Mixtral 8x7B model instead, all you have to do is 
+change the model_id parameter. The necessary instructions for doing so are 
+embedded in the script. Moreover, the code on the following page will provide 
+you with a specific example of building a Q&A bot with Mixtral 8x7B.
+
+TROUBLESHOOTING
+---------------
+
+ISSUE: "ModuleNotFoundError"
+Solution: Make sure virtual environment is activated and packages are installed
+
+ISSUE: "Connection error"
+Solution: Check internet connection and API endpoint URL
+
+ISSUE: "Authentication error"
+Solution: Verify project_id is set to "skills-network"
+
+ISSUE: Response is cut off
+Solution: Increase MAX_NEW_TOKENS parameter
+
+ISSUE: Response takes too long
+Solution: This is normal for LLM inference, be patient
+
+[END SECTION 5.7]
+================================================================================
+
+PART 6: INTEGRATING GRADIO WITH LLMs
+================================================================================
+
+Now that we understand how to use LLMs, let's integrate them with Gradio to 
+create a user-friendly web interface. This is where everything comes together!
+
+SECTION 6.1: WHY INTEGRATE GRADIO WITH LLMs?
+---------------------------------------------
+
+OVERVIEW
+--------
+We've seen how to use LLMs in the terminal. Now let's understand why adding a 
+Gradio interface makes sense.
+
+PROBLEMS WITH TERMINAL-BASED INTERACTION
+-----------------------------------------
+• Requires technical knowledge (command line)
+• Not user-friendly for non-technical users
+• Hard to share with others
+• No visual feedback
+• Difficult to use in presentations
+• Not accessible to all users
+
+BENEFITS OF GRADIO INTERFACE
+-----------------------------
+• User-friendly web interface
+• No technical knowledge required
+• Easy to share (just share a URL)
+• Visual feedback and better UX
+• Great for demos and presentations
+• Accessible from any device with a browser
+
+WHAT WE'LL BUILD
+----------------
+A chatbot interface where:
+• Users type questions in a text box
+• Click a button (or press Enter)
+• See responses displayed in another text box
+• All through a clean web interface
+• No terminal needed!
+
+REAL-WORLD ANALOGY
+-------------------
+Terminal-based = Talking to someone on the phone (functional but limited)
+Gradio interface = Video call with screen sharing (much better experience)
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: UNDERSTANDING THE INTEGRATION APPROACH
+---------------------------------------------------
+
+OVERVIEW
+--------
+Let's understand how we'll combine Gradio with our LLM code.
+
+THE INTEGRATION PATTERN
+------------------------
+1. Keep the LLM initialization code (same as before)
+2. Create a function that takes user input and returns LLM response
+3. Connect that function to a Gradio interface
+4. Launch the interface
+
+KEY INSIGHT
+-----------
+The function we create for Gradio is just a wrapper around watsonx_llm.invoke():
+• Takes text input (from Gradio)
+• Calls the LLM
+• Returns text output (to Gradio)
+• Gradio handles the rest!
+
+THE THREE COMPONENTS
+--------------------
+1. MODEL INITIALIZATION
+   • Same as simple_llm.py
+   • Creates watsonx_llm object
+   • Configures model and parameters
+
+2. RESPONSE FUNCTION
+   • New function for Gradio
+   • Takes prompt as input
+   • Calls watsonx_llm.invoke()
+   • Returns the response
+
+3. GRADIO INTERFACE
+   • Creates the web interface
+   • Connects function to UI
+   • Launches the server
+
+HOW IT ALL FITS TOGETHER
+-------------------------
+```
+User types question → Gradio captures input → Calls our function → 
+Function calls LLM → LLM generates response → Function returns response → 
+Gradio displays response → User sees answer
+```
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: CREATING THE LLM CHAT APPLICATION
+-----------------------------------------------
+
+OVERVIEW
+--------
+Now we'll create the complete chatbot application that integrates Gradio with 
+IBM watsonx.ai. This combines everything we've learned.
+
+STEP 1: CREATE THE FILE
+-----------------------
+Navigate to the PROJECT directory, right-click and create a new file named 
+"llm_chat.py".
+
+STEP 2: UNDERSTANDING THE STRUCTURE
+------------------------------------
+The code includes three main components:
+1. Initializing the model (same as before)
+2. Defining the function that generates responses from the LLM
+3. Constructing the Gradio interface and enabling interaction with the LLM
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: UNDERSTANDING THE CHATBOT CODE
+--------------------------------------------
+
+OVERVIEW
+--------
+Let's go through the complete chatbot code line by line to understand every detail.
+
+THE COMPLETE CODE
+------------------
+```python
+# Import necessary packages
+from ibm_watsonx.ai.foundation_models import ModelInference
+from ibm_watsonx.ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx.ai import Credentials
+from langchain_ibm import WatsonxLLM
+import gradio as gr
+
+# Model and project settings
+#model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503' # Specify the Mixtral 8x7B model
+model_id = 'ibm/granite-3-3-8b-instruct' # Specify IBM's Granite 3.3 8B model
+
+# Set necessary parameters
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 256, # Specify the max tokens you want to generate
+    GenParams.TEMPERATURE: 0.5, # This randomness or creativity of the model's responses
+}
+project_id = "skills-network"
+
+# Wrap up the model into WatsonxLLM inference
+watsonx_llm = WatsonxLLM(
+    model_id=model_id,
+    url="https://us-south.ml.cloud.ibm.com",
+    project_id=project_id,
+    params=parameters,
+)
+
+# Function to generate a response from the model
+def generate_response(prompt_txt):
+    generated_response = watsonx_llm.invoke(prompt_txt)
+    return generated_response
+
+# Create Gradio interface
+chat_application = gr.Interface(
+    fn=generate_response,
+    allow_flagging="never",
+    inputs=gr.Textbox(label="Input", lines=2, placeholder="Type your question here..."),
+    outputs=gr.Textbox(label="Output"),
+    title="Watsonx.ai Chatbot",
+    description="Ask any question and the chatbot will try to answer."
+)
+
+# Launch the app
+chat_application.launch(server_name="127.0.0.1", server_port=7860)
+```
+
+LINE-BY-LINE EXPLANATION - IMPORTS
+------------------------------------
+
+LINE 1: # Import necessary packages
+------------------------------------
+• Comment section header
+
+LINES 2-5: Import statements
+-----------------------------
+• Same imports as simple_llm.py
+• Plus: import gradio as gr (for the interface)
+
+We've covered these imports in detail earlier. The new one is:
+• import gradio as gr - Gives us access to Gradio functionality
+
+LINE-BY-LINE EXPLANATION - MODEL SETUP
+---------------------------------------
+
+LINES 7-9: Model configuration
+-------------------------------
+• Same as simple_llm.py
+• Selects which model to use
+• Granite is active, Mistral is commented
+
+LINES 11-15: Parameters
+-----------------------
+• Same as simple_llm.py
+• MAX_NEW_TOKENS: 256
+• TEMPERATURE: 0.5
+
+LINE 16: project_id
+------------------
+• Same as before: "skills-network"
+
+LINES 18-23: LLM initialization
+-------------------------------
+• Same as simple_llm.py
+• Creates watsonx_llm object
+• Configures model, URL, project_id, and parameters
+
+LINE-BY-LINE EXPLANATION - RESPONSE FUNCTION
+---------------------------------------------
+
+LINE 25: # Function to generate a response from the model
+----------------------------------------------------------
+• Comment explaining the function
+
+LINE 26: def generate_response(prompt_txt):
+--------------------------------------------
+• def = Python keyword to define a function
+• generate_response = Function name (descriptive)
+• (prompt_txt) = Parameter (the user's question)
+• : = Starts function body
+
+What this function does:
+• Takes the user's prompt/question as input
+• Sends it to the LLM
+• Returns the generated response
+• This is the function Gradio will call
+
+Why "prompt_txt"?
+• Descriptive name (could be "query", "question", etc.)
+• Makes it clear this is text input
+• Good naming practice
+
+LINE 27: generated_response = watsonx_llm.invoke(prompt_txt)
+-------------------------------------------------------------
+• generated_response = Variable to store the response
+• = = Assignment
+• watsonx_llm = Our LLM object (created earlier)
+• . = Dot notation
+• invoke( = Method to generate text
+• prompt_txt = The user's question (parameter)
+• ) = Closes invoke() call
+
+What this does:
+• Calls the LLM with the user's prompt
+• The LLM generates a response
+• Stores the response in generated_response variable
+• This is the same invoke() we used in simple_llm.py
+
+LINE 28: return generated_response
+------------------------------------
+• return = Python keyword to return a value
+• generated_response = The LLM's response
+• This returns the response to Gradio
+
+What this does:
+• Sends the response back to Gradio
+• Gradio will display it in the output text box
+• This is what the user will see
+
+COMPLETE FUNCTION FLOW
+----------------------
+1. User types question in Gradio interface
+2. Gradio calls generate_response("user's question")
+3. Function receives prompt_txt = "user's question"
+4. watsonx_llm.invoke() sends question to LLM
+5. LLM generates response
+6. Response stored in generated_response
+7. Function returns response to Gradio
+8. Gradio displays response to user
+
+LINE-BY-LINE EXPLANATION - GRADIO INTERFACE
+--------------------------------------------
+
+LINE 30: # Create Gradio interface
+-----------------------------------
+• Comment explaining the section
+
+LINE 31: chat_application = gr.Interface(
+------------------------------------------
+• chat_application = Variable to store the interface
+• = = Assignment
+• gr.Interface( = Creates a new Gradio Interface
+• ( = Start of parameters
+
+What this does:
+• Creates a Gradio interface object
+• Stores it in chat_application variable
+• We'll configure it with parameters below
+
+LINE 32: fn=generate_response,
+------------------------------
+• fn = Parameter name (function)
+• = = Assignment
+• generate_response = Our function (defined above)
+• , = Separates parameters
+
+What this does:
+• Tells Gradio which function to call
+• When user submits input, Gradio calls generate_response()
+• The function we defined earlier
+
+LINE 33: allow_flagging="never",
+---------------------------------
+• allow_flagging = Parameter name
+• = = Assignment
+• "never" = Value (disables flagging feature)
+• , = Separates parameters
+
+What flagging does:
+• Gradio can let users "flag" problematic outputs
+• Useful for collecting feedback
+• "never" disables this feature
+
+Why "never"?
+• Simpler interface for this lab
+• Not needed for basic chatbot
+• Can be enabled if you want user feedback
+
+LINE 34: inputs=gr.Textbox(label="Input", lines=2, placeholder="Type your question here..."),
+------------------------------------------------------------------------
+• inputs = Parameter name
+• = = Assignment
+• gr.Textbox( = Creates a text input box
+• label="Input" = Label shown above the text box
+• lines=2 = Height of text box (2 lines tall)
+• placeholder="Type your question here..." = Hint text inside box
+• ) = Closes Textbox()
+• , = Separates parameters
+
+What this creates:
+• A text input field for users to type questions
+• Label "Input" appears above it
+• Box is 2 lines tall (can expand if needed)
+• Placeholder text shows when box is empty
+• Users see helpful hint text
+
+Why these settings?
+• label: Clear what the field is for
+• lines=2: Good size for questions (not too small, not too large)
+• placeholder: Guides users on what to do
+
+LINE 35: outputs=gr.Textbox(label="Output"),
+----------------------------------------------
+• outputs = Parameter name
+• = = Assignment
+• gr.Textbox( = Creates a text output box
+• label="Output" = Label shown above output
+• ) = Closes Textbox()
+• , = Separates parameters (last one, but comma is fine)
+
+What this creates:
+• A text output field to display responses
+• Label "Output" appears above it
+• Shows the LLM's generated response
+• Read-only (users can't type in it)
+
+Why Textbox for output?
+• Responses can be long (multiple lines)
+• Textbox handles long text well
+• Can scroll if response is very long
+
+LINE 36: title="Watsonx.ai Chatbot",
+-------------------------------------
+• title = Parameter name
+• = = Assignment
+• "Watsonx.ai Chatbot" = Title text
+• , = Separates parameters
+
+What this does:
+• Sets the title of the web page
+• Appears at the top of the interface
+• Helps users understand what the app is
+
+LINE 37: description="Ask any question and the chatbot will try to answer."
+----------------------------------------------------------------------------
+• description = Parameter name
+• = = Assignment
+• "Ask any question..." = Description text
+• ) = Closes gr.Interface() call
+
+What this does:
+• Adds descriptive text below the title
+• Explains what the chatbot does
+• Helps users understand how to use it
+
+LINE-BY-LINE EXPLANATION - LAUNCHING
+--------------------------------------
+
+LINE 39: # Launch the app
+-------------------------
+• Comment explaining the section
+
+LINE 40: chat_application.launch(server_name="127.0.0.1", server_port=7860)
+---------------------------------------------------------------------------
+• chat_application = Our interface object
+• . = Dot notation
+• launch( = Method to start the web server
+• server_name="127.0.0.1" = Localhost address
+• , = Separates parameters
+• server_port=7860 = Port number
+• ) = Closes launch() call
+
+What this does:
+• Starts the web server
+• Makes interface accessible at http://127.0.0.1:7860
+• Keeps running until stopped (Ctrl+C)
+
+Same as our sum calculator demo!
+
+COMPLETE APPLICATION FLOW
+--------------------------
+1. Script starts
+2. Imports libraries
+3. Configures model (Granite 3.3 8B)
+4. Sets parameters (256 tokens, temp 0.5)
+5. Creates watsonx_llm object
+6. Defines generate_response() function
+7. Creates Gradio interface
+8. Launches web server
+9. User opens browser to http://127.0.0.1:7860
+10. User sees chatbot interface
+11. User types question
+12. Clicks submit (or presses Enter)
+13. Gradio calls generate_response()
+14. Function calls watsonx_llm.invoke()
+15. LLM generates response
+16. Response returned to Gradio
+17. Gradio displays response
+18. User sees answer!
+
+[END SECTION 6.4]
+================================================================================
+
+SECTION 6.5: LAUNCHING AND TESTING THE CHATBOT
+------------------------------------------------
+
+OVERVIEW
+--------
+Now let's run our chatbot and see it in action! This is the exciting part where 
+everything comes together.
+
+STEP 1: SAVE YOUR CODE
+-----------------------
+Make sure you've saved llm_chat.py with all the code from the previous section.
+
+STEP 2: VERIFY ENVIRONMENT
+---------------------------
+Open your terminal and verify that you are in the my_env virtual environment.
+
+Your prompt should show:
+(my_env) user@computer:~/project$
+
+STEP 3: RUN THE APPLICATION
+---------------------------
+Run the following code in the terminal to run the application:
+
+Command:
+python3.11 llm_chat.py
+
+WHAT HAPPENS:
+• Python executes the script
+• LLM is initialized (may take a moment)
+• Gradio creates the interface
+• Web server starts
+• You'll see a URL in the terminal
+
+EXPECTED OUTPUT
+---------------
+After the code runs successfully, you will see a message in the terminal window 
+with the local URL displayed. You'll also see a message that instructs you that 
+if you want to create a public link, to set share=True in launch().
+
+Example output:
+Running on local URL: http://127.0.0.1:7860
+
+To create a public link, set `share=True` in `launch()`.
+
+STEP 4: OPEN THE WEB APPLICATION
+---------------------------------
+
+FOR CLOUD IDE USERS:
+Select the following Web Application button to view the application you developed.
+
+(Note: if this Web Application button does not work, follow these instructions:)
+1. Select OTHER and Launch Application
+2. Next, type your port number (7860) in the Application Port field and select 
+   Your Application
+
+FOR LOCAL IDE USERS:
+Open your web browser and navigate to:
+http://127.0.0.1:7860
+
+STEP 5: USE THE CHATBOT
+------------------------
+The chatbot you successfully created is displayed. You should see:
+• Title: "Watsonx.ai Chatbot"
+• Description: "Ask any question and the chatbot will try to answer."
+• Input text box (with placeholder: "Type your question here...")
+• Output text box (initially empty)
+• Submit button (or you can press Enter)
+
+NOW YOU CAN ASK YOUR CHATBOT A QUESTION
+---------------------------------------
+Here is an example of a question asked of the chatbot and its displayed output:
+
+Example interaction:
+1. User types in Input box: "What is artificial intelligence?"
+2. User clicks Submit (or presses Enter)
+3. Output box shows the LLM's response about AI
+
+The response will be generated by the Granite 3.3 8B model and displayed in the 
+output text box.
+
+TRY DIFFERENT QUESTIONS
+-----------------------
+Experiment with various questions:
+• "Explain machine learning in simple terms"
+• "What is Python programming?"
+• "How do neural networks work?"
+• "Tell me about data science"
+• "What are the benefits of cloud computing?"
+
+OBSERVE THE RESPONSES
+---------------------
+Notice:
+• Response quality
+• Response length (may be limited by MAX_NEW_TOKENS)
+• Response style and tone
+• How long it takes to generate
+
+STEP 6: STOPPING THE APPLICATION
+--------------------------------
+When you are ready to terminate the script, press Ctrl+C in the terminal and 
+close the application window.
+
+HOW TO STOP:
+1. Go back to your terminal
+2. Press Ctrl+C
+3. Server stops
+4. Close browser tab
+
+IMPORTANT NOTES
+---------------
+Finally, note that this application used the Granite 3.3 8B model by default. 
+Please compare it to the simple_llm.py script that also used the Granite 3.3 8B 
+model. With watsonx.ai all we had to do was change model_id to change the model!
+
+The key difference:
+• simple_llm.py: Terminal-based interaction
+• llm_chat.py: Web-based interface (Gradio)
+• Both use the same LLM backend
+• Gradio just adds the user-friendly interface!
+
+[END SECTION 6.5]
+================================================================================
+
+SECTION 6.6: COMPARING MODELS
+-------------------------------
+
+OVERVIEW
+--------
+One of the great features of watsonx.ai is how easy it is to switch between 
+models. Let's understand how to do this and compare different models.
+
+HOW TO SWITCH MODELS
+--------------------
+To use a different model, simply change the model_id:
+
+To use Mistral instead of Granite:
+```python
+model_id = 'mistralai/mistral-small-3-1-24b-instruct-2503' # Mistral model
+#model_id = 'ibm/granite-3-3-8b-instruct' # Granite model (now commented)
+```
+
+Then run the application again. That's it!
+
+COMPARING MODELS
+----------------
+You can compare models by:
+1. Running the app with one model
+2. Asking the same question
+3. Changing the model_id
+4. Running again with the same question
+5. Comparing the responses
+
+WHAT TO COMPARE
+---------------
+• Response quality
+• Response length
+• Response style
+• Speed of generation
+• Accuracy of information
+• Creativity level
+
+EXAMPLE COMPARISON
+------------------
+Question: "What is machine learning?"
+
+Granite 3.3 8B response:
+• May be more concise
+• Faster generation
+• Good for general questions
+
+Mistral 8x7B response:
+• May be more detailed
+• Possibly higher quality
+• Good for complex questions
+
+CHOOSING THE RIGHT MODEL
+-------------------------
+Consider:
+• Your use case (simple Q&A vs complex reasoning)
+• Speed requirements (fast vs thorough)
+• Cost considerations
+• Quality needs
+
+Experiment and find what works best for your application!
+
+[END SECTION 6.6]
+================================================================================
+
+PART 7: ADVANCED FEATURES AND EXERCISES
+================================================================================
+
+Now that we have a working chatbot, let's explore advanced features, fix common 
+issues, and complete exercises to deepen our understanding.
+
+SECTION 7.1: UNDERSTANDING INCOMPLETE RESPONSES
+------------------------------------------------
+
+OVERVIEW
+--------
+You might observe that responses from the LLM are occasionally incomplete. Let's 
+understand why this happens and how to fix it.
+
+WHY RESPONSES GET CUT OFF
+-------------------------
+Responses can be incomplete because:
+• MAX_NEW_TOKENS limit is reached
+• The model hits the token limit before finishing
+• Response is longer than the limit we set
+
+EXAMPLE OF INCOMPLETE RESPONSE
+-------------------------------
+Question: "How to be a good data scientist?"
+
+Response might end like:
+"...Fifth, you need"
+
+This is cut off because:
+• MAX_NEW_TOKENS was set to 256
+• The response exceeded 256 tokens
+• Model stopped mid-sentence
+
+HOW TO IDENTIFY THE CAUSE
+--------------------------
+The cause is the MAX_NEW_TOKENS parameter. If responses are cut off:
+• Check your MAX_NEW_TOKENS value
+• If it's too low (like 256), increase it
+• Try 512, 1024, or higher
+
+SIGNS OF INCOMPLETE RESPONSES
+------------------------------
+• Response ends mid-sentence
+• Response seems to cut off abruptly
+• Last sentence is incomplete
+• Response feels unfinished
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: FIXING INCOMPLETE RESPONSES
+------------------------------------------
+
+OVERVIEW
+--------
+Now let's fix the incomplete response issue by adjusting the MAX_NEW_TOKENS parameter.
+
+THE SOLUTION
+-----------
+Actually, all you need to do is increase the MAX_NEW_TOKENS value!
+
+HOW TO FIX IT
+-------------
+Change this line in your code:
+```python
+GenParams.MAX_NEW_TOKENS: 256,  # Original (too low)
+```
+
+To:
+```python
+GenParams.MAX_NEW_TOKENS: 512,  # Increased (allows longer responses)
+```
+
+Or even:
+```python
+GenParams.MAX_NEW_TOKENS: 1024,  # Much longer responses
+```
+
+STEP-BY-STEP FIX
+-----------------
+1. Open llm_chat.py
+2. Find the parameters dictionary
+3. Change MAX_NEW_TOKENS from 256 to 512 (or higher)
+4. Save the file
+5. Restart the application
+6. Ask the same question again
+7. Response should be complete now!
+
+EXAMPLE CODE CHANGE
+-------------------
+Before:
+```python
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 256,
+    GenParams.TEMPERATURE: 0.5,
+}
+```
+
+After:
+```python
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 512,  # Increased from 256
+    GenParams.TEMPERATURE: 0.5,
+}
+```
+
+TRADE-OFFS
+-----------
+Higher MAX_NEW_TOKENS:
+• ✅ Complete responses
+• ✅ More detailed answers
+• ❌ Takes longer to generate
+• ❌ Uses more tokens (may cost more)
+• ❌ May generate unnecessary text
+
+Lower MAX_NEW_TOKENS:
+• ✅ Faster generation
+• ✅ Uses fewer tokens
+• ❌ Responses may be cut off
+• ❌ Less detailed answers
+
+RECOMMENDATIONS
+---------------
+• For short Q&A: 256-512 tokens
+• For detailed explanations: 512-1024 tokens
+• For long-form content: 1024-2048 tokens
+• Experiment to find the right balance!
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: CUSTOMIZING THE INTERFACE
+----------------------------------------
+
+OVERVIEW
+--------
+Now that we have a working chatbot, let's explore ways to customize and improve 
+the interface.
+
+CUSTOMIZATION OPTIONS
+---------------------
+
+1. CHANGE THE TITLE
+```python
+title="My Custom Chatbot",
+```
+
+2. CHANGE THE DESCRIPTION
+```python
+description="This is my custom chatbot description.",
+```
+
+3. CHANGE INPUT LABEL
+```python
+inputs=gr.Textbox(label="Your Question", ...),
+```
+
+4. CHANGE OUTPUT LABEL
+```python
+outputs=gr.Textbox(label="AI Response"),
+```
+
+5. CHANGE PLACEHOLDER TEXT
+```python
+inputs=gr.Textbox(..., placeholder="Ask me anything..."),
+```
+
+6. CHANGE TEXT BOX SIZE
+```python
+inputs=gr.Textbox(..., lines=5),  # Taller input box
+```
+
+7. ADD A THEME
+```python
+chat_application.launch(..., theme="soft")
+```
+
+8. ENABLE SHARING
+```python
+chat_application.launch(..., share=True)  # Creates public link
+```
+
+EXAMPLE CUSTOMIZED INTERFACE
+-----------------------------
+```python
+chat_application = gr.Interface(
+    fn=generate_response,
+    allow_flagging="never",
+    inputs=gr.Textbox(
+        label="Ask Your Question",
+        lines=3,
+        placeholder="Type your question here and press Enter..."
+    ),
+    outputs=gr.Textbox(
+        label="AI Response",
+        lines=10
+    ),
+    title="🤖 My AI Assistant",
+    description="Ask me anything and I'll do my best to help you!"
+)
+
+chat_application.launch(
+    server_name="127.0.0.1",
+    server_port=7860,
+    share=False  # Set to True for public link
+)
+```
+
+EXPERIMENT AND CUSTOMIZE
+------------------------
+Try different combinations to make the interface your own!
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: ADDITIONAL EXERCISES
+-----------------------------------
+
+OVERVIEW
+--------
+Here are some exercises to help you practice and extend your knowledge.
+
+EXERCISE 1: IMPROVE RESPONSE HANDLING
+--------------------------------------
+Modify the generate_response function to:
+• Handle errors gracefully
+• Add loading messages
+• Format responses better
+
+EXERCISE 2: ADD MULTIPLE MODELS
+--------------------------------
+Create an interface that lets users choose between models:
+• Add a dropdown to select model
+• Switch models dynamically
+• Compare responses side-by-side
+
+EXERCISE 3: ADD CONVERSATION HISTORY
+-------------------------------------
+Modify the chatbot to:
+• Remember previous messages
+• Show conversation history
+• Allow follow-up questions
+
+EXERCISE 4: CUSTOMIZE PARAMETERS
+---------------------------------
+Add sliders to adjust:
+• Temperature (creativity)
+• Max tokens (response length)
+• Let users experiment with settings
+
+EXERCISE 5: ADD MULTIPLE OUTPUTS
+----------------------------------
+Create an interface that shows:
+• The response
+• Response length (in tokens)
+• Generation time
+• Model used
+
+TRY THESE EXERCISES
+--------------------
+These exercises will help you:
+• Understand Gradio better
+• Learn advanced features
+• Build more sophisticated applications
+• Prepare for real-world projects
+
+[END SECTION 7.4]
+================================================================================
+
+SECTION 7.5: BEST PRACTICES AND TIPS
+--------------------------------------
+
+OVERVIEW
+--------
+Let's cover some best practices and tips for building Gradio applications with LLMs.
+
+BEST PRACTICES
+--------------
+
+1. ERROR HANDLING
+   • Always handle errors gracefully
+   • Show user-friendly error messages
+   • Log errors for debugging
+
+2. PARAMETER TUNING
+   • Experiment with different parameters
+   • Find the right balance for your use case
+   • Document your parameter choices
+
+3. USER EXPERIENCE
+   • Clear labels and descriptions
+   • Helpful placeholder text
+   • Responsive design
+
+4. PERFORMANCE
+   • Consider response time
+   • Optimize token usage
+   • Cache responses when possible
+
+5. SECURITY
+   • Don't expose API keys
+   • Validate user inputs
+   • Rate limit if needed
+
+TIPS FOR SUCCESS
+----------------
+
+1. START SIMPLE
+   • Build basic version first
+   • Add features gradually
+   • Test each addition
+
+2. EXPERIMENT FREELY
+   • Try different models
+   • Adjust parameters
+   • See what works best
+
+3. READ DOCUMENTATION
+   • Gradio docs: https://gradio.app/docs/
+   • IBM watsonx.ai docs
+   • LangChain docs
+
+4. ASK FOR HELP
+   • Check error messages
+   • Search online
+   • Ask in communities
+
+5. ITERATE AND IMPROVE
+   • Get feedback
+   • Improve based on usage
+   • Keep learning
+
+COMMON PITFALLS TO AVOID
+-------------------------
+
+1. FORGETTING TO ACTIVATE VIRTUAL ENVIRONMENT
+   • Always activate before running
+   • Check prompt for (my_env)
+
+2. SETTING MAX_NEW_TOKENS TOO LOW
+   • Responses get cut off
+   • Increase if needed
+
+3. NOT HANDLING ERRORS
+   • App crashes on errors
+   • Add try/except blocks
+
+4. IGNORING USER EXPERIENCE
+   • Unclear interfaces
+   • Poor labels/descriptions
+   • Think from user's perspective
+
+5. NOT TESTING THOROUGHLY
+   • Test with different inputs
+   • Test edge cases
+   • Test error scenarios
+
+[END SECTION 7.5]
+================================================================================
+
+END OF PART 2
+=============
+
+Congratulations! You've completed the comprehensive guide on setting up a Gradio 
+interface to interact with your models. You've learned:
+
+• What Gradio is and how to use it
+• How to set up your development environment
+• How to create basic Gradio interfaces
+• What LLMs are and how they work
+• How to use IBM watsonx.ai
+• How to integrate Gradio with LLMs
+• How to build a complete chatbot interface
+• How to customize and improve your applications
+• Best practices and tips
+
+You now have the skills to:
+• Create interactive web interfaces with Gradio
+• Connect interfaces to LLM backends
+• Build functional chatbots
+• Customize interfaces for your needs
+• Deploy and share your applications
+
+NEXT STEPS
+----------
+• Practice with the exercises
+• Build your own chatbot applications
+• Experiment with different models
+• Explore advanced Gradio features
+• Apply these skills to real projects
+
+Happy coding! 🚀
+
+================================================================================

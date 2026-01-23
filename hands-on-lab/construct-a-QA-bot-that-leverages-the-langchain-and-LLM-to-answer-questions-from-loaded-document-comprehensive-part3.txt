@@ -1,0 +1,1579 @@
+================================================================================
+CONSTRUCT A QA BOT THAT LEVERAGES LANGCHAIN AND LLMs TO ANSWER QUESTIONS
+FROM LOADED DOCUMENTS
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+Welcome back! In Part 2, you implemented all the core components: document 
+loader, text splitter, embedding model, vector database, and retriever. Now 
+we'll complete the QA bot by implementing the QA chain and creating the Gradio 
+interface.
+
+In this part, you'll learn:
+• How to implement the QA chain that generates answers
+• How to create a Gradio interface for user interaction
+• How to launch and test your complete application
+• How to troubleshoot common issues
+• Best practices for QA bots
+
+ESTIMATED TIME NEEDED
+---------------------
+Original lab time: 20-30 minutes
+Comprehensive study: 2-3 hours (with all examples and practice)
+Full mastery: 3-4 hours (including experimentation and extensions)
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+PART 1: IMPLEMENTING THE QA CHAIN
+  SECTION 1.1: UNDERSTANDING THE QA CHAIN FUNCTION
+  SECTION 1.2: CREATING THE retriever_qa() FUNCTION
+  SECTION 1.3: LINE-BY-LINE EXPLANATION
+  SECTION 1.4: UNDERSTANDING RetrievalQA
+  SECTION 1.5: HOW THE QA CHAIN WORKS
+
+PART 2: CREATING THE GRADIO INTERFACE
+  SECTION 2.1: UNDERSTANDING GRADIO INTERFACES
+  SECTION 2.2: CREATING THE GRADIO INTERFACE
+  SECTION 2.3: LINE-BY-LINE EXPLANATION
+  SECTION 2.4: UNDERSTANDING GRADIO COMPONENTS
+  SECTION 2.5: CUSTOMIZING THE INTERFACE
+
+PART 3: LAUNCHING THE APPLICATION
+  SECTION 3.1: ADDING THE LAUNCH CODE
+  SECTION 3.2: UNDERSTANDING SERVER SETTINGS
+  SECTION 3.3: RUNNING THE APPLICATION
+  SECTION 3.4: ACCESSING THE WEB INTERFACE
+
+PART 4: TESTING AND TROUBLESHOOTING
+  SECTION 4.1: TESTING YOUR QA BOT
+  SECTION 4.2: COMMON ISSUES AND SOLUTIONS
+  SECTION 4.3: DEBUGGING TIPS
+  SECTION 4.4: OPTIMIZING PERFORMANCE
+
+PART 5: COMPLETE CODE REVIEW
+  SECTION 5.1: COMPLETE qabot.py CODE
+  SECTION 5.2: VERIFYING YOUR IMPLEMENTATION
+  SECTION 5.3: BEST PRACTICES
+  SECTION 5.4: EXTENSIONS AND IMPROVEMENTS
+
+================================================================================
+PART 1: IMPLEMENTING THE QA CHAIN
+================================================================================
+
+Now we'll implement the QA chain that ties everything together. This is the 
+component that actually generates answers to user questions.
+
+SECTION 1.1: UNDERSTANDING THE QA CHAIN FUNCTION
+------------------------------------------------
+
+OVERVIEW
+--------
+The QA chain function takes a file and a question, processes them through 
+all our components, and returns an answer.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Take a file and a query (question) as input
+2. Get the LLM instance
+3. Create a retriever from the file
+4. Create a RetrievalQA chain
+5. Invoke the chain with the query
+6. Return the answer
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this starter code:
+
+```python
+## QA Chain
+def retriever_qa(file, query):
+    llm = get_llm()
+    retriever_obj = retriever(file)
+    qa = RetrievalQA.from_chain_type(llm=llm,
+                                      chain_type=……,
+                                      retriever=……,
+                                      return_source_documents=……)
+    response = qa.invoke(……)
+    return response['result']
+```
+
+FILLING IN THE BLANKS
+---------------------
+• chain_type=……
+  → Should be: "stuff"
+
+• retriever=……
+  → Should be: retriever_obj
+
+• return_source_documents=……
+  → Should be: True (or False, True is better for debugging)
+
+• qa.invoke(……)
+  → Should be: {"query": query}
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: CREATING THE retriever_qa() FUNCTION
+--------------------------------------------------
+
+OVERVIEW
+--------
+Let's create the complete QA chain function.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## QA Chain
+def retriever_qa(file, query):
+    llm = get_llm()
+    retriever_obj = retriever(file)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=retriever_obj,
+        return_source_documents=True
+    )
+    response = qa.invoke({"query": query})
+    return response['result']
+```
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Receives a file and a query (question)
+2. Gets an LLM instance (for generating answers)
+3. Creates a retriever from the file (processes document)
+4. Creates a RetrievalQA chain (combines retriever + LLM)
+5. Invokes the chain with the query
+6. Returns the generated answer
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line in detail.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## QA Chain
+2  def retriever_qa(file, query):
+3      llm = get_llm()
+4      retriever_obj = retriever(file)
+5      qa = RetrievalQA.from_chain_type(
+6          llm=llm,
+7          chain_type="stuff",
+8          retriever=retriever_obj,
+9          return_source_documents=True
+10     )
+11     response = qa.invoke({"query": query})
+12     return response['result']
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## QA Chain
+• Comment indicating this is the QA chain section
+
+Line 2: def retriever_qa(file, query):
+• Defines function named retriever_qa
+• Takes two parameters:
+  - file: The uploaded PDF file (from Gradio)
+  - query: The user's question (string)
+• Function starts here
+
+Line 3: llm = get_llm()
+• Calls get_llm() function we created earlier
+• Gets a configured LLM instance
+• Stores in llm variable
+• This LLM will generate the answer
+
+Line 4: retriever_obj = retriever(file)
+• Calls retriever() function we created earlier
+• Passes the file
+• retriever() processes the file:
+  - Loads PDF
+  - Splits into chunks
+  - Creates embeddings
+  - Stores in vector database
+  - Creates retriever
+• Returns retriever object
+• Stores in retriever_obj variable
+• This retriever can find relevant chunks
+
+Line 5: qa = RetrievalQA.from_chain_type(
+• Creates RetrievalQA chain instance
+• RetrievalQA is from langchain.chains
+• from_chain_type() is a class method
+• Opening parenthesis starts the call
+
+Line 6: llm=llm,
+• Passes the LLM instance
+• Left llm: parameter name
+• Right llm: variable from line 3
+• LLM will generate the answer
+
+Line 7: chain_type="stuff",
+• Sets chain type to "stuff"
+• "stuff" means: put all retrieved chunks in one prompt
+• Alternative: "map_reduce", "refine"
+• "stuff" is simplest and works well for small numbers of chunks
+• Comma separates parameters
+
+Line 8: retriever=retriever_obj,
+• Passes the retriever instance
+• Left retriever: parameter name
+• Right retriever_obj: variable from line 4
+• Retriever will find relevant chunks
+
+Line 9: return_source_documents=True
+• Tells chain to return source documents
+• True: response includes which chunks were used
+• Useful for debugging and transparency
+• Can be False if you don't need sources
+
+Line 10: )
+• Closes RetrievalQA.from_chain_type() call
+• Chain is now created and configured
+
+Line 11: response = qa.invoke({"query": query})
+• Invokes the QA chain
+• Passes dictionary with "query" key
+• Value is the user's question
+• Chain processes:
+  1. Retriever finds relevant chunks
+  2. Chunks + question → prompt
+  3. Prompt → LLM
+  4. LLM generates answer
+• Returns response dictionary
+• Stores in response variable
+
+Line 12: return response['result']
+• Extracts the answer from response
+• response is a dictionary
+• 'result' key contains the generated answer
+• Returns the answer string
+• Function execution ends
+
+WHAT HAPPENS WHEN THIS FUNCTION RUNS
+------------------------------------
+Let's trace through a complete execution:
+
+1. User uploads PDF and asks: "How do I reset my password?"
+2. retriever_qa(file, "How do I reset my password?") is called
+3. get_llm() → Returns configured LLM
+4. retriever(file) → Processes PDF:
+   • Loads PDF (extracts text)
+   • Splits into chunks
+   • Creates embeddings
+   • Stores in vector database
+   • Returns retriever
+5. RetrievalQA.from_chain_type() → Creates QA chain
+6. qa.invoke({"query": "How do I reset my password?"}):
+   a. Retriever searches vector database
+   b. Finds 3 most relevant chunks about password reset
+   c. Creates prompt:
+      "Based on the following context, answer: How do I reset my password?
+       Context: [Chunk 1] [Chunk 2] [Chunk 3]"
+   d. Sends prompt to LLM
+   e. LLM generates answer based on chunks
+   f. Returns response dictionary
+7. response['result'] → Extracts answer
+8. Answer returned: "To reset your password, go to Settings > Security..."
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: UNDERSTANDING RetrievalQA
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand what RetrievalQA does and how it works.
+
+WHAT IS RetrievalQA?
+--------------------
+RetrievalQA is a LangChain chain that:
+• Combines retrieval and generation
+• Takes a question
+• Retrieves relevant documents
+• Generates an answer based on retrieved documents
+• Handles the entire QA workflow automatically
+
+HOW IT WORKS
+------------
+1. Receives a question
+2. Uses retriever to find relevant chunks
+3. Combines question + chunks into a prompt
+4. Sends prompt to LLM
+5. Returns generated answer
+
+CHAIN TYPES
+-----------
+"stuff" chain type:
+• Puts all retrieved chunks in one prompt
+• Simple and straightforward
+• Works well when you have few chunks
+• May hit token limits with many chunks
+
+"map_reduce" chain type:
+• Processes each chunk separately
+• Combines results
+• Good for many chunks
+• More complex, slower
+
+"refine" chain type:
+• Iteratively refines answer
+• Processes chunks sequentially
+• Most accurate but slowest
+
+For our use case, "stuff" is perfect!
+
+RETURN SOURCE DOCUMENTS
+-----------------------
+return_source_documents=True:
+• Response includes 'source_documents' key
+• Shows which chunks were used
+• Useful for:
+  - Debugging
+  - Transparency
+  - Showing sources to users
+  - Verifying answers
+
+Example response:
+```python
+{
+    'result': 'The answer...',
+    'source_documents': [chunk1, chunk2, chunk3]
+}
+```
+
+[END SECTION 1.4]
+================================================================================
+
+SECTION 1.5: HOW THE QA CHAIN WORKS
+------------------------------------
+
+OVERVIEW
+--------
+Let's understand the complete flow of how the QA chain processes a question.
+
+THE COMPLETE FLOW
+-----------------
+```
+User Question: "How do I reset my password?"
+    ↓
+retriever_qa(file, query) called
+    ↓
+get_llm() → LLM instance
+    ↓
+retriever(file) → Processes PDF, creates retriever
+    ↓
+RetrievalQA.from_chain_type() → Creates QA chain
+    ↓
+qa.invoke({"query": "How do I reset my password?"})
+    ↓
+[Inside RetrievalQA]
+    ↓
+1. Retriever searches vector database
+   • Converts question to embedding
+   • Finds similar chunks
+   • Returns top 3 chunks
+    ↓
+2. Creates prompt:
+   "Based on the following context, answer: How do I reset my password?
+   
+   Context:
+   [Retrieved chunk 1]
+   [Retrieved chunk 2]
+   [Retrieved chunk 3]"
+    ↓
+3. Sends prompt to LLM
+    ↓
+4. LLM generates answer:
+   "To reset your password, go to Settings > Security > Reset Password..."
+    ↓
+5. Returns response dictionary
+    ↓
+response['result'] → Extracts answer
+    ↓
+Answer returned to caller
+```
+
+WHY THIS DESIGN WORKS
+--------------------
+• Retrieval finds relevant information
+• LLM generates coherent answer
+• Answer is grounded in documents
+• Less hallucination
+• More accurate responses
+
+[END SECTION 1.5]
+================================================================================
+
+PART 2: CREATING THE GRADIO INTERFACE
+================================================================================
+
+Now we'll create the Gradio interface that allows users to interact with our 
+QA bot through a web interface.
+
+SECTION 2.1: UNDERSTANDING GRADIO INTERFACES
+--------------------------------------------
+
+OVERVIEW
+--------
+Gradio interfaces make it easy to create web UIs for Python functions. We'll 
+create an interface that allows users to upload PDFs and ask questions.
+
+WHAT WE NEED
+------------
+• File upload component (for PDFs)
+• Text input (for questions)
+• Text output (for answers)
+• Submit button (to process)
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this starter code:
+
+```python
+# Create Gradio interface
+rag_application = gr.Interface(
+    fn=……,
+    allow_flagging=……,
+    inputs=[
+        gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+        gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
+    ],
+    outputs=gr.Textbox(label=……),
+    title=……,
+    description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+)
+```
+
+FILLING IN THE BLANKS
+---------------------
+• fn=……
+  → Should be: retriever_qa
+
+• allow_flagging=……
+  → Should be: "never" (or False, or "manual")
+
+• label=…… (for outputs)
+  → Should be: "Answer" (or "Response", or "Generated Answer")
+
+• title=……
+  → Should be: "QA Bot" (or "Document QA Bot", or "PDF Question Answering Bot")
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: CREATING THE GRADIO INTERFACE
+------------------------------------------
+
+OVERVIEW
+--------
+Let's create the complete Gradio interface.
+
+THE COMPLETE INTERFACE CODE
+----------------------------
+```python
+# Create Gradio interface
+rag_application = gr.Interface(
+    fn=retriever_qa,
+    allow_flagging="never",
+    inputs=[
+        gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+        gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
+    ],
+    outputs=gr.Textbox(label="Answer"),
+    title="QA Bot - Document Question Answering",
+    description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+)
+```
+
+WHAT THIS CREATES
+-----------------
+• A web interface with:
+  - File upload area (for PDFs)
+  - Text input box (for questions)
+  - Submit button (automatically created)
+  - Text output area (for answers)
+  - Title and description
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand each part of the Gradio interface.
+
+COMPLETE CODE WITH LINE NUMBERS
+--------------------------------
+```python
+1  # Create Gradio interface
+2  rag_application = gr.Interface(
+3      fn=retriever_qa,
+4      allow_flagging="never",
+5      inputs=[
+6          gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+7          gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
+8      ],
+9      outputs=gr.Textbox(label="Answer"),
+10     title="QA Bot - Document Question Answering",
+11     description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+12 )
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: # Create Gradio interface
+• Comment explaining what this section does
+
+Line 2: rag_application = gr.Interface(
+• Creates a Gradio Interface instance
+• gr is the gradio module (imported as gr)
+• Interface is the main class for creating UIs
+• Stores interface in rag_application variable
+• Opening parenthesis starts the call
+
+Line 3: fn=retriever_qa,
+• Sets the function to call
+• fn: parameter name (function)
+• retriever_qa: our QA function (takes file and query)
+• When user submits, Gradio calls this function
+• Comma separates parameters
+
+Line 4: allow_flagging="never",
+• Controls flagging feature
+• "never": Don't allow flagging (simplest)
+• Alternatives: "manual", "auto", False
+• Flagging lets users mark good/bad responses
+• For this lab, "never" is fine
+• Comma separates parameters
+
+Line 5: inputs=[
+• Starts defining input components
+• inputs: parameter name
+• Opening bracket starts list
+• List contains input components
+
+Line 6: gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+• Creates file upload component
+• gr.File: Gradio file upload component
+• label: Text shown above the component ("Upload PDF File")
+• file_count="single": Allow only one file
+• file_types=['.pdf']: Only accept PDF files
+• type="filepath": Return file path (not file object)
+• This becomes the 'file' parameter in retriever_qa()
+• Comma separates list items
+
+Line 7: gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here..."),
+• Creates text input component
+• gr.Textbox: Gradio text input component
+• label: Text shown above ("Input Query")
+• lines=2: Text box height (2 lines)
+• placeholder: Hint text shown when empty
+• This becomes the 'query' parameter in retriever_qa()
+• Comma (last item in list, but comma is fine)
+
+Line 8: ],
+• Closes the inputs list
+• Two inputs: File and Textbox
+
+Line 9: outputs=gr.Textbox(label="Answer"),
+• Defines output component
+• outputs: parameter name
+• gr.Textbox: Text display component
+• label: Text shown above ("Answer")
+• This displays the answer from retriever_qa()
+• Comma separates parameters
+
+Line 10: title="QA Bot - Document Question Answering",
+• Sets the interface title
+• title: parameter name
+• "QA Bot - Document Question Answering": Title text
+• Shown at top of interface
+• Comma separates parameters
+
+Line 11: description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+• Sets the interface description
+• description: parameter name
+• Long string explaining what the interface does
+• Shown below title
+• Helps users understand how to use it
+
+Line 12: )
+• Closes gr.Interface() call
+• Interface is now created and configured
+
+HOW GRADIO CONNECTS TO OUR FUNCTION
+------------------------------------
+When user interacts with the interface:
+
+1. User uploads PDF file
+   • Gradio stores file temporarily
+   • File path available
+
+2. User types question
+   • Text stored in textbox
+
+3. User clicks Submit (or presses Enter)
+   • Gradio calls: retriever_qa(file_path, question_text)
+   • Our function processes and returns answer
+
+4. Answer displayed
+   • Gradio shows answer in output textbox
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: UNDERSTANDING GRADIO COMPONENTS
+---------------------------------------------
+
+OVERVIEW
+--------
+Let's understand the Gradio components we're using.
+
+gr.File COMPONENT
+-----------------
+Purpose: File upload
+Parameters we used:
+• label: Display label
+• file_count: "single" = one file only
+• file_types: ['.pdf'] = only PDFs
+• type: "filepath" = returns file path string
+
+What it does:
+• Shows file upload area
+• Allows drag-and-drop or click to browse
+• Validates file type
+• Returns file path to function
+
+gr.Textbox COMPONENT (Input)
+----------------------------
+Purpose: Text input
+Parameters we used:
+• label: Display label
+• lines: Height in lines
+• placeholder: Hint text
+
+What it does:
+• Shows text input area
+• User can type question
+• Returns text string to function
+
+gr.Textbox COMPONENT (Output)
+------------------------------
+Purpose: Text display
+Parameters we used:
+• label: Display label
+
+What it does:
+• Shows text output area
+• Displays answer from function
+• Read-only (user can't edit)
+
+gr.Interface PARAMETERS
+-----------------------
+• fn: Function to call
+• inputs: List of input components
+• outputs: Output component(s)
+• title: Interface title
+• description: Interface description
+• allow_flagging: Flagging control
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: CUSTOMIZING THE INTERFACE
+---------------------------------------
+
+OVERVIEW
+--------
+You can customize the Gradio interface further. Here are some options.
+
+ADDITIONAL CUSTOMIZATIONS
+-------------------------
+```python
+rag_application = gr.Interface(
+    fn=retriever_qa,
+    allow_flagging="never",
+    inputs=[
+        gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+        gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
+    ],
+    outputs=gr.Textbox(label="Answer", lines=10),  # More lines for answer
+    title="QA Bot - Document Question Answering",
+    description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document.",
+    theme="default",  # Can change theme
+    examples=[  # Example inputs
+        ["example.pdf", "What is this document about?"]
+    ]
+)
+```
+
+CUSTOMIZATION OPTIONS
+---------------------
+• Output lines: lines=10 (taller output box)
+• Theme: theme="default" or "soft" or "monochrome"
+• Examples: Pre-filled examples for users
+• CSS: Custom styling (advanced)
+
+For now, the basic interface is perfect!
+
+[END SECTION 2.5]
+================================================================================
+
+PART 3: LAUNCHING THE APPLICATION
+================================================================================
+
+Now we'll add the code to launch the application and make it accessible via 
+a web interface.
+
+SECTION 3.1: ADDING THE LAUNCH CODE
+------------------------------------
+
+OVERVIEW
+--------
+We need to add code to launch the Gradio interface so users can access it.
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this starter code:
+
+```python
+# Launch the app
+rag_application.launch(server_name=..., server_port= ...)
+```
+
+FILLING IN THE BLANKS
+---------------------
+• server_name=...
+  → Should be: "0.0.0.0" (accessible from network) or "127.0.0.1" (local only)
+
+• server_port= ...
+  → Should be: 7860 (Gradio default, or any available port)
+
+THE COMPLETE LAUNCH CODE
+------------------------
+```python
+# Launch the app
+rag_application.launch(server_name="0.0.0.0", server_port=7860)
+```
+
+WHAT THIS DOES
+--------------
+• Starts a web server
+• Makes the interface accessible via web browser
+• Listens on port 7860
+• Shows URL to access the interface
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: UNDERSTANDING SERVER SETTINGS
+-------------------------------------------
+
+OVERVIEW
+--------
+Let's understand the server settings.
+
+SERVER_NAME: "0.0.0.0"
+-----------------------
+What it means:
+• "0.0.0.0" = Listen on all network interfaces
+• Makes server accessible from:
+  - Localhost (127.0.0.1)
+  - Local network
+  - External network (if configured)
+
+Alternatives:
+• "127.0.0.1" = Localhost only (more secure)
+• "localhost" = Same as 127.0.0.1
+
+For lab: "0.0.0.0" is fine (allows access from browser)
+
+SERVER_PORT: 7860
+-----------------
+What it means:
+• Port number for the web server
+• 7860 is Gradio's default port
+• Must be available (not used by another app)
+
+Alternatives:
+• Any available port (e.g., 8080, 5000, 3000)
+• Check if port is available first
+
+URL ACCESS
+----------
+After launching:
+• Local: http://localhost:7860
+• Network: http://your-ip:7860
+• Gradio shows the URL when it starts
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: RUNNING THE APPLICATION
+--------------------------------------
+
+OVERVIEW
+--------
+Now let's run the complete application.
+
+HOW TO RUN
+----------
+1. Make sure virtual environment is activated
+   • Check for "(my_env)" in prompt
+
+2. Navigate to project directory
+   • cd to directory with qabot.py
+
+3. Run the script
+   ```bash
+   python qabot.py
+   ```
+   Or:
+   ```bash
+   python3 qabot.py
+   ```
+
+WHAT YOU'LL SEE
+---------------
+When the application starts, you'll see output like:
+
+```
+Running on local URL:  http://127.0.0.1:7860
+
+To create a public link, set `share=True` in `launch()`.
+
+ * Serving Flask app 'gradio'
+ * Debug mode: off
+```
+
+The application is now running!
+
+ACCESSING THE INTERFACE
+-----------------------
+1. Open web browser
+2. Go to: http://localhost:7860
+3. You should see the Gradio interface
+4. Ready to use!
+
+STOPPING THE APPLICATION
+------------------------
+• Press Ctrl+C in the terminal
+• Server stops
+• Interface becomes unavailable
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: ACCESSING THE WEB INTERFACE
+-----------------------------------------
+
+OVERVIEW
+--------
+Let's understand how to access and use the web interface.
+
+CLOUD IDE SETUP (Original Lab)
+--------------------------------
+If using Cloud IDE:
+
+1. Application runs on port 7860
+2. Use "Launch Application" button
+3. Or use Skills Network extension
+4. Insert port number: 7860
+5. Click "Your Application"
+
+LOCAL SETUP
+-----------
+If running locally:
+
+1. Application runs on http://localhost:7860
+2. Open browser
+3. Navigate to: http://localhost:7860
+4. Interface should load
+
+USING THE INTERFACE
+-------------------
+1. Upload PDF:
+   • Click "Upload PDF File" area
+   • Select a PDF file
+   • File uploads
+
+2. Type question:
+   • Click in "Input Query" box
+   • Type your question
+   • Example: "What is this document about?"
+
+3. Submit:
+   • Click "Submit" button
+   • Or press Enter
+
+4. Wait for answer:
+   • Processing happens (may take 10-30 seconds)
+   • Answer appears in "Answer" box
+
+5. Ask more questions:
+   • Same PDF, different questions
+   • Or upload new PDF
+
+[END SECTION 3.4]
+================================================================================
+
+PART 4: TESTING AND TROUBLESHOOTING
+================================================================================
+
+Now let's test the application and learn how to troubleshoot common issues.
+
+SECTION 4.1: TESTING YOUR QA BOT
+----------------------------------
+
+OVERVIEW
+--------
+Let's test the complete QA bot to make sure everything works.
+
+TESTING CHECKLIST
+----------------
+✓ Application starts without errors
+✓ Web interface loads
+✓ Can upload PDF file
+✓ Can type question
+✓ Submit button works
+✓ Answer is generated
+✓ Answer is relevant to document
+
+TEST SCENARIO 1: BASIC FUNCTIONALITY
+-------------------------------------
+1. Start application: python qabot.py
+2. Open browser: http://localhost:7860
+3. Upload a simple PDF (e.g., a short article)
+4. Ask: "What is this document about?"
+5. Verify: Answer is generated and relevant
+
+TEST SCENARIO 2: SPECIFIC QUESTIONS
+------------------------------------
+1. Upload a technical manual
+2. Ask specific questions:
+   • "How do I install the software?"
+   • "What are the system requirements?"
+   • "How do I troubleshoot errors?"
+3. Verify: Answers are accurate and from the document
+
+TEST SCENARIO 3: MULTIPLE QUESTIONS
+------------------------------------
+1. Upload one PDF
+2. Ask multiple questions about it
+3. Verify: Each question gets answered
+4. Verify: Answers are consistent
+
+WHAT TO LOOK FOR
+----------------
+• Answers should be relevant to the document
+• Answers should be coherent
+• Processing time should be reasonable (10-30 seconds)
+• No errors in terminal
+• Interface should be responsive
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: COMMON ISSUES AND SOLUTIONS
+------------------------------------------
+
+OVERVIEW
+--------
+Let's learn about common issues and how to fix them.
+
+ISSUE 1: IMPORT ERRORS
+----------------------
+Problem: ModuleNotFoundError or ImportError
+
+Symptoms:
+• "No module named 'gradio'"
+• "No module named 'langchain'"
+• etc.
+
+Solutions:
+1. Check virtual environment is activated
+   • Look for "(my_env)" in prompt
+   • If not, activate: source my_env/bin/activate
+
+2. Check packages are installed
+   • Run: pip list
+   • Verify all required packages are there
+
+3. Reinstall missing packages
+   • pip install package-name
+
+ISSUE 2: FILE NOT FOUND
+----------------------
+Problem: Can't find PDF file
+
+Symptoms:
+• "FileNotFoundError"
+• "No such file or directory"
+
+Solutions:
+1. Check file path is correct
+2. Make sure file exists
+3. Check file permissions
+4. Try absolute path instead of relative
+
+ISSUE 3: LLM ERRORS
+-------------------
+Problem: LLM API errors
+
+Symptoms:
+• "Authentication failed"
+• "Invalid model ID"
+• "API error"
+
+Solutions:
+1. Check credentials are set up
+2. Verify model ID is correct
+3. Check internet connection
+4. Verify project_id is correct
+5. Check API quotas/limits
+
+ISSUE 4: SLOW PROCESSING
+------------------------
+Problem: Takes very long to answer
+
+Symptoms:
+• 30+ seconds per question
+• Application seems frozen
+
+Solutions:
+1. Check document size (very large PDFs are slow)
+2. Reduce chunk size (if too large)
+3. Reduce number of retrieved chunks
+4. Check internet speed (for API calls)
+5. Consider using faster model
+
+ISSUE 5: POOR ANSWERS
+---------------------
+Problem: Answers are not relevant or accurate
+
+Symptoms:
+• Answers don't match document content
+• Answers are generic
+• Answers are wrong
+
+Solutions:
+1. Check document was loaded correctly
+2. Verify chunks are reasonable size
+3. Try different chunk sizes
+4. Increase number of retrieved chunks
+5. Check if document has extractable text
+6. Try different questions
+
+ISSUE 6: PORT ALREADY IN USE
+----------------------------
+Problem: Can't start server
+
+Symptoms:
+• "Address already in use"
+• Port 7860 is taken
+
+Solutions:
+1. Change port number:
+   ```python
+   rag_application.launch(server_port=8080)
+   ```
+2. Stop other application using the port
+3. Find and kill process using port:
+   ```bash
+   # Linux/Mac
+   lsof -i :7860
+   kill -9 <PID>
+   
+   # Windows
+   netstat -ano | findstr :7860
+   taskkill /PID <PID> /F
+   ```
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: DEBUGGING TIPS
+-----------------------------
+
+OVERVIEW
+--------
+Let's learn debugging techniques.
+
+ADDING PRINT STATEMENTS
+------------------------
+Add print statements to see what's happening:
+
+```python
+def retriever_qa(file, query):
+    print(f"Processing file: {file.name}")
+    print(f"Question: {query}")
+    
+    llm = get_llm()
+    print("LLM initialized")
+    
+    retriever_obj = retriever(file)
+    print("Retriever created")
+    
+    qa = RetrievalQA.from_chain_type(...)
+    print("QA chain created")
+    
+    response = qa.invoke({"query": query})
+    print(f"Answer: {response['result']}")
+    
+    return response['result']
+```
+
+CHECKING INTERMEDIATE RESULTS
+------------------------------
+Test each component separately:
+
+```python
+# Test document loader
+file = ... # your file
+docs = document_loader(file)
+print(f"Loaded {len(docs)} pages")
+
+# Test text splitter
+chunks = text_splitter(docs)
+print(f"Created {len(chunks)} chunks")
+
+# Test embedding
+embeddings = watsonx_embedding()
+print("Embeddings model ready")
+
+# Test vector database
+vectordb = vector_database(chunks)
+print("Vector database created")
+```
+
+CHECKING ERROR MESSAGES
+------------------------
+• Read error messages carefully
+• They often tell you exactly what's wrong
+• Look for line numbers
+• Check the specific error type
+
+USING TRY-EXCEPT
+----------------
+Wrap code in try-except to catch errors:
+
+```python
+try:
+    answer = retriever_qa(file, query)
+    return answer
+except Exception as e:
+    print(f"Error: {e}")
+    return f"Error occurred: {str(e)}"
+```
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: OPTIMIZING PERFORMANCE
+------------------------------------
+
+OVERVIEW
+--------
+Let's learn how to optimize the QA bot's performance.
+
+OPTIMIZATION TIPS
+-----------------
+
+1. CHUNK SIZE
+   • Too large: Slower processing, less precise
+   • Too small: More chunks, more API calls
+   • Optimal: 500-1500 characters
+   • Test different sizes for your documents
+
+2. NUMBER OF RETRIEVED CHUNKS
+   • More chunks: More context, slower
+   • Fewer chunks: Faster, but might miss info
+   • Optimal: 3-5 chunks
+   • Adjust in retriever: search_kwargs={"k": 3}
+
+3. CHUNK OVERLAP
+   • More overlap: Better context, more redundancy
+   • Less overlap: Faster, but might lose context
+   • Optimal: 10-20% of chunk size
+
+4. LLM PARAMETERS
+   • MAX_NEW_TOKENS: Lower = faster, but shorter answers
+   • TEMPERATURE: Lower = more consistent, faster
+
+5. CACHING
+   • Process document once, reuse retriever
+   • Don't reprocess same file multiple times
+   • Store vector database if possible
+
+EXAMPLE: OPTIMIZED RETRIEVER
+-----------------------------
+```python
+def retriever(file):
+    splits = document_loader(file)
+    chunks = text_splitter(splits)
+    vectordb = vector_database(chunks)
+    # Optimize: retrieve only top 3 chunks
+    retriever = vectordb.as_retriever(
+        search_kwargs={"k": 3}
+    )
+    return retriever
+```
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: COMPLETE CODE REVIEW
+================================================================================
+
+Now let's review the complete code and verify everything is correct.
+
+SECTION 5.1: COMPLETE qabot.py CODE
+------------------------------------
+
+OVERVIEW
+--------
+Here's the complete qabot.py file with all components:
+
+```python
+from ibm_watsonx_ai.foundation_models import ModelInference
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
+from ibm_watsonx_ai import Credentials
+from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.chains import RetrievalQA
+from huggingface_hub import HfFolder
+import gradio as gr
+
+# You can use this section to suppress warnings generated by your code:
+def warn(*args, **kwargs):
+    pass
+
+import warnings
+warnings.warn = warn
+warnings.filterwarnings('ignore')
+
+## LLM
+def get_llm():
+    model_id = 'ibm/granite-3-2-8b-instruct'
+    parameters = {
+        GenParams.MAX_NEW_TOKENS: 256,
+        GenParams.TEMPERATURE: 0.5,
+    }
+    project_id = "skills-network"
+    watsonx_llm = WatsonxLLM(
+        model_id=model_id,
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id=project_id,
+        params=parameters,
+    )
+    return watsonx_llm
+
+## Document loader
+def document_loader(file):
+    loader = PyPDFLoader(file.name)
+    loaded_document = loader.load()
+    return loaded_document
+
+## Text splitter
+def text_splitter(data):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len,
+    )
+    chunks = text_splitter.split_documents(data)
+    return chunks
+
+## Embedding model
+def watsonx_embedding():
+    embed_params = {
+        EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512
+    }
+    watsonx_embedding = WatsonxEmbeddings(
+        model_id="ibm/slate-125m-english-rtrvr",
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id="skills-network",
+        params=embed_params,
+    )
+    return watsonx_embedding
+
+## Vector db
+def vector_database(chunks):
+    embedding_model = watsonx_embedding()
+    vectordb = Chroma.from_documents(chunks, embedding_model)
+    return vectordb
+
+## Retriever
+def retriever(file):
+    splits = document_loader(file)
+    chunks = text_splitter(splits)
+    vectordb = vector_database(chunks)
+    retriever = vectordb.as_retriever()
+    return retriever
+
+## QA Chain
+def retriever_qa(file, query):
+    llm = get_llm()
+    retriever_obj = retriever(file)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=retriever_obj,
+        return_source_documents=True
+    )
+    response = qa.invoke({"query": query})
+    return response['result']
+
+# Create Gradio interface
+rag_application = gr.Interface(
+    fn=retriever_qa,
+    allow_flagging="never",
+    inputs=[
+        gr.File(label="Upload PDF File", file_count="single", file_types=['.pdf'], type="filepath"),
+        gr.Textbox(label="Input Query", lines=2, placeholder="Type your question here...")
+    ],
+    outputs=gr.Textbox(label="Answer"),
+    title="QA Bot - Document Question Answering",
+    description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+)
+
+# Launch the app
+rag_application.launch(server_name="0.0.0.0", server_port=7860)
+```
+
+VERIFYING STRUCTURE
+--------------------
+✓ All imports at the top
+✓ Warning suppression
+✓ get_llm() function
+✓ document_loader() function
+✓ text_splitter() function
+✓ watsonx_embedding() function
+✓ vector_database() function
+✓ retriever() function
+✓ retriever_qa() function
+✓ Gradio interface creation
+✓ Launch code
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: VERIFYING YOUR IMPLEMENTATION
+-------------------------------------------
+
+OVERVIEW
+--------
+Let's verify that your implementation matches the requirements.
+
+CHECKLIST
+---------
+✓ All imports are correct
+✓ get_llm() initializes LLM with correct parameters
+✓ document_loader() uses PyPDFLoader correctly
+✓ text_splitter() uses RecursiveCharacterTextSplitter with correct parameters
+✓ watsonx_embedding() creates embedding model
+✓ vector_database() creates Chroma vector store
+✓ retriever() orchestrates all components
+✓ retriever_qa() creates QA chain and generates answers
+✓ Gradio interface has file upload and text input
+✓ Launch code starts the server
+
+COMMON MISTAKES TO AVOID
+------------------------
+• Forgetting to return values from functions
+• Wrong parameter names
+• Missing commas in dictionaries/lists
+• Incorrect function calls
+• Wrong variable names
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: BEST PRACTICES
+---------------------------
+
+OVERVIEW
+--------
+Let's learn best practices for QA bots.
+
+CODE ORGANIZATION
+-----------------
+• Keep functions focused (one responsibility)
+• Use descriptive names
+• Add comments for complex logic
+• Organize imports logically
+
+ERROR HANDLING
+--------------
+Add error handling for robustness:
+
+```python
+def retriever_qa(file, query):
+    try:
+        llm = get_llm()
+        retriever_obj = retriever(file)
+        qa = RetrievalQA.from_chain_type(...)
+        response = qa.invoke({"query": query})
+        return response['result']
+    except Exception as e:
+        return f"Error: {str(e)}"
+```
+
+USER EXPERIENCE
+---------------
+• Provide clear instructions
+• Show loading indicators
+• Handle errors gracefully
+• Give helpful error messages
+
+PERFORMANCE
+-----------
+• Process documents once
+• Cache when possible
+• Optimize chunk sizes
+• Limit retrieved chunks
+
+SECURITY
+--------
+• Validate file types
+• Limit file sizes
+• Sanitize user inputs
+• Handle sensitive data carefully
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: EXTENSIONS AND IMPROVEMENTS
+-----------------------------------------
+
+OVERVIEW
+--------
+Here are ideas for extending and improving your QA bot.
+
+POSSIBLE IMPROVEMENTS
+---------------------
+
+1. SUPPORT MULTIPLE FILES
+   • Allow uploading multiple PDFs
+   • Process all files together
+   • Search across all documents
+
+2. SHOW SOURCES
+   • Display which chunks were used
+   • Show page numbers
+   • Highlight relevant sections
+
+3. CONVERSATION HISTORY
+   • Remember previous questions
+   • Allow follow-up questions
+   • Maintain context
+
+4. DIFFERENT FILE TYPES
+   • Support Word documents
+   • Support text files
+   • Support web pages
+
+5. BETTER UI
+   • Add loading spinner
+   • Show processing progress
+   • Better styling
+   • Mobile responsive
+
+6. ADVANCED RETRIEVAL
+   • Hybrid search (keyword + semantic)
+   • Re-ranking results
+   • Filtering by metadata
+
+7. EXPORT FUNCTIONALITY
+   • Export Q&A pairs
+   • Generate reports
+   • Save conversations
+
+EXAMPLE: SHOWING SOURCES
+-------------------------
+```python
+def retriever_qa(file, query):
+    llm = get_llm()
+    retriever_obj = retriever(file)
+    qa = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=retriever_obj,
+        return_source_documents=True
+    )
+    response = qa.invoke({"query": query})
+    
+    answer = response['result']
+    sources = response['source_documents']
+    
+    # Format answer with sources
+    result = f"{answer}\n\nSources:\n"
+    for i, source in enumerate(sources, 1):
+        result += f"{i}. Page {source.metadata.get('page', 'N/A')}\n"
+    
+    return result
+```
+
+[END SECTION 5.4]
+================================================================================
+
+END OF PART 3 AND COMPLETE GUIDE
+================================
+
+Congratulations! You've completed the entire comprehensive guide. You now 
+have:
+
+✓ A complete understanding of RAG and QA bots
+✓ A working QA bot implementation
+✓ Knowledge of all components
+✓ Ability to troubleshoot and optimize
+✓ Ideas for extensions and improvements
+
+WHAT YOU'VE BUILT
+-----------------
+A complete Question-Answering bot that:
+• Reads PDF documents
+• Processes and understands content
+• Answers questions accurately
+• Provides a user-friendly interface
+• Uses RAG for accurate, grounded answers
+
+NEXT STEPS
+----------
+• Test your QA bot with different documents
+• Experiment with different parameters
+• Try the extensions mentioned
+• Build your own improvements
+• Apply these skills to real-world projects
+
+CONGRATULATIONS!
+----------------
+You've successfully built a complete QA bot using LangChain and LLMs! This 
+is a real-world application that companies use for document analysis, customer 
+support, and knowledge management.
+
+Keep learning, keep building, and keep improving! 🚀
+
+================================================================================

@@ -1,0 +1,2641 @@
+================================================================================
+EXPRESS WEB APPLICATION FRAMEWORK
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME BACK
+------------
+Welcome to Part 2 of the Express Web Application Framework comprehensive guide. 
+In Part 1, we covered what Express is, its primary uses (APIs and SSR), and 
+the first two steps of working with Express (declaring dependencies and installing 
+packages). Now we'll complete the journey by covering Steps 3-5: importing 
+Express, creating route handlers, and starting the server.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Import Express module and create an Express application
+• Understand the Express app object and its methods
+• Create route handlers for different HTTP methods
+• Understand request and response objects in detail
+• Start an HTTP server with Express
+• Build complete Express applications
+• Apply best practices for Express development
+
+OVERVIEW
+--------
+In this part, we'll complete the five-step process by learning how to:
+1. Import Express and create an application instance
+2. Define routes that handle different URLs and HTTP methods
+3. Start a server that listens for incoming requests
+
+We'll build complete, working examples with detailed explanations of every line 
+of code, so you understand not just what to do, but why you're doing it.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 4: STEP 3 - IMPORT EXPRESS AND CREATE APPLICATION
+  SECTION 4.1: IMPORTING THE EXPRESS MODULE
+  SECTION 4.2: CREATING AN EXPRESS APPLICATION
+  SECTION 4.3: UNDERSTANDING THE APP OBJECT
+
+PART 5: STEP 4 - CREATE ROUTE HANDLERS
+  SECTION 5.1: WHAT ARE ROUTE HANDLERS?
+  SECTION 5.2: BASIC ROUTE SYNTAX
+  SECTION 5.3: HANDLING DIFFERENT HTTP METHODS
+  SECTION 5.4: ROUTE PARAMETERS
+  SECTION 5.5: QUERY PARAMETERS
+  SECTION 5.6: REQUEST BODY
+  SECTION 5.7: RESPONSE METHODS
+  SECTION 5.8: COMPLETE ROUTING EXAMPLES
+
+PART 6: STEP 5 - START THE HTTP SERVER
+  SECTION 6.1: THE app.listen() METHOD
+  SECTION 6.2: UNDERSTANDING PORTS
+  SECTION 6.3: SERVER CALLBACK FUNCTION
+
+PART 7: COMPLETE EXPRESS APPLICATION EXAMPLES
+  SECTION 7.1: MINIMAL EXPRESS APPLICATION
+  SECTION 7.2: API APPLICATION EXAMPLE
+  SECTION 7.3: SSR APPLICATION EXAMPLE
+  SECTION 7.4: COMBINED APPLICATION EXAMPLE
+
+PART 8: SUMMARY AND KEY TAKEAWAYS
+  SECTION 8.1: THE FIVE STEPS RECAP
+  SECTION 8.2: KEY DEFINITIONS
+  SECTION 8.3: QUICK REFERENCE GUIDE
+  SECTION 8.4: COMMON PATTERNS
+  SECTION 8.5: BEST PRACTICES
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 4.3:") to quickly jump to any section.
+
+================================================================================
+PART 4: STEP 3 - IMPORT EXPRESS AND CREATE APPLICATION
+================================================================================
+
+SECTION 4.1: IMPORTING THE EXPRESS MODULE
+------------------------------------------
+
+OVERVIEW
+--------
+Step three: import the Express module and create an Express application. This 
+step brings Express into your code so you can use it.
+
+UNDERSTANDING MODULE IMPORTS IN NODE.JS
+----------------------------------------
+In Node.js, you use `require()` to import modules. There are two types of 
+modules:
+1. Core modules (built into Node.js) - like 'http', 'fs', 'path'
+2. Third-party modules (installed via npm) - like 'express'
+
+When you run `npm install express`, Express is downloaded to node_modules/express. 
+When you use `require('express')`, Node.js looks for Express in:
+1. Core modules (Express isn't one)
+2. node_modules folder (finds it here!)
+3. If not found, throws an error
+
+BASIC IMPORT SYNTAX
+--------------------
+const express = require('express');
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+const express
+  - Declares a constant variable named 'express'
+  - 'const' means the variable cannot be reassigned
+  - 'express' is the variable name (you can name it anything, but 'express' is conventional)
+
+= require('express')
+  - require() is a Node.js function that imports modules
+  - 'express' in quotes is the module name
+  - Node.js looks for this module in node_modules
+  - Returns the Express module (which is a function)
+
+;
+  - Semicolon ends the statement
+
+WHAT DOES require('express') RETURN?
+-------------------------------------
+require('express') returns a function. Specifically, it returns the Express 
+application factory function. This function is used to create Express 
+applications.
+
+You can verify this:
+const express = require('express');
+console.log(typeof express);  // Outputs: "function"
+
+ALTERNATIVE IMPORT SYNTAX (ES6 MODULES)
+----------------------------------------
+If you're using ES6 modules (with "type": "module" in package.json), you 
+would use:
+
+import express from 'express';
+
+However, the original Express documentation and most tutorials use CommonJS 
+(require), so we'll stick with that format in this guide.
+
+COMPLETE EXAMPLE: IMPORTING EXPRESS
+------------------------------------
+// app.js
+
+// Step 1: Import Express module
+const express = require('express');
+
+// At this point, 'express' is a function that creates Express applications
+// We haven't created an application yet - that's the next step!
+
+console.log('Express imported successfully!');
+console.log('Express is a:', typeof express);
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: CREATING AN EXPRESS APPLICATION
+---------------------------------------------
+
+OVERVIEW
+--------
+After importing Express, you need to create an Express application instance. 
+This instance (usually stored in a variable called 'app') is what you use to 
+define routes, add middleware, and start the server.
+
+BASIC APPLICATION CREATION
+---------------------------
+const express = require('express');
+const app = express();
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+const express = require('express');
+  - Imports the Express module (as explained in Section 4.1)
+  - 'express' is now a function
+
+const app = express();
+  - express() calls the Express function
+  - This creates a new Express application instance
+  - The instance is stored in the variable 'app'
+  - 'app' is the conventional name, but you could name it anything
+
+UNDERSTANDING THE APP OBJECT
+-----------------------------
+The 'app' object is an instance of an Express application. It has many methods 
+that you'll use to build your application:
+
+• app.get() - Handle GET requests
+• app.post() - Handle POST requests
+• app.put() - Handle PUT requests
+• app.delete() - Handle DELETE requests
+• app.use() - Add middleware
+• app.listen() - Start the server
+• And many more!
+
+Think of 'app' as your application's control center. Everything you do with 
+Express goes through this object.
+
+WHAT HAPPENS WHEN YOU CALL express()?
+--------------------------------------
+When you call express(), Express creates a new application instance with:
+• Default settings
+• Empty middleware stack
+• Empty route handlers
+• Default error handling
+
+It's like getting a blank canvas - you haven't drawn anything yet, but you 
+have all the tools you need.
+
+COMPLETE EXAMPLE: CREATING AN APPLICATION
+------------------------------------------
+// app.js
+
+// Step 1: Import Express
+const express = require('express');
+
+// Step 2: Create Express application
+const app = express();
+
+// Now 'app' is ready to use!
+// You can add routes, middleware, etc.
+
+console.log('Express application created!');
+console.log('App type:', typeof app);
+console.log('App methods available:', Object.getOwnPropertyNames(app).slice(0, 10));
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: UNDERSTANDING THE APP OBJECT
+------------------------------------------
+
+OVERVIEW
+--------
+The app object is central to Express development. Understanding its properties 
+and methods is crucial for building Express applications.
+
+KEY PROPERTIES OF THE APP OBJECT
+---------------------------------
+
+1. app.locals
+   - Object for storing application-level variables
+   - Available to all routes and middleware
+   - Example: app.locals.title = 'My App'
+
+2. app.mountpath
+   - The path pattern on which a sub-app was mounted
+   - Used when mounting Express sub-applications
+
+3. app.settings
+   - Contains application settings
+   - Can be accessed via app.get('setting-name')
+   - Can be set via app.set('setting-name', value)
+
+KEY METHODS OF THE APP OBJECT
+-----------------------------
+
+1. ROUTING METHODS
+   • app.get(path, handler) - Handle GET requests
+   • app.post(path, handler) - Handle POST requests
+   • app.put(path, handler) - Handle PUT requests
+   • app.delete(path, handler) - Handle DELETE requests
+   • app.patch(path, handler) - Handle PATCH requests
+   • app.all(path, handler) - Handle all HTTP methods
+   • app.route(path) - Create a chainable route handler
+
+2. MIDDLEWARE METHODS
+   • app.use([path], middleware) - Mount middleware
+   • app.use(function(err, req, res, next)) - Error handling middleware
+
+3. CONFIGURATION METHODS
+   • app.set(name, value) - Set application setting
+   • app.get(name) - Get application setting
+   • app.enable(name) - Enable setting (sets to true)
+   • app.disable(name) - Disable setting (sets to false)
+
+4. SERVER METHODS
+   • app.listen(port, [callback]) - Start HTTP server
+   • app.listen(port, hostname, [callback]) - Start server on specific host
+
+5. TEMPLATE ENGINE METHODS
+   • app.engine(ext, callback) - Register template engine
+   • app.set('view engine', engine) - Set default template engine
+
+EXPLORING THE APP OBJECT
+------------------------
+You can explore the app object to see what's available:
+
+const express = require('express');
+const app = express();
+
+// See all methods
+console.log('All app methods:');
+console.log(Object.getOwnPropertyNames(app).filter(name => typeof app[name] === 'function'));
+
+// See all properties
+console.log('All app properties:');
+console.log(Object.getOwnPropertyNames(app).filter(name => typeof app[name] !== 'function'));
+
+COMMON APP SETTINGS
+-------------------
+You can configure Express using app.set():
+
+app.set('view engine', 'ejs');        // Set template engine
+app.set('views', './views');           // Set views directory
+app.set('port', process.env.PORT || 3000);  // Set port
+app.set('env', 'development');         // Set environment
+app.set('json spaces', 2);             // Pretty print JSON
+
+[END SECTION 4.3]
+================================================================================
+
+PART 5: STEP 4 - CREATE ROUTE HANDLERS
+================================================================================
+
+SECTION 5.1: WHAT ARE ROUTE HANDLERS?
+--------------------------------------
+
+DEFINITION
+----------
+A route handler (also called a route callback or route handler function) is a 
+function that gets executed when a request matches a specific route (URL path) 
+and HTTP method.
+
+DETAILED EXPLANATION
+--------------------
+Route handlers are the heart of your Express application. They define what 
+happens when someone visits a specific URL. Each route handler:
+• Listens for requests to a specific path (like '/users' or '/products')
+• Responds to a specific HTTP method (GET, POST, PUT, DELETE, etc.)
+• Receives request and response objects
+• Can send a response back to the client
+
+THINK OF IT LIKE THIS:
+----------------------
+Imagine your Express app is a restaurant:
+• Routes are like menu items (different dishes = different URLs)
+• Route handlers are like the recipes (what to do when someone orders that dish)
+• The request is like the order (what the customer wants)
+• The response is like the finished dish (what you serve back)
+
+BASIC ROUTE HANDLER STRUCTURE
+------------------------------
+app.METHOD(path, handler)
+
+Where:
+• app - Your Express application instance
+• METHOD - HTTP method (get, post, put, delete, etc.)
+• path - URL path (like '/users', '/products/:id')
+• handler - Function that handles the request
+
+EXAMPLE:
+--------
+app.get('/hello', (req, res) => {
+  res.send('Hello World!');
+});
+
+This means: "When someone makes a GET request to /hello, run this function 
+and send back 'Hello World!'"
+
+THE HANDLER FUNCTION PARAMETERS
+-------------------------------
+Route handler functions receive three main parameters:
+
+1. req (Request Object)
+   - Contains information about the HTTP request
+   - Properties: req.params, req.query, req.body, req.headers, etc.
+   - Represents what the client is asking for
+
+2. res (Response Object)
+   - Used to send a response back to the client
+   - Methods: res.send(), res.json(), res.render(), res.status(), etc.
+   - Represents what you're sending back
+
+3. next (Optional)
+   - Function to pass control to the next middleware
+   - Used for advanced routing and error handling
+   - We'll cover this in more detail later
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: BASIC ROUTE SYNTAX
+--------------------------------
+
+OVERVIEW
+--------
+Let's learn the basic syntax for creating routes in Express. We'll start with 
+the simplest possible route and build up to more complex examples.
+
+SIMPLE GET ROUTE
+----------------
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+app
+  - Your Express application instance
+  - The object you created with const app = express()
+
+.get
+  - Method for handling GET requests
+  - GET is used to retrieve data (like loading a webpage)
+  - Other methods: .post, .put, .delete, .patch
+
+('/')
+  - The route path
+  - '/' is the root path (homepage)
+  - This matches http://localhost:3000/
+  - Could be '/users', '/products', '/about', etc.
+
+(req, res) => { ... }
+  - Arrow function (handler function)
+  - req = request object (incoming request data)
+  - res = response object (used to send response)
+  - This function runs when someone visits this route
+
+res.send('Hello World!')
+  - Sends a response back to the client
+  - 'Hello World!' is the response body
+  - res.send() automatically sets Content-Type header
+  - Can send strings, objects, arrays, etc.
+
+COMPLETE WORKING EXAMPLE
+------------------------
+// app.js
+const express = require('express');
+const app = express();
+
+// Route handler for homepage
+app.get('/', (req, res) => {
+  res.send('Welcome to my Express app!');
+});
+
+// Route handler for /about page
+app.get('/about', (req, res) => {
+  res.send('This is the about page');
+});
+
+// Start server (we'll cover this in detail in Part 6)
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+TESTING THESE ROUTES:
+---------------------
+After starting the server, you can test these routes:
+
+1. Open browser: http://localhost:3000/
+   → Shows: "Welcome to my Express app!"
+
+2. Open browser: http://localhost:3000/about
+   → Shows: "This is the about page"
+
+3. Try a route that doesn't exist: http://localhost:3000/contact
+   → Shows: "Cannot GET /contact" (404 error)
+
+ROUTE PATH MATCHING
+-------------------
+Express matches routes based on the path you specify:
+
+• Exact match: app.get('/users') matches only '/users'
+• Case sensitive: '/Users' is different from '/users'
+• Query strings ignored: '/users?id=1' matches '/users' route
+• Trailing slashes: '/users' and '/users/' are treated the same by default
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: HANDLING DIFFERENT HTTP METHODS
+--------------------------------------------
+
+OVERVIEW
+--------
+HTTP has different methods (verbs) that indicate what action should be performed. 
+Express provides methods for handling each HTTP method. Understanding these 
+methods is crucial for building RESTful APIs.
+
+COMMON HTTP METHODS
+-------------------
+
+1. GET - Retrieve data
+   • Used to fetch/read data
+   • Should not modify server state
+   • Can be cached
+   • Example: Get list of users, Get a specific user
+
+2. POST - Create data
+   • Used to create new resources
+   • Sends data in request body
+   • Not idempotent (calling twice creates two resources)
+   • Example: Create a new user, Submit a form
+
+3. PUT - Update/replace data
+   • Used to update an entire resource
+   • Replaces the entire resource
+   • Idempotent (calling twice has same effect as once)
+   • Example: Update all fields of a user
+
+4. PATCH - Partial update
+   • Used to partially update a resource
+   • Only updates specified fields
+   • Example: Update only user's email
+
+5. DELETE - Remove data
+   • Used to delete a resource
+   • Idempotent (calling twice has same effect)
+   • Example: Delete a user
+
+EXPRESS METHODS FOR HTTP VERBS
+------------------------------
+Express provides methods that correspond to HTTP methods:
+
+app.get()      → Handles GET requests
+app.post()     → Handles POST requests
+app.put()      → Handles PUT requests
+app.patch()    → Handles PATCH requests
+app.delete()   → Handles DELETE requests
+app.all()      → Handles all HTTP methods
+
+COMPLETE EXAMPLE: CRUD OPERATIONS
+----------------------------------
+// app.js
+const express = require('express');
+const app = express();
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// In-memory data store
+let users = [
+  { id: 1, name: 'Alice', email: 'alice@example.com' },
+  { id: 2, name: 'Bob', email: 'bob@example.com' }
+];
+
+// GET /users - Retrieve all users
+app.get('/users', (req, res) => {
+  res.json(users);
+});
+
+// GET /users/:id - Retrieve a specific user
+app.get('/users/:id', (req, res) => {
+  const userId = parseInt(req.params.id);
+  const user = users.find(u => u.id === userId);
+  
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ error: 'User not found' });
+  }
+});
+
+// POST /users - Create a new user
+app.post('/users', (req, res) => {
+  const newUser = {
+    id: users.length + 1,
+    name: req.body.name,
+    email: req.body.email
+  };
+  
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
+
+// PUT /users/:id - Update entire user
+app.put('/users/:id', (req, res) => {
+  const userId = parseInt(req.params.id);
+  const userIndex = users.findIndex(u => u.id === userId);
+  
+  if (userIndex !== -1) {
+    users[userIndex] = {
+      id: userId,
+      name: req.body.name,
+      email: req.body.email
+    };
+    res.json(users[userIndex]);
+  } else {
+    res.status(404).json({ error: 'User not found' });
+  }
+});
+
+// PATCH /users/:id - Partially update user
+app.patch('/users/:id', (req, res) => {
+  const userId = parseInt(req.params.id);
+  const userIndex = users.findIndex(u => u.id === userId);
+  
+  if (userIndex !== -1) {
+    users[userIndex] = {
+      ...users[userIndex],
+      ...req.body  // Only update provided fields
+    };
+    res.json(users[userIndex]);
+  } else {
+    res.status(404).json({ error: 'User not found' });
+  }
+});
+
+// DELETE /users/:id - Delete a user
+app.delete('/users/:id', (req, res) => {
+  const userId = parseInt(req.params.id);
+  const userIndex = users.findIndex(u => u.id === userId);
+  
+  if (userIndex !== -1) {
+    users.splice(userIndex, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).json({ error: 'User not found' });
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+LINE-BY-LINE EXPLANATION OF KEY PARTS:
+---------------------------------------
+Line 5: app.use(express.json());
+        - Adds middleware to parse JSON request bodies
+        - Without this, req.body would be undefined
+        - Must come before routes that use req.body
+
+Line 7-10: let users = [...]
+         - In-memory array to store users
+         - In production, this would be a database
+         - 'let' allows us to modify the array
+
+Line 13-15: GET /users
+          - app.get() handles GET requests
+          - '/users' is the route path
+          - res.json(users) sends the users array as JSON
+          - Automatically sets Content-Type: application/json
+
+Line 17-25: GET /users/:id
+          - ':id' is a route parameter (we'll cover this in Section 5.4)
+          - req.params.id contains the ID from the URL
+          - parseInt() converts string to number
+          - users.find() searches for matching user
+          - If found: send user; if not: send 404 error
+
+Line 27-37: POST /users
+          - app.post() handles POST requests (creating data)
+          - req.body contains parsed JSON from request
+          - Creates new user with auto-incremented ID
+          - users.push() adds to array
+          - res.status(201) sets HTTP status to 201 (Created)
+          - Sends new user back as JSON
+
+Line 39-51: PUT /users/:id
+          - app.put() handles PUT requests (full update)
+          - Replaces entire user object
+          - users.findIndex() finds position in array
+          - Updates user and sends it back
+
+Line 53-65: PATCH /users/:id
+          - app.patch() handles PATCH requests (partial update)
+          - Spread operator (...) merges old and new data
+          - Only updates fields provided in req.body
+          - More flexible than PUT
+
+Line 67-77: DELETE /users/:id
+          - app.delete() handles DELETE requests
+          - users.splice() removes user from array
+          - res.status(204).send() sends 204 (No Content)
+          - 204 is standard for successful deletions
+
+TESTING THE API:
+----------------
+You can test these routes using:
+• Browser (for GET requests): http://localhost:3000/users
+• Postman (for all methods)
+• curl command line tool
+• fetch() in JavaScript
+
+Example curl commands:
+  # GET all users
+  curl http://localhost:3000/users
+
+  # GET specific user
+  curl http://localhost:3000/users/1
+
+  # POST new user
+  curl -X POST http://localhost:3000/users \
+    -H "Content-Type: application/json" \
+    -d '{"name":"Charlie","email":"charlie@example.com"}'
+
+  # PUT update user
+  curl -X PUT http://localhost:3000/users/1 \
+    -H "Content-Type: application/json" \
+    -d '{"name":"Alice Updated","email":"alice.updated@example.com"}'
+
+  # DELETE user
+  curl -X DELETE http://localhost:3000/users/1
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: ROUTE PARAMETERS
+-------------------------------
+
+OVERVIEW
+--------
+Route parameters are named URL segments that capture values at specific positions 
+in the URL. They're used to make routes dynamic, allowing the same route handler 
+to work with different values.
+
+BASIC SYNTAX
+------------
+To define a route parameter, use a colon (:) followed by the parameter name:
+
+app.get('/users/:id', (req, res) => {
+  // req.params.id contains the value
+});
+
+EXAMPLES OF ROUTE PARAMETERS
+-----------------------------
+app.get('/users/:id', handler);
+  - Matches: /users/1, /users/123, /users/abc
+  - req.params.id = '1', '123', or 'abc'
+
+app.get('/posts/:postId/comments/:commentId', handler);
+  - Matches: /posts/5/comments/10
+  - req.params.postId = '5'
+  - req.params.commentId = '10'
+
+app.get('/users/:userId/posts/:postId', handler);
+  - Matches: /users/1/posts/5
+  - req.params.userId = '1'
+  - req.params.postId = '5'
+
+IMPORTANT NOTES
+---------------
+1. Route parameters are always strings
+   - Even if the URL has /users/123, req.params.id is '123' (string)
+   - Use parseInt() or Number() to convert to number if needed
+
+2. Route parameters are required
+   - /users/:id does NOT match /users
+   - The parameter must be present in the URL
+
+3. Multiple parameters are allowed
+   - You can have multiple parameters in one route
+   - Each gets its own property in req.params
+
+4. Parameter names matter
+   - /users/:id creates req.params.id
+   - /users/:userId creates req.params.userId
+   - Use descriptive names!
+
+COMPLETE EXAMPLE
+----------------
+const express = require('express');
+const app = express();
+
+// Sample data
+const products = [
+  { id: 1, name: 'Laptop', price: 999, category: 'electronics' },
+  { id: 2, name: 'Phone', price: 699, category: 'electronics' },
+  { id: 3, name: 'Desk', price: 299, category: 'furniture' }
+];
+
+// Route with single parameter
+app.get('/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const product = products.find(p => p.id === productId);
+  
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
+  }
+});
+
+// Route with multiple parameters
+app.get('/categories/:categoryId/products/:productId', (req, res) => {
+  const categoryId = req.params.categoryId;
+  const productId = parseInt(req.params.productId);
+  
+  const product = products.find(p => 
+    p.category === categoryId && p.id === productId
+  );
+  
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404).json({ error: 'Product not found in this category' });
+  }
+});
+
+// Route with optional parameter (using query string instead)
+// Note: Express doesn't have built-in optional route parameters
+// But you can use query strings: /products?id=1
+app.get('/products', (req, res) => {
+  if (req.query.id) {
+    // Handle with query parameter
+    const productId = parseInt(req.query.id);
+    const product = products.find(p => p.id === productId);
+    res.json(product || { error: 'Product not found' });
+  } else {
+    // Return all products
+    res.json(products);
+  }
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 13-22: Single parameter route
+          - '/products/:id' defines a route with one parameter
+          - ':id' is the parameter name
+          - req.params.id contains the value from URL
+          - parseInt() converts string to number
+          - products.find() searches for matching product
+
+Line 24-35: Multiple parameters route
+          - '/categories/:categoryId/products/:productId'
+          - Two parameters: categoryId and productId
+          - req.params.categoryId and req.params.productId
+          - Finds product matching both category and ID
+
+Line 37-48: Query parameter alternative
+          - Shows how to handle optional parameters
+          - Uses req.query instead of req.params
+          - More flexible for optional parameters
+
+ROUTE ORDER MATTERS
+-------------------
+Express matches routes in the order they're defined. More specific routes should 
+come before more general ones:
+
+// CORRECT ORDER:
+app.get('/users/new', handler);        // Specific route first
+app.get('/users/:id', handler);       // Parameter route second
+
+// WRONG ORDER:
+app.get('/users/:id', handler);       // This would match /users/new too!
+app.get('/users/new', handler);       // This would never be reached
+
+In the wrong order, '/users/new' would be treated as '/users/:id' where id='new'.
+
+[END SECTION 5.4]
+================================================================================
+
+SECTION 5.5: QUERY PARAMETERS
+------------------------------
+
+OVERVIEW
+--------
+Query parameters are key-value pairs that appear after a question mark (?) in 
+the URL. They're used for optional data, filtering, searching, and pagination.
+
+BASIC SYNTAX
+------------
+Query parameters appear in the URL like this:
+  /users?name=Alice&age=30
+
+In Express, they're accessed via req.query:
+  req.query.name = 'Alice'
+  req.query.age = '30'
+
+EXAMPLES
+--------
+URL: /users?sort=name&order=asc
+  req.query = { sort: 'name', order: 'asc' }
+
+URL: /search?q=javascript&limit=10&page=1
+  req.query = { q: 'javascript', limit: '10', page: '1' }
+
+URL: /products?category=electronics&minPrice=100&maxPrice=500
+  req.query = { category: 'electronics', minPrice: '100', maxPrice: '500' }
+
+IMPORTANT NOTES
+---------------
+1. Query parameters are always strings
+   - req.query.limit is '10' (string), not 10 (number)
+   - Convert to number if needed: parseInt(req.query.limit)
+
+2. Query parameters are optional
+   - The route works with or without query parameters
+   - /users and /users?sort=name both match the same route
+
+3. Multiple values
+   - /users?tag=javascript&tag=node
+   - req.query.tag = ['javascript', 'node'] (array)
+
+4. No question mark needed in route definition
+   - Define route as '/users', not '/users?'
+   - Express automatically parses query string
+
+COMPLETE EXAMPLE
+----------------
+const express = require('express');
+const app = express();
+
+let users = [
+  { id: 1, name: 'Alice', age: 30, city: 'New York', role: 'admin' },
+  { id: 2, name: 'Bob', age: 25, city: 'London', role: 'user' },
+  { id: 3, name: 'Charlie', age: 35, city: 'New York', role: 'user' },
+  { id: 4, name: 'Diana', age: 28, city: 'Paris', role: 'admin' }
+];
+
+// GET /users with optional query parameters
+app.get('/users', (req, res) => {
+  let filteredUsers = [...users];  // Copy array
+  
+  // Filter by city if provided
+  if (req.query.city) {
+    filteredUsers = filteredUsers.filter(u => 
+      u.city.toLowerCase() === req.query.city.toLowerCase()
+    );
+  }
+  
+  // Filter by role if provided
+  if (req.query.role) {
+    filteredUsers = filteredUsers.filter(u => u.role === req.query.role);
+  }
+  
+  // Filter by minimum age if provided
+  if (req.query.minAge) {
+    const minAge = parseInt(req.query.minAge);
+    filteredUsers = filteredUsers.filter(u => u.age >= minAge);
+  }
+  
+  // Sort if provided
+  if (req.query.sort) {
+    const sortBy = req.query.sort;  // 'name', 'age', 'city'
+    filteredUsers.sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) return -1;
+      if (a[sortBy] > b[sortBy]) return 1;
+      return 0;
+    });
+    
+    // Reverse if order=desc
+    if (req.query.order === 'desc') {
+      filteredUsers.reverse();
+    }
+  }
+  
+  // Pagination
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const startIndex = (page - 1) * limit;
+  const endIndex = startIndex + limit;
+  
+  const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+  
+  // Send response with metadata
+  res.json({
+    data: paginatedUsers,
+    total: filteredUsers.length,
+    page: page,
+    limit: limit,
+    totalPages: Math.ceil(filteredUsers.length / limit)
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 15: let filteredUsers = [...users];
+        - Creates a copy of the users array
+        - Spread operator (...) copies array
+        - We filter this copy, not the original
+
+Line 18-22: Filter by city
+          - Checks if req.query.city exists
+          - Filters users matching the city
+          - toLowerCase() for case-insensitive matching
+
+Line 25-28: Filter by role
+          - Filters users by role (admin/user)
+          - Simple equality check
+
+Line 31-35: Filter by minimum age
+          - parseInt() converts string to number
+          - Filters users with age >= minAge
+
+Line 38-48: Sorting
+          - Sorts by the field specified in req.query.sort
+          - Default order is ascending
+          - Reverses if order=desc
+
+Line 51-56: Pagination
+          - Calculates which items to return
+          - page=1 means items 0-9, page=2 means items 10-19
+          - Default page is 1, default limit is 10
+
+Line 58: const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+        - slice() extracts portion of array
+        - Returns only the items for current page
+
+Line 61-67: Response with metadata
+          - Sends filtered and paginated data
+          - Includes metadata (total, page, limit, totalPages)
+          - Helps frontend implement pagination UI
+
+TESTING QUERY PARAMETERS:
+-------------------------
+Test these URLs in your browser or with curl:
+
+  # Get all users
+  http://localhost:3000/users
+
+  # Filter by city
+  http://localhost:3000/users?city=New%20York
+
+  # Filter by role
+  http://localhost:3000/users?role=admin
+
+  # Multiple filters
+  http://localhost:3000/users?city=New%20York&role=user
+
+  # Sort by name
+  http://localhost:3000/users?sort=name
+
+  # Sort descending
+  http://localhost:3000/users?sort=age&order=desc
+
+  # Pagination
+  http://localhost:3000/users?page=1&limit=2
+
+  # Combined: filter, sort, and paginate
+  http://localhost:3000/users?city=New%20York&sort=age&page=1&limit=1
+
+[END SECTION 5.5]
+================================================================================
+
+SECTION 5.6: REQUEST BODY
+--------------------------
+
+OVERVIEW
+--------
+The request body contains data sent by the client in POST, PUT, PATCH, and 
+sometimes other requests. It's used to send data to the server (like form data 
+or JSON).
+
+UNDERSTANDING REQUEST BODIES
+-----------------------------
+• GET requests typically don't have bodies (data goes in URL/query params)
+• POST, PUT, PATCH requests often have bodies
+• Body can be JSON, form data, XML, etc.
+• Express needs middleware to parse the body
+
+PARSING JSON BODIES
+-------------------
+To parse JSON request bodies, use express.json() middleware:
+
+app.use(express.json());
+
+This middleware:
+• Parses incoming JSON payloads
+• Makes data available in req.body
+• Only processes requests with Content-Type: application/json
+
+EXAMPLE: POST REQUEST WITH JSON BODY
+-------------------------------------
+const express = require('express');
+const app = express();
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+let users = [];
+
+// POST /users - Create user with data in body
+app.post('/users', (req, res) => {
+  // req.body contains the parsed JSON
+  const { name, email, age } = req.body;
+  
+  // Validate required fields
+  if (!name || !email) {
+    return res.status(400).json({ 
+      error: 'Name and email are required' 
+    });
+  }
+  
+  // Create new user
+  const newUser = {
+    id: users.length + 1,
+    name: name,
+    email: email,
+    age: age || null
+  };
+  
+  users.push(newUser);
+  res.status(201).json(newUser);
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 4: app.use(express.json());
+        - Adds middleware to parse JSON bodies
+        - Must come BEFORE routes that use req.body
+        - Without this, req.body would be undefined
+
+Line 11: const { name, email, age } = req.body;
+        - Destructuring assignment
+        - Extracts name, email, age from req.body
+        - Equivalent to:
+          const name = req.body.name;
+          const email = req.body.email;
+          const age = req.body.age;
+
+Line 14-17: Validation
+          - Checks if required fields exist
+          - Returns early if validation fails
+          - Sends 400 (Bad Request) status
+
+Line 20-25: Create user
+          - Creates new user object
+          - Uses provided data or defaults
+          - Adds to users array
+
+Line 27: res.status(201).json(newUser);
+        - Sets HTTP status to 201 (Created)
+        - Sends new user as JSON response
+
+PARSING FORM DATA
+-----------------
+For HTML form submissions, use express.urlencoded():
+
+app.use(express.urlencoded({ extended: true }));
+
+This parses application/x-www-form-urlencoded data (HTML forms).
+
+COMPLETE EXAMPLE: HANDLING DIFFERENT BODY TYPES
+------------------------------------------------
+const express = require('express');
+const app = express();
+
+// Parse JSON bodies
+app.use(express.json());
+
+// Parse URL-encoded bodies (HTML forms)
+app.use(express.urlencoded({ extended: true }));
+
+let products = [];
+
+// POST /products (JSON)
+app.post('/products', (req, res) => {
+  const { name, price, description } = req.body;
+  
+  if (!name || !price) {
+    return res.status(400).json({ error: 'Name and price required' });
+  }
+  
+  const newProduct = {
+    id: products.length + 1,
+    name,
+    price: parseFloat(price),
+    description: description || ''
+  };
+  
+  products.push(newProduct);
+  res.status(201).json(newProduct);
+});
+
+// PUT /products/:id (Update product)
+app.put('/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const productIndex = products.findIndex(p => p.id === productId);
+  
+  if (productIndex === -1) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+  
+  // Update with data from body
+  products[productIndex] = {
+    ...products[productIndex],
+    ...req.body,
+    id: productId  // Don't allow ID to be changed
+  };
+  
+  res.json(products[productIndex]);
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+TESTING WITH CURL:
+------------------
+# POST with JSON body
+curl -X POST http://localhost:3000/products \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Laptop","price":999,"description":"Gaming laptop"}'
+
+# PUT with JSON body
+curl -X PUT http://localhost:3000/products/1 \
+  -H "Content-Type: application/json" \
+  -d '{"price":899}'
+
+[END SECTION 5.6]
+================================================================================
+
+SECTION 5.7: RESPONSE METHODS
+------------------------------
+
+OVERVIEW
+--------
+The response object (res) has many methods for sending responses to clients. 
+Understanding these methods is crucial for building Express applications.
+
+COMMON RESPONSE METHODS
+-----------------------
+
+1. res.send(body)
+   • Sends a response
+   • Automatically sets Content-Type based on data type
+   • Can send strings, objects, arrays, Buffers
+   • Example: res.send('Hello'), res.send({ message: 'Hi' })
+
+2. res.json(body)
+   • Sends JSON response
+   • Sets Content-Type: application/json
+   • Converts JavaScript to JSON automatically
+   • Example: res.json({ users: [...] })
+
+3. res.status(code)
+   • Sets HTTP status code
+   • Chainable: res.status(404).json({ error: 'Not found' })
+   • Example: res.status(201).send('Created')
+
+4. res.render(view, [locals], callback)
+   • Renders a template (for SSR)
+   • Combines template with data
+   • Sends HTML response
+   • Example: res.render('index', { title: 'Home' })
+
+5. res.redirect([status,] path)
+   • Redirects to another URL
+   • Default status is 302 (Found)
+   • Example: res.redirect('/users')
+
+6. res.sendFile(path, [options], [callback])
+   • Sends a file
+   • Useful for serving static files
+   • Example: res.sendFile('/path/to/file.html')
+
+7. res.download(path, [filename], [callback])
+   • Sends file as download
+   • Sets Content-Disposition header
+   • Example: res.download('/path/to/file.pdf')
+
+8. res.end([data] [, encoding])
+   • Ends response without sending data
+   • Used with res.write() for streaming
+   • Example: res.end()
+
+DETAILED EXAMPLES
+-----------------
+
+EXAMPLE 1: res.send() vs res.json()
+------------------------------------
+app.get('/example1', (req, res) => {
+  // res.send() - auto-detects content type
+  res.send({ message: 'Hello' });  // Sends as JSON
+  res.send('Hello');                // Sends as text/html
+  res.send(123);                    // Sends as text/html
+});
+
+app.get('/example2', (req, res) => {
+  // res.json() - always sends as JSON
+  res.json({ message: 'Hello' });  // Content-Type: application/json
+  res.json([1, 2, 3]);             // Content-Type: application/json
+});
+
+EXAMPLE 2: res.status() - Setting HTTP Status Codes
+-----------------------------------------------------
+app.get('/users/:id', (req, res) => {
+  const user = findUser(req.params.id);
+  
+  if (user) {
+    res.status(200).json(user);  // 200 = OK (default, but explicit is better)
+  } else {
+    res.status(404).json({ error: 'User not found' });  // 404 = Not Found
+  }
+});
+
+app.post('/users', (req, res) => {
+  const newUser = createUser(req.body);
+  res.status(201).json(newUser);  // 201 = Created
+});
+
+COMMON HTTP STATUS CODES:
+-------------------------
+• 200 OK - Request succeeded
+• 201 Created - Resource created successfully
+• 204 No Content - Success but no content to return
+• 400 Bad Request - Invalid request
+• 401 Unauthorized - Authentication required
+• 403 Forbidden - Not allowed
+• 404 Not Found - Resource doesn't exist
+• 500 Internal Server Error - Server error
+
+EXAMPLE 3: res.redirect() - Redirecting Requests
+-------------------------------------------------
+app.get('/old-page', (req, res) => {
+  res.redirect('/new-page');  // Default: 302 Found
+});
+
+app.get('/permanent-redirect', (req, res) => {
+  res.redirect(301, '/new-location');  // 301 Moved Permanently
+});
+
+app.post('/login', (req, res) => {
+  // After login, redirect to dashboard
+  if (authenticate(req.body)) {
+    res.redirect('/dashboard');
+  } else {
+    res.redirect('/login?error=invalid');
+  }
+});
+
+EXAMPLE 4: res.render() - Server-Side Rendering
+------------------------------------------------
+// Assuming EJS template engine is set up
+app.set('view engine', 'ejs');
+
+app.get('/users/:id', (req, res) => {
+  const user = findUser(req.params.id);
+  
+  if (user) {
+    res.render('user-profile', {  // Renders views/user-profile.ejs
+      title: `${user.name}'s Profile`,
+      user: user
+    });
+  } else {
+    res.status(404).render('error', {
+      message: 'User not found'
+    });
+  }
+});
+
+COMPLETE EXAMPLE: USING MULTIPLE RESPONSE METHODS
+-------------------------------------------------
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+let posts = [
+  { id: 1, title: 'First Post', content: 'Content here', published: true },
+  { id: 2, title: 'Second Post', content: 'More content', published: false }
+];
+
+// GET /posts - Return all published posts
+app.get('/posts', (req, res) => {
+  const publishedPosts = posts.filter(p => p.published);
+  res.json(publishedPosts);  // res.json() for API
+});
+
+// GET /posts/:id - Get specific post
+app.get('/posts/:id', (req, res) => {
+  const postId = parseInt(req.params.id);
+  const post = posts.find(p => p.id === postId);
+  
+  if (post) {
+    res.json(post);
+  } else {
+    res.status(404).json({ error: 'Post not found' });  // Chain status + json
+  }
+});
+
+// POST /posts - Create new post
+app.post('/posts', (req, res) => {
+  const { title, content } = req.body;
+  
+  if (!title || !content) {
+    return res.status(400).json({ error: 'Title and content required' });
+  }
+  
+  const newPost = {
+    id: posts.length + 1,
+    title,
+    content,
+    published: false
+  };
+  
+  posts.push(newPost);
+  res.status(201).json(newPost);  // 201 Created
+});
+
+// DELETE /posts/:id - Delete post
+app.delete('/posts/:id', (req, res) => {
+  const postId = parseInt(req.params.id);
+  const postIndex = posts.findIndex(p => p.id === postId);
+  
+  if (postIndex === -1) {
+    return res.status(404).json({ error: 'Post not found' });
+  }
+  
+  posts.splice(postIndex, 1);
+  res.status(204).send();  // 204 No Content (successful deletion)
+});
+
+// GET /redirect - Example redirect
+app.get('/redirect', (req, res) => {
+  res.redirect('/posts');  // Redirect to /posts
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+[END SECTION 5.7]
+================================================================================
+
+SECTION 5.8: COMPLETE ROUTING EXAMPLES
+---------------------------------------
+
+OVERVIEW
+--------
+Let's put everything together with complete, real-world routing examples that 
+demonstrate all the concepts we've learned.
+
+EXAMPLE 1: BLOG API
+--------------------
+const express = require('express');
+const app = express();
+
+app.use(express.json());
+
+// In-memory database
+let blogs = [];
+let comments = [];
+let nextBlogId = 1;
+let nextCommentId = 1;
+
+// GET /blogs - Get all blogs with optional filters
+app.get('/blogs', (req, res) => {
+  let filteredBlogs = [...blogs];
+  
+  // Filter by author
+  if (req.query.author) {
+    filteredBlogs = filteredBlogs.filter(b => 
+      b.author === req.query.author
+    );
+  }
+  
+  // Filter by published status
+  if (req.query.published !== undefined) {
+    const published = req.query.published === 'true';
+    filteredBlogs = filteredBlogs.filter(b => b.published === published);
+  }
+  
+  // Sort
+  if (req.query.sort) {
+    const sortBy = req.query.sort;
+    filteredBlogs.sort((a, b) => {
+      if (a[sortBy] < b[sortBy]) return -1;
+      if (a[sortBy] > b[sortBy]) return 1;
+      return 0;
+    });
+  }
+  
+  res.json(filteredBlogs);
+});
+
+// GET /blogs/:id - Get specific blog
+app.get('/blogs/:id', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blog = blogs.find(b => b.id === blogId);
+  
+  if (!blog) {
+    return res.status(404).json({ error: 'Blog not found' });
+  }
+  
+  // Include comments for this blog
+  const blogComments = comments.filter(c => c.blogId === blogId);
+  res.json({
+    ...blog,
+    comments: blogComments
+  });
+});
+
+// POST /blogs - Create new blog
+app.post('/blogs', (req, res) => {
+  const { title, content, author } = req.body;
+  
+  if (!title || !content || !author) {
+    return res.status(400).json({ 
+      error: 'Title, content, and author are required' 
+    });
+  }
+  
+  const newBlog = {
+    id: nextBlogId++,
+    title,
+    content,
+    author,
+    published: false,
+    createdAt: new Date().toISOString()
+  };
+  
+  blogs.push(newBlog);
+  res.status(201).json(newBlog);
+});
+
+// PUT /blogs/:id - Update entire blog
+app.put('/blogs/:id', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blogIndex = blogs.findIndex(b => b.id === blogId);
+  
+  if (blogIndex === -1) {
+    return res.status(404).json({ error: 'Blog not found' });
+  }
+  
+  const { title, content, author, published } = req.body;
+  
+  blogs[blogIndex] = {
+    id: blogId,
+    title: title || blogs[blogIndex].title,
+    content: content || blogs[blogIndex].content,
+    author: author || blogs[blogIndex].author,
+    published: published !== undefined ? published : blogs[blogIndex].published,
+    createdAt: blogs[blogIndex].createdAt,
+    updatedAt: new Date().toISOString()
+  };
+  
+  res.json(blogs[blogIndex]);
+});
+
+// PATCH /blogs/:id/publish - Publish a blog
+app.patch('/blogs/:id/publish', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blog = blogs.find(b => b.id === blogId);
+  
+  if (!blog) {
+    return res.status(404).json({ error: 'Blog not found' });
+  }
+  
+  blog.published = true;
+  blog.publishedAt = new Date().toISOString();
+  
+  res.json(blog);
+});
+
+// DELETE /blogs/:id - Delete blog
+app.delete('/blogs/:id', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blogIndex = blogs.findIndex(b => b.id === blogId);
+  
+  if (blogIndex === -1) {
+    return res.status(404).json({ error: 'Blog not found' });
+  }
+  
+  // Also delete associated comments
+  comments = comments.filter(c => c.blogId !== blogId);
+  blogs.splice(blogIndex, 1);
+  
+  res.status(204).send();
+});
+
+// POST /blogs/:id/comments - Add comment to blog
+app.post('/blogs/:id/comments', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blog = blogs.find(b => b.id === blogId);
+  
+  if (!blog) {
+    return res.status(404).json({ error: 'Blog not found' });
+  }
+  
+  const { author, content } = req.body;
+  
+  if (!author || !content) {
+    return res.status(400).json({ 
+      error: 'Author and content are required' 
+    });
+  }
+  
+  const newComment = {
+    id: nextCommentId++,
+    blogId: blogId,
+    author,
+    content,
+    createdAt: new Date().toISOString()
+  };
+  
+  comments.push(newComment);
+  res.status(201).json(newComment);
+});
+
+// GET /blogs/:id/comments - Get all comments for a blog
+app.get('/blogs/:id/comments', (req, res) => {
+  const blogId = parseInt(req.params.id);
+  const blogComments = comments.filter(c => c.blogId === blogId);
+  res.json(blogComments);
+});
+
+app.listen(3000, () => {
+  console.log('Blog API running on http://localhost:3000');
+});
+
+This example demonstrates:
+• Multiple HTTP methods (GET, POST, PUT, PATCH, DELETE)
+• Route parameters (/blogs/:id)
+• Query parameters (filtering, sorting)
+• Request body parsing
+• Nested routes (/blogs/:id/comments)
+• Proper HTTP status codes
+• Error handling
+
+[END SECTION 5.8]
+================================================================================
+
+PART 6: STEP 5 - START THE HTTP SERVER
+================================================================================
+
+SECTION 6.1: THE app.listen() METHOD
+--------------------------------------
+
+OVERVIEW
+--------
+Step five: start an HTTP server on a given port number. This is the final step 
+that makes your Express application accessible to clients.
+
+BASIC SYNTAX
+------------
+app.listen(port, [callback])
+
+Where:
+• app - Your Express application instance
+• port - Port number (like 3000, 8080, etc.)
+• callback - Optional function called when server starts
+
+SIMPLE EXAMPLE
+--------------
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+app.listen(3000, ...)
+  - Starts the HTTP server
+  - 3000 is the port number
+  - Server listens on port 3000
+
+() => { console.log(...) }
+  - Callback function
+  - Executes when server successfully starts
+  - Logs a message to confirm server is running
+
+WHAT HAPPENS WHEN YOU CALL app.listen()?
+-----------------------------------------
+1. Express creates an HTTP server
+2. Server starts listening on the specified port
+3. Server waits for incoming HTTP requests
+4. When a request arrives, Express processes it through your routes
+5. Server continues running until you stop it (Ctrl+C)
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: UNDERSTANDING PORTS
+----------------------------------
+
+OVERVIEW
+--------
+A port is like a door number for your server. It allows multiple applications 
+to run on the same computer, each listening on a different port.
+
+COMMON PORTS
+------------
+• 3000 - Common for development (Express default in many tutorials)
+• 8000 - Alternative development port
+• 8080 - Common for web servers
+• 80 - HTTP (default, requires admin privileges)
+• 443 - HTTPS (default, requires admin privileges)
+• 5000 - Used by some frameworks
+
+CHOOSING A PORT
+---------------
+For development, use ports 3000-8999 (they don't require admin privileges).
+
+For production, you might use:
+• Environment variables: process.env.PORT
+• Default fallback: process.env.PORT || 3000
+
+EXAMPLE: USING ENVIRONMENT VARIABLES
+------------------------------------
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+const PORT = process.env.PORT || 3000;
+  - process.env.PORT gets port from environment variable
+  - || 3000 provides fallback if PORT not set
+  - Common pattern: use env var in production, 3000 in development
+
+app.listen(PORT, ...)
+  - Uses the PORT variable
+  - Works in both development and production
+
+console.log(`Server running on port ${PORT}`);
+  - Template literal (backticks)
+  - Interpolates PORT value into string
+  - Shows which port server is using
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: SERVER CALLBACK FUNCTION
+---------------------------------------
+
+OVERVIEW
+--------
+The callback function in app.listen() is optional but useful. It runs once when 
+the server successfully starts listening.
+
+USES FOR THE CALLBACK
+---------------------
+1. Logging - Confirm server started
+2. Database connections - Connect to database after server starts
+3. Initialization - Set up any required services
+4. Notifications - Notify that server is ready
+
+EXAMPLES
+--------
+
+EXAMPLE 1: SIMPLE LOGGING
+--------------------------
+app.listen(3000, () => {
+  console.log('Server started successfully!');
+  console.log('Listening on http://localhost:3000');
+});
+
+EXAMPLE 2: WITH PORT VARIABLE
+------------------------------
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log('Press Ctrl+C to stop the server');
+});
+
+EXAMPLE 3: WITH DATABASE CONNECTION
+------------------------------------
+app.listen(3000, async () => {
+  console.log('Server starting...');
+  
+  try {
+    // Connect to database
+    await connectToDatabase();
+    console.log('Database connected');
+    
+    console.log('Server running on http://localhost:3000');
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+});
+
+EXAMPLE 4: COMPLETE SERVER SETUP
+---------------------------------
+const express = require('express');
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('API is running');
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log('=================================');
+  console.log('Express Server Started');
+  console.log('=================================');
+  console.log(`Port: ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`URL: http://localhost:${PORT}`);
+  console.log('=================================');
+});
+
+[END SECTION 6.3]
+================================================================================
+
+PART 7: COMPLETE EXPRESS APPLICATION EXAMPLES
+================================================================================
+
+SECTION 7.1: MINIMAL EXPRESS APPLICATION
+-----------------------------------------
+
+OVERVIEW
+--------
+This is the absolute minimum Express application - just 7 lines of code!
+
+COMPLETE MINIMAL APP
+--------------------
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+app.listen(3000);
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: const express = require('express');
+        - Imports Express module
+
+Line 2: const app = express();
+        - Creates Express application
+
+Line 3: Blank line for readability
+
+Line 4-6: app.get('/', (req, res) => { res.send('Hello World!'); });
+        - Defines route for homepage
+        - Sends "Hello World!" when someone visits /
+
+Line 8: app.listen(3000);
+        - Starts server on port 3000
+        - No callback (optional)
+
+This is a complete, working Express application! Run it with:
+  node app.js
+
+Then visit http://localhost:3000 in your browser.
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: API APPLICATION EXAMPLE
+-------------------------------------
+
+OVERVIEW
+--------
+A complete REST API example demonstrating all CRUD operations.
+
+COMPLETE API APPLICATION
+------------------------
+// app.js
+const express = require('express');
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Data store (in production, use a database)
+let todos = [];
+let nextId = 1;
+
+// GET /todos - Get all todos
+app.get('/todos', (req, res) => {
+  // Filter by completed status if provided
+  let filteredTodos = todos;
+  
+  if (req.query.completed !== undefined) {
+    const completed = req.query.completed === 'true';
+    filteredTodos = todos.filter(t => t.completed === completed);
+  }
+  
+  res.json(filteredTodos);
+});
+
+// GET /todos/:id - Get specific todo
+app.get('/todos/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const todo = todos.find(t => t.id === id);
+  
+  if (todo) {
+    res.json(todo);
+  } else {
+    res.status(404).json({ error: 'Todo not found' });
+  }
+});
+
+// POST /todos - Create new todo
+app.post('/todos', (req, res) => {
+  const { title, description } = req.body;
+  
+  if (!title) {
+    return res.status(400).json({ error: 'Title is required' });
+  }
+  
+  const newTodo = {
+    id: nextId++,
+    title,
+    description: description || '',
+    completed: false,
+    createdAt: new Date().toISOString()
+  };
+  
+  todos.push(newTodo);
+  res.status(201).json(newTodo);
+});
+
+// PUT /todos/:id - Update entire todo
+app.put('/todos/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const todoIndex = todos.findIndex(t => t.id === id);
+  
+  if (todoIndex === -1) {
+    return res.status(404).json({ error: 'Todo not found' });
+  }
+  
+  const { title, description, completed } = req.body;
+  
+  todos[todoIndex] = {
+    id: id,
+    title: title || todos[todoIndex].title,
+    description: description !== undefined ? description : todos[todoIndex].description,
+    completed: completed !== undefined ? completed : todos[todoIndex].completed,
+    createdAt: todos[todoIndex].createdAt,
+    updatedAt: new Date().toISOString()
+  };
+  
+  res.json(todos[todoIndex]);
+});
+
+// PATCH /todos/:id - Toggle completion status
+app.patch('/todos/:id/toggle', (req, res) => {
+  const id = parseInt(req.params.id);
+  const todo = todos.find(t => t.id === id);
+  
+  if (!todo) {
+    return res.status(404).json({ error: 'Todo not found' });
+  }
+  
+  todo.completed = !todo.completed;
+  todo.updatedAt = new Date().toISOString();
+  
+  res.json(todo);
+});
+
+// DELETE /todos/:id - Delete todo
+app.delete('/todos/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  const todoIndex = todos.findIndex(t => t.id === id);
+  
+  if (todoIndex === -1) {
+    return res.status(404).json({ error: 'Todo not found' });
+  }
+  
+  todos.splice(todoIndex, 1);
+  res.status(204).send();
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Todo API running on http://localhost:${PORT}`);
+});
+
+This API supports:
+• GET /todos - List all todos (with optional filtering)
+• GET /todos/:id - Get specific todo
+• POST /todos - Create new todo
+• PUT /todos/:id - Update entire todo
+• PATCH /todos/:id/toggle - Toggle completion
+• DELETE /todos/:id - Delete todo
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: SSR APPLICATION EXAMPLE
+---------------------------------------
+
+OVERVIEW
+--------
+A complete server-side rendering example using EJS templates.
+
+SETUP REQUIRED
+--------------
+First, install EJS:
+  npm install ejs
+
+Then create a 'views' folder with template files.
+
+COMPLETE SSR APPLICATION
+------------------------
+// app.js
+const express = require('express');
+const app = express();
+
+// Set EJS as template engine
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+// Sample data
+const posts = [
+  { 
+    id: 1, 
+    title: 'Getting Started with Express', 
+    content: 'Express is a minimal web framework...',
+    author: 'John Doe',
+    date: '2024-01-15'
+  },
+  { 
+    id: 2, 
+    title: 'Understanding Middleware', 
+    content: 'Middleware functions are the heart of Express...',
+    author: 'Jane Smith',
+    date: '2024-01-20'
+  }
+];
+
+// Route: Homepage - List all posts
+app.get('/', (req, res) => {
+  res.render('index', {
+    title: 'My Blog',
+    posts: posts
+  });
+});
+
+// Route: Individual post page
+app.get('/posts/:id', (req, res) => {
+  const postId = parseInt(req.params.id);
+  const post = posts.find(p => p.id === postId);
+  
+  if (post) {
+    res.render('post', {
+      title: post.title,
+      post: post
+    });
+  } else {
+    res.status(404).render('error', {
+      title: 'Post Not Found',
+      message: 'The post you are looking for does not exist.'
+    });
+  }
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
+
+TEMPLATE FILE: views/index.ejs
+-------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .post {
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+        }
+        .post:last-child {
+            border-bottom: none;
+        }
+        h1 {
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            margin-top: 0;
+        }
+        .meta {
+            color: #888;
+            font-size: 0.9em;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1><%= title %></h1>
+    
+    <% if (posts.length === 0) { %>
+        <p>No posts yet. Check back soon!</p>
+    <% } else { %>
+        <% posts.forEach(post => { %>
+            <div class="post">
+                <h2><a href="/posts/<%= post.id %>"><%= post.title %></a></h2>
+                <p class="meta">By <%= post.author %> on <%= post.date %></p>
+                <p><%= post.content.substring(0, 150) %>...</p>
+                <a href="/posts/<%= post.id %>">Read more →</a>
+            </div>
+        <% }); %>
+    <% } %>
+</body>
+</html>
+
+TEMPLATE FILE: views/post.ejs
+------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .meta {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 30px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="/">← Back to Home</a>
+    
+    <h1><%= post.title %></h1>
+    <p class="meta">By <%= post.author %> on <%= post.date %></p>
+    
+    <div class="content">
+        <p><%= post.content %></p>
+    </div>
+    
+    <a href="/">← Back to Home</a>
+</body>
+</html>
+
+TEMPLATE FILE: views/error.ejs
+--------------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <h1><%= title %></h1>
+    <p><%= message %></p>
+    <a href="/">Go to Homepage</a>
+</body>
+</html>
+
+This SSR application:
+• Renders HTML pages on the server
+• Uses EJS templates for dynamic content
+• Handles routes and displays different pages
+• Shows how Express combines templates with data
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: COMBINED APPLICATION EXAMPLE
+-------------------------------------------
+
+OVERVIEW
+--------
+An application that uses both API endpoints and server-side rendering.
+
+COMPLETE COMBINED APPLICATION
+-----------------------------
+// app.js
+const express = require('express');
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(express.static('public'));  // Serve static files
+
+// Set up EJS for SSR
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+// Data store
+let products = [
+  { id: 1, name: 'Laptop', price: 999, inStock: true },
+  { id: 2, name: 'Phone', price: 699, inStock: false },
+  { id: 3, name: 'Tablet', price: 399, inStock: true }
+];
+
+// ===== SSR ROUTES (for browsers) =====
+
+// Homepage - Render product list
+app.get('/', (req, res) => {
+  res.render('products', {
+    title: 'Product Catalog',
+    products: products
+  });
+});
+
+// Product detail page
+app.get('/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const product = products.find(p => p.id === productId);
+  
+  if (product) {
+    res.render('product-detail', {
+      title: product.name,
+      product: product
+    });
+  } else {
+    res.status(404).render('error', {
+      message: 'Product not found'
+    });
+  }
+});
+
+// ===== API ROUTES (for programmatic access) =====
+
+// GET /api/products - Get all products as JSON
+app.get('/api/products', (req, res) => {
+  res.json(products);
+});
+
+// GET /api/products/:id - Get specific product as JSON
+app.get('/api/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const product = products.find(p => p.id === productId);
+  
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404).json({ error: 'Product not found' });
+  }
+});
+
+// POST /api/products - Create product (API only)
+app.post('/api/products', (req, res) => {
+  const { name, price, inStock } = req.body;
+  
+  if (!name || price === undefined) {
+    return res.status(400).json({ error: 'Name and price required' });
+  }
+  
+  const newProduct = {
+    id: products.length + 1,
+    name,
+    price: parseFloat(price),
+    inStock: inStock !== undefined ? inStock : true
+  };
+  
+  products.push(newProduct);
+  res.status(201).json(newProduct);
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log('SSR: http://localhost:3000/');
+  console.log('API: http://localhost:3000/api/products');
+});
+
+This application demonstrates:
+• SSR routes (/) for human users browsing the website
+• API routes (/api/*) for programmatic access
+• Same data, different presentation formats
+• Best of both worlds approach
+
+[END SECTION 7.4]
+================================================================================
+
+PART 8: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 8.1: THE FIVE STEPS RECAP
+-----------------------------------
+
+THE COMPLETE FIVE-STEP PROCESS
+-------------------------------
+
+STEP 1: DECLARE EXPRESS AS A DEPENDENCY
+  Create package.json with Express in dependencies:
+  {
+    "dependencies": {
+      "express": "^4.x"
+    }
+  }
+
+STEP 2: RUN NPM INSTALL
+  Download Express and dependencies:
+  npm install
+
+STEP 3: IMPORT EXPRESS AND CREATE APPLICATION
+  const express = require('express');
+  const app = express();
+
+STEP 4: CREATE ROUTE HANDLERS
+  app.get('/', (req, res) => {
+    res.send('Hello World!');
+  });
+
+STEP 5: START THE HTTP SERVER
+  app.listen(3000, () => {
+    console.log('Server running on port 3000');
+  });
+
+COMPLETE MINIMAL EXAMPLE
+-------------------------
+// Step 1 & 2: Already done (package.json created, npm install run)
+
+// Step 3: Import and create app
+const express = require('express');
+const app = express();
+
+// Step 4: Create route handler
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
+// Step 5: Start server
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
+
+[END SECTION 8.1]
+================================================================================
+
+SECTION 8.2: KEY DEFINITIONS
+-----------------------------
+
+EXPRESS
+-------
+Express is a web application framework based on the Node.js runtime environment 
+that abstracts low-level details, helping you organize your application better 
+and develop faster. It provides robust mechanisms for integrating middleware 
+packages and handling different HTTP request methods.
+
+ROUTE HANDLER
+-------------
+A function that gets executed when a request matches a specific route (URL path) 
+and HTTP method. Route handlers receive request and response objects and send 
+responses back to clients.
+
+MIDDLEWARE
+----------
+Functions that have access to the request and response objects. They can modify 
+them, end the request-response cycle, or pass control to the next middleware.
+
+API (Application Programming Interface)
+---------------------------------------
+An HTTP interface to interact with the data layer. Data is sent back to the 
+client in JSON format using res.json().
+
+SSR (Server-Side RendERING)
+---------------------------
+Using Express to set up templates that dynamically generate HTML, CSS, and/or 
+JavaScript. The complete page is sent back to the client as text using res.render().
+
+ROUTE PARAMETER
+---------------
+Named URL segments (like :id in /users/:id) that capture values at specific 
+positions in the URL. Accessed via req.params.
+
+QUERY PARAMETER
+---------------
+Key-value pairs after a ? in the URL (like ?name=Alice&age=30). Accessed via 
+req.query. Used for optional data, filtering, and pagination.
+
+REQUEST BODY
+------------
+Data sent by the client in POST, PUT, PATCH requests. Parsed by middleware 
+(express.json()) and accessed via req.body.
+
+[END SECTION 8.2]
+================================================================================
+
+SECTION 8.3: QUICK REFERENCE GUIDE
+------------------------------------
+
+EXPRESS SETUP
+-------------
+const express = require('express');
+const app = express();
+app.use(express.json());  // Parse JSON bodies
+app.listen(3000);
+
+HTTP METHODS
+------------
+app.get(path, handler)     // GET - Retrieve data
+app.post(path, handler)     // POST - Create data
+app.put(path, handler)      // PUT - Update entire resource
+app.patch(path, handler)    // PATCH - Partial update
+app.delete(path, handler)   // DELETE - Remove data
+
+ROUTE PATTERNS
+--------------
+app.get('/users', handler)           // Exact match
+app.get('/users/:id', handler)       // Route parameter
+app.get('/users/:id/posts/:postId', handler)  // Multiple parameters
+
+ACCESSING DATA
+--------------
+req.params.id           // Route parameter
+req.query.name          // Query parameter (?name=value)
+req.body.email         // Request body (requires middleware)
+
+RESPONSE METHODS
+----------------
+res.send(data)          // Send response (auto Content-Type)
+res.json(data)          // Send JSON response
+res.status(404).json()  // Set status code and send JSON
+res.render('view', data) // Render template (SSR)
+res.redirect('/path')   // Redirect to another URL
+
+COMMON STATUS CODES
+-------------------
+200 OK                  // Success
+201 Created             // Resource created
+204 No Content          // Success, no content
+400 Bad Request         // Invalid request
+404 Not Found          // Resource doesn't exist
+500 Server Error       // Server error
+
+[END SECTION 8.3]
+================================================================================
+
+SECTION 8.4: COMMON PATTERNS
+-----------------------------
+
+PATTERN 1: BASIC CRUD API
+--------------------------
+app.get('/items', (req, res) => {
+  res.json(items);
+});
+
+app.get('/items/:id', (req, res) => {
+  const item = items.find(i => i.id === parseInt(req.params.id));
+  item ? res.json(item) : res.status(404).json({ error: 'Not found' });
+});
+
+app.post('/items', (req, res) => {
+  const newItem = { id: items.length + 1, ...req.body };
+  items.push(newItem);
+  res.status(201).json(newItem);
+});
+
+app.put('/items/:id', (req, res) => {
+  const index = items.findIndex(i => i.id === parseInt(req.params.id));
+  if (index !== -1) {
+    items[index] = { ...items[index], ...req.body };
+    res.json(items[index]);
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
+});
+
+app.delete('/items/:id', (req, res) => {
+  const index = items.findIndex(i => i.id === parseInt(req.params.id));
+  if (index !== -1) {
+    items.splice(index, 1);
+    res.status(204).send();
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
+});
+
+PATTERN 2: FILTERING WITH QUERY PARAMETERS
+-------------------------------------------
+app.get('/items', (req, res) => {
+  let filtered = items;
+  
+  if (req.query.category) {
+    filtered = filtered.filter(i => i.category === req.query.category);
+  }
+  
+  if (req.query.minPrice) {
+    filtered = filtered.filter(i => i.price >= parseFloat(req.query.minPrice));
+  }
+  
+  res.json(filtered);
+});
+
+PATTERN 3: ERROR HANDLING
+--------------------------
+app.get('/items/:id', (req, res) => {
+  const item = items.find(i => i.id === parseInt(req.params.id));
+  
+  if (!item) {
+    return res.status(404).json({ error: 'Item not found' });
+  }
+  
+  res.json(item);
+});
+
+PATTERN 4: VALIDATION
+---------------------
+app.post('/items', (req, res) => {
+  const { name, price } = req.body;
+  
+  if (!name || !price) {
+    return res.status(400).json({ error: 'Name and price required' });
+  }
+  
+  if (price < 0) {
+    return res.status(400).json({ error: 'Price must be positive' });
+  }
+  
+  // Create item...
+});
+
+[END SECTION 8.4]
+================================================================================
+
+SECTION 8.5: BEST PRACTICES
+----------------------------
+
+1. ALWAYS USE express.json() MIDDLEWARE FOR APIs
+   app.use(express.json());
+   Place this before your routes that need req.body.
+
+2. USE DESCRIPTIVE ROUTE NAMES
+   Good: /users/:userId/posts/:postId
+   Bad: /u/:id/p/:pid
+
+3. VALIDATE INPUT DATA
+   Always validate req.body and req.params before using them.
+
+4. USE APPROPRIATE HTTP STATUS CODES
+   200 for success, 201 for created, 404 for not found, 400 for bad request.
+
+5. HANDLE ERRORS GRACEFULLY
+   Always check if resources exist before operating on them.
+
+6. USE ENVIRONMENT VARIABLES FOR CONFIGURATION
+   const PORT = process.env.PORT || 3000;
+
+7. ORGANIZE YOUR CODE
+   Separate routes into different files as your app grows.
+
+8. USE CONSISTENT RESPONSE FORMATS
+   For APIs, always return JSON in a consistent structure.
+
+9. DOCUMENT YOUR API
+   Consider using tools like Swagger/OpenAPI for API documentation.
+
+10. SECURITY BEST PRACTICES
+    • Never trust user input - always validate
+    • Use HTTPS in production
+    • Implement authentication and authorization
+    • Protect against common vulnerabilities (XSS, CSRF, etc.)
+
+[END SECTION 8.5]
+================================================================================
+
+FINAL SUMMARY
+=============
+
+CONGRATULATIONS!
+----------------
+You've completed the comprehensive guide to Express Web Application Framework! 
+You now understand:
+
+✓ What Express is and why it exists
+✓ How Express abstracts low-level details
+✓ The two primary uses: APIs and SSR
+✓ The complete five-step process for working with Express
+✓ How to create route handlers for all HTTP methods
+✓ How to work with route parameters, query parameters, and request bodies
+✓ How to send different types of responses
+✓ How to start an Express server
+✓ Complete working examples of Express applications
+
+NEXT STEPS
+----------
+Now that you understand the fundamentals:
+1. Practice building your own Express applications
+2. Explore Express middleware (authentication, logging, etc.)
+3. Learn about organizing larger Express applications
+4. Study database integration with Express
+5. Learn about deployment and production considerations
+
+Remember: The best way to learn is by building. Start with simple applications 
+and gradually add complexity. Express is a powerful tool, and with practice, 
+you'll be building robust web applications in no time!
+
+[END OF PART 2]
+[END OF COMPREHENSIVE GUIDE]
+================================================================================
+

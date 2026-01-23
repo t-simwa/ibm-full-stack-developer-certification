@@ -1,0 +1,1615 @@
+================================================================================
+AUTHENTICATION IN NODE.JS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+This is Part 2 of the comprehensive Authentication in Node.js guide. Part 1 covered:
+• Introduction to authentication and authorization
+• Different authentication approaches
+• Token-based authentication advantages
+• Understanding JSON Web Tokens (JWT)
+• Basic Express server setup
+• Creating protected endpoints
+
+Part 2 covers:
+• Complete authentication implementation
+• JWT generation and verification
+• Login endpoint with detailed code explanations
+• Protected resource endpoints
+• Complete working code examples with line-by-line explanations
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+This part covers the complete implementation:
+
+PART 4: IMPLEMENTING LOGIN AND JWT GENERATION
+  SECTION 4.1: SETTING UP JWT AND MIDDLEWARE
+  SECTION 4.2: CREATING THE LOGIN ENDPOINT
+  SECTION 4.3: JWT GENERATION EXPLAINED
+  SECTION 4.4: HANDLING LOGIN ERRORS
+
+PART 5: IMPLEMENTING TOKEN VERIFICATION
+  SECTION 5.1: READING THE AUTHORIZATION HEADER
+  SECTION 5.2: VERIFYING THE JWT TOKEN
+  SECTION 5.3: PROTECTING THE EMPLOYEES ENDPOINT
+  SECTION 5.4: HANDLING VERIFICATION ERRORS
+
+PART 6: COMPLETE CODE EXAMPLE
+  SECTION 6.1: COMPLETE SERVER CODE
+  SECTION 6.2: LINE-BY-LINE EXPLANATION
+  SECTION 6.3: TESTING THE COMPLETE APPLICATION
+
+PART 7: SUMMARY AND KEY TAKEAWAYS
+  SECTION 7.1: CONCEPT SUMMARY
+  SECTION 7.2: KEY DEFINITIONS
+  SECTION 7.3: QUICK REFERENCE GUIDE
+  SECTION 7.4: BEST PRACTICES AND SECURITY CONSIDERATIONS
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 4.1:") to quickly jump to any section.
+
+================================================================================
+PART 4: IMPLEMENTING LOGIN AND JWT GENERATION
+================================================================================
+
+SECTION 4.1: SETTING UP JWT AND MIDDLEWARE
+-------------------------------------------
+
+OVERVIEW
+--------
+In the next part of the code, we allow users to sign in and send back a verified 
+generated token as long as the username and password are correct. To generate the 
+verified JWT, use the jsonwebtoken npm package.
+
+REQUIRING THE JSONWEBTOKEN MODULE
+----------------------------------
+At the start, you will need to require the module jsonwebtoken from the 
+jsonwebtoken package. This module is used to generate the JWT using the JWT secret.
+
+CODE:
+  const jwt = require('jsonwebtoken');
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const jwt = require('jsonwebtoken');
+        • Imports the jsonwebtoken module
+        • require() loads the module from node_modules
+        • 'jsonwebtoken' is the package name
+        • We assign it to the constant jwt
+        • This module is used to generate the JWT using the JWT secret
+        • At the start, you will need to require the module jsonwebtoken from 
+          the jsonwebtoken package
+
+WHAT IS JSONWEBTOKEN MODULE?
+The jsonwebtoken module provides functions to:
+• jwt.sign() - Create (sign) a JWT token
+• jwt.verify() - Verify and decode a JWT token
+• jwt.decode() - Decode a JWT without verification
+
+CREATING THE JWT SECRET
+-----------------------
+A constant is then declared to store the JWT secret.
+
+CODE:
+  const JWT_SECRET = 'your-secret-key-here';
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const JWT_SECRET = 'your-secret-key-here';
+        • Creates a constant to store the JWT secret
+        • const means the value cannot be changed
+        • JWT_SECRET is the variable name (uppercase is convention for constants)
+        • 'your-secret-key-here' is the secret key (should be a strong, random string)
+        • A constant is then declared to store the JWT secret
+
+IMPORTANT SECURITY NOTE
+-----------------------
+Please note, however, that the JWT secret should always be generated using a 
+password generator and stored in the config file as an environment variable and 
+not hard coded in the API as shown here.
+
+WHY NOT HARD CODE THE SECRET?
+• Security risk if code is shared or leaked
+• Different secrets for different environments (dev, production)
+• Easy to change without modifying code
+• Best practice for security
+
+HOW TO USE ENVIRONMENT VARIABLES
+---------------------------------
+Instead of hard coding, use environment variables:
+
+1. Install dotenv package:
+   npm install dotenv
+
+2. Create .env file:
+   JWT_SECRET=your-super-secret-key-generated-by-password-generator
+
+3. In your code:
+   require('dotenv').config();
+   const JWT_SECRET = process.env.JWT_SECRET;
+
+4. Add .env to .gitignore (never commit secrets!)
+
+ENABLING JSON MIDDLEWARE
+------------------------
+The myapp.use method enables returning a JSON response by the API methods.
+
+CODE:
+  myApp.use(express.json());
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: myApp.use(express.json());
+        • Adds middleware to parse JSON request bodies
+        • myApp.use() adds middleware to the Express app
+        • express.json() is built-in middleware
+        • It parses incoming JSON requests
+        • Makes req.body available as a JavaScript object
+        • The myapp.use method enables returning a JSON response by the API methods
+
+WHAT IS MIDDLEWARE?
+Middleware are functions that run between receiving a request and sending a response.
+They can:
+• Parse request data
+• Add functionality
+• Modify requests/responses
+• Execute code before routes
+
+WHY DO WE NEED express.json()?
+Without this middleware:
+• req.body would be undefined
+• We couldn't read JSON from request body
+• Login endpoint couldn't read username/password
+
+WITH express.json():
+• Automatically parses JSON request bodies
+• Makes data available in req.body
+• Essential for POST requests with JSON data
+
+COMPLETE SETUP CODE SO FAR
+---------------------------
+  const express = require('express');
+  const jwt = require('jsonwebtoken');
+  const myApp = express();
+  const JWT_SECRET = 'your-secret-key-here';
+
+  myApp.use(express.json());
+
+  myApp.listen(5000, () => {
+    console.log('API server is localhost:5000');
+  });
+
+[END SECTION 4.1]
+================================================================================
+SECTION 4.2: CREATING THE LOGIN ENDPOINT
+-----------------------------------------
+
+OVERVIEW
+--------
+We will first use a POST API for logging in that returns a web token to sign in 
+by sending the username and password in the request body. The call to this API 
+endpoint should be made from the web server that hosts the application's front end.
+
+HARD CODED CREDENTIALS (FOR DEMO)
+----------------------------------
+To display the code in this video, we are hard coding the username and password. 
+Generally, usernames and passwords are stored in the database. However, since 
+setting up a database connection is out of the scope of this code demo, we will 
+hard code user and password as the username and password in this code example.
+
+IMPORTANT NOTE
+--------------
+In real applications:
+• Credentials are stored in a database
+• Passwords are hashed (never stored in plain text)
+• Use libraries like bcrypt for password hashing
+• Never hard code credentials in production!
+
+LOGIN ENDPOINT CODE
+-------------------
+  myApp.post('/signin', (req, res) => {
+    const { username, password } = req.body;
+
+    // Hard coded for demo (in real app, check database)
+    if (username === 'user' && password === 'password') {
+      const token = jwt.sign({ username: username }, JWT_SECRET);
+      res.json({ token: token });
+    } else {
+      res.status(401).json({ message: 'invalid username and or password' });
+    }
+  });
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: myApp.post('/signin', (req, res) => {
+        • Creates a POST endpoint at '/signin'
+        • myApp.post() creates a POST route (for creating/submitting data)
+        • '/signin' is the URL path (e.g., http://localhost:5000/signin)
+        • (req, res) => { } is the route handler function
+        • req = request object (contains data sent by client)
+        • res = response object (used to send response back)
+        • We will first use a POST API for logging in that returns a web token
+
+Line 2: const { username, password } = req.body;
+        • Extracts username and password from request body
+        • req.body contains the JSON data sent in the request
+        • { username, password } is destructuring (ES6 syntax)
+        • This is equivalent to:
+          const username = req.body.username;
+          const password = req.body.password;
+        • The username and password from the request body is then compared
+
+Line 3: (empty line for readability)
+
+Line 4: // Hard coded for demo (in real app, check database)
+        • Comment explaining this is for demonstration only
+        • In production, you would query a database instead
+
+Line 5: if (username === 'user' && password === 'password') {
+        • Checks if credentials match hard coded values
+        • === is strict equality (checks value and type)
+        • && means both conditions must be true
+        • username must equal 'user' AND password must equal 'password'
+        • Generally, usernames and passwords are stored in the database
+        • However, since setting up a database connection is out of the scope 
+          of this code demo, we will hard code user and password as the username 
+          and password in this code example
+
+Line 6: const token = jwt.sign({ username: username }, JWT_SECRET);
+        • Generates a JWT token if credentials are correct
+        • jwt.sign() creates and signs a JWT
+        • First argument: { username: username } is the payload (data in token)
+        • Second argument: JWT_SECRET is the secret key for signing
+        • The token is stored in the constant token
+        • The JWT is generated using the jsonwebtoken.sign function by including 
+          the username and the JWT secret as parameters
+
+WHAT IS jwt.sign()?
+jwt.sign() creates a JWT token with:
+• Payload: The data you want to store (username in this case)
+• Secret: The key used to sign the token
+• Returns: A signed JWT token string
+
+Line 7: res.json({ token: token });
+        • Sends JSON response with the token
+        • res.json() sends a JSON response
+        • { token: token } creates an object with token property
+        • The token is returned as a JSON response from the sign-in API
+        • Client receives: { "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+
+Line 8: } else {
+        • If credentials don't match, execute this block
+
+Line 9: res.status(401).json({ message: 'invalid username and or password' });
+        • Sends 401 Unauthorized status
+        • res.status(401) sets HTTP status code to 401
+        • .json() sends JSON response
+        • { message: '...' } is the error message
+        • Now, if the username and password match fails, then an HTTP status 
+          code of 401 is returned with the message, invalid username and or password
+
+Line 10: }
+         • Closes the else block
+
+Line 11: });
+         • Closes the route handler function
+         • Closes the myApp.post() method
+
+UNDERSTANDING THE FLOW
+----------------------
+1. Client sends POST request to /signin with username and password
+2. Server extracts username and password from req.body
+3. Server compares credentials with stored values
+4. If match: Generate JWT and return token
+5. If no match: Return 401 error
+
+REQUEST EXAMPLE
+---------------
+Client sends:
+  POST http://localhost:5000/signin
+  Content-Type: application/json
+  
+  {
+    "username": "user",
+    "password": "password"
+  }
+
+SUCCESS RESPONSE (200 OK)
+-------------------------
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpYXQiOjE2MTYyMzkwMjJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+  }
+
+ERROR RESPONSE (401 Unauthorized)
+----------------------------------
+  {
+    "message": "invalid username and or password"
+  }
+
+[END SECTION 4.2]
+================================================================================
+SECTION 4.3: JWT GENERATION EXPLAINED
+--------------------------------------
+
+DETAILED LOOK AT jwt.sign()
+---------------------------
+Let's understand how jwt.sign() works in detail:
+
+BASIC SYNTAX
+------------
+  jwt.sign(payload, secret, options)
+
+PARAMETERS
+----------
+1. PAYLOAD (First Argument)
+   • The data you want to store in the token
+   • Usually contains user information
+   • Example: { username: 'user', userId: '123' }
+   • This data is encoded (not encrypted) in the token
+
+2. SECRET (Second Argument)
+   • The secret key used to sign the token
+   • Must be kept secret on the server
+   • Used to verify token hasn't been tampered with
+   • Example: JWT_SECRET constant
+
+3. OPTIONS (Third Argument - Optional)
+   • Additional settings for the token
+   • Example: { expiresIn: '1h' } (token expires in 1 hour)
+   • Can set expiration, issuer, audience, etc.
+
+OUR CODE
+--------
+  const token = jwt.sign({ username: username }, JWT_SECRET);
+
+WHAT HAPPENS INTERNALLY
+-----------------------
+1. JWT library creates the header:
+   {
+     "alg": "HS256",
+     "typ": "JWT"
+   }
+
+2. JWT library encodes the payload:
+   {
+     "username": "user"
+   }
+
+3. JWT library creates signature:
+   • Takes encoded header + encoded payload
+   • Signs with JWT_SECRET using HMAC SHA256
+   • Creates signature string
+
+4. JWT library combines all three parts:
+   header.payload.signature
+
+5. Returns the complete JWT token string
+
+WHAT'S IN THE TOKEN?
+--------------------
+If we decode the token (without verification), we'd see:
+
+HEADER:
+  {
+    "alg": "HS256",
+    "typ": "JWT"
+  }
+
+PAYLOAD:
+  {
+    "username": "user",
+    "iat": 1616239022
+  }
+  (iat = issued at timestamp, added automatically)
+
+SIGNATURE:
+  (Cryptographic signature created with JWT_SECRET)
+
+ADDING EXPIRATION
+-----------------
+You can add expiration to tokens:
+
+  const token = jwt.sign(
+    { username: username },
+    JWT_SECRET,
+    { expiresIn: '1h' }  // Token expires in 1 hour
+  );
+
+COMMON EXPIRATION OPTIONS
+-------------------------
+• '1h' - 1 hour
+• '24h' - 24 hours
+• '7d' - 7 days
+• '30d' - 30 days
+• 3600 - 3600 seconds (1 hour)
+• '2 days' - 2 days
+
+WHY ADD EXPIRATION?
+-------------------
+• Security: Limits damage if token is stolen
+• Forces re-authentication periodically
+• Reduces risk of long-lived tokens
+• Best practice for production applications
+
+[END SECTION 4.3]
+================================================================================
+SECTION 4.4: HANDLING LOGIN ERRORS
+------------------------------------
+
+ERROR SCENARIOS
+---------------
+The login endpoint handles these error scenarios:
+
+1. INVALID CREDENTIALS
+   • Username doesn't match
+   • Password doesn't match
+   • Both don't match
+   • Response: 401 with error message
+
+2. MISSING CREDENTIALS
+   • No username in request
+   • No password in request
+   • Both missing
+   • Currently returns 401 (could add validation)
+
+IMPROVING ERROR HANDLING
+------------------------
+We can improve error handling:
+
+  myApp.post('/signin', (req, res) => {
+    const { username, password } = req.body;
+
+    // Check if credentials are provided
+    if (!username || !password) {
+      return res.status(400).json({ 
+        message: 'username and password are required' 
+      });
+    }
+
+    // Check credentials (hard coded for demo)
+    if (username === 'user' && password === 'password') {
+      const token = jwt.sign({ username: username }, JWT_SECRET);
+      return res.json({ token: token });
+    } else {
+      return res.status(401).json({ 
+        message: 'invalid username and or password' 
+      });
+    }
+  });
+
+IMPROVEMENTS EXPLAINED
+----------------------
+1. VALIDATION:
+   • Checks if username and password exist
+   • Returns 400 Bad Request if missing
+   • Better error message for client
+
+2. RETURN STATEMENTS:
+   • Uses return to stop execution
+   • Prevents code from continuing after sending response
+   • Best practice in Express routes
+
+3. CONSISTENT ERROR FORMAT:
+   • All errors return JSON with message
+   • Consistent structure for client to handle
+
+[END SECTION 4.4]
+[END PART 4]
+================================================================================
+PART 5: IMPLEMENTING TOKEN VERIFICATION
+================================================================================
+
+SECTION 5.1: READING THE AUTHORIZATION HEADER
+-----------------------------------------------
+
+OVERVIEW
+--------
+Next, we define the getAPI method with the employees endpoint. The token fetched 
+from the call to the sign-in API is passed in the authorization header. The 
+getAPI employees is updated to read the authorization header from the incoming 
+API request using the request.header function.
+
+UNDERSTANDING AUTHORIZATION HEADERS
+------------------------------------
+The authorization header always starts with the string, bearer, at the start of 
+the header, and therefore, this token is also known as bearer token.
+
+FORMAT:
+  Authorization: Bearer <token>
+
+EXAMPLE:
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+READING THE HEADER
+------------------
+The getAPI employees is updated to read the authorization header from the incoming 
+API request using the request.header function.
+
+CODE:
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    
+    // Continue with token verification...
+  });
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: myApp.get('/employees', (req, res) => {
+        • Creates GET endpoint at '/employees'
+        • Same as before, but now we'll add authentication
+        • Next, we define the getAPI method with the employees endpoint
+
+Line 2: const authHeader = req.headers.authorization;
+        • Gets the Authorization header from the request
+        • req.headers contains all HTTP headers
+        • req.headers.authorization gets the Authorization header value
+        • Stores it in authHeader constant
+        • The getAPI employees is updated to read the authorization header from 
+          the incoming API request using the request.header function
+        • Note: req.headers.authorization (not req.header - that's a method)
+
+WHAT IS req.headers?
+req.headers is an object containing all HTTP headers sent by the client:
+  {
+    "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "content-type": "application/json",
+    "user-agent": "Mozilla/5.0...",
+    ...
+  }
+
+Line 3: (empty line)
+
+Line 4: if (!authHeader) {
+        • Checks if authorization header exists
+        • ! means "not" (negation)
+        • If authHeader is undefined, null, or empty, this is true
+        • And if no header is found within the request, then a status code of 
+          401 is sent back
+
+Line 5: return res.status(401).json({ message: 'no token' });
+        • Returns 401 Unauthorized if no token
+        • return stops execution (prevents code below from running)
+        • res.status(401) sets status code
+        • .json() sends JSON response
+        • { message: 'no token' } is the error message
+        • then a status code of 401 is sent back by the getAPI with the message, 
+          no token
+
+EXTRACTING THE TOKEN
+--------------------
+The authorization header contains "Bearer <token>", so we need to extract just 
+the token part:
+
+CODE:
+  const token = authHeader.split(' ')[1];
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: const token = authHeader.split(' ')[1];
+        • Extracts the token from "Bearer <token>"
+        • authHeader.split(' ') splits the string by space
+        • Results in: ["Bearer", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."]
+        • [1] gets the second element (the token)
+        • Stores it in token constant
+
+HOW split() WORKS
+-----------------
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...".split(' ')
+  
+  Results in array:
+  [
+    "Bearer",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  ]
+  
+  [0] = "Bearer"
+  [1] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." (the token)
+
+COMPLETE HEADER READING CODE
+----------------------------
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    
+    const token = authHeader.split(' ')[1];
+    
+    // Continue with verification...
+  });
+
+[END SECTION 5.1]
+================================================================================
+SECTION 5.2: VERIFYING THE JWT TOKEN
+--------------------------------------
+
+OVERVIEW
+--------
+The fetched JWT is verified using the function jsonwebtoken.verify by passing the 
+fetched token and the JWT secret. And the value returned by this function is then 
+used to verify if the user property matches with the username fetched from the 
+database.
+
+VERIFYING THE TOKEN
+-------------------
+CODE:
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // Token is valid, continue...
+  } catch (error) {
+    return res.status(401).json({ message: 'please log in to access this resource' });
+  }
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: try {
+        • Starts a try-catch block
+        • try block contains code that might throw an error
+        • If error occurs, catch block handles it
+
+Line 2: const decoded = jwt.verify(token, JWT_SECRET);
+        • Verifies the JWT token
+        • jwt.verify() checks if token is valid
+        • First argument: token (the JWT string)
+        • Second argument: JWT_SECRET (secret key used to sign)
+        • Returns decoded payload if token is valid
+        • Throws error if token is invalid, expired, or tampered with
+        • The fetched JWT is verified using the function jsonwebtoken.verify by 
+          passing the fetched token and the JWT secret
+
+WHAT DOES jwt.verify() DO?
+1. Extracts header, payload, and signature from token
+2. Recreates signature using header, payload, and JWT_SECRET
+3. Compares recreated signature with token's signature
+4. Checks if token is expired (if exp claim exists)
+5. If everything matches: Returns decoded payload
+6. If anything is wrong: Throws an error
+
+Line 3: (empty line)
+
+Line 4: // Token is valid, continue...
+        • Comment indicating token verification succeeded
+        • Code continues here if token is valid
+
+Line 5: } catch (error) {
+        • Catches any errors from try block
+        • If jwt.verify() throws error, this block executes
+        • error contains information about what went wrong
+
+Line 6: return res.status(401).json({ message: 'please log in to access this resource' });
+        • Returns 401 if verification fails
+        • Now, if the verification fails, then the 401 unauthorized status code 
+          is sent back to the client with the message, please log in to access 
+          this resource
+
+WHAT ERRORS CAN OCCUR?
+----------------------
+jwt.verify() can throw these errors:
+• TokenExpiredError - Token has expired
+• JsonWebTokenError - Token is invalid or malformed
+• NotBeforeError - Token not yet valid (nbf claim)
+
+WHY USE TRY-CATCH?
+-----------------
+• jwt.verify() throws errors (doesn't return false)
+• We need to catch these errors
+• Prevents server from crashing
+• Allows us to send proper error response
+
+UNDERSTANDING THE DECODED PAYLOAD
+----------------------------------
+If verification succeeds, decoded contains the payload:
+
+  {
+    "username": "user",
+    "iat": 1616239022
+  }
+
+This is the data we put in the token when we signed it!
+
+[END SECTION 5.2]
+================================================================================
+SECTION 5.3: PROTECTING THE EMPLOYEES ENDPOINT
+-----------------------------------------------
+
+OVERVIEW
+--------
+And if that match happens, then the user is authenticated and is provided access 
+to the employees API. The API then returns the 200 success status code with the 
+message, access successful to employee endpoint.
+
+COMPLETE PROTECTED ENDPOINT
+----------------------------
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    
+    const token = authHeader.split(' ')[1];
+    
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      
+      // User is authenticated, provide access
+      res.status(200).json({ 
+        message: 'access successful to employee endpoint' 
+      });
+    } catch (error) {
+      return res.status(401).json({ 
+        message: 'please log in to access this resource' 
+      });
+    }
+  });
+
+LINE-BY-LINE EXPLANATION (NEW PARTS)
+------------------------------------
+Line 1-8: (Already explained in previous sections)
+
+Line 9: const decoded = jwt.verify(token, JWT_SECRET);
+        • Verifies token (already explained)
+        • If successful, decoded contains user information
+        • And the value returned by this function is then used to verify
+
+Line 10: (empty line)
+
+Line 11: // User is authenticated, provide access
+         • Comment explaining user is now authenticated
+         • And if that match happens, then the user is authenticated
+
+Line 12: res.status(200).json({
+         • Sends 200 OK status (success)
+         • res.status(200) sets HTTP status code to 200
+         • .json() sends JSON response
+         • The API then returns the 200 success status code
+
+Line 13: message: 'access successful to employee endpoint'
+         • Success message
+         • with the message, access successful to employee endpoint
+
+Line 14: });
+         • Closes the JSON object
+         • Closes the .json() method
+
+Line 15: } catch (error) {
+         • Catches verification errors (already explained)
+
+Line 16: return res.status(401).json({
+         • Returns 401 if verification fails (already explained)
+
+Line 17: message: 'please log in to access this resource'
+         • Error message (already explained)
+
+WHAT HAPPENS WHEN TOKEN IS VALID?
+---------------------------------
+1. Token is extracted from Authorization header
+2. Token is verified with JWT_SECRET
+3. If valid, decoded payload contains user information
+4. User is authenticated
+5. Server returns 200 OK with success message
+6. User can now access the resource
+
+WHAT HAPPENS WHEN TOKEN IS INVALID?
+------------------------------------
+1. Token is extracted from Authorization header
+2. Token verification fails (expired, tampered, etc.)
+3. jwt.verify() throws an error
+4. Error is caught by catch block
+5. Server returns 401 Unauthorized
+6. User cannot access the resource
+
+[END SECTION 5.3]
+================================================================================
+SECTION 5.4: HANDLING VERIFICATION ERRORS
+------------------------------------------
+
+COMMON VERIFICATION ERRORS
+--------------------------
+Let's understand different error scenarios:
+
+ERROR 1: NO TOKEN PROVIDED
+---------------------------
+Request without Authorization header:
+  GET /employees
+  (no Authorization header)
+
+Response:
+  Status: 401 Unauthorized
+  Body: { "message": "no token" }
+
+ERROR 2: INVALID TOKEN FORMAT
+------------------------------
+Request with malformed token:
+  GET /employees
+  Authorization: Bearer invalid-token-format
+
+Response:
+  Status: 401 Unauthorized
+  Body: { "message": "please log in to access this resource" }
+
+ERROR 3: EXPIRED TOKEN
+----------------------
+Request with expired token:
+  GET /employees
+  Authorization: Bearer <expired-token>
+
+Response:
+  Status: 401 Unauthorized
+  Body: { "message": "please log in to access this resource" }
+
+ERROR 4: TAMPERED TOKEN
+-----------------------
+Request with modified token:
+  GET /employees
+  Authorization: Bearer <modified-token>
+
+Response:
+  Status: 401 Unauthorized
+  Body: { "message": "please log in to access this resource" }
+
+IMPROVING ERROR MESSAGES
+------------------------
+We can provide more specific error messages:
+
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    
+    const token = authHeader.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({ message: 'invalid token format' });
+    }
+    
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      res.status(200).json({ 
+        message: 'access successful to employee endpoint' 
+      });
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ message: 'token expired' });
+      }
+      return res.status(401).json({ 
+        message: 'please log in to access this resource' 
+      });
+    }
+  });
+
+IMPROVEMENTS EXPLAINED
+---------------------
+1. CHECKS FOR TOKEN EXISTENCE:
+   • Verifies token exists after splitting
+   • Handles case where header is "Bearer " (no token)
+
+2. SPECIFIC ERROR FOR EXPIRED TOKENS:
+   • Checks error type
+   • Returns specific message for expired tokens
+   • Helps client understand what went wrong
+
+[END SECTION 5.4]
+[END PART 5]
+================================================================================
+PART 6: COMPLETE CODE EXAMPLE
+================================================================================
+
+SECTION 6.1: COMPLETE SERVER CODE
+-----------------------------------
+
+COMPLETE IMPLEMENTATION
+-----------------------
+Here's the complete code combining everything we've learned:
+
+  const express = require('express');
+  const jwt = require('jsonwebtoken');
+  const myApp = express();
+  const JWT_SECRET = 'your-secret-key-here';
+
+  myApp.use(express.json());
+
+  // Login endpoint
+  myApp.post('/signin', (req, res) => {
+    const { username, password } = req.body;
+
+    if (username === 'user' && password === 'password') {
+      const token = jwt.sign({ username: username }, JWT_SECRET);
+      res.json({ token: token });
+    } else {
+      res.status(401).json({ message: 'invalid username and or password' });
+    }
+  });
+
+  // Protected employees endpoint
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    
+    const token = authHeader.split(' ')[1];
+    
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      res.status(200).json({ 
+        message: 'access successful to employee endpoint' 
+      });
+    } catch (error) {
+      return res.status(401).json({ 
+        message: 'please log in to access this resource' 
+      });
+    }
+  });
+
+  // Start server
+  myApp.listen(5000, () => {
+    console.log('API server is localhost:5000');
+  });
+
+FILE STRUCTURE
+--------------
+Save this file as: apiServer.js
+
+[END SECTION 6.1]
+================================================================================
+SECTION 6.2: LINE-BY-LINE EXPLANATION
+---------------------------------------
+
+COMPLETE LINE-BY-LINE BREAKDOWN
+--------------------------------
+
+=== IMPORTS AND SETUP ===
+
+Line 1: const express = require('express');
+        • Imports Express framework
+        • Creates web server capabilities
+
+Line 2: const jwt = require('jsonwebtoken');
+        • Imports jsonwebtoken library
+        • Enables JWT creation and verification
+        • At the start, you will need to require the module jsonwebtoken from 
+          the jsonwebtoken package
+
+Line 3: const myApp = express();
+        • Creates Express application
+        • This code creates a web server module by calling the express function 
+          and assigning it to the constant myApp
+
+Line 4: const JWT_SECRET = 'your-secret-key-here';
+        • Stores JWT secret key
+        • A constant is then declared to store the JWT secret
+        • Please note, however, that the JWT secret should always be generated 
+          using a password generator and stored in the config file as an 
+          environment variable and not hard coded in the API as shown here
+
+Line 5: (empty line)
+
+Line 6: myApp.use(express.json());
+        • Enables JSON parsing middleware
+        • The myapp.use method enables returning a JSON response by the API methods
+
+=== LOGIN ENDPOINT ===
+
+Line 7: (empty line)
+
+Line 8: // Login endpoint
+        • Comment describing the endpoint
+
+Line 9: myApp.post('/signin', (req, res) => {
+        • Creates POST endpoint at '/signin'
+        • We will first use a POST API for logging in that returns a web token
+        • The call to this API endpoint should be made from the web server that 
+          hosts the application's front end
+
+Line 10: const { username, password } = req.body;
+         • Extracts credentials from request body
+         • The username and password from the request body is then compared
+
+Line 11: (empty line)
+
+Line 12: if (username === 'user' && password === 'password') {
+         • Checks if credentials match
+         • To display the code in this video, we are hard coding the username 
+           and password
+         • Generally, usernames and passwords are stored in the database
+         • However, since setting up a database connection is out of the scope 
+           of this code demo, we will hard code user and password as the username 
+           and password in this code example
+
+Line 13: const token = jwt.sign({ username: username }, JWT_SECRET);
+         • Generates JWT token
+         • The JWT is generated using the jsonwebtoken.sign function by 
+           including the username and the JWT secret as parameters
+
+Line 14: res.json({ token: token });
+         • Sends token to client
+         • is returned as a JSON response from the sign-in API
+
+Line 15: } else {
+         • Handles invalid credentials
+
+Line 16: res.status(401).json({ message: 'invalid username and or password' });
+         • Returns 401 error
+         • Now, if the username and password match fails, then an HTTP status 
+           code of 401 is returned with the message, invalid username and or 
+           password
+
+Line 17: }
+         • Closes else block
+
+Line 18: });
+         • Closes login endpoint
+
+=== PROTECTED ENDPOINT ===
+
+Line 19: (empty line)
+
+Line 20: // Protected employees endpoint
+         • Comment describing the endpoint
+
+Line 21: myApp.get('/employees', (req, res) => {
+         • Creates GET endpoint at '/employees'
+         • Next, we define the getAPI method with the employees endpoint
+         • A second GET API will be the resource endpoint to get employee 
+           information that only authenticated users can access
+
+Line 22: const authHeader = req.headers.authorization;
+         • Gets Authorization header
+         • The getAPI employees is updated to read the authorization header from 
+           the incoming API request using the request.header function
+         • The token fetched from the call to the sign-in API is passed in the 
+           authorization header
+
+Line 23: (empty line)
+
+Line 24: if (!authHeader) {
+         • Checks if header exists
+         • And if no header is found within the request, then a status code of 
+           401 is sent back
+
+Line 25: return res.status(401).json({ message: 'no token' });
+         • Returns 401 if no token
+         • by the getAPI with the message, no token
+
+Line 26: }
+         • Closes if block
+
+Line 27: (empty line)
+
+Line 28: const token = authHeader.split(' ')[1];
+         • Extracts token from "Bearer <token>"
+         • The authorization header always starts with the string, bearer, at 
+           the start of the header, and therefore, this token is also known as 
+           bearer token
+
+Line 29: (empty line)
+
+Line 30: try {
+         • Starts error handling block
+
+Line 31: const decoded = jwt.verify(token, JWT_SECRET);
+         • Verifies the token
+         • The fetched JWT is verified using the function jsonwebtoken.verify by 
+           passing the fetched token and the JWT secret
+         • And the value returned by this function is then used to verify if the 
+           user property matches with the username fetched from the database
+
+Line 32: res.status(200).json({
+         • Sends success response
+         • And if that match happens, then the user is authenticated and is 
+           provided access to the employees API
+         • The API then returns the 200 success status code
+
+Line 33: message: 'access successful to employee endpoint'
+         • Success message
+         • with the message, access successful to employee endpoint
+
+Line 34: });
+         • Closes JSON response
+
+Line 35: } catch (error) {
+         • Catches verification errors
+         • Now, if the verification fails, then the 401 unauthorized status code 
+           is sent back
+
+Line 36: return res.status(401).json({
+         • Returns 401 on error
+
+Line 37: message: 'please log in to access this resource'
+         • Error message
+         • to the client with the message, please log in to access this resource
+
+Line 38: });
+         • Closes JSON response
+
+Line 39: }
+         • Closes catch block
+
+Line 40: });
+         • Closes employees endpoint
+
+=== SERVER STARTUP ===
+
+Line 41: (empty line)
+
+Line 42: // Start server
+         • Comment
+
+Line 43: myApp.listen(5000, () => {
+         • Starts server on port 5000
+         • Lastly, write a listener function that listens for the response on 
+           port 5000
+
+Line 44: console.log('API server is localhost:5000');
+         • Logs startup message
+         • then log the phrase, API server is localhost 5000 to the console log
+
+Line 45: });
+         • Closes listen method
+
+[END SECTION 6.2]
+================================================================================
+SECTION 6.3: TESTING THE COMPLETE APPLICATION
+----------------------------------------------
+
+STEP 1: START THE SERVER
+------------------------
+Save the file as apiServer.js and run:
+  node apiServer.js
+
+You should see:
+  API server is localhost:5000
+
+STEP 2: TEST LOGIN (SUCCESS)
+----------------------------
+Test with correct credentials:
+
+  curl -X POST http://localhost:5000/signin \
+    -H "Content-Type: application/json" \
+    -d '{"username":"user","password":"password"}'
+
+Expected Response:
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+
+Save the token for the next step!
+
+STEP 3: TEST LOGIN (FAILURE)
+----------------------------
+Test with incorrect credentials:
+
+  curl -X POST http://localhost:5000/signin \
+    -H "Content-Type: application/json" \
+    -d '{"username":"wrong","password":"wrong"}'
+
+Expected Response:
+  Status: 401 Unauthorized
+  {
+    "message": "invalid username and or password"
+  }
+
+STEP 4: TEST PROTECTED ENDPOINT (NO TOKEN)
+------------------------------------------
+Try to access employees without token:
+
+  curl http://localhost:5000/employees
+
+Expected Response:
+  Status: 401 Unauthorized
+  {
+    "message": "no token"
+  }
+
+STEP 5: TEST PROTECTED ENDPOINT (WITH TOKEN)
+--------------------------------------------
+Access employees with valid token (replace YOUR_TOKEN with actual token):
+
+  curl http://localhost:5000/employees \
+    -H "Authorization: Bearer YOUR_TOKEN"
+
+Expected Response:
+  Status: 200 OK
+  {
+    "message": "access successful to employee endpoint"
+  }
+
+STEP 6: TEST PROTECTED ENDPOINT (INVALID TOKEN)
+------------------------------------------------
+Try with invalid token:
+
+  curl http://localhost:5000/employees \
+    -H "Authorization: Bearer invalid-token-here"
+
+Expected Response:
+  Status: 401 Unauthorized
+  {
+    "message": "please log in to access this resource"
+  }
+
+COMPLETE TEST FLOW
+-------------------
+1. ✅ Server starts successfully
+2. ✅ Login with correct credentials returns token
+3. ✅ Login with incorrect credentials returns 401
+4. ✅ Accessing employees without token returns 401
+5. ✅ Accessing employees with valid token returns 200
+6. ✅ Accessing employees with invalid token returns 401
+
+[END SECTION 6.3]
+[END PART 6]
+================================================================================
+PART 7: SUMMARY AND KEY TAKEAWAYS
+================================================================================
+
+SECTION 7.1: CONCEPT SUMMARY
+-----------------------------
+
+WHAT IS AUTHENTICATION?
+------------------------
+Authentication is the process of confirming a user's identity by obtaining 
+credentials and using those credentials to validate their identity. 
+Authentication is meant to identify users and provide access rights and contents 
+depending on their ID.
+
+WHAT IS TOKEN-BASED AUTHENTICATION?
+------------------------------------
+Token-based authentication is an approach where:
+• User provides credentials (username/password)
+• Server validates credentials
+• Server generates a token (JWT)
+• Client uses token for subsequent requests
+• Server validates token to authenticate user
+
+WHAT ARE JWTs?
+--------------
+JSON Web Tokens (JWT) are:
+• Compact, URL-safe tokens
+• Contain three parts: header.payload.signature
+• Signed with a secret key
+• Cannot be tampered with
+• Can contain user information
+
+HOW DOES IT WORK?
+-----------------
+1. User logs in with credentials
+2. Server generates JWT token
+3. Client stores token
+4. Client sends token in Authorization header
+5. Server verifies token
+6. If valid, user is authenticated
+
+KEY COMPONENTS
+--------------
+• Login endpoint (POST /signin) - Authenticates user
+• Protected endpoints (GET /employees) - Requires authentication
+• JWT generation (jwt.sign()) - Creates tokens
+• JWT verification (jwt.verify()) - Validates tokens
+• Authorization header - Carries the token
+
+[END SECTION 7.1]
+================================================================================
+SECTION 7.2: KEY DEFINITIONS
+-----------------------------
+
+AUTHENTICATION
+--------------
+The process of confirming a user's identity by obtaining credentials and using 
+those credentials to validate their identity. Authentication is meant to identify 
+users and provide access rights and contents depending on their ID.
+
+AUTHORIZATION
+-------------
+The process of determining what resources a user can access and what actions 
+they can perform. Happens after authentication.
+
+TOKEN-BASED AUTHENTICATION
+--------------------------
+An authentication approach where the server generates a token after validating 
+user credentials. The client uses this token to access protected resources.
+
+JSON WEB TOKEN (JWT)
+--------------------
+A compact, URL-safe way of representing claims to be transferred between two 
+parties. Consists of header.payload.signature and is signed with a secret key.
+
+BEARER TOKEN
+------------
+A token passed in the Authorization header with the format "Bearer <token>". 
+The authorization header always starts with the string "bearer" at the start of 
+the header, and therefore, this token is also known as bearer token.
+
+JWT SECRET
+----------
+A secret key used to sign and verify JWT tokens. Must be kept secure and should 
+be generated using a password generator and stored as an environment variable.
+
+LOGIN ENDPOINT
+--------------
+A POST API endpoint that accepts username and password, validates them, and 
+returns a JWT token if credentials are correct. We will first use a POST API 
+for logging in that returns a web token to sign in by sending the username and 
+password in the request body.
+
+PROTECTED ENDPOINT
+------------------
+An API endpoint that requires authentication. The token fetched from the call 
+to the sign-in API is passed in the authorization header. Only authenticated 
+users can access these endpoints.
+
+[END SECTION 7.2]
+================================================================================
+SECTION 7.3: QUICK REFERENCE GUIDE
+-----------------------------------
+
+INSTALLATION
+------------
+  npm install express
+  npm install --save jsonwebtoken
+
+REQUIRING MODULES
+-----------------
+  const express = require('express');
+  const jwt = require('jsonwebtoken');
+
+CREATING SERVER
+---------------
+  const myApp = express();
+  myApp.use(express.json());
+
+JWT SECRET
+----------
+  const JWT_SECRET = 'your-secret-key-here';
+  // In production, use environment variables!
+
+LOGIN ENDPOINT
+--------------
+  myApp.post('/signin', (req, res) => {
+    const { username, password } = req.body;
+    if (username === 'user' && password === 'password') {
+      const token = jwt.sign({ username: username }, JWT_SECRET);
+      res.json({ token: token });
+    } else {
+      res.status(401).json({ message: 'invalid username and or password' });
+    }
+  });
+
+PROTECTED ENDPOINT
+------------------
+  myApp.get('/employees', (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({ message: 'no token' });
+    }
+    const token = authHeader.split(' ')[1];
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET);
+      res.status(200).json({ message: 'access successful to employee endpoint' });
+    } catch (error) {
+      return res.status(401).json({ message: 'please log in to access this resource' });
+    }
+  });
+
+GENERATING JWT
+---------------
+  const token = jwt.sign(payload, JWT_SECRET);
+  // payload example: { username: 'user' }
+
+VERIFYING JWT
+-------------
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    // Token is valid, decoded contains payload
+  } catch (error) {
+    // Token is invalid
+  }
+
+HTTP STATUS CODES
+-----------------
+• 200 OK - Request succeeded
+• 401 Unauthorized - Not authenticated
+• 400 Bad Request - Invalid request
+
+[END SECTION 7.3]
+================================================================================
+SECTION 7.4: BEST PRACTICES AND SECURITY CONSIDERATIONS
+--------------------------------------------------------
+
+SECURITY BEST PRACTICES
+-----------------------
+
+1. NEVER HARD CODE SECRETS
+   ❌ BAD: const JWT_SECRET = 'my-secret';
+   ✅ GOOD: const JWT_SECRET = process.env.JWT_SECRET;
+   
+   The JWT secret should always be generated using a password generator and 
+   stored in the config file as an environment variable and not hard coded in 
+   the API as shown here.
+
+2. USE STRONG SECRETS
+   • Generate using password generator
+   • At least 32 characters long
+   • Mix of letters, numbers, symbols
+   • Different secrets for different environments
+
+3. ADD TOKEN EXPIRATION
+   • Set expiration time for tokens
+   • Forces re-authentication periodically
+   • Reduces risk of stolen tokens
+   • Example: { expiresIn: '1h' }
+
+4. HASH PASSWORDS
+   • Never store passwords in plain text
+   • Use bcrypt or similar library
+   • Hash passwords before storing in database
+   • Compare hashed passwords during login
+
+5. USE HTTPS
+   • Always use HTTPS in production
+   • Protects tokens in transit
+   • Prevents man-in-the-middle attacks
+   • Essential for security
+
+6. VALIDATE INPUT
+   • Check if username/password exist
+   • Validate input format
+   • Sanitize user input
+   • Prevent injection attacks
+
+7. HANDLE ERRORS PROPERLY
+   • Don't expose sensitive information
+   • Use generic error messages
+   • Log errors server-side
+   • Return appropriate status codes
+
+8. USE REFRESH TOKENS
+   • Short-lived access tokens
+   • Long-lived refresh tokens
+   • Refresh access token when expired
+   • Better security model
+
+PRODUCTION CONSIDERATIONS
+-------------------------
+
+DATABASE INTEGRATION
+--------------------
+• Store users in database (not hard coded)
+• Hash passwords with bcrypt
+• Query database for user validation
+• Store user sessions if needed
+
+ENVIRONMENT VARIABLES
+---------------------
+• Use .env file for configuration
+• Never commit .env to version control
+• Different configs for dev/production
+• Use dotenv package
+
+ERROR HANDLING
+--------------
+• Comprehensive error handling
+• Specific error messages for debugging
+• Logging for monitoring
+• User-friendly error messages
+
+MIDDLEWARE
+----------
+• Create authentication middleware
+• Reusable across multiple endpoints
+• Cleaner code organization
+• Example: authenticateToken middleware
+
+TOKEN STORAGE
+-------------
+• Client-side storage options:
+  - localStorage (persists, accessible to JS)
+  - sessionStorage (session-only, accessible to JS)
+  - Memory (most secure, lost on refresh)
+• Consider security implications of each
+
+[END SECTION 7.4]
+================================================================================
+FINAL SUMMARY
+==============
+
+WHAT WE LEARNED
+---------------
+In this comprehensive guide, we learned:
+
+1. AUTHENTICATION CONCEPTS:
+   • Authentication vs. Authorization
+   • Different authentication approaches
+   • Why token-based authentication is popular
+
+2. TOKEN-BASED AUTHENTICATION:
+   • Advantages: Scalability, flexibility, security
+   • How JWTs work (header.payload.signature)
+   • Bearer tokens and Authorization headers
+
+3. IMPLEMENTATION:
+   • Setting up Express server
+   • Creating login endpoint
+   • Generating JWT tokens
+   • Protecting endpoints
+   • Verifying tokens
+
+4. KEY TAKEAWAYS:
+   • The advantages of token-based authentication include scalability, 
+     flexibility, and security
+   • The POST API is used during authentication to log a user into an 
+     application
+   • The GET API is used in authorization to determine which resources a user 
+     can access
+   • And a JSON web token is used to authenticate a user and authorize which 
+     resources they have access to use
+
+RECALL
+------
+Recall that the code you just wrote has a sign-in API endpoint that reads the 
+username and password from the request body and then validates it against the 
+username and password stored in the database. If there is a match, it then uses 
+the jsonwebtoken.sign method to generate the token and send it back in the 
+response.
+
+NEXT STEPS
+----------
+• Practice implementing authentication in your own projects
+• Integrate with a database for user storage
+• Add password hashing with bcrypt
+• Implement token expiration
+• Create authentication middleware
+• Add refresh token functionality
+• Secure your application with HTTPS
+
+================================================================================
+END OF PART 2
+================================================================================
+
+You now have a comprehensive understanding of authentication in Node.js using 
+token-based authentication with JSON Web Tokens. These concepts are fundamental 
+to building secure web applications and APIs.
+
+Good luck with your authentication implementation journey!
+
+================================================================================
+FINAL NOTES
+================================================================================
+
+This comprehensive study guide has expanded on the original content while 
+maintaining all original definitions and information. Each concept has been 
+explained in detail with line-by-line code explanations to ensure thorough 
+understanding.
+
+Remember:
+• Authentication confirms user identity
+• Token-based authentication is scalable and flexible
+• JWTs are signed and encrypted for security
+• Always use environment variables for secrets
+• Follow security best practices in production
+
+Original Content Maintained
+----------------------------
+All original definitions, explanations, and code examples from the source 
+material have been preserved and expanded upon in this comprehensive guide.
+

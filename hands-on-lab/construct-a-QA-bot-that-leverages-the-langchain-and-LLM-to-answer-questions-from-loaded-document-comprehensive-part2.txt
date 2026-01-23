@@ -1,0 +1,1942 @@
+================================================================================
+CONSTRUCT A QA BOT THAT LEVERAGES LANGCHAIN AND LLMs TO ANSWER QUESTIONS
+FROM LOADED DOCUMENTS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+Welcome back! In Part 1, you learned about RAG, understood all the components, 
+and set up your development environment. Now we'll actually build the QA bot 
+step by step, implementing each component with detailed explanations.
+
+In this part, you'll learn:
+• How to import all necessary libraries
+• How to initialize the LLM with proper configuration
+• How to implement the document loader
+• How to implement the text splitter
+• How to implement the embedding model
+• How to implement the vector database
+• How to implement the retriever
+
+ESTIMATED TIME NEEDED
+---------------------
+Original lab time: 30-40 minutes
+Comprehensive study: 2-3 hours (with all examples and practice)
+Full mastery: 4-5 hours (including experimentation)
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 1: IMPORTING NECESSARY LIBRARIES
+  SECTION 1.1: UNDERSTANDING THE IMPORTS
+  SECTION 1.2: IMPORTING FROM IBM WATSONX.AI
+  SECTION 1.3: IMPORTING FROM LANGCHAIN
+  SECTION 1.4: IMPORTING FROM LANGCHAIN COMMUNITY
+  SECTION 1.5: IMPORTING GRADIO
+  SECTION 1.6: SUPPRESSING WARNINGS
+
+PART 2: INITIALIZING THE LLM
+  SECTION 2.1: UNDERSTANDING LLM INITIALIZATION
+  SECTION 2.2: SETTING UP MODEL ID AND PARAMETERS
+  SECTION 2.3: CREATING THE get_llm() FUNCTION
+  SECTION 2.4: LINE-BY-LINE EXPLANATION OF LLM CODE
+
+PART 3: IMPLEMENTING THE DOCUMENT LOADER
+  SECTION 3.1: UNDERSTANDING THE DOCUMENT LOADER FUNCTION
+  SECTION 3.2: CREATING THE document_loader() FUNCTION
+  SECTION 3.3: LINE-BY-LINE EXPLANATION
+  SECTION 3.4: TESTING THE DOCUMENT LOADER
+
+PART 4: IMPLEMENTING THE TEXT SPLITTER
+  SECTION 4.1: UNDERSTANDING THE TEXT SPLITTER FUNCTION
+  SECTION 4.2: CREATING THE text_splitter() FUNCTION
+  SECTION 4.3: LINE-BY-LINE EXPLANATION
+  SECTION 4.4: UNDERSTANDING CHUNK SIZE AND OVERLAP
+  SECTION 4.5: TESTING THE TEXT SPLITTER
+
+PART 5: IMPLEMENTING THE EMBEDDING MODEL
+  SECTION 5.1: UNDERSTANDING THE EMBEDDING FUNCTION
+  SECTION 5.2: CREATING THE watsonx_embedding() FUNCTION
+  SECTION 5.3: LINE-BY-LINE EXPLANATION
+  SECTION 5.4: TESTING THE EMBEDDING MODEL
+
+PART 6: IMPLEMENTING THE VECTOR DATABASE
+  SECTION 6.1: UNDERSTANDING THE VECTOR DATABASE FUNCTION
+  SECTION 6.2: CREATING THE vector_database() FUNCTION
+  SECTION 6.3: LINE-BY-LINE EXPLANATION
+  SECTION 6.4: TESTING THE VECTOR DATABASE
+
+PART 7: IMPLEMENTING THE RETRIEVER
+  SECTION 7.1: UNDERSTANDING THE RETRIEVER FUNCTION
+  SECTION 7.2: CREATING THE retriever() FUNCTION
+  SECTION 7.3: LINE-BY-LINE EXPLANATION
+  SECTION 7.4: HOW RETRIEVER TIES EVERYTHING TOGETHER
+  SECTION 7.5: TESTING THE RETRIEVER
+
+NOTE: Part 3 of this guide covers:
+  • Implementing the QA chain
+  • Creating the Gradio interface
+  • Launching the application
+  • Testing the complete system
+  • Troubleshooting and best practices
+
+================================================================================
+PART 1: IMPORTING NECESSARY LIBRARIES
+================================================================================
+
+Before we can build anything, we need to import all the libraries we'll use. 
+Understanding what each import does will help you troubleshoot issues and 
+understand the code better.
+
+SECTION 1.1: UNDERSTANDING THE IMPORTS
+---------------------------------------
+
+OVERVIEW
+--------
+We need to import classes and functions from several libraries. Each import 
+serves a specific purpose in our QA bot. Let's understand what we're importing 
+and why.
+
+THE COMPLETE IMPORT SECTION
+----------------------------
+Here's what we'll import (we'll explain each one):
+
+```python
+from ibm_watsonx_ai.foundation_models import ModelInference
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
+from ibm_watsonx_ai import Credentials
+from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.chains import RetrievalQA
+from huggingface_hub import HfFolder
+import gradio as gr
+```
+
+WHY WE NEED IMPORTS
+-------------------
+• Python needs to know where to find code
+• Imports bring in functionality from libraries
+• Without imports, Python doesn't know about these classes/functions
+• Each import gives us specific capabilities
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: IMPORTING FROM IBM WATSONX.AI
+-------------------------------------------
+
+OVERVIEW
+--------
+We'll import several things from ibm_watsonx_ai. These are used for working 
+with IBM's watsonx.ai platform and models.
+
+IMPORT 1: ModelInference
+------------------------
+```python
+from ibm_watsonx_ai.foundation_models import ModelInference
+```
+
+What it is:
+• A class for making inference calls to IBM models
+• Used for direct model interactions
+• Lower-level API for model calls
+
+Why we import it:
+• The lab mentions it, though we'll primarily use WatsonxLLM
+• Good to have available if needed
+• Some advanced use cases might need it
+
+When we use it:
+• Not directly in our main code
+• Available if we need direct model inference
+• WatsonxLLM uses it internally
+
+IMPORT 2: GenTextParamsMetaNames
+----------------------------------
+```python
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+```
+
+What it is:
+• Constants for parameter names when generating text
+• Provides standardized names for parameters
+• Prevents typos in parameter names
+
+Why we import it:
+• We'll use GenParams.MAX_NEW_TOKENS instead of "max_new_tokens"
+• We'll use GenParams.TEMPERATURE instead of "temperature"
+• More reliable than strings
+
+Example usage:
+```python
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 256,  # Instead of "max_new_tokens": 256
+    GenParams.TEMPERATURE: 0.5,     # Instead of "temperature": 0.5
+}
+```
+
+Benefits:
+• Autocomplete in IDEs
+• Type checking
+• Less prone to typos
+• Self-documenting code
+
+IMPORT 3: EmbedTextParamsMetaNames
+------------------------------------
+```python
+from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
+```
+
+What it is:
+• Constants for embedding parameters
+• Similar to GenTextParamsMetaNames but for embeddings
+• Used when creating embeddings
+
+Why we import it:
+• For configuring embedding models
+• Setting embedding parameters
+• Consistent parameter naming
+
+When we use it:
+• When configuring WatsonxEmbeddings
+• Setting embedding-specific parameters
+• Advanced embedding configuration
+
+IMPORT 4: Credentials
+---------------------
+```python
+from ibm_watsonx_ai import Credentials
+```
+
+What it is:
+• Class for managing IBM Cloud credentials
+• Handles authentication
+• Manages API keys and tokens
+
+Why we import it:
+• For credential management
+• Authentication with IBM services
+• In the lab, credentials are pre-configured
+• Available if we need custom credential handling
+
+When we use it:
+• If we need custom authentication
+• For advanced credential management
+• Not directly used in our simple setup
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: IMPORTING FROM LANGCHAIN
+--------------------------------------
+
+OVERVIEW
+--------
+LangChain provides the core framework for building LLM applications. We'll 
+import several key components.
+
+IMPORT 1: WatsonxLLM and WatsonxEmbeddings
+-------------------------------------------
+```python
+from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+```
+
+What they are:
+• WatsonxLLM: LangChain wrapper for IBM watsonx.ai LLM models
+• WatsonxEmbeddings: LangChain wrapper for IBM watsonx.ai embedding models
+
+Why we import them:
+• WatsonxLLM: We need an LLM to generate answers
+• WatsonxEmbeddings: We need embeddings to convert text to vectors
+
+How we'll use them:
+• WatsonxLLM: Initialize LLM for answer generation
+• WatsonxEmbeddings: Initialize embedding model for vector creation
+
+Example:
+```python
+llm = WatsonxLLM(...)  # For generating answers
+embeddings = WatsonxEmbeddings(...)  # For creating embeddings
+```
+
+IMPORT 2: RecursiveCharacterTextSplitter
+-----------------------------------------
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+```
+
+What it is:
+• A text splitter that breaks documents into chunks
+• Tries to keep sentences/paragraphs together
+• Maintains overlap between chunks
+
+Why we import it:
+• We need to split large documents into smaller chunks
+• Required for processing large PDFs
+• Enables efficient embedding and retrieval
+
+How we'll use it:
+```python
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+```
+
+IMPORT 3: RetrievalQA
+----------------------
+```python
+from langchain.chains import RetrievalQA
+```
+
+What it is:
+• A chain that combines retrieval and generation
+• Takes a question, retrieves relevant chunks, generates answer
+• Handles the entire QA workflow
+
+Why we import it:
+• We need a QA chain for our bot
+• Combines retriever + LLM automatically
+• Provides the answer generation functionality
+
+How we'll use it:
+```python
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever
+)
+answer = qa.invoke({"query": "Your question"})
+```
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: IMPORTING FROM LANGCHAIN COMMUNITY
+------------------------------------------------
+
+OVERVIEW
+--------
+LangChain Community provides additional integrations and tools that aren't 
+in the core LangChain package.
+
+IMPORT 1: Chroma
+----------------
+```python
+from langchain_community.vectorstores import Chroma
+```
+
+What it is:
+• Vector database integration for LangChain
+• Stores embeddings and enables similarity search
+• Popular open-source vector database
+
+Why we import it:
+• We need a vector database to store embeddings
+• Chroma is easy to use and integrates well
+• Enables fast similarity search
+
+How we'll use it:
+```python
+vectordb = Chroma.from_documents(
+    documents=chunks,
+    embedding=embeddings
+)
+```
+
+IMPORT 2: PyPDFLoader
+---------------------
+```python
+from langchain_community.document_loaders import PyPDFLoader
+```
+
+What it is:
+• Document loader specifically for PDF files
+• Extracts text from PDF documents
+• Creates LangChain Document objects
+
+Why we import it:
+• We need to read PDF files
+• Extract text content from PDFs
+• Convert PDFs to processable format
+
+How we'll use it:
+```python
+loader = PyPDFLoader("document.pdf")
+documents = loader.load()
+```
+
+[END SECTION 1.4]
+================================================================================
+
+SECTION 1.5: IMPORTING GRADIO
+-------------------------------
+
+OVERVIEW
+--------
+Gradio provides the web interface for our QA bot.
+
+IMPORT: gradio
+--------------
+```python
+import gradio as gr
+```
+
+What it is:
+• Library for creating web interfaces
+• Makes it easy to build UIs for ML models
+• Provides components like file upload, text input, etc.
+
+Why we import it:
+• We need a user interface
+• Users need to upload PDFs and ask questions
+• Gradio makes this easy
+
+How we'll use it:
+```python
+interface = gr.Interface(
+    fn=our_function,
+    inputs=[gr.File(), gr.Textbox()],
+    outputs=gr.Textbox()
+)
+```
+
+The "as gr" part:
+• Creates an alias for gradio
+• Instead of writing "gradio.Interface", we write "gr.Interface"
+• Shorter and cleaner code
+
+[END SECTION 1.5]
+================================================================================
+
+SECTION 1.6: SUPPRESSING WARNINGS
+----------------------------------
+
+OVERVIEW
+--------
+Sometimes libraries generate warnings that clutter the output. We'll add 
+code to suppress unnecessary warnings.
+
+THE WARNING SUPPRESSION CODE
+-----------------------------
+```python
+# You can use this section to suppress warnings generated by your code:
+def warn(*args, **kwargs):
+    pass
+
+import warnings
+warnings.warn = warn
+warnings.filterwarnings('ignore')
+```
+
+LINE-BY-LINE EXPLANATION
+------------------------
+
+Line 1: Comment explaining what this section does
+• Helps other developers understand the code
+• Explains why warnings are suppressed
+
+Line 2-3: Defining a custom warn function
+```python
+def warn(*args, **kwargs):
+    pass
+```
+• Creates a function that does nothing
+• *args: Accepts any number of positional arguments
+• **kwargs: Accepts any number of keyword arguments
+• pass: Does nothing (empty function body)
+• This function will replace the default warning function
+
+Line 4: Import warnings module
+```python
+import warnings
+```
+• Imports Python's warnings module
+• This module handles warnings in Python
+
+Line 5: Replace the warn function
+```python
+warnings.warn = warn
+```
+• Replaces the default warnings.warn with our custom function
+• Now when code calls warnings.warn(), it does nothing
+• Suppresses all warnings
+
+Line 6: Filter all warnings
+```python
+warnings.filterwarnings('ignore')
+```
+• Tells Python to ignore all warnings
+• Additional layer of warning suppression
+• Ensures no warnings are shown
+
+WHY SUPPRESS WARNINGS?
+----------------------
+• Libraries sometimes show deprecation warnings
+• These can clutter the output
+• For a clean user experience
+• Warnings don't affect functionality in this case
+
+SHOULD YOU ALWAYS SUPPRESS WARNINGS?
+------------------------------------
+No! In production code:
+• Warnings often indicate issues
+• Should investigate and fix warnings
+• Suppress only when necessary
+• For this lab, it's fine to suppress
+
+[END SECTION 1.6]
+================================================================================
+
+COMPLETE IMPORT SECTION - PUTTING IT ALL TOGETHER
+==================================================
+
+Here's the complete import section for qabot.py:
+
+```python
+from ibm_watsonx_ai.foundation_models import ModelInference
+from ibm_watsonx_ai.metanames import GenTextParamsMetaNames as GenParams
+from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
+from ibm_watsonx_ai import Credentials
+from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain_community.document_loaders import PyPDFLoader
+from langchain.chains import RetrievalQA
+from huggingface_hub import HfFolder
+import gradio as gr
+
+# You can use this section to suppress warnings generated by your code:
+def warn(*args, **kwargs):
+    pass
+
+import warnings
+warnings.warn = warn
+warnings.filterwarnings('ignore')
+```
+
+WHAT TO DO NOW
+--------------
+1. Create a new file called qabot.py
+2. Add all the imports above
+3. Save the file
+4. Verify no import errors
+
+TESTING IMPORTS
+---------------
+You can test if imports work:
+
+```python
+# Add this at the end of qabot.py temporarily
+print("All imports successful!")
+```
+
+Run: python qabot.py
+
+If you see "All imports successful!", you're good to go!
+
+================================================================================
+PART 2: INITIALIZING THE LLM
+================================================================================
+
+Now we'll initialize the Large Language Model (LLM) that will generate answers. 
+This is a crucial component - it's what actually creates the answers to user 
+questions.
+
+SECTION 2.1: UNDERSTANDING LLM INITIALIZATION
+----------------------------------------------
+
+OVERVIEW
+--------
+We need to create an LLM instance that we can use throughout our application. 
+We'll create a function that returns a configured LLM.
+
+WHAT IS AN LLM?
+---------------
+LLM = Large Language Model
+• A neural network trained on vast amounts of text
+• Can generate human-like text
+• Understands context and meaning
+• In our case: IBM's watsonx.ai models
+
+WHY DO WE NEED AN LLM?
+----------------------
+• To generate answers to questions
+• To understand user queries
+• To create coherent responses
+• To process retrieved document chunks
+
+WHICH LLM WILL WE USE?
+----------------------
+According to the lab, we'll use:
+• Model: "ibm/granite-3-2-8b-instruct" (or similar)
+• This is IBM's Granite model
+• 8 billion parameters
+• Instruction-tuned (good at following instructions)
+
+WHAT IS WatsonxLLM?
+-------------------
+• LangChain wrapper for IBM watsonx.ai models
+• Makes IBM models work with LangChain
+• Provides consistent interface
+• Handles API calls automatically
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: SETTING UP MODEL ID AND PARAMETERS
+------------------------------------------------
+
+OVERVIEW
+--------
+Before creating the LLM, we need to configure it with the right model ID and 
+parameters. Let's understand what each setting does.
+
+THE STARTER CODE FROM THE LAB
+------------------------------
+The lab provides this starter code with blanks to fill:
+
+```python
+## LLM
+def get_llm():
+    model_id = 'ibm/granite-3-2-8b-instruct'
+    parameters = {
+        ...
+    }
+    project_id = "skills-network"
+    watsonx_llm = WatsonxLLM(
+        model_id=...,
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id=...,
+        params=...,
+    )
+    return watsonx_llm
+```
+
+UNDERSTANDING MODEL ID
+----------------------
+```python
+model_id = 'ibm/granite-3-2-8b-instruct'
+```
+
+What it means:
+• 'ibm' - The provider (IBM)
+• 'granite-3-2-8b' - The model name and version
+  - granite: Model family name
+  - 3-2: Version 3.2
+  - 8b: 8 billion parameters
+• 'instruct' - Instruction-tuned version (good at following instructions)
+
+Why this model:
+• Good balance of performance and speed
+• Well-suited for question answering
+• Instruction-tuned for better responses
+
+UNDERSTANDING PARAMETERS
+-------------------------
+We need to set parameters for text generation:
+
+```python
+parameters = {
+    GenParams.MAX_NEW_TOKENS: 256,
+    GenParams.TEMPERATURE: 0.5,
+}
+```
+
+MAX_NEW_TOKENS: 256
+• Maximum number of tokens the model can generate
+• Tokens are pieces of words (not full words)
+• 256 tokens ≈ 200-300 words
+• Limits response length
+• Prevents very long responses
+
+TEMPERATURE: 0.5
+• Controls randomness/creativity
+• Range: 0.0 to 1.0 (sometimes higher)
+• 0.0 = Very deterministic (always same response)
+• 0.5 = Balanced (some creativity, some consistency)
+• 0.7-0.9 = More creative
+• 1.0+ = Very random
+• 0.5 is good for QA (balanced)
+
+UNDERSTANDING PROJECT ID
+-------------------------
+```python
+project_id = "skills-network"
+```
+
+What it is:
+• IBM Cloud project identifier
+• Organizes resources in IBM Cloud
+• Pre-configured for the lab environment
+• If working locally, you'd use your own project ID
+
+UNDERSTANDING URL
+-----------------
+```python
+url="https://us-south.ml.cloud.ibm.com"
+```
+
+What it is:
+• API endpoint for IBM watsonx.ai
+• "us-south" = US South region
+• IBM has data centers in different regions
+• This is the region we're using
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: CREATING THE get_llm() FUNCTION
+--------------------------------------------
+
+OVERVIEW
+--------
+Now we'll create the complete get_llm() function. This function will initialize 
+and return a configured LLM instance.
+
+THE COMPLETE FUNCTION
+---------------------
+Here's what the function should look like:
+
+```python
+## LLM
+def get_llm():
+    model_id = 'ibm/granite-3-2-8b-instruct'
+    parameters = {
+        GenParams.MAX_NEW_TOKENS: 256,
+        GenParams.TEMPERATURE: 0.5,
+    }
+    project_id = "skills-network"
+    watsonx_llm = WatsonxLLM(
+        model_id=model_id,
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id=project_id,
+        params=parameters,
+    )
+    return watsonx_llm
+```
+
+FILLING IN THE BLANKS
+---------------------
+The lab had blanks marked with "...". Here's what goes in each:
+
+1. parameters = { ... } 
+   → Fill with GenParams.MAX_NEW_TOKENS and GenParams.TEMPERATURE
+
+2. model_id=...
+   → Fill with model_id (the variable we defined)
+
+3. project_id=...
+   → Fill with project_id (the variable we defined)
+
+4. params=...
+   → Fill with parameters (the variable we defined)
+
+WHY CREATE A FUNCTION?
+----------------------
+• Reusable: Can call get_llm() multiple times
+• Clean: Keeps initialization code organized
+• Testable: Easy to test LLM initialization
+• Maintainable: Change LLM config in one place
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: LINE-BY-LINE EXPLANATION OF LLM CODE
+--------------------------------------------------
+
+OVERVIEW
+--------
+Let's go through the get_llm() function line by line to understand exactly 
+what each part does.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## LLM
+2  def get_llm():
+3      model_id = 'ibm/granite-3-2-8b-instruct'
+4      parameters = {
+5          GenParams.MAX_NEW_TOKENS: 256,
+6          GenParams.TEMPERATURE: 0.5,
+7      }
+8      project_id = "skills-network"
+9      watsonx_llm = WatsonxLLM(
+10         model_id=model_id,
+11         url="https://us-south.ml.cloud.ibm.com",
+12         project_id=project_id,
+13         params=parameters,
+14     )
+15     return watsonx_llm
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## LLM
+• Comment indicating this section is for LLM initialization
+• Helps organize code
+• Makes it easy to find LLM-related code
+
+Line 2: def get_llm():
+• Defines a function named get_llm
+• Takes no parameters (empty parentheses)
+• Will return an LLM instance
+• Function definition starts here
+
+Line 3: model_id = 'ibm/granite-3-2-8b-instruct'
+• Creates a variable named model_id
+• Stores the model identifier as a string
+• This tells WatsonxLLM which model to use
+• The model ID format: provider/model-name
+
+Line 4: parameters = {
+• Starts creating a dictionary named parameters
+• Dictionary stores key-value pairs
+• Will contain LLM generation parameters
+• Opening brace starts the dictionary
+
+Line 5: GenParams.MAX_NEW_TOKENS: 256,
+• Sets maximum tokens parameter
+• GenParams.MAX_NEW_TOKENS is a constant (from imports)
+• Value is 256 (maximum tokens to generate)
+• Comma separates this from next item
+
+Line 6: GenParams.TEMPERATURE: 0.5,
+• Sets temperature parameter
+• GenParams.TEMPERATURE is a constant
+• Value is 0.5 (balanced creativity)
+• Comma separates items
+
+Line 7: }
+• Closes the parameters dictionary
+• Dictionary is now complete
+• Contains two parameters
+
+Line 8: project_id = "skills-network"
+• Creates variable for project ID
+• String value identifies IBM Cloud project
+• Used for organizing resources
+• Pre-configured for lab environment
+
+Line 9: watsonx_llm = WatsonxLLM(
+• Creates WatsonxLLM instance
+• Stores it in variable watsonx_llm
+• WatsonxLLM is a class (from langchain_ibm)
+• Opening parenthesis starts function call
+• We're calling the constructor
+
+Line 10: model_id=model_id,
+• Passes model_id to WatsonxLLM
+• Left model_id: parameter name
+• Right model_id: variable we defined (line 3)
+• Comma separates parameters
+
+Line 11: url="https://us-south.ml.cloud.ibm.com",
+• Passes API endpoint URL
+• This is where API calls go
+• "us-south" is the region
+• Comma separates parameters
+
+Line 12: project_id=project_id,
+• Passes project_id to WatsonxLLM
+• Left project_id: parameter name
+• Right project_id: variable we defined (line 8)
+• Comma separates parameters
+
+Line 13: params=parameters,
+• Passes parameters dictionary
+• Left params: parameter name
+• Right parameters: dictionary we created (lines 4-7)
+• Contains MAX_NEW_TOKENS and TEMPERATURE
+• Comma (last parameter, but comma is fine)
+
+Line 14: )
+• Closes the WatsonxLLM constructor call
+• All parameters have been passed
+• Instance is now created
+
+Line 15: return watsonx_llm
+• Returns the LLM instance
+• When someone calls get_llm(), they get this instance
+• Function execution ends here
+• watsonx_llm is the return value
+
+WHAT HAPPENS WHEN THIS FUNCTION RUNS
+------------------------------------
+1. Function is called: llm = get_llm()
+2. model_id variable is created
+3. parameters dictionary is created
+4. project_id variable is created
+5. WatsonxLLM instance is created with all settings
+6. Instance is returned
+7. Caller receives the configured LLM
+
+HOW TO USE THIS FUNCTION
+------------------------
+```python
+# Call the function to get an LLM instance
+llm = get_llm()
+
+# Now you can use llm to generate text
+response = llm.invoke("What is AI?")
+print(response)
+```
+
+[END SECTION 2.4]
+================================================================================
+
+PART 3: IMPLEMENTING THE DOCUMENT LOADER
+================================================================================
+
+Now we'll implement the document loader that reads PDF files and extracts 
+their text content. This is the first step in processing user-uploaded documents.
+
+SECTION 3.1: UNDERSTANDING THE DOCUMENT LOADER FUNCTION
+-------------------------------------------------------
+
+OVERVIEW
+--------
+The document loader function takes a PDF file and returns Document objects 
+that LangChain can work with.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Take a file as input (from Gradio file upload)
+2. Create a PyPDFLoader instance
+3. Load the PDF and extract text
+4. Return Document objects
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this starter code:
+
+```python
+## Document loader
+def document_loader(file):
+    loader = ...(file.name)
+    loaded_document = ...load()
+    return loaded_document
+```
+
+FILLING IN THE BLANKS
+---------------------
+• loader = ...(file.name)
+  → Should be: PyPDFLoader(file.name)
+
+• loaded_document = ...load()
+  → Should be: loader.load()
+
+UNDERSTANDING file.name
+-----------------------
+When Gradio uploads a file:
+• file is a file object
+• file.name contains the file path
+• Example: "/tmp/uploaded_document.pdf"
+• PyPDFLoader needs the file path
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: CREATING THE document_loader() FUNCTION
+----------------------------------------------------
+
+OVERVIEW
+--------
+Let's create the complete document loader function.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## Document loader
+def document_loader(file):
+    loader = PyPDFLoader(file.name)
+    loaded_document = loader.load()
+    return loaded_document
+```
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Receives a file object from Gradio
+2. Creates a PyPDFLoader instance with the file path
+3. Loads the PDF and extracts text
+4. Returns a list of Document objects
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line in detail.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## Document loader
+2  def document_loader(file):
+3      loader = PyPDFLoader(file.name)
+4      loaded_document = loader.load()
+5      return loaded_document
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## Document loader
+• Comment indicating this is the document loader section
+• Helps organize code
+• Makes it easy to find this function
+
+Line 2: def document_loader(file):
+• Defines function named document_loader
+• Takes one parameter: file
+• file will be a Gradio file object
+• Function starts here
+
+Line 3: loader = PyPDFLoader(file.name)
+• Creates PyPDFLoader instance
+• PyPDFLoader is the class we imported
+• file.name gets the file path from Gradio file object
+• Stores loader instance in variable named loader
+• Loader is now ready to load the PDF
+
+Line 4: loaded_document = loader.load()
+• Calls the load() method on the loader
+• This actually reads the PDF file
+• Extracts text from all pages
+• Creates Document objects
+• Returns a list of Document objects
+• Stores result in loaded_document variable
+
+Line 5: return loaded_document
+• Returns the list of Document objects
+• Caller receives the loaded documents
+• Function execution ends
+
+WHAT HAPPENS INSIDE loader.load()
+----------------------------------
+When loader.load() is called:
+
+1. Opens the PDF file at file.name
+2. Parses the PDF structure
+3. Extracts text from each page
+4. Creates a Document object for each page:
+   - page_content: The extracted text
+   - metadata: Page number, source file path
+5. Returns list of Document objects
+
+EXAMPLE OUTPUT
+--------------
+If PDF has 3 pages:
+
+```python
+[
+    Document(page_content="Page 1 text...", metadata={"page": 1, "source": "file.pdf"}),
+    Document(page_content="Page 2 text...", metadata={"page": 2, "source": "file.pdf"}),
+    Document(page_content="Page 3 text...", metadata={"page": 3, "source": "file.pdf"})
+]
+```
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: TESTING THE DOCUMENT LOADER
+-----------------------------------------
+
+OVERVIEW
+--------
+Before moving on, it's good to test that the document loader works. However, 
+for now, we'll just make sure the code is correct. Full testing will happen 
+when we build the complete application.
+
+WHAT TO CHECK
+-------------
+• Function is defined correctly
+• Imports are correct
+• Syntax is correct
+• No typos
+
+NEXT STEPS
+----------
+Once the document loader is implemented, we move on to the text splitter!
+
+[END SECTION 3.4]
+================================================================================
+
+PART 4: IMPLEMENTING THE TEXT SPLITTER
+================================================================================
+
+Now we'll implement the text splitter that breaks documents into smaller chunks. 
+This is crucial for processing large documents efficiently.
+
+SECTION 4.1: UNDERSTANDING THE TEXT SPLITTER FUNCTION
+------------------------------------------------------
+
+OVERVIEW
+--------
+The text splitter takes loaded documents and splits them into smaller chunks 
+that are easier to process and embed.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Take loaded documents as input
+2. Create a RecursiveCharacterTextSplitter instance
+3. Configure chunk size and overlap
+4. Split documents into chunks
+5. Return list of chunks
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab mentions:
+• Use RecursiveCharacterTextSplitter
+• chunk_size of 1000
+• chunk_overlap of 200
+• length_function should be len
+
+THE FUNCTION STRUCTURE
+----------------------
+```python
+## Text splitter
+def text_splitter(data):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=...,
+        chunk_overlap=...,
+        length_function=...,
+    )
+    chunks = text_splitter.split_documents(data)
+    return chunks
+```
+
+FILLING IN THE BLANKS
+---------------------
+• chunk_size=...
+  → Should be: 1000
+
+• chunk_overlap=...
+  → Should be: 200
+
+• length_function=...
+  → Should be: len
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: CREATING THE text_splitter() FUNCTION
+---------------------------------------------------
+
+OVERVIEW
+--------
+Let's create the complete text splitter function.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## Text splitter
+def text_splitter(data):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200,
+        length_function=len,
+    )
+    chunks = text_splitter.split_documents(data)
+    return chunks
+```
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Receives loaded documents (from document_loader)
+2. Creates RecursiveCharacterTextSplitter with specified settings
+3. Splits documents into chunks of ~1000 characters
+4. Maintains 200 character overlap between chunks
+5. Returns list of document chunks
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line in detail.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## Text splitter
+2  def text_splitter(data):
+3      text_splitter = RecursiveCharacterTextSplitter(
+4          chunk_size=1000,
+5          chunk_overlap=200,
+6          length_function=len,
+7      )
+8      chunks = text_splitter.split_documents(data)
+9      return chunks
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## Text splitter
+• Comment indicating this is the text splitter section
+
+Line 2: def text_splitter(data):
+• Defines function named text_splitter
+• Takes one parameter: data
+• data will be the loaded documents from document_loader()
+
+Line 3: text_splitter = RecursiveCharacterTextSplitter(
+• Creates RecursiveCharacterTextSplitter instance
+• RecursiveCharacterTextSplitter is the class we imported
+• Stores instance in variable text_splitter
+• Opening parenthesis starts constructor call
+
+Line 4: chunk_size=1000,
+• Sets maximum chunk size to 1000 characters
+• Chunks will be approximately this size
+• May be slightly smaller to avoid breaking sentences
+• Comma separates parameters
+
+Line 5: chunk_overlap=200,
+• Sets overlap between chunks to 200 characters
+• Each chunk overlaps with previous/next chunk by 200 chars
+• Maintains context across chunk boundaries
+• Comma separates parameters
+
+Line 6: length_function=len,
+• Sets function to measure chunk size
+• len is Python's built-in length function
+• Measures size in characters
+• Comma (last parameter)
+
+Line 7: )
+• Closes RecursiveCharacterTextSplitter constructor
+• Splitter is now configured
+
+Line 8: chunks = text_splitter.split_documents(data)
+• Calls split_documents() method
+• Passes data (the loaded documents)
+• Splits documents into chunks
+• Returns list of Document chunks
+• Stores result in chunks variable
+
+Line 9: return chunks
+• Returns the list of chunks
+• Caller receives the split documents
+
+WHAT HAPPENS INSIDE split_documents()
+-------------------------------------
+When split_documents() is called:
+
+1. Takes each document in data
+2. Extracts text content
+3. Splits text into chunks of ~1000 characters
+4. Tries to split at sentence/paragraph boundaries
+5. Maintains 200 character overlap
+6. Creates new Document objects for each chunk
+7. Returns list of chunk Document objects
+
+EXAMPLE
+-------
+Input: Document with 2500 characters
+
+Output: 3 chunks
+• Chunk 1: Characters 1-1000
+• Chunk 2: Characters 801-1800 (200 overlap with Chunk 1)
+• Chunk 3: Characters 1601-2500 (200 overlap with Chunk 2)
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: UNDERSTANDING CHUNK SIZE AND OVERLAP
+--------------------------------------------------
+
+OVERVIEW
+--------
+Let's understand why we chose these specific values and what they mean.
+
+CHUNK SIZE: 1000 CHARACTERS
+---------------------------
+Why 1000?
+• Not too large: Fits in LLM context window
+• Not too small: Maintains enough context
+• Good balance for most documents
+• Can be adjusted based on your needs
+
+What it means:
+• Each chunk is approximately 1000 characters
+• May be slightly less to avoid breaking sentences
+• Ensures chunks are manageable
+
+CHUNK OVERLAP: 200 CHARACTERS
+------------------------------
+Why 200?
+• 20% of chunk size (good rule of thumb)
+• Maintains context across boundaries
+• Prevents losing information at chunk edges
+• Not too much (would create redundancy)
+
+What it means:
+• Each chunk shares 200 characters with adjacent chunks
+• Information at boundaries is preserved
+• Better retrieval results
+
+LENGTH FUNCTION: len
+--------------------
+Why len?
+• Measures size in characters
+• Simple and fast
+• Works for most cases
+• Alternative: token count (more accurate but slower)
+
+What it means:
+• Chunk size is measured in characters
+• Not tokens or words
+• len() counts each character
+
+[END SECTION 4.4]
+================================================================================
+
+SECTION 4.5: TESTING THE TEXT SPLITTER
+--------------------------------------
+
+OVERVIEW
+--------
+The text splitter is now complete. We'll test it fully when we build the 
+complete application.
+
+NEXT STEPS
+----------
+Move on to implementing the embedding model!
+
+[END SECTION 4.5]
+================================================================================
+
+PART 5: IMPLEMENTING THE EMBEDDING MODEL
+================================================================================
+
+Now we'll implement the embedding model that converts text chunks into 
+numerical vectors. These vectors enable similarity search.
+
+SECTION 5.1: UNDERSTANDING THE EMBEDDING FUNCTION
+-------------------------------------------------
+
+OVERVIEW
+--------
+The embedding function creates an embedding model instance that we can use 
+to convert text to vectors.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Configure embedding model parameters
+2. Create WatsonxEmbeddings instance
+3. Return the embedding model
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this structure:
+
+```python
+## Embedding model
+def watsonx_embedding():
+    embed_params = {
+        ...
+    }
+    watsonx_embedding = WatsonxEmbeddings(
+        model_id=...,
+        url=...,
+        project_id=...,
+        params=...,
+    )
+    return watsonx_embedding
+```
+
+FILLING IN THE BLANKS
+---------------------
+We need to fill in:
+• embed_params dictionary
+• model_id
+• url
+• project_id
+• params
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: CREATING THE watsonx_embedding() FUNCTION
+------------------------------------------------------
+
+OVERVIEW
+--------
+Let's create the complete embedding function. The lab doesn't specify exact 
+values, but we'll use standard IBM watsonx.ai embedding model configuration.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## Embedding model
+def watsonx_embedding():
+    embed_params = {
+        EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512
+    }
+    watsonx_embedding = WatsonxEmbeddings(
+        model_id="ibm/slate-125m-english-rtrvr",
+        url="https://us-south.ml.cloud.ibm.com",
+        project_id="skills-network",
+        params=embed_params,
+    )
+    return watsonx_embedding
+```
+
+NOTE: The exact model_id and parameters may vary. Check IBM watsonx.ai 
+documentation for current embedding models. Common options:
+• "ibm/slate-125m-english-rtrvr" - English retrieval model
+• "ibm/slate-30m-english-rtrvr" - Smaller English model
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Creates embedding parameters dictionary
+2. Creates WatsonxEmbeddings instance
+3. Configures with model ID, URL, project ID, and parameters
+4. Returns the embedding model instance
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: LINE-BY-LINE EXPLANATION
+-------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line in detail.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## Embedding model
+2  def watsonx_embedding():
+3      embed_params = {
+4          EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512
+5      }
+6      watsonx_embedding = WatsonxEmbeddings(
+7          model_id="ibm/slate-125m-english-rtrvr",
+8          url="https://us-south.ml.cloud.ibm.com",
+9          project_id="skills-network",
+10         params=embed_params,
+11     )
+12     return watsonx_embedding
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## Embedding model
+• Comment indicating this is the embedding model section
+
+Line 2: def watsonx_embedding():
+• Defines function named watsonx_embedding
+• Takes no parameters
+• Will return an embedding model instance
+
+Line 3: embed_params = {
+• Starts creating parameters dictionary
+• Will contain embedding-specific parameters
+
+Line 4: EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512
+• Sets maximum input tokens to 512
+• Prevents very long inputs
+• EmbedTextParamsMetaNames is from imports
+• 512 is a reasonable limit
+
+Line 5: }
+• Closes the embed_params dictionary
+
+Line 6: watsonx_embedding = WatsonxEmbeddings(
+• Creates WatsonxEmbeddings instance
+• WatsonxEmbeddings is from langchain_ibm
+• Stores in variable watsonx_embedding
+
+Line 7: model_id="ibm/slate-125m-english-rtrvr",
+• Sets the embedding model to use
+• "ibm" = provider
+• "slate-125m-english-rtrvr" = model name
+• 125m = 125 million parameters
+• "rtrvr" = retrieval-optimized
+
+Line 8: url="https://us-south.ml.cloud.ibm.com",
+• API endpoint URL
+• Same region as LLM
+
+Line 9: project_id="skills-network",
+• Project ID
+• Same as LLM
+
+Line 10: params=embed_params,
+• Passes the parameters dictionary
+• Contains truncation setting
+
+Line 11: )
+• Closes WatsonxEmbeddings constructor
+
+Line 12: return watsonx_embedding
+• Returns the embedding model instance
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: TESTING THE EMBEDDING MODEL
+----------------------------------------
+
+OVERVIEW
+--------
+The embedding model function is complete. We'll use it when creating the 
+vector database.
+
+NEXT STEPS
+----------
+Move on to implementing the vector database!
+
+[END SECTION 5.4]
+================================================================================
+
+PART 6: IMPLEMENTING THE VECTOR DATABASE
+================================================================================
+
+Now we'll implement the vector database that stores embeddings and enables 
+fast similarity search.
+
+SECTION 6.1: UNDERSTANDING THE VECTOR DATABASE FUNCTION
+--------------------------------------------------------
+
+OVERVIEW
+--------
+The vector database function takes document chunks and creates a vector store 
+that we can search.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Take document chunks as input
+2. Get the embedding model
+3. Create Chroma vector store from chunks and embeddings
+4. Return the vector store
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this structure:
+
+```python
+## Vector db
+def vector_database(chunks):
+    embedding_model = watsonx_embedding()
+    vectordb = Chroma.from_documents(chunks, embedding_model)
+    return vectordb
+```
+
+This looks complete! But let's understand it fully.
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: CREATING THE vector_database() FUNCTION
+----------------------------------------------------
+
+OVERVIEW
+--------
+The function is already complete in the lab, but let's make sure we understand 
+it fully.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## Vector db
+def vector_database(chunks):
+    embedding_model = watsonx_embedding()
+    vectordb = Chroma.from_documents(chunks, embedding_model)
+    return vectordb
+```
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Receives document chunks (from text_splitter)
+2. Gets embedding model instance (calls watsonx_embedding())
+3. Creates Chroma vector store from chunks and embeddings
+4. Stores embeddings in the vector database
+5. Returns the vector store (ready for searching)
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: LINE-BY-LINE EXPLANATION
+--------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line in detail.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## Vector db
+2  def vector_database(chunks):
+3      embedding_model = watsonx_embedding()
+4      vectordb = Chroma.from_documents(chunks, embedding_model)
+5      return vectordb
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## Vector db
+• Comment indicating this is the vector database section
+
+Line 2: def vector_database(chunks):
+• Defines function named vector_database
+• Takes one parameter: chunks
+• chunks will be the document chunks from text_splitter()
+
+Line 3: embedding_model = watsonx_embedding()
+• Calls the watsonx_embedding() function we created
+• Gets an embedding model instance
+• Stores it in embedding_model variable
+• This model will convert text to vectors
+
+Line 4: vectordb = Chroma.from_documents(chunks, embedding_model)
+• Creates Chroma vector store
+• Chroma.from_documents() is a class method
+• Takes two arguments:
+  - chunks: The document chunks to store
+  - embedding_model: The model to create embeddings
+• What happens inside:
+  1. Converts each chunk to embedding (using embedding_model)
+  2. Stores chunk + embedding pairs
+  3. Creates searchable index
+  4. Returns Chroma instance
+• Stores result in vectordb variable
+
+Line 5: return vectordb
+• Returns the vector store instance
+• Caller receives a searchable vector database
+
+WHAT HAPPENS INSIDE Chroma.from_documents()
+-------------------------------------------
+When Chroma.from_documents() is called:
+
+1. Takes chunks and embedding_model
+2. For each chunk:
+   a. Converts text to embedding using embedding_model
+   b. Stores chunk text + embedding pair
+3. Creates index for fast similarity search
+4. Returns Chroma instance ready for queries
+
+EXAMPLE
+-------
+Input: 10 document chunks
+
+Process:
+• Chunk 1 → Embedding 1 → Store
+• Chunk 2 → Embedding 2 → Store
+• ... (10 chunks total)
+
+Output: Chroma vector store with 10 chunks indexed
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: TESTING THE VECTOR DATABASE
+-----------------------------------------
+
+OVERVIEW
+--------
+The vector database function is complete. We'll use it in the retriever function.
+
+NEXT STEPS
+----------
+Move on to implementing the retriever!
+
+[END SECTION 6.4]
+================================================================================
+
+PART 7: IMPLEMENTING THE RETRIEVER
+================================================================================
+
+Now we'll implement the retriever that ties everything together. The retriever 
+takes a file, processes it through all previous steps, and returns a retriever 
+object for finding relevant chunks.
+
+SECTION 7.1: UNDERSTANDING THE RETRIEVER FUNCTION
+-------------------------------------------------
+
+OVERVIEW
+--------
+The retriever function is the orchestrator. It calls all previous functions 
+in the right order to process a file and create a retriever.
+
+WHAT THE FUNCTION SHOULD DO
+----------------------------
+1. Take a file as input
+2. Load the document (document_loader)
+3. Split into chunks (text_splitter)
+4. Create vector database (vector_database)
+5. Create retriever from vector database
+6. Return the retriever
+
+THE STARTER CODE FROM THE LAB
+-----------------------------
+The lab provides this structure:
+
+```python
+## Retriever
+def retriever(file):
+    splits = document_loader(file)
+    chunks = text_splitter(splits)
+    vectordb = vector_database(chunks)
+    retriever = vectordb.as_retriever()
+    return retriever
+```
+
+This looks complete! Let's understand it fully.
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: CREATING THE retriever() FUNCTION
+-----------------------------------------------
+
+OVERVIEW
+--------
+The function is already complete in the lab. Let's understand how it orchestrates 
+all the components.
+
+THE COMPLETE FUNCTION
+---------------------
+```python
+## Retriever
+def retriever(file):
+    splits = document_loader(file)
+    chunks = text_splitter(splits)
+    vectordb = vector_database(chunks)
+    retriever = vectordb.as_retriever()
+    return retriever
+```
+
+WHAT THIS FUNCTION DOES
+-----------------------
+1. Receives a file (from Gradio upload)
+2. Loads PDF and extracts text (document_loader)
+3. Splits text into chunks (text_splitter)
+4. Creates vector database with embeddings (vector_database)
+5. Creates retriever from vector database
+6. Returns retriever (ready to find relevant chunks)
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: LINE-BY-LINE EXPLANATION
+-------------------------------------
+
+OVERVIEW
+--------
+Let's understand each line and how they connect.
+
+COMPLETE FUNCTION WITH LINE NUMBERS
+-----------------------------------
+```python
+1  ## Retriever
+2  def retriever(file):
+3      splits = document_loader(file)
+4      chunks = text_splitter(splits)
+5      vectordb = vector_database(chunks)
+6      retriever = vectordb.as_retriever()
+7      return retriever
+```
+
+LINE-BY-LINE BREAKDOWN
+----------------------
+
+Line 1: ## Retriever
+• Comment indicating this is the retriever section
+
+Line 2: def retriever(file):
+• Defines function named retriever
+• Takes one parameter: file
+• file will be a Gradio file object
+
+Line 3: splits = document_loader(file)
+• Calls document_loader() function
+• Passes the file
+• document_loader() loads PDF and returns Document objects
+• Stores result in splits variable
+• splits contains loaded documents
+
+Line 4: chunks = text_splitter(splits)
+• Calls text_splitter() function
+• Passes splits (the loaded documents)
+• text_splitter() splits documents into chunks
+• Returns list of chunk Document objects
+• Stores result in chunks variable
+• chunks contains document chunks
+
+Line 5: vectordb = vector_database(chunks)
+• Calls vector_database() function
+• Passes chunks (the document chunks)
+• vector_database() creates embeddings and stores in Chroma
+• Returns Chroma vector store instance
+• Stores result in vectordb variable
+• vectordb is a searchable vector database
+
+Line 6: retriever = vectordb.as_retriever()
+• Calls as_retriever() method on vectordb
+• Creates a retriever object from the vector store
+• Retriever can search the vector database
+• Stores result in retriever variable
+• retriever is ready to find relevant chunks
+
+Line 7: return retriever
+• Returns the retriever object
+• Caller receives a retriever that can find relevant chunks
+
+THE FLOW - STEP BY STEP
+------------------------
+Let's trace through what happens:
+
+1. User uploads PDF file
+2. retriever(file) is called
+3. document_loader(file):
+   • Reads PDF
+   • Extracts text
+   • Returns Document objects
+4. text_splitter(splits):
+   • Takes Documents
+   • Splits into chunks
+   • Returns chunk Documents
+5. vector_database(chunks):
+   • Takes chunks
+   • Creates embeddings
+   • Stores in Chroma
+   • Returns vector store
+6. vectordb.as_retriever():
+   • Creates retriever from vector store
+   • Returns retriever object
+7. Retriever is returned
+8. Ready to search for relevant chunks!
+
+[END SECTION 7.3]
+================================================================================
+
+SECTION 7.4: HOW RETRIEVER TIES EVERYTHING TOGETHER
+----------------------------------------------------
+
+OVERVIEW
+--------
+The retriever function is crucial because it orchestrates all the previous 
+components. Let's understand how everything connects.
+
+THE COMPLETE PIPELINE
+---------------------
+Here's how all components connect through the retriever:
+
+```
+User uploads PDF
+    ↓
+retriever(file) called
+    ↓
+document_loader(file) → Loads PDF, extracts text
+    ↓
+text_splitter(splits) → Splits into chunks
+    ↓
+vector_database(chunks) → Creates embeddings, stores in Chroma
+    ↓
+vectordb.as_retriever() → Creates searchable retriever
+    ↓
+Retriever returned (ready to use)
+```
+
+WHY THIS DESIGN?
+----------------
+• Modular: Each function does one thing
+• Reusable: Functions can be used independently
+• Testable: Each component can be tested separately
+• Maintainable: Easy to modify individual components
+
+HOW RETRIEVER IS USED LATER
+----------------------------
+The retriever will be used in the QA chain:
+
+```python
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=retriever(file)  # Uses our retriever
+)
+```
+
+When a question is asked:
+1. Question is converted to embedding
+2. Retriever searches vector database
+3. Finds most similar chunks
+4. Returns relevant chunks
+5. Chunks + question → LLM → Answer
+
+[END SECTION 7.4]
+================================================================================
+
+SECTION 7.5: TESTING THE RETRIEVER
+-----------------------------------
+
+OVERVIEW
+--------
+The retriever function is complete! It ties together all the components we've 
+built. We'll test it fully when we build the complete application.
+
+WHAT WE'VE BUILT SO FAR
+-----------------------
+✓ Document loader - Reads PDFs
+✓ Text splitter - Splits into chunks
+✓ Embedding model - Converts text to vectors
+✓ Vector database - Stores embeddings
+✓ Retriever - Finds relevant chunks
+
+WHAT'S NEXT
+-----------
+In Part 3, we'll:
+• Implement the QA chain
+• Create the Gradio interface
+• Launch the complete application
+• Test everything together
+
+[END SECTION 7.5]
+================================================================================
+
+END OF PART 2
+=============
+
+Congratulations! You've completed Part 2 of the comprehensive guide. You now 
+understand and have implemented:
+
+✓ How to import all necessary libraries
+✓ How to initialize the LLM
+✓ How to implement the document loader
+✓ How to implement the text splitter
+✓ How to implement the embedding model
+✓ How to implement the vector database
+✓ How to implement the retriever
+
+NEXT STEPS
+----------
+Now you're ready for Part 3, where we'll:
+• Implement the QA chain
+• Create the Gradio interface
+• Launch the complete application
+• Test and troubleshoot
+
+Move on to Part 3 to complete your QA bot!
+
+================================================================================
