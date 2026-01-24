@@ -1,0 +1,2187 @@
+================================================================================
+HTML FOR WEB SCRAPING
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This is Part 2 of the comprehensive HTML for Web Scraping study guide. In 
+this part, you will learn about the detailed composition of HTML tags, 
+attributes, HTML document trees, and HTML tables. These concepts are 
+essential for understanding how to effectively extract data from web pages.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Understand the complete composition of an HTML tag
+• Explain opening tags, closing tags, and tag content
+• Understand HTML attributes and attribute values
+• Describe the relationship between tag names and Python classes
+• Understand HTML document trees and hierarchical structure
+• Explain parent, child, descendant, and sibling relationships
+• Understand HTML tables and their structure
+• Recognize table rows (tr), table cells (td), and table headers (th)
+• Apply tree structure concepts to web scraping
+
+OVERVIEW
+--------
+In Part 1, you learned the basics of HTML structure. Now we'll dive deeper 
+into how HTML tags are composed, how they relate to each other in a tree 
+structure, and how tables organize data. Understanding these concepts will 
+make you much more effective at web scraping.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+This part covers advanced HTML concepts:
+
+PART 2: ADVANCED HTML CONCEPTS
+  SECTION 2.1: THE COMPOSITION OF AN HTML TAG
+  SECTION 2.2: UNDERSTANDING TAG NAMES
+  SECTION 2.3: OPENING TAGS AND CLOSING TAGS
+  SECTION 2.4: TAG CONTENT
+  SECTION 2.5: HTML ATTRIBUTES AND ATTRIBUTE VALUES
+  SECTION 2.6: INSPECTING HTML IN BROWSERS
+  SECTION 2.7: HTML DOCUMENT TREES - INTRODUCTION
+  SECTION 2.8: UNDERSTANDING PARENT-CHILD RELATIONSHIPS
+  SECTION 2.9: DESCENDANTS AND SIBLINGS
+  SECTION 2.10: HTML TABLES - BASIC STRUCTURE
+  SECTION 2.11: TABLE ROWS (TR) AND TABLE CELLS (TD)
+  SECTION 2.12: TABLE HEADERS (TH)
+
+NOTE: Part 1 covered HTML basics and document structure. Part 3 covers 
+practical examples and data extraction preparation.
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 2.3:") to quickly jump to any section.
+
+================================================================================
+PART 2: ADVANCED HTML CONCEPTS
+================================================================================
+
+SECTION 2.1: THE COMPOSITION OF AN HTML TAG
+--------------------------------------------
+
+DEFINITION
+----------
+Let's take a closer look at the composition of an HTML tag. An HTML tag is 
+composed of several parts: the tag name, opening tag, closing tag, content, 
+and optionally attributes with attribute values. Understanding each part is 
+essential for effective web scraping.
+
+DETAILED EXPLANATION
+--------------------
+HTML tags are not just simple brackets - they have a specific structure and 
+composition. Each part serves a purpose and understanding these parts helps 
+you write better scraping code and understand how HTML works.
+
+THE COMPLETE STRUCTURE OF AN HTML TAG
+--------------------------------------
+Here's an example of a complete HTML tag with all its parts:
+
+  <a href="https://www.ibm.com">IBM</a>
+   ↑  ↑    ↑                    ↑   ↑
+   |  |    |                    |   |
+   |  |    |                    |   └─ Closing tag
+   |  |    |                    └───── Content
+   |  |    └────────────────────────── Attribute value
+   |  └──────────────────────────────── Attribute name
+   └─────────────────────────────────── Opening tag (with tag name)
+
+Let's break down each component in detail.
+
+COMPONENT 1: TAG NAME
+---------------------
+The tag name identifies what type of element this is:
+• In <a>, the tag name is "a"
+• In <h3>, the tag name is "h3"
+• In <p>, the tag name is "p"
+
+The tag name tells the browser:
+• What type of content this is
+• How to display it
+• What properties it has
+
+WHAT DOES EACH TAG NAME MEAN?
+------------------------------
+Common tag names and their meanings:
+• <a> = Anchor (creates a hyperlink)
+• <h1> to <h6> = Headings (levels 1-6)
+• <p> = Paragraph
+• <div> = Division (container)
+• <span> = Inline container
+• <img> = Image
+• <table> = Table
+• <tr> = Table row
+• <td> = Table cell
+
+COMPONENT 2: OPENING TAG
+-------------------------
+The opening tag starts the element:
+• Format: <tagname> or <tagname attributes>
+• Opens the element
+• Can contain attributes
+• Must have a matching closing tag (for most tags)
+
+Examples:
+  <a>                    ← Simple opening tag
+  <a href="...">         ← Opening tag with attribute
+  <h3>                   ← Opening tag for heading
+  <p>                    ← Opening tag for paragraph
+
+COMPONENT 3: CLOSING TAG
+-------------------------
+The closing tag ends the element:
+• Format: </tagname>
+• Always starts with </
+• Must match the opening tag name
+• Closes the element
+
+Examples:
+  </a>                   ← Closing tag for anchor
+  </h3>                  ← Closing tag for heading
+  </p>                   ← Closing tag for paragraph
+
+IMPORTANT: The closing tag has the tag name preceded by a slash (/).
+
+COMPONENT 4: CONTENT
+---------------------
+The content is what's displayed on the web page:
+• Goes between opening and closing tags
+• Can be text, other HTML elements, or both
+• This is usually the data you want to extract
+
+Examples:
+  <a>IBM</a>             ← "IBM" is the content
+  <h3>Michael Jordan</h3>  ← "Michael Jordan" is the content
+  <p>Salary: $33M</p>    ← "Salary: $33M" is the content
+
+COMPONENT 5: ATTRIBUTES (OPTIONAL)
+-----------------------------------
+Attributes provide additional information:
+• Go inside the opening tag
+• Format: attributename="attributevalue"
+• Provide extra details about the element
+
+Example:
+  <a href="https://www.ibm.com">IBM</a>
+       ↑                    ↑
+       |                    |
+  Attribute name      Attribute value
+
+COMPLETE EXAMPLE BREAKDOWN
+--------------------------
+Let's break down a complete example:
+
+  <a href="https://www.ibm.com">IBM</a>
+
+Full breakdown:
+• Tag name: "a" (anchor/hyperlink)
+• Opening tag: <a href="https://www.ibm.com">
+• Attribute name: href
+• Attribute value: "https://www.ibm.com"
+• Content: IBM
+• Closing tag: </a>
+
+What this does:
+• Creates a clickable link
+• The link text says "IBM"
+• Clicking it takes you to https://www.ibm.com
+• The href attribute specifies the destination URL
+
+WHY UNDERSTANDING TAG COMPOSITION MATTERS
+------------------------------------------
+Understanding tag composition matters because:
+
+1. PRECISE EXTRACTION
+   • You know exactly where data is (in content)
+   • You can target specific attributes if needed
+   • You understand the complete structure
+
+2. ATTRIBUTE USAGE
+   • Some data might be in attributes (like image URLs)
+   • Attributes can help identify specific elements
+   • Understanding attributes expands what you can extract
+
+3. CODE ACCURACY
+   • Write more accurate scraping code
+   • Target the right parts of tags
+   • Avoid common mistakes
+
+4. DEBUGGING
+   • When scraping fails, understand tag structure
+   • Identify if attributes are needed
+   • Fix issues more effectively
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: UNDERSTANDING TAG NAMES
+--------------------------------------
+
+DEFINITION
+----------
+The tag name identifies the type of HTML element. In the example of an HTML 
+Anchor tag, the tag name is "a". This tag defines a hyperlink, which is 
+used to link from one page to another. It's helpful to think of each tag 
+name as a class in Python and each individual tag as an instance.
+
+DETAILED EXPLANATION
+--------------------
+Tag names are fundamental to HTML. They define what each element is and how 
+it behaves. Understanding tag names helps you identify and extract the right 
+data when scraping.
+
+WHAT IS A TAG NAME?
+-------------------
+The tag name is the word that comes after the opening angle bracket:
+
+  <a>        ← Tag name is "a"
+  <h3>       ← Tag name is "h3"
+  <p>        ← Tag name is "p"
+  <div>      ← Tag name is "div"
+  <table>    ← Tag name is "table"
+
+Tag names are:
+• Case-insensitive in HTML (but lowercase is standard)
+• Defined by HTML standards
+• Tell browsers what the element is
+• Determine how the element behaves
+
+THE ANCHOR TAG EXAMPLE
+----------------------
+Let's use the anchor tag as a detailed example:
+
+  <a href="https://www.ibm.com">IBM</a>
+
+Tag name: "a"
+• "a" stands for "anchor"
+• Creates a hyperlink (clickable link)
+• Used to link from one page to another
+• One of the most common HTML tags
+
+What it does:
+• Displays "IBM" as clickable text
+• When clicked, navigates to https://www.ibm.com
+• The href attribute specifies the destination
+
+TAG NAMES AS CLASSES (PYTHON ANALOGY)
+--------------------------------------
+It's helpful to think of each tag name as a class in Python and each 
+individual tag as an instance.
+
+Python analogy:
+  class Anchor:          ← Tag name "a" is like a class
+      def __init__(self):
+          self.href = ""
+          self.content = ""
+
+  link1 = Anchor()       ← <a>IBM</a> is like an instance
+  link2 = Anchor()       ← <a>Google</a> is another instance
+
+HTML reality:
+  <a>IBM</a>             ← Instance 1 of tag name "a"
+  <a>Google</a>          ← Instance 2 of tag name "a"
+  <a>Microsoft</a>       ← Instance 3 of tag name "a"
+
+Why this analogy helps:
+• Tag name = Template/Blueprint (like a class)
+• Individual tags = Specific instances (like objects)
+• All <a> tags share the same properties (can have href, are clickable)
+• But each has different content and attributes
+
+COMMON TAG NAMES AND THEIR PURPOSES
+------------------------------------
+Here are common tag names you'll encounter:
+
+1. HEADING TAGS
+   • <h1> - Main heading (largest)
+   • <h2> - Section heading
+   • <h3> - Subsection heading
+   • <h4>, <h5>, <h6> - Smaller headings
+   • Purpose: Create visual hierarchy
+
+2. TEXT TAGS
+   • <p> - Paragraph
+   • <span> - Inline text container
+   • <strong> - Bold text
+   • <em> - Italic text
+   • Purpose: Format and contain text
+
+3. LINK TAGS
+   • <a> - Anchor/hyperlink
+   • Purpose: Create clickable links
+
+4. STRUCTURE TAGS
+   • <div> - Block container
+   • <section> - Section of content
+   • <article> - Article content
+   • Purpose: Organize and group content
+
+5. LIST TAGS
+   • <ul> - Unordered list
+   • <ol> - Ordered list
+   • <li> - List item
+   • Purpose: Create lists
+
+6. TABLE TAGS
+   • <table> - Table container
+   • <tr> - Table row
+   • <td> - Table cell
+   • <th> - Table header
+   • Purpose: Display tabular data
+
+7. MEDIA TAGS
+   • <img> - Image
+   • <video> - Video
+   • <audio> - Audio
+   • Purpose: Embed media
+
+WHY TAG NAMES MATTER FOR SCRAPING
+----------------------------------
+Tag names matter because:
+
+1. DATA IDENTIFICATION
+   • You identify data by tag name
+   • "Find all <h3> tags" = find all headings
+   • "Find all <p> tags" = find all paragraphs
+   • Tag names help you target the right elements
+
+2. CONSISTENCY
+   • Same tag name = same type of content
+   • All <h3> tags are headings
+   • All <p> tags are paragraphs
+   • You can rely on this consistency
+
+3. EFFICIENT SCRAPING
+   • Target specific tag names
+   • Extract all instances of that tag
+   • Get all data of that type at once
+
+4. UNDERSTANDING STRUCTURE
+   • Tag names reveal page structure
+   • Headings show hierarchy
+   • Tables show tabular data
+   • Understanding structure improves scraping
+
+REAL-WORLD EXAMPLE
+-------------------
+In our basketball players example:
+
+  <h3>Michael Jordan</h3>
+  <p>Salary: $33,000,000</p>
+  <h3>LeBron James</h3>
+  <p>Salary: $41,000,000</p>
+
+Tag names used:
+• <h3> - For player names (headings)
+• <p> - For salaries (paragraphs)
+
+When scraping:
+• Find all elements with tag name "h3" → get player names
+• Find all elements with tag name "p" → get salaries
+• Tag names help you identify what each element contains
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: OPENING TAGS AND CLOSING TAGS
+-------------------------------------------
+
+DEFINITION
+----------
+We have the opening or start tag and we have the end tag. The end tag has 
+the tag name preceded by a slash. These tags contain the content, in this 
+case what's displayed on the web page.
+
+DETAILED EXPLANATION
+--------------------
+Opening and closing tags work together to define HTML elements. Understanding 
+how they work is fundamental to understanding HTML structure and effective 
+web scraping.
+
+WHAT IS AN OPENING TAG?
+-----------------------
+The opening tag marks the beginning of an HTML element:
+
+  <tagname>
+
+Or with attributes:
+
+  <tagname attribute="value">
+
+Characteristics:
+• Starts with <
+• Contains the tag name
+• Can contain attributes
+• Marks where the element begins
+
+Examples:
+  <a>                    ← Simple opening tag
+  <a href="...">         ← Opening tag with attribute
+  <h3>                   ← Opening tag for heading
+  <p>                    ← Opening tag for paragraph
+  <div class="container"> ← Opening tag with class attribute
+
+WHAT IS A CLOSING TAG?
+----------------------
+The closing tag marks the end of an HTML element:
+
+  </tagname>
+
+Characteristics:
+• Starts with </
+• Contains the tag name (same as opening tag)
+• Cannot contain attributes
+• Marks where the element ends
+• The slash (/) indicates it's a closing tag
+
+Examples:
+  </a>                   ← Closing tag for anchor
+  </h3>                  ← Closing tag for heading
+  </p>                   ← Closing tag for paragraph
+  </div>                 ← Closing tag for division
+
+THE RELATIONSHIP BETWEEN OPENING AND CLOSING TAGS
+--------------------------------------------------
+Opening and closing tags work together:
+
+  <h3>Michael Jordan</h3>
+   ↑                    ↑
+   |                    |
+Opening tag        Closing tag
+   |                    |
+   └────────────────────┘
+        Content
+
+Key points:
+• Opening tag starts the element
+• Closing tag ends the element
+• Content goes between them
+• Tag names must match
+• They work as a pair
+
+WHAT HAPPENS BETWEEN THE TAGS
+------------------------------
+Everything between opening and closing tags is the element's content:
+
+  <p>This is the content</p>
+      ↑─────────────────↑
+      Content area
+
+Content can be:
+• Plain text: <p>Hello World</p>
+• Other HTML elements: <div><p>Text</p></div>
+• Mixed: <p>Text with <strong>bold</strong> words</p>
+• Empty: <p></p> (empty paragraph)
+
+WHY TAGS MUST MATCH
+-------------------
+Opening and closing tags must have the same tag name:
+
+Correct:
+  <h3>Michael Jordan</h3>     ← Tag names match: h3 and h3
+
+Incorrect:
+  <h3>Michael Jordan</h2>      ← Tag names don't match: h3 and h2
+  <h3>Michael Jordan</p>       ← Tag names don't match: h3 and p
+
+If tags don't match:
+• HTML might still work (browsers are forgiving)
+• But it's invalid HTML
+• Can cause display issues
+• Makes scraping unreliable
+
+SELF-CLOSING TAGS (SPECIAL CASE)
+---------------------------------
+Some tags don't need closing tags - they're self-closing:
+
+  <img src="image.jpg" alt="Description">
+  <br>
+  <hr>
+  <input type="text">
+
+These tags:
+• Don't contain content
+• Close themselves
+• Can be written as <tag /> or <tag>
+• Common examples: img, br, hr, input, meta
+
+NESTED TAGS
+-----------
+Tags can contain other tags (nesting):
+
+  <div>
+    <h3>Michael Jordan</h3>
+    <p>Salary: $33,000,000</p>
+  </div>
+
+Structure:
+• <div> is the outer (parent) tag
+• <h3> and <p> are inner (child) tags
+• Inner tags must close before outer tags
+
+Correct nesting:
+  <div><p>Text</p></div>      ← Inner tag closes first
+
+Incorrect nesting:
+  <div><p>Text</div></p>      ← Outer tag closes first (wrong!)
+
+WHY OPENING AND CLOSING TAGS MATTER FOR SCRAPING
+-------------------------------------------------
+Understanding opening and closing tags matters because:
+
+1. CONTENT EXTRACTION
+   • Content is between opening and closing tags
+   • You extract the text/content between them
+   • Understanding tags helps you get the right content
+
+2. ELEMENT IDENTIFICATION
+   • Opening tag defines where element starts
+   • Closing tag defines where element ends
+   • You can identify complete elements
+
+3. NAVIGATION
+   • You navigate from opening to closing tag
+   • Find parent elements (opening tags that contain others)
+   • Find child elements (tags inside other tags)
+
+4. PARSING
+   • HTML parsers use opening/closing tags to build structure
+   • They create a tree based on tag pairs
+   • Understanding tags helps you understand parsed structure
+
+REAL-WORLD EXAMPLE
+------------------
+Let's look at a complete example:
+
+  <body>
+    <h3>Michael Jordan</h3>
+    <p>Salary: $33,000,000</p>
+  </body>
+
+Tag pairs:
+• <body> ... </body> - Contains entire page content
+• <h3> ... </h3> - Contains player name
+• <p> ... </p> - Contains salary
+
+When scraping:
+• You find the opening <h3> tag
+• Extract content until closing </h3> tag
+• This gives you "Michael Jordan"
+• Same process for <p> tag gives you the salary
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: TAG CONTENT
+-------------------------
+
+DEFINITION
+----------
+These tags contain the content, in this case what's displayed on the web 
+page. The content is the actual data or text that appears when the web page 
+is viewed in a browser. This content is what you typically want to extract 
+when web scraping.
+
+DETAILED EXPLANATION
+--------------------
+Tag content is the heart of web scraping - it's the actual data you want to 
+extract. Understanding what content is, where it's located, and how to 
+extract it is essential for successful web scraping.
+
+WHAT IS TAG CONTENT?
+--------------------
+Tag content is everything between the opening and closing tags:
+
+  <h3>Michael Jordan</h3>
+       ↑──────────────↑
+       This is the content
+
+Content characteristics:
+• Located between opening and closing tags
+• This is what users see on the web page
+• This is usually what you want to extract
+• Can be text, other HTML elements, or both
+
+TYPES OF CONTENT
+----------------
+Content can be different types:
+
+1. PLAIN TEXT CONTENT
+   <p>This is plain text</p>
+   • Simple text between tags
+   • Most common type of content
+   • Easy to extract
+
+2. NESTED HTML ELEMENTS
+   <div>
+     <h3>Title</h3>
+     <p>Description</p>
+   </div>
+   • Other HTML elements as content
+   • Creates hierarchical structure
+   • Can extract nested content separately
+
+3. MIXED CONTENT
+   <p>Text with <strong>bold</strong> words</p>
+   • Combination of text and HTML elements
+   • More complex to extract
+   • May need to handle nested elements
+
+4. EMPTY CONTENT
+   <p></p>
+   • No content between tags
+   • Element exists but has no visible content
+   • Sometimes used for spacing/layout
+
+CONTENT VS. WHAT'S DISPLAYED
+-----------------------------
+Important distinction:
+• Content = What's between the tags in HTML
+• Displayed = What users see in the browser
+
+Sometimes they're the same:
+  <p>Hello World</p>
+  Content: "Hello World"
+  Displayed: "Hello World"
+
+Sometimes they differ:
+  <p>Hello   World</p>        ← Multiple spaces in HTML
+  Content: "Hello   World"
+  Displayed: "Hello World"    ← Browser collapses spaces
+
+  <p>Hello<br>World</p>       ← Line break in HTML
+  Content: "Hello<br>World"
+  Displayed: 
+    Hello
+    World
+
+WHY CONTENT IS IMPORTANT FOR SCRAPING
+--------------------------------------
+Content is important because:
+
+1. DATA LOCATION
+   • The data you want is in the content
+   • Player names, prices, descriptions - all in content
+   • This is your primary target when scraping
+
+2. EXTRACTION TARGET
+   • You extract content from tags
+   • Content is what you save/process
+   • Understanding content helps you get the right data
+
+3. DATA STRUCTURE
+   • Content structure reveals data organization
+   • How content is organized helps you extract it
+   • Understanding content structure improves scraping
+
+REAL-WORLD EXAMPLE: EXTRACTING CONTENT
+--------------------------------------
+Let's say you have this HTML:
+
+  <body>
+    <h3>Michael Jordan</h3>
+    <p>Salary: $33,000,000</p>
+    <h3>LeBron James</h3>
+    <p>Salary: $41,000,000</p>
+  </body>
+
+Content to extract:
+• From <h3> tags: "Michael Jordan", "LeBron James"
+• From <p> tags: "Salary: $33,000,000", "Salary: $41,000,000"
+
+Scraping process:
+1. Find all <h3> elements
+2. Extract content from each → ["Michael Jordan", "LeBron James"]
+3. Find all <p> elements
+4. Extract content from each → ["Salary: $33,000,000", "Salary: $41,000,000"]
+5. Match them up to create player-salary pairs
+
+CONTENT WITH NESTED ELEMENTS
+-----------------------------
+Sometimes content contains nested elements:
+
+  <div>
+    <h3>Michael Jordan</h3>
+    <p>Salary: <strong>$33,000,000</strong></p>
+  </div>
+
+Content structure:
+• <div> contains:
+  - <h3> with content "Michael Jordan"
+  - <p> with content "Salary: " and nested <strong> with "$33,000,000"
+
+When extracting:
+• You can extract just the text: "Salary: $33,000,000"
+• Or extract separately: "Salary: " and "$33,000,000"
+• Depends on what you need
+
+WHITESPACE IN CONTENT
+---------------------
+Whitespace (spaces, tabs, newlines) in content:
+
+  <p>Hello    World</p>        ← Multiple spaces
+  <p>Hello
+  World</p>                    ← Newline
+  <p>  Hello World  </p>       ← Leading/trailing spaces
+
+Browsers handle whitespace:
+• Multiple spaces → collapsed to one space
+• Newlines → treated as spaces
+• Leading/trailing spaces → usually ignored
+
+When scraping:
+• Be aware of how whitespace is handled
+• May need to clean up extracted content
+• Use .strip() or similar to remove extra spaces
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: HTML ATTRIBUTES AND ATTRIBUTE VALUES
+---------------------------------------------------
+
+DEFINITION
+----------
+We have the attribute, this is composed of the Attribute Name and Attribute 
+Value. In the case of an anchor tag, the href attribute contains the URL to 
+the destination web page. Attributes provide additional information about 
+HTML elements.
+
+DETAILED EXPLANATION
+--------------------
+Attributes are key-value pairs that provide additional information about HTML 
+elements. They go inside the opening tag and help identify, style, or 
+configure elements. Understanding attributes is crucial for web scraping 
+because some data is stored in attributes, and attributes can help you 
+identify specific elements.
+
+WHAT IS AN HTML ATTRIBUTE?
+--------------------------
+An attribute provides extra information about an element:
+
+  <a href="https://www.ibm.com">IBM</a>
+       ↑                    ↑
+       |                    |
+  Attribute name      Attribute value
+
+Structure:
+• Attribute name: Identifies what the attribute is (href)
+• Equals sign: Separates name from value (=)
+• Attribute value: The actual value ("https://www.ibm.com")
+• Quotes: Usually required around values (can be single or double)
+
+ATTRIBUTE SYNTAX
+----------------
+Basic syntax:
+
+  <tagname attributename="attributevalue">
+
+Examples:
+  <a href="https://www.ibm.com">IBM</a>
+  <img src="photo.jpg" alt="Description">
+  <div class="container" id="main">
+  <p class="highlight" style="color: blue;">
+
+Multiple attributes:
+  <a href="https://www.ibm.com" class="link" id="ibm-link">IBM</a>
+       ↑                    ↑     ↑              ↑
+       |                    |     |              |
+    Attribute 1        Value 1  Attribute 2  Value 2
+
+COMMON ATTRIBUTES
+-----------------
+Here are common attributes you'll encounter:
+
+1. HREF ATTRIBUTE (Links)
+   <a href="https://www.example.com">Link</a>
+   • Used in <a> tags
+   • Specifies the destination URL
+   • Essential for creating hyperlinks
+
+2. SRC ATTRIBUTE (Sources)
+   <img src="image.jpg">
+   <script src="script.js">
+   • Specifies the source file
+   • Used for images, scripts, iframes
+   • Contains file path or URL
+
+3. ALT ATTRIBUTE (Alternate Text)
+   <img src="photo.jpg" alt="A beautiful sunset">
+   • Provides text alternative for images
+   • Important for accessibility
+   • Shown if image can't load
+
+4. CLASS ATTRIBUTE (Styling/Grouping)
+   <div class="container">
+   <p class="highlight">
+   • Groups elements with similar styling
+   • Can have multiple classes: class="class1 class2"
+   • Used for CSS styling and JavaScript selection
+
+5. ID ATTRIBUTE (Unique Identifier)
+   <div id="main-content">
+   • Provides unique identifier for element
+   • Only one element per page should have each ID
+   • Used for linking and JavaScript
+
+6. STYLE ATTRIBUTE (Inline Styling)
+   <p style="color: blue; font-size: 16px;">
+   • Applies CSS styles directly
+   • Overrides external stylesheets
+   • Useful for quick styling
+
+THE HREF ATTRIBUTE EXAMPLE
+---------------------------
+Let's use the anchor tag example in detail:
+
+  <a href="https://www.ibm.com">IBM</a>
+
+Breakdown:
+• Tag name: a (anchor)
+• Attribute name: href
+• Attribute value: "https://www.ibm.com"
+• Content: IBM
+
+What it does:
+• Creates a clickable link
+• Link text displays "IBM"
+• Clicking navigates to https://www.ibm.com
+• The href attribute specifies where the link goes
+
+Why href matters:
+• The URL is in the attribute, not the content
+• To extract links, you need to get the href attribute value
+• Content ("IBM") is what's displayed, href is where it goes
+
+WHY ATTRIBUTES MATTER FOR WEB SCRAPING
+---------------------------------------
+Attributes matter because:
+
+1. DATA IN ATTRIBUTES
+   • Some data is stored in attributes
+   • Image URLs are in src attributes
+   • Link URLs are in href attributes
+   • You need to extract attribute values, not just content
+
+2. ELEMENT IDENTIFICATION
+   • Attributes help identify specific elements
+   • class and id attributes are especially useful
+   • You can target elements by their attributes
+
+3. ADDITIONAL INFORMATION
+   • Attributes provide context
+   • alt text describes images
+   • data-* attributes store custom data
+   • More information = better scraping
+
+4. TARGETING ELEMENTS
+   • You can find elements by attribute values
+   • "Find all elements with class='player-name'"
+   • "Find element with id='main-content'"
+   • Makes scraping more precise
+
+REAL-WORLD EXAMPLE: EXTRACTING ATTRIBUTES
+------------------------------------------
+Let's say you want to extract image URLs:
+
+  <img src="player1.jpg" alt="Michael Jordan">
+  <img src="player2.jpg" alt="LeBron James">
+
+To extract:
+• Content: There's no content (img is self-closing)
+• Attribute: src contains the image URL
+• You need to extract the src attribute value
+
+Scraping approach:
+1. Find all <img> elements
+2. Extract src attribute from each
+3. Result: ["player1.jpg", "player2.jpg"]
+
+Example with links:
+
+  <a href="/player/michael-jordan">Michael Jordan</a>
+  <a href="/player/lebron-james">LeBron James</a>
+
+To extract both:
+• Content: Player names ("Michael Jordan", "LeBron James")
+• Attribute: URLs ("/player/michael-jordan", "/player/lebron-james")
+• Extract both for complete data
+
+ATTRIBUTE VALUES: QUOTES
+-------------------------
+Attribute values are usually in quotes:
+
+  <a href="https://www.ibm.com">        ← Double quotes (standard)
+  <a href='https://www.ibm.com'>        ← Single quotes (also valid)
+  <a href=https://www.ibm.com>         ← No quotes (sometimes works, not recommended)
+
+Best practice:
+• Always use quotes
+• Double quotes are most common
+• Single quotes work but are less common
+• No quotes can cause issues with spaces/special characters
+
+BOOLEAN ATTRIBUTES
+------------------
+Some attributes don't need values (boolean attributes):
+
+  <input type="checkbox" checked>
+  <option selected>Option 1</option>
+  <button disabled>Click me</button>
+
+These attributes:
+• Presence = true
+• Absence = false
+• checked means checkbox is checked
+• selected means option is selected
+• disabled means button is disabled
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: INSPECTING HTML IN BROWSERS
+-----------------------------------------
+
+DEFINITION
+----------
+Real web pages are more complex, depending on your browser you can select 
+the HTML element, then click Inspect. The result will give you the ability 
+to inspect the HTML. There is also other types of content such as CSS and 
+JavaScript that we will not go over in this course.
+
+DETAILED EXPLANATION
+--------------------
+Real-world web pages are much more complex than simple examples. Browsers 
+provide developer tools that let you inspect the HTML structure of any web 
+page. This is an essential skill for web scraping because you need to 
+understand the HTML structure before you can extract data from it.
+
+WHY REAL WEB PAGES ARE MORE COMPLEX
+------------------------------------
+Real web pages contain:
+• Hundreds or thousands of HTML elements
+• Nested structures many levels deep
+• CSS for styling (makes pages look good)
+• JavaScript for interactivity (makes pages dynamic)
+• Multiple files linked together
+• Dynamic content loaded after page loads
+
+This complexity means:
+• You can't just read the HTML source easily
+• You need tools to navigate the structure
+• Browser developer tools are essential
+• Understanding structure is crucial
+
+HOW TO INSPECT HTML IN BROWSERS
+--------------------------------
+Most modern browsers have developer tools:
+
+1. RIGHT-CLICK METHOD
+   • Right-click on any element on the page
+   • Select "Inspect" or "Inspect Element"
+   • Developer tools open showing that element
+
+2. KEYBOARD SHORTCUT
+   • Windows/Linux: F12 or Ctrl+Shift+I
+   • Mac: Cmd+Option+I
+   • Opens developer tools
+
+3. MENU METHOD
+   • Chrome/Edge: Menu → More Tools → Developer Tools
+   • Firefox: Menu → Web Developer → Inspector
+   • Safari: Develop menu → Show Web Inspector
+
+WHAT YOU SEE IN DEVELOPER TOOLS
+--------------------------------
+When you inspect an element, you see:
+
+1. HTML STRUCTURE
+   • The complete HTML tree
+   • Highlighted element you're inspecting
+   • Parent and child elements
+   • All attributes
+
+2. STYLES
+   • CSS styles applied to element
+   • Where styles come from
+   • Computed styles (final result)
+
+3. CONSOLE
+   • JavaScript errors
+   • You can run JavaScript commands
+   • Useful for testing
+
+4. NETWORK
+   • All files loaded (HTML, CSS, JavaScript, images)
+   • Request/response details
+   • Useful for understanding page loading
+
+WHY INSPECTING HTML IS ESSENTIAL FOR SCRAPING
+---------------------------------------------
+Inspecting HTML is essential because:
+
+1. UNDERSTAND STRUCTURE
+   • See the actual HTML structure
+   • Understand how data is organized
+   • Identify which tags contain your target data
+
+2. FIND ELEMENT SELECTORS
+   • See class and id attributes
+   • Identify unique identifiers
+   • Write better scraping selectors
+
+3. DEBUG SCRAPING CODE
+   • Compare what you see vs. what your code finds
+   • Identify why extraction fails
+   • Understand structure changes
+
+4. HANDLE DYNAMIC CONTENT
+   • See if content loads dynamically
+   • Understand JavaScript-rendered content
+   • Plan your scraping approach
+
+REAL-WORLD EXAMPLE: INSPECTING A PLAYER NAME
+---------------------------------------------
+Let's say you're on a basketball players page:
+
+1. You see "Michael Jordan" on the page
+2. Right-click on "Michael Jordan"
+3. Select "Inspect"
+4. Developer tools show:
+
+  <div class="player-card">
+    <h3 class="player-name">Michael Jordan</h3>
+    <p class="player-salary">Salary: $33,000,000</p>
+  </div>
+
+What you learn:
+• Player name is in <h3> with class="player-name"
+• Salary is in <p> with class="player-salary"
+• Both are inside <div> with class="player-card"
+• You can use these classes to target elements precisely
+
+For scraping:
+• Find elements with class="player-name" → get names
+• Find elements with class="player-salary" → get salaries
+• Much more precise than just finding all <h3> tags
+
+CSS AND JAVASCRIPT (MENTIONED BUT NOT COVERED)
+-----------------------------------------------
+Web pages also contain:
+
+1. CSS (Cascading Style Sheets)
+   • Controls how pages look
+   • Colors, fonts, layouts, spacing
+   • Not part of HTML structure
+   • Doesn't contain scrapable data (usually)
+
+2. JAVASCRIPT
+   • Adds interactivity
+   • Can modify page content dynamically
+   • Can load content after page loads
+   • Can make scraping more complex
+
+For this course:
+• We focus on HTML structure
+• CSS and JavaScript are mentioned but not covered in detail
+• Understanding HTML is the foundation
+• You can learn CSS/JavaScript separately if needed
+
+PRACTICAL TIP: USING INSPECT ELEMENT
+-------------------------------------
+When scraping a new website:
+
+1. Open the website in your browser
+2. Right-click on the data you want to extract
+3. Click "Inspect"
+4. Look at the HTML structure
+5. Identify:
+   • What tag contains your data
+   • What attributes it has
+   • How it's nested
+   • If there's a pattern
+6. Use this information to write your scraping code
+
+This process:
+• Saves time
+• Makes scraping more accurate
+• Helps you understand the page structure
+• Essential for successful web scraping
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: HTML DOCUMENT TREES - INTRODUCTION
+-------------------------------------------------
+
+DEFINITION
+----------
+Each HTML document can actually be referred to as a document tree. Tags may 
+contain strings and other tags. These elements are the tag's children. We 
+can represent this as a family tree.
+
+DETAILED EXPLANATION
+--------------------
+HTML documents have a hierarchical structure that can be visualized as a tree. 
+Understanding this tree structure is crucial for web scraping because it helps 
+you navigate relationships between elements and understand how to access nested 
+data.
+
+WHAT IS AN HTML DOCUMENT TREE?
+------------------------------
+An HTML document tree is a way of representing the hierarchical structure of 
+an HTML document. Like a family tree, it shows relationships between 
+elements:
+
+  <html>
+    <head>
+      <title>Page Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </body>
+  </html>
+
+Tree representation:
+
+        <html> (ROOT)
+       /        \
+   <head>      <body>
+     |         /    \
+  <title>   <h1>   <p>
+
+WHY IS IT CALLED A "TREE"?
+--------------------------
+It's called a tree because:
+• Has a root (<html>)
+• Branches out to other elements
+• Each element can have children
+• Forms a branching structure
+• Similar to how a tree branches from trunk to leaves
+
+TREE TERMINOLOGY
+----------------
+Tree terminology helps describe relationships:
+
+• ROOT: The topmost element (<html>)
+• NODE: Any element in the tree
+• PARENT: An element that contains other elements
+• CHILD: An element contained within another element
+• SIBLING: Elements at the same level with the same parent
+• DESCENDANT: Any element nested within another (child, grandchild, etc.)
+• ANCESTOR: Any element that contains another (parent, grandparent, etc.)
+• LEAF: An element with no children (usually contains only text)
+
+HOW TAGS CREATE THE TREE STRUCTURE
+-----------------------------------
+Tags create the tree through nesting:
+
+  <html>
+    <head>
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </body>
+  </html>
+
+Structure:
+• <html> contains <head> and <body>
+• <head> contains <title>
+• <body> contains <h1> and <p>
+• <title>, <h1>, and <p> contain text (leaf nodes)
+
+VISUAL REPRESENTATION
+---------------------
+Here's a visual tree representation:
+
+                    <html>
+                   /      \
+              <head>      <body>
+                |         /    |    \
+              <title>   <h1>  <p>  <div>
+                         |     |     |
+                      "Title" "Text" <span>
+                                      |
+                                    "More"
+
+Levels:
+• Level 0: <html> (root)
+• Level 1: <head>, <body>
+• Level 2: <title>, <h1>, <p>, <div>
+• Level 3: <span>
+• Level 4: Text content
+
+WHY TREE STRUCTURE MATTERS FOR SCRAPING
+---------------------------------------
+Tree structure matters because:
+
+1. NAVIGATION
+   • You navigate from parent to child
+   • You can go up from child to parent
+   • You can find siblings
+   • Tree structure guides your navigation
+
+2. RELATIONSHIPS
+   • Understanding relationships helps extract related data
+   • "Get the paragraph that follows this heading"
+   • "Get all children of this div"
+   • Relationships are defined by tree structure
+
+3. SELECTORS
+   • CSS selectors use tree relationships
+   • "div > p" means p that's a direct child of div
+   • "div p" means p that's a descendant of div
+   • Tree structure enables these selectors
+
+4. PARSING
+   • HTML parsers build a tree structure
+   • BeautifulSoup creates a tree you can navigate
+   • Understanding trees helps you use these tools
+
+REAL-WORLD EXAMPLE: BASKETBALL PLAYERS TREE
+--------------------------------------------
+Let's create a tree for our basketball example:
+
+  <html>
+    <head>
+      <title>NBA Players</title>
+    </head>
+    <body>
+      <h3>Michael Jordan</h3>
+      <p>Salary: $33,000,000</p>
+      <h3>LeBron James</h3>
+      <p>Salary: $41,000,000</p>
+    </body>
+  </html>
+
+Tree structure:
+
+              <html>
+             /      \
+        <head>    <body>
+          |       /  |  |  \
+       <title>  <h3> <p> <h3> <p>
+          |       |   |    |    |
+       "NBA"  "MJ" "$33" "LJ" "$41"
+
+When scraping:
+• Start at <body> (contains the data)
+• Find all <h3> children → player names
+• Find all <p> children → salaries
+• Tree structure shows they're siblings (same parent)
+
+[END SECTION 2.7]
+================================================================================
+
+SECTION 2.8: UNDERSTANDING PARENT-CHILD RELATIONSHIPS
+-------------------------------------------------------
+
+DEFINITION
+----------
+Each nested tag is a level in the tree. The HTML tag contains the head and 
+body tag. The head and body tag are the descendants of the html tag. In 
+particular they are the children of the HTML tag. HTML tag is their parent.
+
+DETAILED EXPLANATION
+--------------------
+Parent-child relationships are fundamental to understanding HTML structure. 
+These relationships define how elements are organized and how you can 
+navigate between them when scraping.
+
+WHAT IS A PARENT ELEMENT?
+--------------------------
+A parent element is an element that contains other elements:
+
+  <div>
+    <p>Text</p>
+  </div>
+
+In this example:
+• <div> is the parent
+• <p> is the child
+• Parent contains the child
+
+WHAT IS A CHILD ELEMENT?
+------------------------
+A child element is an element contained within another element:
+
+  <body>
+    <h1>Heading</h1>
+    <p>Paragraph</p>
+  </body>
+
+In this example:
+• <body> is the parent
+• <h1> and <p> are children
+• Children are directly inside the parent
+
+THE HTML EXAMPLE
+----------------
+Let's use the HTML structure example:
+
+  <html>
+    <head>
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </body>
+  </html>
+
+Parent-child relationships:
+• <html> is the parent of <head> and <body>
+• <head> is the parent of <title>
+• <body> is the parent of <h1> and <p>
+• <title> is a child of <head>
+• <h1> and <p> are children of <body>
+
+VISUAL REPRESENTATION
+---------------------
+Here's a visual representation:
+
+        <html> (PARENT)
+       /        \
+   <head>      <body> (CHILDREN of html)
+     |         /    \
+  <title>   <h1>   <p> (CHILDREN of body)
+
+Relationships:
+• <html> → parent of <head> and <body>
+• <head> → child of <html>, parent of <title>
+• <body> → child of <html>, parent of <h1> and <p>
+• <title> → child of <head>
+• <h1> → child of <body>
+• <p> → child of <body>
+
+DIRECT CHILDREN VS. DESCENDANTS
+--------------------------------
+Important distinction:
+
+Direct children:
+  <div>
+    <p>Text</p>    ← Direct child
+  </div>
+
+Descendants (includes grandchildren, etc.):
+  <div>
+    <section>
+      <p>Text</p>  ← Descendant (but not direct child)
+    </section>
+  </div>
+
+In the second example:
+• <p> is a descendant of <div>
+• But <p> is NOT a direct child of <div>
+• <section> is the direct child
+• <p> is a grandchild (descendant)
+
+WHY PARENT-CHILD RELATIONSHIPS MATTER
+--------------------------------------
+These relationships matter because:
+
+1. NAVIGATION
+   • Navigate from parent to children
+   • Navigate from child to parent
+   • Find siblings (elements with same parent)
+   • Essential for moving through HTML structure
+
+2. DATA EXTRACTION
+   • "Get all children of this div" → extract all content
+   • "Get the parent of this element" → find container
+   • Relationships help you locate related data
+
+3. SELECTORS
+   • CSS selectors use relationships
+   • "div > p" → p that's direct child of div
+   • "div p" → p that's descendant of div
+   • Relationships enable precise selection
+
+4. UNDERSTANDING STRUCTURE
+   • Relationships reveal page organization
+   • Help you understand how data is grouped
+   • Essential for effective scraping
+
+REAL-WORLD EXAMPLE
+-------------------
+Let's use our basketball example:
+
+  <body>
+    <div class="player">
+      <h3>Michael Jordan</h3>
+      <p>Salary: $33,000,000</p>
+    </div>
+    <div class="player">
+      <h3>LeBron James</h3>
+      <p>Salary: $41,000,000</p>
+    </div>
+  </body>
+
+Relationships:
+• <body> is parent of both <div> elements
+• Each <div> is parent of <h3> and <p>
+• <h3> and <p> are children of their <div>
+• <h3> and <p> are siblings (same parent)
+
+When scraping:
+• Find all <div class="player"> elements
+• For each div, get its children:
+  - <h3> child → player name
+  - <p> child → salary
+• Parent-child relationship groups related data together
+
+[END SECTION 2.8]
+================================================================================
+
+SECTION 2.9: DESCENDANTS AND SIBLINGS
+---------------------------------------
+
+DEFINITION
+----------
+The head and body tag are siblings as they are on the same level. Title tag 
+is the child of the head tag and its parent is the head tag. The title tag 
+is a descendant of the HTML tag but not its child. The heading and paragraph 
+tags are the children of the body tag; and as they are all children of the 
+body tag they are siblings of each other.
+
+DETAILED EXPLANATION
+--------------------
+Understanding descendants and siblings helps you navigate HTML structure and 
+extract related data. These relationships are essential for effective web 
+scraping.
+
+WHAT ARE SIBLINGS?
+------------------
+Siblings are elements that share the same parent:
+
+  <body>
+    <h1>Heading 1</h1>
+    <p>Paragraph 1</p>
+    <p>Paragraph 2</p>
+  </body>
+
+In this example:
+• <h1>, <p>, and <p> are all siblings
+• They all have <body> as their parent
+• They are on the same level in the tree
+• They are children of the same parent
+
+THE HEAD AND BODY EXAMPLE
+-------------------------
+Let's use the HTML structure:
+
+  <html>
+    <head>
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+      <p>Paragraph</p>
+    </body>
+  </html>
+
+Sibling relationships:
+• <head> and <body> are siblings
+  - They share the same parent: <html>
+  - They are on the same level
+  - They are both direct children of <html>
+
+WHAT ARE DESCENDANTS?
+---------------------
+Descendants are elements nested within another element at any level:
+
+  <html>
+    <body>
+      <div>
+        <p>Text</p>
+      </div>
+    </body>
+  </html>
+
+Descendant relationships:
+• <p> is a descendant of <html>
+• <p> is a descendant of <body>
+• <p> is a descendant of <div>
+• <p> is a child of <div> (direct descendant)
+• <p> is NOT a direct child of <html> or <body>
+
+THE TITLE TAG EXAMPLE
+---------------------
+Using our HTML structure:
+
+  <html>
+    <head>
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+    </body>
+  </html>
+
+Title tag relationships:
+• <title> is a child of <head>
+  - Direct parent-child relationship
+  - <head> is the parent of <title>
+
+• <title> is a descendant of <html>
+  - <title> is nested inside <html>
+  - But <title> is NOT a direct child of <html>
+  - <head> is between them
+
+Key point:
+• All children are descendants
+• But not all descendants are children
+• Children = direct descendants
+• Descendants = any level of nesting
+
+THE HEADING AND PARAGRAPH EXAMPLE
+----------------------------------
+Let's look at this structure:
+
+  <body>
+    <h1>Heading 1</h1>
+    <p>Paragraph 1</p>
+    <h2>Heading 2</h2>
+    <p>Paragraph 2</p>
+  </body>
+
+Relationships:
+• <h1>, <p>, <h2>, <p> are all children of <body>
+• They are all siblings of each other
+• They share the same parent (<body>)
+• They are on the same level
+
+VISUAL REPRESENTATION
+---------------------
+Here's a visual tree:
+
+        <html>
+       /        \
+   <head>      <body>     ← SIBLINGS (same parent: html)
+     |         /    |    \
+  <title>   <h1>  <p>  <h2>  ← SIBLINGS (same parent: body)
+             |    |     |
+          "H1"  "P1"  "H2"
+
+Relationships:
+• <head> and <body> → siblings
+• <h1>, <p>, <h2> → siblings
+• <title> → descendant of <html>, child of <head>
+• <h1> → descendant of <html>, child of <body>
+
+WHY SIBLINGS MATTER FOR SCRAPING
+---------------------------------
+Siblings matter because:
+
+1. RELATED DATA
+   • Siblings often contain related data
+   • Heading followed by paragraph = related content
+   • You can extract siblings together
+
+2. NAVIGATION
+   • Find next sibling → get following element
+   • Find previous sibling → get preceding element
+   • Navigate through related elements
+
+3. PATTERNS
+   • Siblings often follow patterns
+   • "Every h3 is followed by a p with salary"
+   • Patterns make extraction predictable
+
+REAL-WORLD EXAMPLE: EXTRACTING SIBLINGS
+---------------------------------------
+Let's use our basketball example:
+
+  <body>
+    <h3>Michael Jordan</h3>
+    <p>Salary: $33,000,000</p>
+    <h3>LeBron James</h3>
+    <p>Salary: $41,000,000</p>
+  </body>
+
+Structure:
+• <h3> and <p> are siblings (both children of <body>)
+• Each <h3> is followed by a <p> sibling
+• Pattern: h3 → p → h3 → p
+
+When scraping:
+1. Find all <h3> elements
+2. For each <h3>, find its next sibling <p>
+3. Extract name from <h3>, salary from <p>
+4. Sibling relationship groups related data
+
+WHY DESCENDANTS MATTER FOR SCRAPING
+------------------------------------
+Descendants matter because:
+
+1. NESTED STRUCTURE
+   • Data is often nested deeply
+   • "Find all paragraphs anywhere in this div"
+   • Descendants include all nested levels
+
+2. FLEXIBLE SELECTION
+   • "div p" selects all p descendants
+   • Not just direct children
+   • More flexible than child selectors
+
+3. COMPREHENSIVE EXTRACTION
+   • Extract all content from a container
+   • Get all descendants, not just children
+   • Useful for complex structures
+
+REAL-WORLD EXAMPLE: DESCENDANTS
+--------------------------------
+Let's say you have:
+
+  <div class="player-info">
+    <div class="name-section">
+      <h3>Michael Jordan</h3>
+    </div>
+    <div class="details-section">
+      <p>Salary: $33,000,000</p>
+      <p>Team: Chicago Bulls</p>
+    </div>
+  </div>
+
+Descendant relationships:
+• <h3> and <p> elements are descendants of <div class="player-info">
+• They're not direct children (there are other divs in between)
+• But they're still descendants
+
+When scraping:
+• "Find all <h3> descendants of player-info div" → gets the name
+• "Find all <p> descendants of player-info div" → gets all details
+• Descendant selectors are more flexible than child selectors
+
+[END SECTION 2.9]
+================================================================================
+
+SECTION 2.10: HTML TABLES - BASIC STRUCTURE
+--------------------------------------------
+
+DEFINITION
+----------
+Next, let's review HTML tables. To define an HTML table we have the table 
+tag. Each table row is defined with a "tr" tag, you can also use a table 
+header tag for the first row. The table row cell contains a set of "td" tags, 
+each defines a table cell.
+
+DETAILED EXPLANATION
+--------------------
+HTML tables are a common way to organize and display structured data on web 
+pages. Understanding table structure is essential for web scraping because 
+many websites use tables to display data like prices, statistics, schedules, 
+and more.
+
+WHAT IS AN HTML TABLE?
+----------------------
+An HTML table displays data in rows and columns:
+
+  <table>
+    <tr>
+      <td>Cell 1</td>
+      <td>Cell 2</td>
+    </tr>
+    <tr>
+      <td>Cell 3</td>
+      <td>Cell 4</td>
+    </tr>
+  </table>
+
+This creates:
+  ┌─────────┬─────────┐
+  │ Cell 1  │ Cell 2  │
+  ├─────────┼─────────┤
+  │ Cell 3  │ Cell 4  │
+  └─────────┴─────────┘
+
+WHY ARE TABLES IMPORTANT FOR SCRAPING?
+--------------------------------------
+Tables are important because:
+• Many websites use tables for structured data
+• Data is organized in rows and columns
+• Easy to extract row by row
+• Common format for data display
+
+THE TABLE TAG
+-------------
+The <table> tag defines the table:
+
+  <table>
+    <!-- Table content goes here -->
+  </table>
+
+Characteristics:
+• Container for the entire table
+• Wraps all rows and cells
+• Can have attributes for styling
+• Root element for table structure
+
+TABLE ROWS (TR)
+---------------
+Each table row is defined with a "tr" tag:
+
+  <tr>
+    <!-- Table cells go here -->
+  </tr>
+
+Characteristics:
+• "tr" stands for "table row"
+• Each <tr> creates one row
+• Contains table cells (<td> or <th>)
+• Rows go horizontally across the table
+
+TABLE CELLS (TD)
+----------------
+Table row cells contain "td" tags:
+
+  <td>Cell content</td>
+
+Characteristics:
+• "td" stands for "table data"
+• Each <td> creates one cell
+• Contains the actual data
+• Cells go vertically in columns
+
+TABLE HEADERS (TH)
+------------------
+You can use a table header tag for the first row:
+
+  <th>Header content</th>
+
+Characteristics:
+• "th" stands for "table header"
+• Used for column headers
+• Usually in the first row
+• Displayed as bold by default
+• Describes what the column contains
+
+BASIC TABLE STRUCTURE
+---------------------
+Here's a complete basic table:
+
+  <table>
+    <tr>
+      <th>Player Name</th>
+      <th>Salary</th>
+    </tr>
+    <tr>
+      <td>Michael Jordan</td>
+      <td>$33,000,000</td>
+    </tr>
+    <tr>
+      <td>LeBron James</td>
+      <td>$41,000,000</td>
+    </tr>
+  </table>
+
+This creates:
+
+  ┌─────────────────┬──────────────┐
+  │ Player Name     │ Salary       │ ← Header row (th)
+  ├─────────────────┼──────────────┤
+  │ Michael Jordan  │ $33,000,000  │ ← Data row (td)
+  │ LeBron James    │ $41,000,000  │ ← Data row (td)
+  └─────────────────┴──────────────┘
+
+STRUCTURE BREAKDOWN
+-------------------
+Level 1: <table> - Contains entire table
+Level 2: <tr> - Each row
+Level 3: <td> or <th> - Each cell
+
+Tree structure:
+
+        <table>
+       /    |    \
+    <tr>   <tr>  <tr>
+     |      |     |
+   <th>   <td>  <td>
+   <th>   <td>  <td>
+
+[END SECTION 2.10]
+================================================================================
+
+SECTION 2.11: TABLE ROWS (TR) AND TABLE CELLS (TD)
+----------------------------------------------------
+
+DEFINITION
+----------
+For the first row first cell we have; for the first row second cell we have; 
+and so on. For the second row we have; and for the second row first cell we 
+have; for the second row second cell we have; and so on.
+
+DETAILED EXPLANATION
+--------------------
+Understanding how table rows and cells are organized is crucial for extracting 
+data from tables. Each cell has a specific position based on its row and 
+column, and understanding this structure helps you extract data accurately.
+
+HOW TABLES ARE ORGANIZED
+------------------------
+Tables are organized in a grid:
+
+  <table>
+    <tr>                    ← Row 1
+      <td>Row1 Col1</td>    ← Row 1, Column 1
+      <td>Row1 Col2</td>    ← Row 1, Column 2
+      <td>Row1 Col3</td>    ← Row 1, Column 3
+    </tr>
+    <tr>                    ← Row 2
+      <td>Row2 Col1</td>    ← Row 2, Column 1
+      <td>Row2 Col2</td>    ← Row 2, Column 2
+      <td>Row2 Col3</td>    ← Row 2, Column 3
+    </tr>
+  </table>
+
+Visual representation:
+
+        Column 1    Column 2    Column 3
+  Row 1  Cell 1     Cell 2      Cell 3
+  Row 2  Cell 4     Cell 5      Cell 6
+
+THE FIRST ROW
+-------------
+The first row typically contains headers:
+
+  <tr>
+    <th>Player Name</th>    ← First row, first cell (header)
+    <th>Salary</th>         ← First row, second cell (header)
+    <th>Team</th>           ← First row, third cell (header)
+  </tr>
+
+Structure:
+• First row: Contains column headers
+• Uses <th> tags (table header)
+• Describes what each column contains
+• Usually only one header row
+
+SUBSEQUENT ROWS
+---------------
+Subsequent rows contain data:
+
+  <tr>
+    <td>Michael Jordan</td>  ← Second row, first cell (data)
+    <td>$33,000,000</td>    ← Second row, second cell (data)
+    <td>Chicago Bulls</td>  ← Second row, third cell (data)
+  </tr>
+  <tr>
+    <td>LeBron James</td>   ← Third row, first cell (data)
+    <td>$41,000,000</td>    ← Third row, second cell (data)
+    <td>LA Lakers</td>      ← Third row, third cell (data)
+  </tr>
+
+Structure:
+• Each <tr> creates a new row
+• Each <td> in the row creates a cell
+• Cells are in the same order as headers
+• Each row represents one record/item
+
+COMPLETE TABLE EXAMPLE
+-----------------------
+Here's a complete table example:
+
+  <table>
+    <!-- Row 1: Headers -->
+    <tr>
+      <th>Player Name</th>      ← Row 1, Cell 1 (Header)
+      <th>Salary</th>           ← Row 1, Cell 2 (Header)
+      <th>Team</th>            ← Row 1, Cell 3 (Header)
+    </tr>
+    
+    <!-- Row 2: First data row -->
+    <tr>
+      <td>Michael Jordan</td>  ← Row 2, Cell 1 (Data)
+      <td>$33,000,000</td>     ← Row 2, Cell 2 (Data)
+      <td>Chicago Bulls</td>   ← Row 2, Cell 3 (Data)
+    </tr>
+    
+    <!-- Row 3: Second data row -->
+    <tr>
+      <td>LeBron James</td>    ← Row 3, Cell 1 (Data)
+      <td>$41,000,000</td>     ← Row 3, Cell 2 (Data)
+      <td>LA Lakers</td>       ← Row 3, Cell 2 (Data)
+    </tr>
+  </table>
+
+Visual result:
+
+  ┌─────────────────┬──────────────┬──────────────┐
+  │ Player Name     │ Salary       │ Team         │ ← Row 1 (Headers)
+  ├─────────────────┼──────────────┼──────────────┤
+  │ Michael Jordan  │ $33,000,000  │ Chicago Bulls│ ← Row 2 (Data)
+  │ LeBron James    │ $41,000,000  │ LA Lakers    │ ← Row 3 (Data)
+  └─────────────────┴──────────────┴──────────────┘
+
+HOW TO EXTRACT DATA FROM TABLES
+--------------------------------
+When scraping tables:
+
+1. FIND THE TABLE
+   • Locate the <table> element
+   • Identify which table contains your data
+
+2. EXTRACT HEADERS (OPTIONAL)
+   • Get the first <tr> with <th> elements
+   • These tell you what each column represents
+
+3. EXTRACT DATA ROWS
+   • Find all <tr> elements (skip header row if needed)
+   • For each row, extract all <td> elements
+   • Each <td> is a cell in that row
+
+4. ORGANIZE DATA
+   • Match cells to headers
+   • Create structured data (list of dictionaries, etc.)
+
+EXAMPLE: EXTRACTING TABLE DATA
+-------------------------------
+Given this table:
+
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Salary</th>
+    </tr>
+    <tr>
+      <td>Michael Jordan</td>
+      <td>$33,000,000</td>
+    </tr>
+    <tr>
+      <td>LeBron James</td>
+      <td>$41,000,000</td>
+    </tr>
+  </table>
+
+Extraction process:
+1. Find <table> element
+2. Find all <tr> elements → 3 rows (1 header + 2 data)
+3. For each data row (<tr>):
+   - Find all <td> elements in that row
+   - Extract text from each <td>
+4. Result:
+   - Row 1: ["Michael Jordan", "$33,000,000"]
+   - Row 2: ["LeBron James", "$41,000,000"]
+
+WHY UNDERSTANDING ROWS AND CELLS MATTERS
+----------------------------------------
+Understanding rows and cells matters because:
+
+1. SYSTEMATIC EXTRACTION
+   • Extract row by row
+   • Get all cells in each row
+   • Maintain data relationships
+
+2. COLUMN IDENTIFICATION
+   • Know which column is which
+   • Match data to headers
+   • Extract specific columns
+
+3. DATA INTEGRITY
+   • Each row = one record
+   • Cells in row = attributes of that record
+   • Maintain this structure when extracting
+
+4. HANDLING VARIATIONS
+   • Some rows might have different numbers of cells
+   • Handle missing cells gracefully
+   • Understand table structure variations
+
+[END SECTION 2.11]
+================================================================================
+
+SECTION 2.12: TABLE HEADERS (TH)
+----------------------------------
+
+DEFINITION
+----------
+You can also use a table header tag for the first row. Table headers use the 
+<th> tag and typically appear in the first row of a table to describe what 
+each column contains.
+
+DETAILED EXPLANATION
+--------------------
+Table headers are special cells that describe the content of each column. They 
+help users understand what data is in each column and are useful for scraping 
+because they tell you what each column represents.
+
+WHAT IS A TABLE HEADER?
+------------------------
+A table header uses the <th> tag:
+
+  <th>Column Name</th>
+
+Characteristics:
+• "th" stands for "table header"
+• Used for column headers
+• Usually in the first row
+• Displayed as bold by default
+• Describes what the column contains
+
+HEADERS VS. REGULAR CELLS
+--------------------------
+Difference between <th> and <td>:
+
+<th> (Table Header):
+  <th>Player Name</th>
+  • Used for headers
+  • Bold by default
+  • Describes column content
+  • Usually in first row
+
+<td> (Table Data):
+  <td>Michael Jordan</td>
+  • Used for data
+  • Regular text
+  • Contains actual data
+  • Used in data rows
+
+WHEN TO USE HEADERS
+-------------------
+Headers are typically used:
+• In the first row of a table
+• To label columns
+• To describe what data is in each column
+• For accessibility (screen readers use them)
+
+COMPLETE TABLE WITH HEADERS
+---------------------------
+Here's a complete table with headers:
+
+  <table>
+    <tr>
+      <th>Player Name</th>    ← Header: Column 1
+      <th>Salary</th>         ← Header: Column 2
+      <th>Team</th>          ← Header: Column 3
+    </tr>
+    <tr>
+      <td>Michael Jordan</td> ← Data: Column 1
+      <td>$33,000,000</td>    ← Data: Column 2
+      <td>Chicago Bulls</td>  ← Data: Column 3
+    </tr>
+    <tr>
+      <td>LeBron James</td>   ← Data: Column 1
+      <td>$41,000,000</td>    ← Data: Column 2
+      <td>LA Lakers</td>     ← Data: Column 3
+    </tr>
+  </table>
+
+Structure:
+• First <tr> contains <th> elements (headers)
+• Subsequent <tr> elements contain <td> elements (data)
+• Headers describe what's in each column
+• Data rows contain the actual information
+
+WHY HEADERS MATTER FOR SCRAPING
+--------------------------------
+Headers matter because:
+
+1. COLUMN IDENTIFICATION
+   • Headers tell you what each column contains
+   • "Player Name" column → extract names
+   • "Salary" column → extract salaries
+   • Makes extraction more reliable
+
+2. DYNAMIC EXTRACTION
+   • Find column by header name
+   • Not dependent on column position
+   • More flexible if column order changes
+
+3. DATA ORGANIZATION
+   • Match data to column names
+   • Create structured output
+   • Use headers as keys in dictionaries
+
+4. UNDERSTANDING STRUCTURE
+   • Headers reveal table purpose
+   • Understand what data is available
+   • Plan extraction strategy
+
+EXTRACTING HEADERS
+------------------
+When scraping, you might extract headers:
+
+  <tr>
+    <th>Player Name</th>
+    <th>Salary</th>
+    <th>Team</th>
+  </tr>
+
+Extraction:
+• Find first <tr>
+• Extract text from all <th> elements
+• Result: ["Player Name", "Salary", "Team"]
+
+USING HEADERS FOR DATA EXTRACTION
+----------------------------------
+You can use headers to organize extracted data:
+
+Headers: ["Player Name", "Salary", "Team"]
+Row 1: ["Michael Jordan", "$33,000,000", "Chicago Bulls"]
+Row 2: ["LeBron James", "$41,000,000", "LA Lakers"]
+
+Create structured data:
+[
+  {
+    "Player Name": "Michael Jordan",
+    "Salary": "$33,000,000",
+    "Team": "Chicago Bulls"
+  },
+  {
+    "Player Name": "LeBron James",
+    "Salary": "$41,000,000",
+    "Team": "LA Lakers"
+  }
+]
+
+This approach:
+• Uses headers as keys
+• Creates meaningful data structure
+• Makes data easier to work with
+• More maintainable
+
+[END SECTION 2.12]
+================================================================================
+
+END OF PART 2
+=============
+
+You have now learned:
+• The complete composition of HTML tags
+• Opening tags, closing tags, and content
+• HTML attributes and attribute values
+• How to inspect HTML in browsers
+• HTML document trees and hierarchical structure
+• Parent, child, descendant, and sibling relationships
+• HTML tables and their structure
+• Table rows (tr), cells (td), and headers (th)
+
+In Part 3, you will learn about:
+• Practical examples of HTML structure
+• How to prepare for data extraction
+• Summary of key concepts
+• Next steps for web scraping with Python
+
+Continue to Part 3 for practical applications and summary.
+
+================================================================================
