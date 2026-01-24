@@ -1,0 +1,1803 @@
+================================================================================
+TYPES IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+Welcome to Part 2 of "Types in Python". This part focuses on type conversion 
+(typecasting) - the process of converting data from one type to another. You'll 
+learn how to convert between integers, floats, strings, and booleans, when to 
+do it, and what to watch out for. You'll also learn about the Boolean type, 
+which represents True and False values, and how booleans interact with other types.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice and reflection)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what typecasting is and why it's useful
+• Convert integers to floats and vice versa
+• Convert strings to numbers (int and float)
+• Convert numbers to strings
+• Understand the Boolean type (bool) and its values
+• Convert between booleans and numbers
+• Recognize when type conversion happens automatically
+• Avoid common type conversion errors
+
+OVERVIEW
+--------
+You can change the type of the expression in Python, this is called typecasting. 
+Type conversion is essential when you need to perform operations between 
+different types or when you receive data in one format but need it in another. 
+Understanding typecasting helps you write more flexible and robust Python programs.
+
+This guide will walk you through:
+• What typecasting is and how it works
+• Converting integers to floats
+• Converting floats to integers (and what gets lost)
+• Converting strings to integers and floats
+• Converting numbers to strings
+• The Boolean type (True and False)
+• Boolean conversions and their uses
+• Common errors and how to avoid them
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: TYPE CONVERSION (TYPECASTING) AND BOOLEANS
+  SECTION 2.1: WHAT IS TYPECASTING?
+  SECTION 2.2: CONVERTING INT TO FLOAT
+  SECTION 2.3: CONVERTING FLOAT TO INT
+  SECTION 2.4: CONVERTING STRINGS TO NUMBERS
+  SECTION 2.5: CONVERTING NUMBERS TO STRINGS
+  SECTION 2.6: BOOLEAN TYPE (BOOL) - TRUE AND FALSE
+  SECTION 2.7: CONVERTING BOOLEANS TO NUMBERS
+  SECTION 2.8: CONVERTING NUMBERS TO BOOLEANS
+
+NOTE: Part 3 of this guide covers:
+  • Advanced type concepts
+  • Type checking and validation
+  • Other types in Python (lists, tuples, dictionaries, etc.)
+  • Type hints and annotations
+  • Best practices for working with types
+  • Summary and key takeaways
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 2.3:") to quickly jump to any section.
+
+================================================================================
+PART 2: TYPE CONVERSION (TYPECASTING) AND BOOLEANS
+================================================================================
+
+SECTION 2.1: WHAT IS TYPECASTING?
+----------------------------------
+
+DEFINITION
+----------
+You can change the type of the expression in Python, this is called typecasting.
+
+DETAILED EXPLANATION
+--------------------
+Typecasting (also called type conversion) is the process of converting a value 
+from one data type to another. It's like translating between different languages 
+- you're taking data in one format and converting it to another format that 
+Python can work with differently.
+
+REAL-WORLD ANALOGY
+------------------
+Think of typecasting like unit conversion:
+• You have 5 feet, but you need it in meters
+• You convert: 5 feet = 1.524 meters
+• Same value, different representation
+
+Or think of it like currency conversion:
+• You have $100 USD
+• You convert it to euros: €85
+• Same value, different currency (type)
+
+WHY TYPECASTING IS NEEDED
+-------------------------
+Typecasting is needed because:
+1. Different operations require different types
+   • You can't add a string and a number directly
+   • You need to convert one to match the other
+
+2. Data comes in different formats
+   • User input is always a string
+   • You might need it as a number for calculations
+
+3. You need to ensure correct types
+   • Sometimes you're not sure what type something is
+   • Converting ensures you have the right type
+
+4. You want to display numbers as text
+   • Numbers need to be converted to strings for display
+   • Or for creating formatted messages
+
+HOW TYPECASTING WORKS
+---------------------
+Typecasting uses type constructor functions:
+• int() - converts to integer
+• float() - converts to float
+• str() - converts to string
+• bool() - converts to boolean
+
+SYNTAX
+------
+The general syntax is:
+
+  target_type(value)
+
+WHERE:
+• target_type → The type you want (int, float, str, bool)
+• ( → Opening parenthesis
+• value → The value you want to convert
+• ) → Closing parenthesis
+
+EXAMPLE: BASIC TYPECASTING
+---------------------------
+  int(5.7)        # Converts float to int: 5
+  float(5)        # Converts int to float: 5.0
+  str(5)          # Converts int to string: "5"
+
+WHAT HAPPENS:
+1. Python sees the type constructor function (int, float, str)
+2. Python takes the value inside the parentheses
+3. Python converts it to the target type
+4. Python returns the converted value
+
+IMPORTANT NOTES
+---------------
+• Not all conversions are possible
+• Some conversions lose information
+• Some conversions cause errors
+• We'll cover each type of conversion in detail
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: CONVERTING INT TO FLOAT
+-------------------------------------
+
+DEFINITION
+----------
+You can convert an int to a float.
+
+DETAILED EXPLANATION
+--------------------
+Converting an integer to a float is straightforward and safe. When you convert 
+an integer to a float, you're essentially adding a decimal point (.0) to the 
+number. This conversion never loses information because every integer can be 
+represented exactly as a float.
+
+WHY CONVERT INT TO FLOAT?
+-------------------------
+You might convert int to float when:
+• You need to perform division that might result in decimals
+• You're working with functions that require floats
+• You want to ensure decimal precision in calculations
+• You're mixing int and float in operations
+
+HOW IT WORKS
+------------
+When you convert an integer to a float:
+• The integer value is preserved exactly
+• A decimal point (.0) is added
+• The type changes from int to float
+• No information is lost
+
+EXAMPLE 1: BASIC INT TO FLOAT CONVERSION
+-----------------------------------------
+You can convert or cast the integer 2 to a float 2.0.
+
+  float(2)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This is a type conversion expression:
+• float → The float() function that converts to float type
+• ( → Opening parenthesis that starts the function call
+• 2 → The integer value we want to convert
+• ) → Closing parenthesis that ends the function call
+
+WHAT HAPPENS:
+1. Python sees the float() function
+2. Python takes the integer value: 2
+3. Python converts it to float: 2.0
+4. Python returns: 2.0
+
+THE RESULT:
+The output will be: 2.0
+
+TYPE CHECKING:
+  type(float(2))    # Returns: <class 'float'>
+
+VERIFICATION:
+  float(2) == 2.0   # Returns: True (they represent the same value)
+
+EXAMPLE 2: CONVERTING NEGATIVE INTEGERS
+----------------------------------------
+  float(-5)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a negative integer:
+• float → The float() conversion function
+• ( → Opening parenthesis
+• -5 → The negative integer value
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the integer: -5
+2. Python converts it to float: -5.0
+3. Python returns: -5.0
+
+THE RESULT:
+The output will be: -5.0
+
+EXAMPLE 3: CONVERTING ZERO
+---------------------------
+  float(0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts zero:
+• float → The float() function
+• ( → Opening parenthesis
+• 0 → The integer zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the integer: 0
+2. Python converts it to float: 0.0
+3. Python returns: 0.0
+
+THE RESULT:
+The output will be: 0.0
+
+EXAMPLE 4: CONVERTING LARGE INTEGERS
+-------------------------------------
+  float(1000)
+  float(-999999)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+These convert large integers:
+• float(1000) → Converts 1000 to 1000.0
+• float(-999999) → Converts -999999 to -999999.0
+
+WHAT HAPPENS:
+1. Large integers are converted the same way as small ones
+2. The value is preserved exactly
+3. Only the type changes (int → float)
+
+THE RESULTS:
+  float(1000)      # Returns: 1000.0
+  float(-999999)   # Returns: -999999.0
+
+PRESERVATION OF VALUE
+---------------------
+Nothing really changes when converting int to float. This means:
+• The numeric value stays exactly the same
+• 2 becomes 2.0 (same value, different type)
+• -5 becomes -5.0 (same value, different type)
+• 0 becomes 0.0 (same value, different type)
+
+WHY NOTHING CHANGES
+-------------------
+The value doesn't change because:
+• Every integer can be represented exactly as a float
+• Integers are a subset of floats (mathematically)
+• No precision is lost in the conversion
+• The decimal part is always .0
+
+PRACTICAL EXAMPLES
+------------------
+EXAMPLE: MIXING INT AND FLOAT IN CALCULATIONS
+----------------------------------------------
+When you mix int and float, Python automatically converts:
+
+  5 + 2.5
+
+WHAT HAPPENS:
+1. Python sees int (5) and float (2.5)
+2. Python automatically converts 5 to 5.0
+3. Python performs: 5.0 + 2.5
+4. Python returns: 7.5 (type: float)
+
+EXPLICIT CONVERSION:
+  float(5) + 2.5    # Same result: 7.5
+
+EXAMPLE: ENSURING FLOAT RESULT
+-------------------------------
+If you want to ensure division results in a float:
+
+  10 / 2            # Result: 5.0 (already float)
+  float(10) / 2     # Result: 5.0 (explicit conversion)
+
+WHEN TO USE INT TO FLOAT CONVERSION
+------------------------------------
+Use int to float conversion when:
+• You need decimal precision in calculations
+• You're dividing and want float results
+• You're working with functions that require floats
+• You want to ensure consistent float types
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: CONVERTING FLOAT TO INT
+-------------------------------------
+
+DEFINITION
+----------
+If you cast a float to an integer, you must be careful. For example, if you 
+cast the float 1.1 to 1, you will lose some information.
+
+DETAILED EXPLANATION
+--------------------
+Converting a float to an integer is more complex than the reverse. When you 
+convert a float to an int, Python truncates (cuts off) the decimal part. This 
+means you lose the fractional portion of the number. This conversion can lose 
+information, so you must be careful when doing it.
+
+WHAT HAPPENS DURING CONVERSION
+------------------------------
+When you convert a float to an integer:
+• Python removes the decimal part (truncation)
+• The number is rounded DOWN (toward zero)
+• The type changes from float to int
+• Information is lost (the decimal part)
+
+TRUNCATION EXPLAINED
+--------------------
+Truncation means cutting off the decimal part:
+• 3.7 becomes 3 (not 4 - it's not rounding, it's truncating)
+• 3.9 becomes 3 (not 4)
+• 3.1 becomes 3
+• -3.7 becomes -3 (toward zero, not -4)
+
+IMPORTANT: Truncation is NOT the same as rounding!
+
+EXAMPLE 1: BASIC FLOAT TO INT CONVERSION
+-----------------------------------------
+If you cast the float 1.1 to 1, you will lose some information.
+
+  int(1.1)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This is a type conversion that loses information:
+• int → The int() function that converts to integer type
+• ( → Opening parenthesis that starts the function call
+• 1.1 → The float value we want to convert
+• ) → Closing parenthesis that ends the function call
+
+WHAT HAPPENS:
+1. Python sees the int() function
+2. Python takes the float value: 1.1
+3. Python truncates (removes) the decimal part: .1 is removed
+4. Python keeps only the integer part: 1
+5. Python returns: 1
+
+THE RESULT:
+The output will be: 1
+
+WHAT WAS LOST:
+• The original value was 1.1
+• The converted value is 1
+• The .1 (decimal part) was lost
+• Information was lost in the conversion
+
+VERIFICATION:
+  int(1.1) == 1.1   # Returns: False (they're not equal!)
+  int(1.1) == 1     # Returns: True (but information was lost)
+
+EXAMPLE 2: CONVERTING VARIOUS FLOATS
+-------------------------------------
+  int(2.0)          # Result: 2 (no loss, was already whole)
+  int(2.5)          # Result: 2 (lost .5)
+  int(2.9)          # Result: 2 (lost .9, NOT rounded to 3!)
+  int(3.7)          # Result: 3 (lost .7)
+  int(99.99)        # Result: 99 (lost .99)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Each conversion removes the decimal part:
+
+int(2.0):
+• Input: 2.0 (float)
+• Process: Remove .0
+• Output: 2 (int)
+• Loss: None (was already whole)
+
+int(2.5):
+• Input: 2.5 (float)
+• Process: Remove .5
+• Output: 2 (int)
+• Loss: 0.5 was lost
+
+int(2.9):
+• Input: 2.9 (float)
+• Process: Remove .9
+• Output: 2 (int)
+• Loss: 0.9 was lost
+• IMPORTANT: NOT rounded to 3! It's truncated to 2.
+
+int(3.7):
+• Input: 3.7 (float)
+• Process: Remove .7
+• Output: 3 (int)
+• Loss: 0.7 was lost
+
+int(99.99):
+• Input: 99.99 (float)
+• Process: Remove .99
+• Output: 99 (int)
+• Loss: 0.99 was lost
+
+EXAMPLE 3: NEGATIVE FLOATS
+---------------------------
+  int(-1.1)         # Result: -1 (lost .1, but kept negative)
+  int(-2.5)         # Result: -2 (lost .5, NOT -3!)
+  int(-2.9)         # Result: -2 (lost .9, NOT -3!)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Negative floats truncate toward zero:
+
+int(-1.1):
+• Input: -1.1 (float)
+• Process: Remove .1, keep -1
+• Output: -1 (int)
+• Loss: 0.1 was lost
+
+int(-2.5):
+• Input: -2.5 (float)
+• Process: Remove .5, keep -2 (toward zero)
+• Output: -2 (int)
+• Loss: 0.5 was lost
+• IMPORTANT: NOT -3! Truncation goes toward zero.
+
+int(-2.9):
+• Input: -2.9 (float)
+• Process: Remove .9, keep -2 (toward zero)
+• Output: -2 (int)
+• Loss: 0.9 was lost
+• IMPORTANT: NOT -3! Still truncates toward zero.
+
+UNDERSTANDING TRUNCATION VS ROUNDING
+-------------------------------------
+TRUNCATION (what int() does):
+• Cuts off the decimal part
+• Always goes toward zero
+• 2.9 → 2 (not 3)
+• -2.9 → -2 (not -3)
+
+ROUNDING (what round() does):
+• Rounds to nearest integer
+• Can go up or down
+• 2.9 → 3
+• 2.4 → 2
+
+COMPARISON:
+  int(2.9)          # Result: 2 (truncation)
+  round(2.9)        # Result: 3 (rounding)
+
+WHEN INFORMATION IS LOST
+------------------------
+Information is lost when:
+• The float has a non-zero decimal part
+• Examples: 1.1, 2.5, 3.7, 99.99
+• The decimal portion is permanently removed
+
+WHEN INFORMATION IS NOT LOST
+----------------------------
+Information is NOT lost when:
+• The float is already a whole number
+• Examples: 2.0, 5.0, 0.0
+• The decimal part is .0 (no actual decimal value)
+
+EXAMPLES:
+  int(2.0) == 2.0   # True (no loss, was already whole)
+  int(5.0) == 5.0   # True (no loss, was already whole)
+  int(1.1) == 1.1   # False (loss occurred, .1 was removed)
+
+WHEN TO USE FLOAT TO INT CONVERSION
+------------------------------------
+Use float to int conversion when:
+• You need whole numbers only
+• You're counting items (can't have half an item)
+• You're working with indices (must be integers)
+• You're okay with losing decimal precision
+• The decimal part is not important
+
+WHEN TO AVOID FLOAT TO INT CONVERSION
+-------------------------------------
+Avoid float to int conversion when:
+• You need precision (like money calculations)
+• The decimal part is important
+• You're doing scientific calculations
+• You need accurate measurements
+
+BEST PRACTICES
+--------------
+• Be aware that conversion loses information
+• Only convert when you're sure you don't need decimals
+• Consider using round() if you want rounding instead
+• Document why you're converting if it's not obvious
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: CONVERTING STRINGS TO NUMBERS
+-------------------------------------------
+
+DEFINITION
+----------
+If a string contains an integer value, you can convert it to int. If we convert 
+a string that contains a non-integer value, we get an error.
+
+DETAILED EXPLANATION
+--------------------
+Converting strings to numbers is very common in programming. User input, data 
+from files, and data from APIs often come as strings, but you need them as 
+numbers for calculations. Python can convert strings to numbers, but only if 
+the string contains a valid number representation.
+
+WHY CONVERT STRINGS TO NUMBERS?
+--------------------------------
+Strings to number conversion is needed because:
+1. User input is always a string
+   • When users type "25", it's the string "25", not the number 25
+   • You need to convert it to use it in calculations
+
+2. Data from files is often strings
+   • CSV files, text files contain numbers as text
+   • You need to convert them to perform operations
+
+3. Data from APIs comes as strings
+   • JSON data often has numbers as strings
+   • Conversion is needed for calculations
+
+HOW IT WORKS
+------------
+When converting strings to numbers:
+• Python reads the string character by character
+• Python checks if it's a valid number representation
+• If valid, Python converts it to the number type
+• If invalid, Python raises an error
+
+CONVERTING STRINGS TO INTEGERS
+-------------------------------
+If a string contains an integer value, you can convert it to int.
+
+EXAMPLE 1: VALID INTEGER STRING
+--------------------------------
+  int("11")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a string containing an integer:
+• int → The int() function that converts to integer
+• ( → Opening parenthesis
+• "11" → The string containing the number 11 (notice the quotes)
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the int() function
+2. Python takes the string: "11"
+3. Python reads the characters: '1' and '1'
+4. Python recognizes this as a valid integer representation
+5. Python converts it to integer: 11
+6. Python returns: 11
+
+THE RESULT:
+The output will be: 11 (type: int, not str)
+
+TYPE CHECKING:
+  type(int("11"))   # Returns: <class 'int'>
+
+VERIFICATION:
+  int("11") == 11   # Returns: True (same value)
+
+EXAMPLE 2: NEGATIVE INTEGER STRING
+-----------------------------------
+  int("-5")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a negative integer string:
+• int → The int() conversion function
+• ( → Opening parenthesis
+• "-5" → The string containing negative five
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads the string: "-5"
+2. Python recognizes the minus sign and the number
+3. Python converts it to integer: -5
+4. Python returns: -5
+
+THE RESULT:
+The output will be: -5 (type: int)
+
+EXAMPLE 3: ZERO AS STRING
+--------------------------
+  int("0")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts zero as a string:
+• int → The int() function
+• ( → Opening parenthesis
+• "0" → The string containing zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads the string: "0"
+2. Python recognizes it as zero
+3. Python converts it to integer: 0
+4. Python returns: 0
+
+THE RESULT:
+The output will be: 0 (type: int)
+
+CONVERTING STRINGS TO FLOATS
+-----------------------------
+You can also convert strings to floats:
+
+EXAMPLE 1: VALID FLOAT STRING
+------------------------------
+  float("21.213")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a string containing a float:
+• float → The float() function that converts to float
+• ( → Opening parenthesis
+• "21.213" → The string containing the decimal number
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads the string: "21.213"
+2. Python recognizes the decimal point
+3. Python converts it to float: 21.213
+4. Python returns: 21.213
+
+THE RESULT:
+The output will be: 21.213 (type: float)
+
+TYPE CHECKING:
+  type(float("21.213"))   # Returns: <class 'float'>
+
+EXAMPLE 2: INTEGER STRING TO FLOAT
+-----------------------------------
+  float("11")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts an integer string to float:
+• float → The float() function
+• ( → Opening parenthesis
+• "11" → The string containing 11
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads the string: "11"
+2. Python converts it to float: 11.0
+3. Python returns: 11.0
+
+THE RESULT:
+The output will be: 11.0 (type: float)
+
+WHAT HAPPENS WHEN CONVERSION FAILS
+-----------------------------------
+If we convert a string that contains a non-integer value, we get an error.
+
+EXAMPLE 1: INVALID STRING FOR INT
+-----------------------------------
+  int("hello")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This tries to convert a non-numeric string:
+• int → The int() function
+• ( → Opening parenthesis
+• "hello" → A string that doesn't contain a number
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the int() function
+2. Python reads the string: "hello"
+3. Python tries to find a number in "hello"
+4. Python finds no valid number representation
+5. Python raises an error: ValueError
+
+THE ERROR:
+  ValueError: invalid literal for int() with base 10: 'hello'
+
+WHAT THIS MEANS:
+• Python cannot convert "hello" to an integer
+• "hello" doesn't represent a number
+• The conversion failed
+
+EXAMPLE 2: FLOAT STRING TO INT (DIRECTLY)
+------------------------------------------
+  int("21.213")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This tries to convert a float string directly to int:
+• int → The int() function
+• ( → Opening parenthesis
+• "21.213" → A string containing a decimal number
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads the string: "21.213"
+2. Python sees a decimal point
+3. Python cannot convert directly to int (needs to be float first)
+4. Python raises an error: ValueError
+
+THE ERROR:
+  ValueError: invalid literal for int() with base 10: '21.213'
+
+WHAT THIS MEANS:
+• You can't convert a float string directly to int
+• You must convert to float first, then to int
+• Two-step process needed
+
+THE SOLUTION:
+  int(float("21.213"))   # First to float, then to int: 21
+
+STEP-BY-STEP:
+1. float("21.213") → 21.213 (float)
+2. int(21.213) → 21 (int, decimal removed)
+
+EXAMPLE 3: EMPTY STRING
+------------------------
+  int("")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This tries to convert an empty string:
+• int → The int() function
+• ( → Opening parenthesis
+• "" → An empty string (no characters)
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python reads an empty string
+2. Python finds no number to convert
+3. Python raises an error: ValueError
+
+THE ERROR:
+  ValueError: invalid literal for int() with base 10: ''
+
+COMMON ERRORS TO AVOID
+----------------------
+ERROR 1: Converting text strings
+  int("hello")        # ERROR: ValueError
+
+ERROR 2: Converting float strings directly to int
+  int("3.14")         # ERROR: ValueError
+  int(float("3.14"))  # CORRECT: 3
+
+ERROR 3: Converting empty strings
+  int("")             # ERROR: ValueError
+
+ERROR 4: Strings with spaces
+  int(" 5 ")          # ERROR: ValueError (has spaces)
+  int("5")            # CORRECT: 5
+
+VALID STRING FORMATS FOR CONVERSION
+-----------------------------------
+VALID FOR INT:
+• "11" → 11
+• "-5" → -5
+• "0" → 0
+• "999" → 999
+
+VALID FOR FLOAT:
+• "21.213" → 21.213
+• "-3.14" → -3.14
+• "5.0" → 5.0
+• "0.0" → 0.0
+
+INVALID:
+• "hello" → ERROR
+• "3.14" (for int) → ERROR (use float first)
+• "" → ERROR
+• " 5 " → ERROR (spaces not allowed)
+
+PRACTICAL EXAMPLES
+------------------
+EXAMPLE: USER INPUT CONVERSION
+-------------------------------
+When users enter data, it comes as a string:
+
+  user_age = input("Enter your age: ")  # User types "25"
+  # user_age is the string "25", not the number 25
+  
+  age = int(user_age)  # Convert to integer: 25
+  # Now age is the integer 25
+  
+  next_year = age + 1  # Can do math: 26
+
+EXAMPLE: CALCULATING WITH STRING NUMBERS
+----------------------------------------
+  price_str = "19.99"        # String from file or API
+  price = float(price_str)   # Convert to float: 19.99
+  total = price * 2          # Can calculate: 39.98
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: CONVERTING NUMBERS TO STRINGS
+-------------------------------------------
+
+DEFINITION
+----------
+You can convert an int to a string or a float to a string.
+
+DETAILED EXPLANATION
+--------------------
+Converting numbers to strings is essential when you need to display numbers as 
+text, combine numbers with text in messages, or write numbers to files. Python 
+makes this conversion straightforward using the str() function.
+
+WHY CONVERT NUMBERS TO STRINGS?
+-------------------------------
+Numbers to string conversion is needed because:
+1. Displaying numbers in messages
+   • "Your age is " + 25 → ERROR (can't add string and int)
+   • "Your age is " + str(25) → "Your age is 25" (works!)
+
+2. Writing numbers to files
+   • Files store text, not numbers
+   • Numbers must be converted to strings first
+
+3. Formatting output
+   • Creating formatted messages with numbers
+   • Building strings that include numeric values
+
+HOW IT WORKS
+------------
+When converting numbers to strings:
+• Python takes the numeric value
+• Python converts it to its text representation
+• The type changes from number to string
+• No information is lost (the value is preserved as text)
+
+CONVERTING INT TO STRING
+------------------------
+You can convert an int to a string.
+
+EXAMPLE 1: BASIC INT TO STRING
+--------------------------------
+  str(11)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts an integer to a string:
+• str → The str() function that converts to string
+• ( → Opening parenthesis
+• 11 → The integer value we want to convert
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the str() function
+2. Python takes the integer: 11
+3. Python converts it to its string representation: "11"
+4. Python returns: "11"
+
+THE RESULT:
+The output will be: "11" (type: str, not int)
+
+TYPE CHECKING:
+  type(str(11))   # Returns: <class 'str'>
+
+VERIFICATION:
+  str(11) == "11"  # Returns: True (same text representation)
+
+EXAMPLE 2: NEGATIVE INT TO STRING
+----------------------------------
+  str(-5)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a negative integer:
+• str → The str() function
+• ( → Opening parenthesis
+• -5 → The negative integer
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the integer: -5
+2. Python converts it to string: "-5"
+3. Python returns: "-5"
+
+THE RESULT:
+The output will be: "-5" (type: str)
+
+EXAMPLE 3: ZERO TO STRING
+--------------------------
+  str(0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts zero:
+• str → The str() function
+• ( → Opening parenthesis
+• 0 → The integer zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the integer: 0
+2. Python converts it to string: "0"
+3. Python returns: "0"
+
+THE RESULT:
+The output will be: "0" (type: str)
+
+CONVERTING FLOAT TO STRING
+---------------------------
+You can convert a float to a string.
+
+EXAMPLE 1: BASIC FLOAT TO STRING
+----------------------------------
+  str(21.213)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a float to a string:
+• str → The str() function
+• ( → Opening parenthesis
+• 21.213 → The float value we want to convert
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the str() function
+2. Python takes the float: 21.213
+3. Python converts it to its string representation: "21.213"
+4. Python returns: "21.213"
+
+THE RESULT:
+The output will be: "21.213" (type: str)
+
+TYPE CHECKING:
+  type(str(21.213))   # Returns: <class 'str'>
+
+EXAMPLE 2: WHOLE NUMBER FLOAT TO STRING
+----------------------------------------
+  str(2.0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts a whole number float:
+• str → The str() function
+• ( → Opening parenthesis
+• 2.0 → The float value (whole number as float)
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the float: 2.0
+2. Python converts it to string: "2.0"
+3. Python returns: "2.0"
+
+THE RESULT:
+The output will be: "2.0" (type: str)
+
+NOTICE:
+• The .0 is preserved in the string
+• "2.0" is different from "2" (both are strings, but different text)
+
+PRACTICAL EXAMPLES
+------------------
+EXAMPLE 1: CREATING MESSAGES WITH NUMBERS
+------------------------------------------
+  age = 25
+  message = "I am " + str(age) + " years old"
+  # Result: "I am 25 years old"
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This creates a message combining text and numbers:
+• age = 25 → Integer variable
+• "I am " → String literal (text)
+• + → String concatenation operator
+• str(age) → Converts 25 to "25"
+• + → String concatenation operator
+• " years old" → String literal (text)
+• message → Contains the combined string
+
+WHAT HAPPENS:
+1. str(age) converts 25 to "25"
+2. "I am " + "25" = "I am 25"
+3. "I am 25" + " years old" = "I am 25 years old"
+4. message stores the final string
+
+WHY STR() IS NEEDED:
+Without str(), this would fail:
+  "I am " + 25  # ERROR: can't concatenate str and int
+
+With str(), it works:
+  "I am " + str(25)  # Works: "I am 25"
+
+EXAMPLE 2: FORMATTING PRICES
+-----------------------------
+  price = 19.99
+  display = "$" + str(price)
+  # Result: "$19.99"
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This formats a price for display:
+• price = 19.99 → Float variable
+• "$" → String with dollar sign
+• + → String concatenation
+• str(price) → Converts 19.99 to "19.99"
+• display → Contains "$19.99"
+
+WHAT HAPPENS:
+1. str(price) converts 19.99 to "19.99"
+2. "$" + "19.99" = "$19.99"
+3. display stores the formatted string
+
+EXAMPLE 3: BUILDING COMPLEX MESSAGES
+-------------------------------------
+  count = 5
+  total = 99.50
+  summary = "You have " + str(count) + " items totaling $" + str(total)
+  # Result: "You have 5 items totaling $99.5"
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This builds a complex message with multiple numbers:
+• count = 5 → Integer
+• total = 99.50 → Float
+• "You have " → String
+• + → Concatenation
+• str(count) → "5"
+• + → Concatenation
+• " items totaling $" → String
+• + → Concatenation
+• str(total) → "99.5"
+• summary → Final combined string
+
+WHAT HAPPENS:
+1. str(count) → "5"
+2. str(total) → "99.5"
+3. All parts concatenated: "You have 5 items totaling $99.5"
+
+WHEN TO USE NUMBER TO STRING CONVERSION
+----------------------------------------
+Use number to string conversion when:
+• Displaying numbers in user messages
+• Writing numbers to text files
+• Building formatted output strings
+• Combining numbers with text
+• Creating file names with numbers
+• Logging numeric values as text
+
+IMPORTANT NOTES
+---------------
+• Converting numbers to strings never fails (unlike string to number)
+• All numeric values can be represented as strings
+• The string representation preserves the value as text
+• Once converted to string, you can't do math (it's text, not a number)
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: BOOLEAN TYPE (BOOL) - TRUE AND FALSE
+---------------------------------------------------
+
+DEFINITION
+----------
+Boolean is another important type in Python. A Boolean can take on two values. 
+The first value is True, just remember we use an uppercase T. Boolean values can 
+also be False with an uppercase F.
+
+DETAILED EXPLANATION
+--------------------
+Boolean (bool) is a fundamental data type that represents truth values. It can 
+only have two possible values: True or False. Booleans are essential for 
+decision-making in programs - they control if statements, loops, and logical 
+operations. The name "Boolean" comes from George Boole, a mathematician who 
+developed Boolean algebra.
+
+WHAT IS A BOOLEAN?
+------------------
+A Boolean is:
+• A data type with only two possible values
+• True (representing truth, yes, on, 1)
+• False (representing falsehood, no, off, 0)
+• Used for logical operations and decision-making
+
+REAL-WORLD ANALOGY
+------------------
+Think of booleans like a light switch:
+• True = Light is ON
+• False = Light is OFF
+• Only two states possible
+
+Or think of them like yes/no questions:
+• "Is it raining?" → True or False
+• "Are you ready?" → True or False
+• "Is 5 greater than 3?" → True
+
+WHY BOOLEANS MATTER
+-------------------
+Booleans are important because:
+1. They control program flow
+   • if statements use booleans
+   • while loops use booleans
+   • Logical operations return booleans
+
+2. They represent conditions
+   • "Is this true?" → Boolean answer
+   • "Should I do this?" → Boolean decision
+
+3. They enable decision-making
+   • Programs make choices based on boolean values
+   • Different code runs based on True/False
+
+THE TWO BOOLEAN VALUES
+----------------------
+A Boolean can take on two values.
+
+VALUE 1: TRUE
+-------------
+The first value is True, just remember we use an uppercase T.
+
+WHAT THIS MEANS:
+• True is a keyword in Python (not a string)
+• The T must be uppercase: True (correct)
+• Not true (incorrect - lowercase)
+• Not TRUE (incorrect - all uppercase)
+• Not "True" (incorrect - that's a string, not a boolean)
+
+EXAMPLE:
+  True
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This is the boolean value True:
+• True → The boolean literal representing truth
+• No quotes around it (it's not a string)
+• Capital T, lowercase rest: True
+
+WHAT THIS REPRESENTS:
+• Truth, yes, on, positive, affirmative
+• Used when a condition is met
+• Used when something is correct
+
+VALUE 2: FALSE
+--------------
+Boolean values can also be False with an uppercase F.
+
+WHAT THIS MEANS:
+• False is also a keyword in Python
+• The F must be uppercase: False (correct)
+• Not false (incorrect - lowercase)
+• Not FALSE (incorrect - all uppercase)
+• Not "False" (incorrect - that's a string)
+
+EXAMPLE:
+  False
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This is the boolean value False:
+• False → The boolean literal representing falsehood
+• No quotes around it (it's not a string)
+• Capital F, lowercase rest: False
+
+WHAT THIS REPRESENTS:
+• Falsehood, no, off, negative, negative
+• Used when a condition is not met
+• Used when something is incorrect
+
+CHECKING BOOLEAN TYPE
+---------------------
+Using the type command on a Boolean value, we obtain the term bool. This is 
+short for Boolean.
+
+EXAMPLE 1: CHECKING TRUE TYPE
+------------------------------
+  type(True)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This checks the type of True:
+• type → The type() function
+• ( → Opening parenthesis
+• True → The boolean value True
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the type() function
+2. Python evaluates True (the boolean value)
+3. Python identifies it as type bool
+4. Python returns: <class 'bool'>
+
+THE RESULT:
+The output will be: <class 'bool'>
+
+WHAT THIS MEANS:
+• <class 'bool'> means the value is of type bool
+• Bool is short for Boolean
+• This confirms True is a boolean
+
+EXAMPLE 2: CHECKING FALSE TYPE
+--------------------------------
+  type(False)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This checks the type of False:
+• type → The type() function
+• ( → Opening parenthesis
+• False → The boolean value False
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python evaluates False
+2. Python identifies it as type bool
+3. Python returns: <class 'bool'>
+
+THE RESULT:
+The output will be: <class 'bool'>
+
+USING BOOLEANS IN CODE
+----------------------
+EXAMPLE 1: BOOLEAN VARIABLES
+-----------------------------
+  is_ready = True
+  is_complete = False
+  
+  type(is_ready)      # Returns: <class 'bool'>
+  type(is_complete)   # Returns: <class 'bool'>
+
+EXAMPLE 2: BOOLEANS IN CONDITIONS
+----------------------------------
+  age = 25
+  is_adult = age >= 18  # Result: True (25 >= 18)
+  
+  if is_adult:
+      print("You are an adult")
+
+EXAMPLE 3: COMPARISON OPERATIONS RETURN BOOLEANS
+------------------------------------------------
+  5 > 3        # Returns: True
+  5 < 3        # Returns: False
+  5 == 5       # Returns: True
+  5 != 5       # Returns: False
+
+COMMON BOOLEAN OPERATIONS
+-------------------------
+LOGICAL OPERATORS:
+  True and True    # Returns: True
+  True and False   # Returns: False
+  True or False    # Returns: True
+  not True         # Returns: False
+
+COMPARISON OPERATORS (return booleans):
+  5 == 5       # Returns: True
+  5 != 3       # Returns: True
+  5 > 3        # Returns: True
+  5 < 3        # Returns: False
+
+WHEN TO USE BOOLEANS
+--------------------
+Use booleans when:
+• You need to represent yes/no states
+• You're making decisions in code
+• You're checking conditions
+• You're controlling program flow
+• You're representing on/off states
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: CONVERTING BOOLEANS TO NUMBERS
+--------------------------------------------
+
+DEFINITION
+----------
+If we cast a Boolean True to an integer or float, we will get a 1. If we cast 
+a Boolean False to an integer or float, we get a 0.
+
+DETAILED EXPLANATION
+--------------------
+Converting booleans to numbers is useful when you need numeric representations 
+of truth values. Python follows a simple rule: True becomes 1, False becomes 0. 
+This conversion works for both integers and floats.
+
+WHY CONVERT BOOLEANS TO NUMBERS?
+--------------------------------
+Boolean to number conversion is useful when:
+1. You need to count true/false values
+   • Count how many items meet a condition
+   • Sum up boolean results
+
+2. You're doing mathematical operations
+   • Multiply by 1 or 0 based on condition
+   • Use in formulas
+
+3. You're working with APIs that expect numbers
+   • Some systems use 1/0 instead of True/False
+
+HOW IT WORKS
+------------
+The conversion rule is simple:
+• True → 1 (in both int and float)
+• False → 0 (in both int and float)
+
+CONVERTING TRUE TO INTEGER
+---------------------------
+If we cast a Boolean True to an integer or float, we will get a 1.
+
+EXAMPLE 1: TRUE TO INTEGER
+---------------------------
+  int(True)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts True to an integer:
+• int → The int() function
+• ( → Opening parenthesis
+• True → The boolean value True
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the int() function
+2. Python takes the boolean: True
+3. Python converts True to integer: 1
+4. Python returns: 1
+
+THE RESULT:
+The output will be: 1 (type: int)
+
+TYPE CHECKING:
+  type(int(True))   # Returns: <class 'int'>
+
+VERIFICATION:
+  int(True) == 1    # Returns: True
+
+CONVERTING TRUE TO FLOAT
+-------------------------
+  float(True)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts True to a float:
+• float → The float() function
+• ( → Opening parenthesis
+• True → The boolean value True
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes True
+2. Python converts it to float: 1.0
+3. Python returns: 1.0
+
+THE RESULT:
+The output will be: 1.0 (type: float)
+
+TYPE CHECKING:
+  type(float(True))   # Returns: <class 'float'>
+
+VERIFICATION:
+  float(True) == 1.0  # Returns: True
+
+CONVERTING FALSE TO INTEGER
+----------------------------
+If we cast a Boolean False to an integer or float, we get a 0.
+
+EXAMPLE 1: FALSE TO INTEGER
+----------------------------
+  int(False)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts False to an integer:
+• int → The int() function
+• ( → Opening parenthesis
+• False → The boolean value False
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the int() function
+2. Python takes the boolean: False
+3. Python converts False to integer: 0
+4. Python returns: 0
+
+THE RESULT:
+The output will be: 0 (type: int)
+
+TYPE CHECKING:
+  type(int(False))   # Returns: <class 'int'>
+
+VERIFICATION:
+  int(False) == 0    # Returns: True
+
+CONVERTING FALSE TO FLOAT
+--------------------------
+  float(False)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts False to a float:
+• float → The float() function
+• ( → Opening parenthesis
+• False → The boolean value False
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes False
+2. Python converts it to float: 0.0
+3. Python returns: 0.0
+
+THE RESULT:
+The output will be: 0.0 (type: float)
+
+TYPE CHECKING:
+  type(float(False))   # Returns: <class 'float'>
+
+VERIFICATION:
+  float(False) == 0.0  # Returns: True
+
+SUMMARY OF BOOLEAN TO NUMBER CONVERSION
+----------------------------------------
+TRUE CONVERSIONS:
+  int(True)      # Returns: 1
+  float(True)    # Returns: 1.0
+
+FALSE CONVERSIONS:
+  int(False)     # Returns: 0
+  float(False)   # Returns: 0.0
+
+THE PATTERN:
+• True always becomes 1 (or 1.0)
+• False always becomes 0 (or 0.0)
+• This is consistent and predictable
+
+PRACTICAL EXAMPLES
+------------------
+EXAMPLE 1: COUNTING TRUE VALUES
+--------------------------------
+  results = [True, False, True, True, False]
+  count = sum(int(x) for x in results)  # Converts and sums: 3
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This counts how many True values:
+• results → List of booleans
+• int(x) → Converts each boolean to int (True→1, False→0)
+• sum() → Adds up all the 1s and 0s
+• count → Total number of True values
+
+WHAT HAPPENS:
+1. True → 1, False → 0, True → 1, True → 1, False → 0
+2. Sum: 1 + 0 + 1 + 1 + 0 = 3
+3. count = 3 (three True values)
+
+EXAMPLE 2: USING IN CALCULATIONS
+---------------------------------
+  is_premium = True
+  base_price = 100
+  premium_fee = int(is_premium) * 20  # 1 * 20 = 20
+  total = base_price + premium_fee     # 100 + 20 = 120
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This uses boolean conversion in a calculation:
+• is_premium = True → Boolean variable
+• base_price = 100 → Base price
+• int(is_premium) → Converts True to 1
+• * 20 → Multiplies by 20 (1 * 20 = 20)
+• premium_fee → 20
+• total → 100 + 20 = 120
+
+WHAT HAPPENS:
+1. int(True) = 1
+2. 1 * 20 = 20
+3. 100 + 20 = 120
+
+[END SECTION 2.7]
+================================================================================
+
+SECTION 2.8: CONVERTING NUMBERS TO BOOLEANS
+--------------------------------------------
+
+DEFINITION
+----------
+If you cast a 1 to a Boolean, you get a True. Similarly, if you cast a 0 to a 
+Boolean, you get a False.
+
+DETAILED EXPLANATION
+--------------------
+Converting numbers to booleans is the reverse of boolean to number conversion. 
+Python has specific rules: 0 and 0.0 become False, and any non-zero number 
+becomes True. However, the most common conversions are 1→True and 0→False.
+
+WHY CONVERT NUMBERS TO BOOLEANS?
+--------------------------------
+Number to boolean conversion is useful when:
+1. You need to check if a number is non-zero
+   • "Is there a value?" → Boolean answer
+   • "Is the count greater than zero?" → Boolean
+
+2. You're working with flags or states
+   • 1 means enabled, 0 means disabled
+   • Convert to True/False for clarity
+
+3. You're simplifying conditions
+   • Instead of checking "if count > 0"
+   • You can use "if bool(count)"
+
+HOW IT WORKS
+------------
+The conversion rules:
+• 0 → False
+• 0.0 → False
+• Any non-zero number → True
+• 1 → True (most common)
+• -1 → True (any non-zero)
+• 100 → True (any non-zero)
+
+CONVERTING 1 TO BOOLEAN
+-----------------------
+If you cast a 1 to a Boolean, you get a True.
+
+EXAMPLE 1: INTEGER 1 TO BOOLEAN
+---------------------------------
+  bool(1)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts the integer 1 to boolean:
+• bool → The bool() function
+• ( → Opening parenthesis
+• 1 → The integer value one
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the bool() function
+2. Python takes the integer: 1
+3. Python converts 1 to boolean: True
+4. Python returns: True
+
+THE RESULT:
+The output will be: True (type: bool)
+
+TYPE CHECKING:
+  type(bool(1))   # Returns: <class 'bool'>
+
+VERIFICATION:
+  bool(1) == True  # Returns: True
+
+EXAMPLE 2: FLOAT 1.0 TO BOOLEAN
+--------------------------------
+  bool(1.0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts the float 1.0 to boolean:
+• bool → The bool() function
+• ( → Opening parenthesis
+• 1.0 → The float value one point zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the float: 1.0
+2. Python converts 1.0 to boolean: True
+3. Python returns: True
+
+THE RESULT:
+The output will be: True (type: bool)
+
+VERIFICATION:
+  bool(1.0) == True  # Returns: True
+
+CONVERTING 0 TO BOOLEAN
+------------------------
+Similarly, if you cast a 0 to a Boolean, you get a False.
+
+EXAMPLE 1: INTEGER 0 TO BOOLEAN
+--------------------------------
+  bool(0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts the integer 0 to boolean:
+• bool → The bool() function
+• ( → Opening parenthesis
+• 0 → The integer value zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python sees the bool() function
+2. Python takes the integer: 0
+3. Python converts 0 to boolean: False
+4. Python returns: False
+
+THE RESULT:
+The output will be: False (type: bool)
+
+TYPE CHECKING:
+  type(bool(0))   # Returns: <class 'bool'>
+
+VERIFICATION:
+  bool(0) == False  # Returns: True
+
+EXAMPLE 2: FLOAT 0.0 TO BOOLEAN
+--------------------------------
+  bool(0.0)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This converts the float 0.0 to boolean:
+• bool → The bool() function
+• ( → Opening parenthesis
+• 0.0 → The float value zero point zero
+• ) → Closing parenthesis
+
+WHAT HAPPENS:
+1. Python takes the float: 0.0
+2. Python converts 0.0 to boolean: False
+3. Python returns: False
+
+THE RESULT:
+The output will be: False (type: bool)
+
+VERIFICATION:
+  bool(0.0) == False  # Returns: True
+
+OTHER NUMBER TO BOOLEAN CONVERSIONS
+------------------------------------
+While 1→True and 0→False are the most common, any non-zero number becomes True:
+
+EXAMPLE 1: POSITIVE NUMBERS
+----------------------------
+  bool(5)        # Returns: True (non-zero)
+  bool(100)      # Returns: True (non-zero)
+  bool(3.14)     # Returns: True (non-zero)
+  bool(0.1)      # Returns: True (non-zero, even small)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+All non-zero numbers become True:
+• bool(5) → True (5 is not zero)
+• bool(100) → True (100 is not zero)
+• bool(3.14) → True (3.14 is not zero)
+• bool(0.1) → True (0.1 is not zero, even though small)
+
+THE RULE:
+Any number that is not exactly 0 or 0.0 becomes True.
+
+EXAMPLE 2: NEGATIVE NUMBERS
+----------------------------
+  bool(-1)       # Returns: True (non-zero)
+  bool(-100)     # Returns: True (non-zero)
+  bool(-3.14)    # Returns: True (non-zero)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Negative numbers also become True:
+• bool(-1) → True (-1 is not zero)
+• bool(-100) → True (-100 is not zero)
+• bool(-3.14) → True (-3.14 is not zero)
+
+THE RULE:
+The sign doesn't matter - only whether it's zero or not.
+
+SUMMARY OF NUMBER TO BOOLEAN CONVERSION
+----------------------------------------
+ZERO VALUES (become False):
+  bool(0)        # Returns: False
+  bool(0.0)      # Returns: False
+
+NON-ZERO VALUES (become True):
+  bool(1)        # Returns: True
+  bool(1.0)      # Returns: True
+  bool(5)        # Returns: True
+  bool(-1)       # Returns: True
+  bool(0.1)      # Returns: True
+
+THE PATTERN:
+• Zero (0 or 0.0) → False
+• Any non-zero number → True
+• Sign doesn't matter, only whether it's zero
+
+PRACTICAL EXAMPLES
+------------------
+EXAMPLE 1: CHECKING IF COUNT IS NON-ZERO
+-----------------------------------------
+  count = 5
+  has_items = bool(count)  # True (count is non-zero)
+  
+  if has_items:
+      print("There are items")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+This checks if count is non-zero:
+• count = 5 → Integer variable
+• bool(count) → Converts 5 to True
+• has_items → True
+• if has_items → Condition is True, so code runs
+
+EXAMPLE 2: SIMPLIFYING CONDITIONS
+----------------------------------
+Instead of:
+  if count > 0:
+      print("Has items")
+
+You can use:
+  if bool(count):
+      print("Has items")
+
+Both work the same way when count is a number.
+
+THE RELATIONSHIP BETWEEN BOOLEANS AND NUMBERS
+---------------------------------------------
+The conversions work both ways:
+
+BOOLEAN → NUMBER:
+  int(True)   → 1
+  int(False)  → 0
+  float(True) → 1.0
+  float(False) → 0.0
+
+NUMBER → BOOLEAN:
+  bool(1)     → True
+  bool(0)     → False
+  bool(1.0)   → True
+  bool(0.0)   → False
+
+ROUND-TRIP CONVERSION:
+  bool(int(True))   → True (True → 1 → True)
+  int(bool(1))      → 1 (1 → True → 1)
+
+[END SECTION 2.8]
+================================================================================
+
+END OF PART 2
+=============
+
+You have now learned about:
+• What typecasting is and how it works
+• Converting integers to floats (and vice versa)
+• Converting strings to numbers (with error handling)
+• Converting numbers to strings
+• The Boolean type (True and False)
+• Converting between booleans and numbers
+
+In Part 3, you will learn about:
+• Advanced type concepts
+• Type checking and validation
+• Other types in Python
+• Best practices for working with types
+• Summary and key takeaways
+
+Continue to Part 3 for more comprehensive coverage of types in Python.
+
+================================================================================
