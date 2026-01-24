@@ -1,0 +1,1673 @@
+================================================================================
+CONDITIONS AND BRANCHING IN PYTHON
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+Welcome to Part 3 of Conditions and Branching in Python. This final part 
+focuses on logic operators that allow you to combine and manipulate Boolean 
+values to create complex conditions.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what logic operators are and how they work
+• Use the not operator to negate Boolean values
+• Use the or operator to check if any condition is True
+• Use the and operator to check if all conditions are True
+• Combine multiple logic operators in complex expressions
+• Understand truth tables and Boolean logic
+• Apply logic operators to real-world problems
+• Write efficient and readable conditional expressions
+
+OVERVIEW
+--------
+Logic operations take Boolean values and produce different Boolean values. 
+They allow you to combine multiple conditions, negate conditions, and create 
+complex decision logic. Python provides three main logic operators:
+
+1. not - Negates a Boolean value (True becomes False, False becomes True)
+2. or - Returns True if at least one condition is True
+3. and - Returns True only if all conditions are True
+
+These operators are fundamental to creating sophisticated conditional logic 
+that can handle multiple criteria and complex decision-making scenarios.
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+This part covers logic operators:
+
+PART 3: LOGIC OPERATORS
+  SECTION 3.1: INTRODUCTION TO LOGIC OPERATORS
+  SECTION 3.2: THE NOT OPERATOR
+  SECTION 3.3: THE OR OPERATOR
+  SECTION 3.4: THE AND OPERATOR
+  SECTION 3.5: COMBINING LOGIC OPERATORS
+  SECTION 3.6: TRUTH TABLES AND BOOLEAN LOGIC
+  SECTION 3.7: REAL-WORLD EXAMPLES WITH LOGIC OPERATORS
+  SECTION 3.8: OPERATOR PRECEDENCE AND BEST PRACTICES
+
+NOTE: Part 1 covered comparison operations and Boolean values.
+      Part 2 covered conditional statements (if, else, elif).
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 3.3:") to quickly jump to any section.
+
+================================================================================
+PART 3: LOGIC OPERATORS
+================================================================================
+
+SECTION 3.1: INTRODUCTION TO LOGIC OPERATORS
+----------------------------------------------
+
+DEFINITION
+----------
+Logic operations take Boolean values and produce different Boolean values. 
+They allow you to combine, negate, and manipulate conditions to create 
+complex decision logic.
+
+DETAILED EXPLANATION
+--------------------
+Logic operators are special operators that work with Boolean values (True 
+and False). They enable you to:
+• Combine multiple conditions
+• Negate conditions
+• Create complex decision trees
+• Simplify conditional logic
+
+Think of logic operators as tools for building more sophisticated conditions 
+than simple comparisons. Instead of checking just one condition, you can 
+check multiple conditions at once and determine the result based on logical 
+rules.
+
+REAL-WORLD ANALOGY
+------------------
+Think of logic operators like decision-making rules:
+
+• NOT: "If it's NOT raining, we can have a picnic"
+• OR: "If it's sunny OR warm, we can go outside"
+• AND: "If you have a ticket AND an ID, you can enter"
+
+These operators help combine simple yes/no questions into more complex 
+decision-making processes.
+
+THE THREE LOGIC OPERATORS
+--------------------------
+Python provides three logic operators:
+
+1. not - Negation operator
+   • Reverses a Boolean value
+   • True becomes False, False becomes True
+
+2. or - Disjunction operator
+   • Returns True if at least one condition is True
+   • Returns False only if all conditions are False
+
+3. and - Conjunction operator
+   • Returns True only if all conditions are True
+   • Returns False if any condition is False
+
+WHY ARE LOGIC OPERATORS IMPORTANT?
+-----------------------------------
+Logic operators are essential because:
+1. They allow combining multiple conditions
+2. They enable complex decision-making
+3. They make code more readable and concise
+4. They are fundamental to Boolean algebra
+5. They are used in virtually all programming languages
+
+EXAMPLE: SIMPLE LOGIC OPERATOR USAGE
+-------------------------------------
+  # Simple examples
+  is_raining = True
+  is_sunny = False
+  
+  # Using not operator
+  not_raining = not is_raining
+  print("Is it not raining?", not_raining)  # Output: False
+  
+  # Using or operator
+  good_weather = is_raining or is_sunny
+  print("Is weather good?", good_weather)  # Output: True
+  
+  # Using and operator
+  perfect_day = is_sunny and not is_raining
+  print("Is it a perfect day?", perfect_day)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Simple examples
+        • Comment
+
+Line 2: is_raining = True
+        • Stores True in is_raining
+
+Line 3: is_sunny = False
+        • Stores False in is_sunny
+
+Line 4: (blank line)
+
+Line 5: # Using not operator
+        • Comment
+
+Line 6: not_raining = not is_raining
+        • not - Logic operator that negates
+        • not is_raining - Negates True, becomes False
+        • Stores False in not_raining
+
+Line 7: print("Is it not raining?", not_raining)
+        • Output: Is it not raining? False
+
+Line 8: (blank line)
+
+Line 9: # Using or operator
+        • Comment
+
+Line 10: good_weather = is_raining or is_sunny
+         • or - Logic operator
+         • is_raining or is_sunny - True or False
+         • Since at least one is True, result is True
+         • Stores True in good_weather
+
+Line 11: print("Is weather good?", good_weather)
+         • Output: Is weather good? True
+
+Line 12: (blank line)
+
+Line 13: # Using and operator
+         • Comment
+
+Line 14: perfect_day = is_sunny and not is_raining
+         • and - Logic operator
+         • is_sunny and not is_raining - False and True
+         • Since both must be True, result is False
+         • Stores False in perfect_day
+
+Line 15: print("Is it a perfect day?", perfect_day)
+         • Output: Is it a perfect day? False
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: THE NOT OPERATOR
+------------------------------
+
+DEFINITION
+----------
+The not operator negates a Boolean value. If the input is True, the result 
+is False. If the input is False, the result is True.
+
+DETAILED EXPLANATION
+--------------------
+The not operator is a unary operator (it operates on a single value). It 
+simply reverses the truth value of a Boolean expression. It's like saying 
+"the opposite of" or "it is not the case that."
+
+SYNTAX
+------
+  not condition
+
+This returns:
+• True if condition is False
+• False if condition is True
+
+KEY POINTS
+----------
+• not is a unary operator (works on one value)
+• It reverses the Boolean value
+• Can be used with variables, comparisons, or other Boolean expressions
+• Often used to make code more readable
+• Can be combined with other logic operators
+
+REAL-WORLD ANALOGY
+------------------
+Think of the not operator like a light switch:
+• If the light is ON (True), not makes it OFF (False)
+• If the light is OFF (False), not makes it ON (True)
+
+Or like answering the opposite:
+• "Is it raining?" → True
+• "Is it NOT raining?" → False (opposite)
+
+TRUTH TABLE FOR NOT
+-------------------
+Input    Output
+-----    ------
+True     False
+False    True
+
+EXAMPLE 1: BASIC NOT OPERATOR
+-------------------------------
+  # Simple not operator usage
+  is_raining = True
+  
+  # Negate the value
+  not_raining = not is_raining
+  print("Is it raining?", is_raining)        # Output: True
+  print("Is it not raining?", not_raining)    # Output: False
+  
+  # Using not directly in condition
+  if not is_raining:
+      print("We can go outside!")
+  else:
+      print("Stay indoors.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Simple not operator usage
+        • Comment
+
+Line 2: is_raining = True
+        • Stores True in is_raining
+
+Line 3: (blank line)
+
+Line 4: # Negate the value
+        • Comment
+
+Line 5: not_raining = not is_raining
+        • not - Negation operator
+        • not is_raining - Negates True
+        • True becomes False
+        • Stores False in not_raining
+
+Line 6: print("Is it raining?", is_raining)
+        • Output: Is it raining? True
+
+Line 7: print("Is it not raining?", not_raining)
+        • Output: Is it not raining? False
+
+Line 8: (blank line)
+
+Line 9: # Using not directly in condition
+        • Comment
+
+Line 10: if not is_raining:
+         • not is_raining - Negates True, becomes False
+         • Since condition is False, if block is skipped
+
+Line 11:     print("We can go outside!")
+         • Not executed (condition was False)
+
+Line 12: else:
+         • Alternative path executes
+
+Line 13:     print("Stay indoors.")
+         • Executes: Output: Stay indoors.
+
+EXAMPLE 2: NOT WITH COMPARISONS
+--------------------------------
+  # Using not with comparison operators
+  age = 17
+  
+  # Check if age is NOT greater than or equal to 18
+  can_enter = not (age >= 18)
+  print("Can enter?", can_enter)  # Output: True
+  
+  # Equivalent to:
+  cannot_enter = age < 18
+  print("Cannot enter?", cannot_enter)  # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Using not with comparison operators
+        • Comment
+
+Line 2: age = 17
+        • Stores 17 in age
+
+Line 3: (blank line)
+
+Line 4: # Check if age is NOT greater than or equal to 18
+        • Comment
+
+Line 5: can_enter = not (age >= 18)
+        • age >= 18 - Compares 17 >= 18 → False
+        • not False - Negates False, becomes True
+        • Stores True in can_enter
+        • Note: Parentheses clarify the order of operations
+
+Line 6: print("Can enter?", can_enter)
+        • Output: Can enter? True
+
+Line 7: (blank line)
+
+Line 8: # Equivalent to:
+        • Comment showing alternative
+
+Line 9: cannot_enter = age < 18
+        • Direct comparison: 17 < 18 → True
+        • This is equivalent to not (age >= 18)
+        • Stores True in cannot_enter
+
+Line 10: print("Cannot enter?", cannot_enter)
+         • Output: Cannot enter? True
+
+EXAMPLE 3: NOT FOR READABILITY
+--------------------------------
+  # Using not to make code more readable
+  is_empty = False
+  
+  # More readable: "if not is_empty"
+  if not is_empty:
+      print("Container has items.")
+  else:
+      print("Container is empty.")
+  
+  # Less readable alternative:
+  if is_empty == False:
+      print("Container has items.")
+  else:
+      print("Container is empty.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Using not to make code more readable
+        • Comment
+
+Line 2: is_empty = False
+        • Stores False in is_empty
+
+Line 3: (blank line)
+
+Line 4: # More readable: "if not is_empty"
+        • Comment
+
+Line 5: if not is_empty:
+        • not is_empty - Negates False, becomes True
+        • Condition is True, execute if block
+
+Line 6:     print("Container has items.")
+        • Executes: Output: Container has items.
+
+Line 7: else:
+        • Not executed
+
+Line 8:     print("Container is empty.")
+        • Not executed
+
+Line 9: (blank line)
+
+Line 10: # Less readable alternative:
+         • Comment
+
+Line 11: if is_empty == False:
+         • Checks if is_empty equals False
+         • False == False → True
+         • This works but is less Pythonic
+         • The "not" version is preferred
+
+Line 12:     print("Container has items.")
+         • Executes: Output: Container has items.
+
+COMMON USE CASES FOR NOT
+-------------------------
+1. Checking if something is NOT true
+   if not user_logged_in:
+       redirect_to_login()
+
+2. Negating conditions for readability
+   if not is_empty:
+       process_items()
+
+3. Double negation (rare, but possible)
+   result = not not True  # True (not False = True)
+
+4. Inverting Boolean flags
+   is_active = not is_inactive
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: THE OR OPERATOR
+-----------------------------
+
+DEFINITION
+----------
+The or operator takes two Boolean values and produces a new Boolean value. 
+It returns True if at least one of the values is True. It only returns 
+False if all values are False.
+
+DETAILED EXPLANATION
+--------------------
+The or operator is a binary operator (it operates on two values). It 
+implements logical disjunction - it's True if either condition is True, 
+or if both are True. It's only False when both conditions are False.
+
+SYNTAX
+------
+  condition1 or condition2
+
+This returns:
+• True if condition1 is True OR condition2 is True OR both are True
+• False only if BOTH condition1 AND condition2 are False
+
+KEY POINTS
+----------
+• or is a binary operator (works on two values)
+• Returns True if at least one condition is True
+• Returns False only if all conditions are False
+• Can chain multiple or operators
+• Short-circuit evaluation: stops checking if first condition is True
+
+REAL-WORLD ANALOGY
+------------------
+Think of the or operator like a menu with options:
+• "Would you like coffee OR tea?" → Yes if you want either (or both)
+• "Is it sunny OR warm?" → True if either condition is true
+
+Or like a pass/fail system:
+• "Pass if you have a ticket OR a membership" → Pass if you have either
+
+TRUTH TABLE FOR OR
+------------------
+A        B        A or B
+-        -        ------
+True     True     True
+True     False    True
+False    True     True
+False    False    False
+
+Key observation: or only produces False if all Boolean values are False.
+
+EXAMPLE 1: BASIC OR OPERATOR
+-----------------------------
+  # Simple or operator usage
+  has_ticket = True
+  has_membership = False
+  
+  # Check if person can enter (has ticket OR membership)
+  can_enter = has_ticket or has_membership
+  print("Has ticket?", has_ticket)           # Output: True
+  print("Has membership?", has_membership)   # Output: False
+  print("Can enter?", can_enter)             # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Simple or operator usage
+        • Comment
+
+Line 2: has_ticket = True
+        • Stores True in has_ticket
+
+Line 3: has_membership = False
+        • Stores False in has_membership
+
+Line 4: (blank line)
+
+Line 5: # Check if person can enter (has ticket OR membership)
+        • Comment
+
+Line 6: can_enter = has_ticket or has_membership
+        • or - Logic operator
+        • has_ticket or has_membership - True or False
+        • According to truth table: True or False = True
+        • Since at least one is True, result is True
+        • Stores True in can_enter
+
+Line 7: print("Has ticket?", has_ticket)
+        • Output: Has ticket? True
+
+Line 8: print("Has membership?", has_membership)
+        • Output: Has membership? False
+
+Line 9: print("Can enter?", can_enter)
+        • Output: Can enter? True
+
+EXAMPLE 2: OR WITH MULTIPLE CONDITIONS
+-------------------------------------
+  # Album year example from the original material
+  album_year = 1990
+  
+  # Check if album was made in 70s OR 90s
+  # Album is from 70s if: 1970 <= album_year <= 1979
+  # Album is from 90s if: 1990 <= album_year <= 1999
+  is_from_70s = (album_year >= 1970) and (album_year <= 1979)
+  is_from_90s = (album_year >= 1990) and (album_year <= 1999)
+  
+  is_from_70s_or_90s = is_from_70s or is_from_90s
+  
+  if is_from_70s_or_90s:
+      print("This album was made in the 70s or 90s.")
+  else:
+      print("This album was not made in the 70s or 90s.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Album year example from the original material
+        • Comment referencing the original example
+
+Line 2: album_year = 1990
+        • Stores 1990 in album_year
+
+Line 3: (blank line)
+
+Line 4: # Check if album was made in 70s OR 90s
+        • Comment
+
+Line 5: # Album is from 70s if: 1970 <= album_year <= 1979
+        • Comment explaining the condition
+
+Line 6: # Album is from 90s if: 1990 <= album_year <= 1999
+        • Comment explaining the condition
+
+Line 7: is_from_70s = (album_year >= 1970) and (album_year <= 1979)
+        • Checks if album_year is between 1970 and 1979
+        • 1990 >= 1970 → True
+        • 1990 <= 1979 → False
+        • True and False → False
+        • Stores False in is_from_70s
+
+Line 8: is_from_90s = (album_year >= 1990) and (album_year <= 1999)
+        • Checks if album_year is between 1990 and 1999
+        • 1990 >= 1990 → True
+        • 1990 <= 1999 → True
+        • True and True → True
+        • Stores True in is_from_90s
+
+Line 9: (blank line)
+
+Line 10: is_from_70s_or_90s = is_from_70s or is_from_90s
+         • or operator combines the two conditions
+         • False or True → True
+         • Since at least one is True, result is True
+         • Stores True in is_from_70s_or_90s
+
+Line 11: (blank line)
+
+Line 12: if is_from_70s_or_90s:
+         • Checks if condition is True
+         • True, so if block executes
+
+Line 13:     print("This album was made in the 70s or 90s.")
+         • Executes: Output: This album was made in the 70s or 90s.
+
+Line 14: else:
+         • Not executed
+
+Line 15:     print("This album was not made in the 70s or 90s.")
+         • Not executed
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check if album_year is from 70s OR 90s:
+
+  70s region (True):  1970, 1971, ..., 1979
+  80s region (False): 1980, 1981, ..., 1989
+  90s region (True):   1990, 1991, ..., 1999
+
+If album_year = 1990:
+• 1990 is in the 90s region (True)
+• So is_from_70s_or_90s is True
+
+The or operator combines these regions - if the year falls in EITHER region, 
+the result is True.
+
+EXAMPLE 3: OR WITH COMPARISONS
+--------------------------------
+  # Multiple or conditions
+  age = 25
+  has_id = True
+  has_passport = False
+  
+  # Can enter if age >= 18 OR has ID OR has passport
+  can_enter = (age >= 18) or has_id or has_passport
+  print("Age >= 18?", age >= 18)        # Output: True
+  print("Has ID?", has_id)              # Output: True
+  print("Has passport?", has_passport)  # Output: False
+  print("Can enter?", can_enter)        # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Multiple or conditions
+        • Comment
+
+Line 2: age = 25
+        • Stores 25 in age
+
+Line 3: has_id = True
+        • Stores True in has_id
+
+Line 4: has_passport = False
+        • Stores False in has_passport
+
+Line 5: (blank line)
+
+Line 6: # Can enter if age >= 18 OR has ID OR has passport
+        • Comment
+
+Line 7: can_enter = (age >= 18) or has_id or has_passport
+        • Multiple or operators chained together
+        • Evaluates left to right:
+          - (age >= 18) → 25 >= 18 → True
+          - True or has_id → True or True → True
+          - True or has_passport → True or False → True
+        • Since first condition is True, result is True
+        • Stores True in can_enter
+
+Line 8: print("Age >= 18?", age >= 18)
+        • Output: Age >= 18? True
+
+Line 9: print("Has ID?", has_id)
+        • Output: Has ID? True
+
+Line 10: print("Has passport?", has_passport)
+         • Output: Has passport? False
+
+Line 11: print("Can enter?", can_enter)
+         • Output: Can enter? True
+
+SHORT-CIRCUIT EVALUATION
+------------------------
+Python uses short-circuit evaluation with or:
+• If the first condition is True, Python stops evaluating
+• It doesn't check the remaining conditions
+• This can improve performance
+
+  # Example of short-circuit evaluation
+  def expensive_check():
+      print("This is expensive!")
+      return True
+  
+  # If first condition is True, expensive_check() is never called
+  result = True or expensive_check()
+  print(result)  # Output: True (no "This is expensive!" printed)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Example of short-circuit evaluation
+        • Comment
+
+Line 2: def expensive_check():
+        • Defines a function (we'll learn more about functions later)
+        • This function would take time to execute
+
+Line 3:     print("This is expensive!")
+        • Would print if function is called
+
+Line 4:     return True
+        • Returns True
+
+Line 5: (blank line)
+
+Line 6: # If first condition is True, expensive_check() is never called
+        • Comment explaining short-circuit
+
+Line 7: result = True or expensive_check()
+        • True or ... - First condition is True
+        • Python doesn't need to check the second condition
+        • expensive_check() is NEVER called
+        • Result is True
+
+Line 8: print(result)
+        • Output: True
+        • Note: "This is expensive!" is NOT printed
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: THE AND OPERATOR
+-------------------------------
+
+DEFINITION
+----------
+The and operator takes two Boolean values and produces a new Boolean value. 
+It returns True only if all values are True. It returns False if any value 
+is False.
+
+DETAILED EXPLANATION
+--------------------
+The and operator is a binary operator that implements logical conjunction. 
+It requires ALL conditions to be True for the result to be True. If ANY 
+condition is False, the result is False.
+
+SYNTAX
+------
+  condition1 and condition2
+
+This returns:
+• True only if BOTH condition1 AND condition2 are True
+• False if condition1 is False OR condition2 is False OR both are False
+
+KEY POINTS
+----------
+• and is a binary operator (works on two values)
+• Returns True only if all conditions are True
+• Returns False if any condition is False
+• Can chain multiple and operators
+• Short-circuit evaluation: stops checking if first condition is False
+
+REAL-WORLD ANALOGY
+------------------
+Think of the and operator like requirements that must ALL be met:
+• "You need a ticket AND an ID to enter" → Both required
+• "Is it sunny AND warm?" → True only if both are true
+
+Or like a checklist:
+• "Pass if you have a ticket AND are 18+ AND have ID" → All must be true
+
+TRUTH TABLE FOR AND
+-------------------
+A        B        A and B
+-        -        -------
+True     True     True
+True     False    False
+False    True     False
+False    False    False
+
+Key observation: and only produces True if all Boolean values are True.
+
+EXAMPLE 1: BASIC AND OPERATOR
+-------------------------------
+  # Simple and operator usage
+  has_ticket = True
+  has_id = True
+  
+  # Check if person can enter (has ticket AND ID)
+  can_enter = has_ticket and has_id
+  print("Has ticket?", has_ticket)     # Output: True
+  print("Has ID?", has_id)              # Output: True
+  print("Can enter?", can_enter)        # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Simple and operator usage
+        • Comment
+
+Line 2: has_ticket = True
+        • Stores True in has_ticket
+
+Line 3: has_id = True
+        • Stores True in has_id
+
+Line 4: (blank line)
+
+Line 5: # Check if person can enter (has ticket AND ID)
+        • Comment
+
+Line 6: can_enter = has_ticket and has_id
+        • and - Logic operator
+        • has_ticket and has_id - True and True
+        • According to truth table: True and True = True
+        • Since both are True, result is True
+        • Stores True in can_enter
+
+Line 7: print("Has ticket?", has_ticket)
+        • Output: Has ticket? True
+
+Line 8: print("Has ID?", has_id)
+        • Output: Has ID? True
+
+Line 9: print("Can enter?", can_enter)
+        • Output: Can enter? True
+
+EXAMPLE 2: AND WITH ONE FALSE CONDITION
+----------------------------------------
+  # What happens when one condition is False?
+  has_ticket = True
+  has_id = False
+  
+  can_enter = has_ticket and has_id
+  print("Has ticket?", has_ticket)     # Output: True
+  print("Has ID?", has_id)              # Output: False
+  print("Can enter?", can_enter)        # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # What happens when one condition is False?
+        • Comment
+
+Line 2: has_ticket = True
+        • Stores True in has_ticket
+
+Line 3: has_id = False
+        • Stores False in has_id
+
+Line 4: (blank line)
+
+Line 5: can_enter = has_ticket and has_id
+        • True and False
+        • According to truth table: True and False = False
+        • Since one condition is False, result is False
+        • Stores False in can_enter
+
+Line 6: print("Has ticket?", has_ticket)
+        • Output: Has ticket? True
+
+Line 7: print("Has ID?", has_id)
+        • Output: Has ID? False
+
+Line 8: print("Can enter?", can_enter)
+        • Output: Can enter? False
+
+EXAMPLE 3: ALBUM YEAR EXAMPLE FROM ORIGINAL MATERIAL
+-----------------------------------------------------
+  # Album year example: Check if album was made in the 80s
+  album_year = 1983
+  
+  # Album is from 80s if: 1980 <= album_year <= 1989
+  # This means: album_year >= 1980 AND album_year <= 1989
+  is_from_80s = (album_year >= 1980) and (album_year <= 1989)
+  
+  if is_from_80s:
+      print("This album was made in the 80s.")
+  else:
+      print("This album was not made in the 80s.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Album year example: Check if album was made in the 80s
+        • Comment
+
+Line 2: album_year = 1983
+        • Stores 1983 in album_year
+
+Line 3: (blank line)
+
+Line 4: # Album is from 80s if: 1980 <= album_year <= 1989
+        • Comment explaining the range
+
+Line 5: # This means: album_year >= 1980 AND album_year <= 1989
+        • Comment showing how to express with and
+
+Line 6: is_from_80s = (album_year >= 1980) and (album_year <= 1989)
+        • First condition: album_year >= 1980
+          - 1983 >= 1980 → True
+        • Second condition: album_year <= 1989
+          - 1983 <= 1989 → True
+        • True and True → True
+        • Stores True in is_from_80s
+
+Line 7: (blank line)
+
+Line 8: if is_from_80s:
+        • Checks if condition is True
+        • True, so if block executes
+
+Line 9:     print("This album was made in the 80s.")
+        • Executes: Output: This album was made in the 80s.
+
+Line 10: else:
+         • Not executed
+
+Line 11:     print("This album was not made in the 80s.")
+         • Not executed
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check if album_year is from 80s (using and):
+
+  Numbers where album_year >= 1980 is False:  ... 1978, 1979
+  Numbers where album_year >= 1980 is True:   1980, 1981, ..., 1999, 2000 ...
+  
+  Numbers where album_year <= 1989 is True:  ... 1987, 1988, 1989
+  Numbers where album_year <= 1989 is False: 1990, 1991, ..., 2000 ...
+  
+  Where BOTH are True (80s region): 1980, 1981, ..., 1989
+
+If album_year = 1983:
+• 1983 >= 1980 → True (first condition)
+• 1983 <= 1989 → True (second condition)
+• True and True → True
+
+The and operator requires BOTH conditions to be True - the year must be in 
+the overlapping region where both conditions are satisfied.
+
+EXAMPLE 4: MULTIPLE AND CONDITIONS
+------------------------------------
+  # Age and membership check
+  age = 25
+  has_membership = True
+  account_active = True
+  
+  # Can access premium features if: age >= 18 AND has membership AND account is active
+  can_access = (age >= 18) and has_membership and account_active
+  print("Age >= 18?", age >= 18)        # Output: True
+  print("Has membership?", has_membership)  # Output: True
+  print("Account active?", account_active)  # Output: True
+  print("Can access?", can_access)      # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Age and membership check
+        • Comment
+
+Line 2: age = 25
+        • Stores 25 in age
+
+Line 3: has_membership = True
+        • Stores True in has_membership
+
+Line 4: account_active = True
+        • Stores True in account_active
+
+Line 5: (blank line)
+
+Line 6: # Can access premium features if: age >= 18 AND has membership AND account is active
+        • Comment
+
+Line 7: can_access = (age >= 18) and has_membership and account_active
+        • Multiple and operators chained
+        • Evaluates left to right:
+          - (age >= 18) → 25 >= 18 → True
+          - True and has_membership → True and True → True
+          - True and account_active → True and True → True
+        • All conditions are True, so result is True
+        • Stores True in can_access
+
+Line 8: print("Age >= 18?", age >= 18)
+        • Output: Age >= 18? True
+
+Line 9: print("Has membership?", has_membership)
+        • Output: Has membership? True
+
+Line 10: print("Account active?", account_active)
+         • Output: Account active? True
+
+Line 11: print("Can access?", can_access)
+         • Output: Can access? True
+
+SHORT-CIRCUIT EVALUATION WITH AND
+----------------------------------
+Python uses short-circuit evaluation with and:
+• If the first condition is False, Python stops evaluating
+• It doesn't check the remaining conditions
+• This can improve performance
+
+  # Example of short-circuit evaluation with and
+  def expensive_check():
+      print("This is expensive!")
+      return True
+  
+  # If first condition is False, expensive_check() is never called
+  result = False and expensive_check()
+  print(result)  # Output: False (no "This is expensive!" printed)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Example of short-circuit evaluation with and
+        • Comment
+
+Line 2: def expensive_check():
+        • Defines a function
+
+Line 3:     print("This is expensive!")
+        • Would print if function is called
+
+Line 4:     return True
+        • Returns True
+
+Line 5: (blank line)
+
+Line 6: # If first condition is False, expensive_check() is never called
+        • Comment
+
+Line 7: result = False and expensive_check()
+        • False and ... - First condition is False
+        • Python doesn't need to check the second condition
+        • expensive_check() is NEVER called
+        • Result is False (because False and anything = False)
+
+Line 8: print(result)
+        • Output: False
+        • Note: "This is expensive!" is NOT printed
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: COMBINING LOGIC OPERATORS
+---------------------------------------
+
+DEFINITION
+----------
+You can combine multiple logic operators (not, or, and) in a single 
+expression to create complex conditions. Understanding operator precedence 
+and using parentheses correctly is crucial.
+
+DETAILED EXPLANATION
+--------------------
+Real-world conditions often require combining multiple logic operators. 
+For example, "if the user is logged in AND (has admin rights OR is the 
+owner), then grant access." This requires combining and and or operators.
+
+OPERATOR PRECEDENCE
+-------------------
+Python evaluates operators in this order (highest to lowest):
+1. not (highest precedence)
+2. and
+3. or (lowest precedence)
+
+Use parentheses to clarify and control the order of evaluation.
+
+EXAMPLE 1: COMBINING AND AND OR
+----------------------------------
+  # Complex access control
+  is_logged_in = True
+  is_admin = False
+  is_owner = True
+  
+  # Grant access if: logged in AND (admin OR owner)
+  can_access = is_logged_in and (is_admin or is_owner)
+  print("Is logged in?", is_logged_in)  # Output: True
+  print("Is admin?", is_admin)           # Output: False
+  print("Is owner?", is_owner)           # Output: True
+  print("Can access?", can_access)       # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Complex access control
+        • Comment
+
+Line 2: is_logged_in = True
+        • Stores True
+
+Line 3: is_admin = False
+        • Stores False
+
+Line 4: is_owner = True
+        • Stores True
+
+Line 5: (blank line)
+
+Line 6: # Grant access if: logged in AND (admin OR owner)
+        • Comment explaining the logic
+
+Line 7: can_access = is_logged_in and (is_admin or is_owner)
+        • Parentheses first: (is_admin or is_owner)
+          - False or True → True
+        • Then: is_logged_in and True
+          - True and True → True
+        • Result: True
+        • Stores True in can_access
+
+Line 8: print("Is logged in?", is_logged_in)
+        • Output: Is logged in? True
+
+Line 9: print("Is admin?", is_admin)
+        • Output: Is admin? False
+
+Line 10: print("Is owner?", is_owner)
+         • Output: Is owner? True
+
+Line 11: print("Can access?", can_access)
+         • Output: Can access? True
+
+EXAMPLE 2: COMBINING NOT, AND, AND OR
+---------------------------------------
+  # Age and membership with exceptions
+  age = 17
+  has_membership = False
+  has_parental_consent = True
+  
+  # Can enter if: (age >= 18 OR has parental consent) AND NOT banned
+  is_banned = False
+  
+  can_enter = ((age >= 18) or has_parental_consent) and not is_banned
+  print("Age >= 18?", age >= 18)                    # Output: False
+  print("Has parental consent?", has_parental_consent)  # Output: True
+  print("Is banned?", is_banned)                    # Output: False
+  print("Can enter?", can_enter)                    # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Age and membership with exceptions
+        • Comment
+
+Line 2: age = 17
+        • Stores 17
+
+Line 3: has_membership = False
+        • Stores False
+
+Line 4: has_parental_consent = True
+        • Stores True
+
+Line 5: (blank line)
+
+Line 6: # Can enter if: (age >= 18 OR has parental consent) AND NOT banned
+        • Comment
+
+Line 7: is_banned = False
+        • Stores False
+
+Line 8: (blank line)
+
+Line 9: can_enter = ((age >= 18) or has_parental_consent) and not is_banned
+        • Innermost parentheses: (age >= 18)
+          - 17 >= 18 → False
+        • Next: False or has_parental_consent
+          - False or True → True
+        • not is_banned: not False → True
+        • Finally: True and True → True
+        • Result: True
+
+Line 10: print("Age >= 18?", age >= 18)
+         • Output: Age >= 18? False
+
+Line 11: print("Has parental consent?", has_parental_consent)
+         • Output: Has parental consent? True
+
+Line 12: print("Is banned?", is_banned)
+         • Output: Is banned? False
+
+Line 13: print("Can enter?", can_enter)
+         • Output: Can enter? True
+
+EXAMPLE 3: COMPLEX CONDITIONAL LOGIC
+-------------------------------------
+  # Movie rating and age restrictions
+  movie_rating = "PG-13"
+  viewer_age = 15
+  has_parent = True
+  
+  # Can watch if:
+  # - (rating is G or PG) OR
+  # - (rating is PG-13 AND (age >= 13 OR has parent)) OR
+  # - (rating is R AND age >= 17)
+  
+  can_watch = (
+      (movie_rating == "G" or movie_rating == "PG") or
+      (movie_rating == "PG-13" and (viewer_age >= 13 or has_parent)) or
+      (movie_rating == "R" and viewer_age >= 17)
+  )
+  
+  print("Movie rating:", movie_rating)  # Output: PG-13
+  print("Viewer age:", viewer_age)     # Output: 15
+  print("Has parent?", has_parent)     # Output: True
+  print("Can watch?", can_watch)       # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Movie rating and age restrictions
+        • Comment
+
+Line 2: movie_rating = "PG-13"
+        • Stores "PG-13"
+
+Line 3: viewer_age = 15
+        • Stores 15
+
+Line 4: has_parent = True
+        • Stores True
+
+Line 5: (blank line)
+
+Line 6: # Can watch if: (complex conditions)
+        • Comment
+
+Line 7-11: Complex condition
+        • Evaluates each part:
+          - (movie_rating == "G" or movie_rating == "PG")
+            "PG-13" == "G" or "PG-13" == "PG" → False or False → False
+          - (movie_rating == "PG-13" and (viewer_age >= 13 or has_parent))
+            "PG-13" == "PG-13" → True
+            (15 >= 13 or True) → True or True → True
+            True and True → True
+          - (movie_rating == "R" and viewer_age >= 17)
+            "PG-13" == "R" → False
+            False and ... → False
+        • Final: False or True or False → True
+
+Line 12: (blank line)
+
+Line 13-16: Print statements
+         • Output:
+           Movie rating: PG-13
+           Viewer age: 15
+           Has parent? True
+           Can watch? True
+
+IMPORTANCE OF PARENTHESES
+-------------------------
+Parentheses are crucial for clarity and correctness:
+
+  # Without parentheses (might not work as intended):
+  result1 = True or False and False
+  # Evaluates as: True or (False and False) = True or False = True
+  
+  # With parentheses (clear intent):
+  result2 = (True or False) and False
+  # Evaluates as: (True) and False = False
+
+Always use parentheses to make your intent clear!
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: TRUTH TABLES AND BOOLEAN LOGIC
+--------------------------------------------
+
+DEFINITION
+----------
+Truth tables show all possible combinations of Boolean values and the 
+result of applying logic operators. They are fundamental to understanding 
+Boolean logic.
+
+DETAILED EXPLANATION
+--------------------
+Truth tables systematically list all possible input combinations and their 
+corresponding outputs. They help visualize and understand how logic 
+operators work.
+
+COMPLETE TRUTH TABLES
+---------------------
+
+NOT OPERATOR (Unary)
+--------------------
+Input    Output
+-----    ------
+True     False
+False    True
+
+OR OPERATOR (Binary)
+--------------------
+A        B        A or B
+-        -        ------
+True     True     True
+True     False    True
+False    True     True
+False    False    False
+
+AND OPERATOR (Binary)
+---------------------
+A        B        A and B
+-        -        ---------
+True     True     True
+True     False    False
+False    True     False
+False    False    False
+
+COMBINED OPERATORS
+-----------------
+A        B        not A    not B    A and B    A or B    not (A and B)
+-        -        ------    ------   -------    ------   -------------
+True     True     False     False    True       True     False
+True     False    False     True     False      True     True
+False    True     True      False    False      True     True
+False    False    True      True     False      False    True
+
+DE MORGAN'S LAWS
+----------------
+Important relationships in Boolean logic:
+
+1. not (A and B) = (not A) or (not B)
+2. not (A or B) = (not A) and (not B)
+
+EXAMPLE:
+  A = True
+  B = False
+  
+  # Law 1: not (A and B) = (not A) or (not B)
+  left1 = not (A and B)        # not (True and False) = not False = True
+  right1 = (not A) or (not B)   # (not True) or (not False) = False or True = True
+  print(left1 == right1)        # Output: True
+  
+  # Law 2: not (A or B) = (not A) and (not B)
+  left2 = not (A or B)         # not (True or False) = not True = False
+  right2 = (not A) and (not B) # (not True) and (not False) = False and True = False
+  print(left2 == right2)       # Output: True
+
+[END SECTION 3.6]
+================================================================================
+
+SECTION 3.7: REAL-WORLD EXAMPLES WITH LOGIC OPERATORS
+-------------------------------------------------------
+
+EXAMPLE 1: USER PERMISSION SYSTEM
+-----------------------------------
+  # Complex permission checking
+  user_role = "editor"
+  is_premium = True
+  account_active = True
+  has_2fa = False
+  
+  # Admin can always access
+  # Premium users can access if account is active
+  # Editors can access if account is active AND has 2FA
+  can_access_admin = user_role == "admin"
+  can_access_premium = is_premium and account_active
+  can_access_editor = (user_role == "editor") and account_active and has_2fa
+  
+  can_access = can_access_admin or can_access_premium or can_access_editor
+  
+  print("User role:", user_role)
+  print("Is premium?", is_premium)
+  print("Account active?", account_active)
+  print("Has 2FA?", has_2fa)
+  print("Can access?", can_access)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Complex permission checking
+        • Comment
+
+Line 2-5: Variable assignments
+        • Sets up user properties
+
+Line 6: (blank line)
+
+Line 7-9: Comment explaining access rules
+        • Different rules for different roles
+
+Line 10: can_access_admin = user_role == "admin"
+        • Checks if user is admin
+        • "editor" == "admin" → False
+
+Line 11: can_access_premium = is_premium and account_active
+        • True and True → True
+
+Line 12: can_access_editor = (user_role == "editor") and account_active and has_2fa
+        • True and True and False → False
+
+Line 13: (blank line)
+
+Line 14: can_access = can_access_admin or can_access_premium or can_access_editor
+        • False or True or False → True
+
+Line 15: (blank line)
+
+Line 16-20: Print statements
+         • Output:
+           User role: editor
+           Is premium? True
+           Account active? True
+           Has 2FA? False
+           Can access? True
+
+EXAMPLE 2: SHOPPING CART VALIDATION
+------------------------------------
+  # Validate shopping cart checkout
+  cart_total = 150
+  has_valid_payment = True
+  items_in_stock = True
+  shipping_address_valid = True
+  is_weekend = False
+  
+  # Can checkout if:
+  # - Cart total > 0 AND
+  # - Has valid payment AND
+  # - All items in stock AND
+  # - Shipping address valid AND
+  # - (NOT weekend OR cart_total >= 100)
+  
+  can_checkout = (
+      cart_total > 0 and
+      has_valid_payment and
+      items_in_stock and
+      shipping_address_valid and
+      (not is_weekend or cart_total >= 100)
+  )
+  
+  print("Cart total:", cart_total)
+  print("Can checkout?", can_checkout)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Validate shopping cart checkout
+        • Comment
+
+Line 2-6: Variable assignments
+        • Sets up cart and order properties
+
+Line 7: (blank line)
+
+Line 8-13: Comment explaining checkout rules
+        • Multiple conditions must be met
+
+Line 14-19: Complex condition
+        • Evaluates each part:
+          - cart_total > 0 → 150 > 0 → True
+          - has_valid_payment → True
+          - items_in_stock → True
+          - shipping_address_valid → True
+          - (not is_weekend or cart_total >= 100)
+            not False or 150 >= 100 → True or True → True
+        • All conditions True: True and True and True and True and True → True
+
+Line 20: (blank line)
+
+Line 21-22: Print statements
+         • Output:
+           Cart total: 150
+           Can checkout? True
+
+EXAMPLE 3: PASSWORD STRENGTH VALIDATOR
+---------------------------------------
+  # Check password strength
+  password = "MyP@ssw0rd"
+  min_length = 8
+  has_uppercase = any(c.isupper() for c in password)  # Checks for uppercase
+  has_lowercase = any(c.islower() for c in password)   # Checks for lowercase
+  has_digit = any(c.isdigit() for c in password)       # Checks for digit
+  has_special = any(c in "!@#$%^&*" for c in password) # Checks for special char
+  
+  # Strong password if:
+  # - Length >= min_length AND
+  # - Has uppercase AND
+  # - Has lowercase AND
+  # - (Has digit OR has special character)
+  
+  is_strong = (
+      len(password) >= min_length and
+      has_uppercase and
+      has_lowercase and
+      (has_digit or has_special)
+  )
+  
+  print("Password:", password)
+  print("Length >= 8?", len(password) >= min_length)
+  print("Has uppercase?", has_uppercase)
+  print("Has lowercase?", has_lowercase)
+  print("Has digit?", has_digit)
+  print("Has special?", has_special)
+  print("Is strong?", is_strong)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Check password strength
+        • Comment
+
+Line 2: password = "MyP@ssw0rd"
+        • Stores password string
+
+Line 3-6: Password checks
+        • Various validation checks
+        • (We'll learn about these methods later)
+
+Line 7: (blank line)
+
+Line 8-11: Comment explaining strength criteria
+        • Multiple requirements
+
+Line 12-16: Complex condition
+        • Checks all requirements
+        • All must be True for strong password
+
+Line 17: (blank line)
+
+Line 18-24: Print statements
+         • Shows all checks and final result
+
+[END SECTION 3.7]
+================================================================================
+
+SECTION 3.8: OPERATOR PRECEDENCE AND BEST PRACTICES
+------------------------------------------------------
+
+OPERATOR PRECEDENCE ORDER
+-------------------------
+From highest to lowest precedence:
+
+1. Parentheses: ()
+2. Comparison operators: <, >, <=, >=, ==, !=
+3. not
+4. and
+5. or
+
+EXAMPLE: PRECEDENCE IN ACTION
+------------------------------
+  # Without parentheses (relying on precedence)
+  result1 = True or False and False
+  # Evaluates as: True or (False and False) = True or False = True
+  
+  # With explicit parentheses
+  result2 = (True or False) and False
+  # Evaluates as: True and False = False
+  
+  print("Result 1:", result1)  # Output: True
+  print("Result 2:", result2)  # Output: False
+
+BEST PRACTICES
+--------------
+1. Always use parentheses for complex expressions
+2. Break complex conditions into smaller, named variables
+3. Use descriptive variable names for Boolean values
+4. Comment complex logic
+5. Test all combinations of conditions
+6. Consider readability over brevity
+
+EXAMPLE: REFACTORING COMPLEX CONDITIONS
+----------------------------------------
+  # Instead of this (hard to read):
+  if (a > b and c < d) or (e == f and not g) or (h and i and j):
+      do_something()
+  
+  # Do this (more readable):
+  condition1 = a > b and c < d
+  condition2 = e == f and not g
+  condition3 = h and i and j
+  
+  if condition1 or condition2 or condition3:
+      do_something()
+
+COMMON MISTAKES TO AVOID
+------------------------
+1. Forgetting parentheses in complex expressions
+2. Confusing and with or
+3. Using = instead of == in conditions
+4. Not understanding short-circuit evaluation
+5. Overly complex nested conditions
+
+[END SECTION 3.8]
+================================================================================
+
+QUICK REFERENCE GUIDE
+=====================
+
+LOGIC OPERATORS SUMMARY
+-----------------------
+Operator    Name        Returns True When
+--------    ----        -----------------
+not         NOT         Input is False
+or          OR          At least one condition is True
+and         AND         All conditions are True
+
+TRUTH TABLES
+------------
+NOT:
+  Input    Output
+  -----    ------
+  True     False
+  False    True
+
+OR:
+  A        B        A or B
+  -        -        ------
+  True     True     True
+  True     False    True
+  False    True     True
+  False    False    False
+
+AND:
+  A        B        A and B
+  -        -        ---------
+  True     True     True
+  True     False    False
+  False    True     False
+  False    False    False
+
+OPERATOR PRECEDENCE
+-------------------
+1. () - Parentheses (highest)
+2. <, >, <=, >=, ==, != - Comparisons
+3. not
+4. and
+5. or (lowest)
+
+COMMON PATTERNS
+---------------
+# Check if value is in range
+if 0 <= value <= 100:
+    print("In range")
+
+# Check multiple conditions
+if condition1 and condition2:
+    do_something()
+
+# Check alternative conditions
+if condition1 or condition2:
+    do_something()
+
+# Negate condition
+if not is_empty:
+    process()
+
+================================================================================
+
+END OF PART 3 AND COMPLETE GUIDE
+=================================
+
+Congratulations! You've completed all three parts of the Conditions and 
+Branching in Python comprehensive study guide. You now understand:
+
+PART 1:
+✓ Comparison operations (==, !=, >, <, >=, <=)
+✓ Boolean values (True and False)
+✓ Comparing different data types
+
+PART 2:
+✓ if statements for conditional execution
+✓ else statements for alternative paths
+✓ elif statements for multiple conditions
+✓ Indentation and code blocks
+✓ Nested conditional statements
+
+PART 3:
+✓ Logic operators (not, or, and)
+✓ Combining logic operators
+✓ Truth tables and Boolean logic
+✓ Real-world applications
+✓ Best practices and common patterns
+
+NEXT STEPS
+----------
+Now that you've mastered conditions and branching, you can:
+1. Practice writing conditional statements
+2. Work through coding exercises
+3. Build programs that make decisions
+4. Move on to loops (for, while) to repeat actions
+5. Learn about functions to organize your code
+
+Remember: Practice is key! Try writing your own conditional statements 
+and experiment with different combinations of operators.
+
+Happy coding!
+
+================================================================================

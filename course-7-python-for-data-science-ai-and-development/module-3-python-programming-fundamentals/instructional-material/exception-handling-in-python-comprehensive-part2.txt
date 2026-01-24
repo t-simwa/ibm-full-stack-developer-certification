@@ -1,0 +1,1874 @@
+================================================================================
+EXCEPTION HANDLING IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+Welcome to Part 2 of Exception Handling in Python. In this part, you will 
+learn about handling multiple types of exceptions, using the else clause to 
+execute code when no exceptions occur, and using the finally clause to ensure 
+cleanup code always runs. You will also see a complete file handling example 
+with detailed line-by-line explanations.
+
+PREREQUISITES
+-------------
+Before studying this part, you should understand:
+• What exceptions are and why they occur
+• Basic try-except syntax
+• How try-except blocks work
+• The difference between handled and unhandled exceptions
+
+If you haven't studied Part 1, please do so first.
+
+ESTIMATED TIME NEEDED
+---------------------
+10 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Write multiple except blocks to handle different exception types
+• Understand why catching all exceptions without specifying types is bad practice
+• Use the else clause to execute code when no exceptions occur
+• Use the finally clause to ensure cleanup code always executes
+• Understand the complete try-except-else-finally structure
+• Write robust file handling code with proper exception handling
+• Apply best practices for exception handling
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: ADVANCED EXCEPTION HANDLING
+  SECTION 2.1: MULTIPLE EXCEPT STATEMENTS
+  SECTION 2.2: HANDLING DIFFERENT TYPES OF ERRORS
+  SECTION 2.3: WHY CATCHING ALL EXCEPTIONS IS BAD PRACTICE
+  SECTION 2.4: THE ELSE CLAUSE
+  SECTION 2.5: THE FINALLY CLAUSE
+  SECTION 2.6: COMPLETE TRY-EXCEPT-ELSE-FINALLY STRUCTURE
+  SECTION 2.7: COMPLETE FILE HANDLING EXAMPLE
+
+NOTE: Part 3 covers:
+  • Best practices for exception handling
+  • Common Python exception types
+  • Advanced exception handling techniques
+  • Summary, key definitions, quick reference guide
+
+================================================================================
+PART 2: ADVANCED EXCEPTION HANDLING
+================================================================================
+
+SECTION 2.1: MULTIPLE EXCEPT STATEMENTS
+-----------------------------------------
+
+DEFINITION
+----------
+Multiple except statements allow you to handle different types of exceptions 
+differently. Each except block can catch a specific exception type, allowing 
+your program to respond appropriately to different kinds of errors.
+
+DETAILED EXPLANATION
+--------------------
+The original material explains: "When writing simple programs we can sometimes 
+get away with only one except statement, but what happens if another error 
+occurs that is not caught by the IOError? If that happened we would need to 
+add another except statement."
+
+This means that different operations can raise different types of exceptions, 
+and you need different except blocks to handle each type appropriately.
+
+WHY MULTIPLE EXCEPT BLOCKS ARE NEEDED
+-------------------------------------
+Different operations raise different exceptions:
+• File operations → IOError, FileNotFoundError
+• Mathematical operations → ZeroDivisionError, OverflowError
+• Type conversions → ValueError, TypeError
+• List operations → IndexError, KeyError
+• Network operations → ConnectionError, TimeoutError
+
+Each type of error needs different handling:
+• File error → Tell user file doesn't exist
+• Division by zero → Tell user cannot divide by zero
+• Invalid input → Tell user to enter valid data
+
+BASIC SYNTAX FOR MULTIPLE EXCEPT BLOCKS
+----------------------------------------
+  try:
+      # Code that might raise different exceptions
+      code_here()
+      
+  except FirstExceptionType:
+      # Handle first type of exception
+      handle_first()
+      
+  except SecondExceptionType:
+      # Handle second type of exception
+      handle_second()
+      
+  except ThirdExceptionType:
+      # Handle third type of exception
+      handle_third()
+
+HOW PYTHON PROCESSES MULTIPLE EXCEPT BLOCKS
+-------------------------------------------
+1. Python executes try block
+2. If exception occurs:
+   a. Python stops executing try block
+   b. Python checks first except block
+   c. If exception type matches → Execute that except block, skip others
+   d. If exception type doesn't match → Check next except block
+   e. Repeat until match found or all except blocks checked
+3. If no match found → Program crashes (unhandled exception)
+4. If match found → Execute matching except block, then continue
+
+IMPORTANT: Only ONE except block executes (the first one that matches).
+
+DETAILED EXAMPLE: CALCULATOR WITH MULTIPLE EXCEPTIONS
+-------------------------------------------------------
+  # Calculator program with multiple exception handlers
+  print("Simple Calculator")
+  
+  try:
+      num1 = float(input("Enter first number: "))
+      num2 = float(input("Enter second number: "))
+      operation = input("Enter operation (+, -, *, /): ")
+      
+      if operation == '+':
+          result = num1 + num2
+      elif operation == '-':
+          result = num1 - num2
+      elif operation == '*':
+          result = num1 * num2
+      elif operation == '/':
+          result = num1 / num2
+      else:
+          raise ValueError("Invalid operation")
+      
+      print(f"Result: {result}")
+      
+  except ValueError:
+      print("Error: Invalid input. Please enter valid numbers and operation.")
+      
+  except ZeroDivisionError:
+      print("Error: Cannot divide by zero!")
+      
+  except KeyboardInterrupt:
+      print("\nError: Operation cancelled by user.")
+      
+  print("Calculator finished.")
+
+LINE-BY-LINE EXPLANATION:
+Line 1: # Calculator program with multiple exception handlers
+        • Comment describing the program
+
+Line 2: print("Simple Calculator")
+        • Displays program title
+        • Always executes
+
+Line 4: try:
+        • Starts try block
+        • Multiple operations might fail here
+
+Line 5: num1 = float(input("Enter first number: "))
+        • Gets first number from user
+        • float() converts string to floating-point number
+        • If user enters "hello" → raises ValueError
+        • If user enters "5" → converts to 5.0 successfully
+
+Line 6: num2 = float(input("Enter second number: "))
+        • Gets second number from user
+        • float() converts string to floating-point number
+        • If user enters invalid input → raises ValueError
+        • If user enters "0" → converts to 0.0 successfully
+
+Line 7: operation = input("Enter operation (+, -, *, /): ")
+        • Gets operation from user
+        • User might enter: "+", "-", "*", "/", or something else
+        • No conversion, so no exception here (always returns string)
+
+Line 9-16: if-elif-else block
+        • Checks which operation user wants
+        • Performs corresponding calculation
+        • If operation is "/" and num2 is 0 → raises ZeroDivisionError
+        • If operation is invalid → raises ValueError manually
+
+Line 18: print(f"Result: {result}")
+        • Displays calculation result
+        • Only executes if no exception occurred
+
+Line 20: except ValueError:
+        • First except block
+        • Catches ValueError exceptions
+        • ValueError occurs when:
+          - float() cannot convert input (line 5 or 6)
+          - raise ValueError is executed (line 15)
+
+Line 21: print("Error: Invalid input. Please enter valid numbers and operation.")
+        • Displays error message for ValueError
+        • User-friendly message explaining the problem
+
+Line 23: except ZeroDivisionError:
+        • Second except block
+        • Catches ZeroDivisionError exceptions
+        • ZeroDivisionError occurs when dividing by zero (line 13)
+
+Line 24: print("Error: Cannot divide by zero!")
+        • Displays error message for division by zero
+        • Specific message for this type of error
+
+Line 26: except KeyboardInterrupt:
+        • Third except block
+        • Catches KeyboardInterrupt exceptions
+        • KeyboardInterrupt occurs when user presses Ctrl+C
+
+Line 27: print("\nError: Operation cancelled by user.")
+        • Displays message when user cancels
+        • \n adds newline for better formatting
+
+Line 29: print("Calculator finished.")
+        • Always executes (not in try-except)
+        • Shows program completed
+
+TESTING THE PROGRAM:
+--------------------
+
+TEST CASE 1: Valid Input
+  Input: 10, 5, +
+  Output:
+    Simple Calculator
+    Enter first number: 10
+    Enter second number: 5
+    Enter operation (+, -, *, /): +
+    Result: 15.0
+    Calculator finished.
+
+  What Happened:
+  • All inputs valid → No exceptions raised
+  • Calculation successful
+  • Result displayed
+  • Program finished normally
+
+TEST CASE 2: Invalid Number Input
+  Input: hello, 5, +
+  Output:
+    Simple Calculator
+    Enter first number: hello
+    Error: Invalid input. Please enter valid numbers and operation.
+    Calculator finished.
+
+  What Happened:
+  • float("hello") raises ValueError
+  • First except block (ValueError) catches it
+  • Error message displayed
+  • Program continues (doesn't crash)
+
+TEST CASE 3: Division by Zero
+  Input: 10, 0, /
+  Output:
+    Simple Calculator
+    Enter first number: 10
+    Enter second number: 0
+    Enter operation (+, -, *, /): /
+    Error: Cannot divide by zero!
+    Calculator finished.
+
+  What Happened:
+  • 10 / 0 raises ZeroDivisionError
+  • Second except block (ZeroDivisionError) catches it
+  • Specific error message displayed
+  • Program continues (doesn't crash)
+
+KEY POINT FROM ORIGINAL MATERIAL
+---------------------------------
+The original material says: "If that happened we would need to add another 
+except statement."
+
+This means:
+• One except block handles one type of error
+• Different errors need different except blocks
+• You add more except blocks as needed
+• Each except block handles its specific exception type
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: HANDLING DIFFERENT TYPES OF ERRORS
+------------------------------------------------
+
+DEFINITION
+----------
+Handling different types of errors means writing specific except blocks for 
+each type of exception your code might raise, allowing your program to respond 
+appropriately to each specific error situation.
+
+DETAILED EXPLANATION
+--------------------
+Different operations raise different exceptions, and each exception type 
+provides information about what went wrong. By handling each type 
+specifically, you can provide appropriate responses and take appropriate 
+actions.
+
+COMMON EXCEPTION TYPES AND WHEN THEY OCCUR
+-------------------------------------------
+
+1. ValueError
+   When it occurs: Invalid value for operation
+   Examples:
+   • int("hello") → Cannot convert "hello" to integer
+   • float("abc") → Cannot convert "abc" to float
+   • Invalid input format
+
+2. TypeError
+   When it occurs: Operation on wrong data type
+   Examples:
+   • "5" + 3 → Cannot add string and integer
+   • len(5) → Integer has no length
+   • Wrong type for operation
+
+3. ZeroDivisionError
+   When it occurs: Division by zero
+   Examples:
+   • 10 / 0 → Cannot divide by zero
+   • 5 // 0 → Cannot do integer division by zero
+   • Any division where denominator is zero
+
+4. IOError / FileNotFoundError
+   When it occurs: File operation fails
+   Examples:
+   • open("nonexistent.txt") → File doesn't exist
+   • Permission denied
+   • Disk full
+   • File locked
+
+5. IndexError
+   When it occurs: Invalid list/index access
+   Examples:
+   • my_list[10] when list has only 5 items
+   • Accessing non-existent index
+
+6. KeyError
+   When it occurs: Invalid dictionary key
+   Examples:
+   • my_dict["nonexistent_key"] → Key doesn't exist
+   • Accessing missing dictionary key
+
+7. AttributeError
+   When it occurs: Object doesn't have attribute
+   Examples:
+   • my_string.uppercase() → String has .upper(), not .uppercase()
+   • Accessing non-existent method or attribute
+
+DETAILED EXAMPLE: FILE OPERATIONS WITH MULTIPLE EXCEPTIONS
+-----------------------------------------------------------
+  # Program that handles multiple file operation errors
+  print("File Operations Program")
+  
+  try:
+      filename = input("Enter filename: ")
+      mode = input("Enter mode (r/w/a): ")
+      
+      # Open file
+      file = open(filename, mode)
+      
+      # Read or write based on mode
+      if mode == 'r':
+          content = file.read()
+          print("File content:")
+          print(content)
+      elif mode == 'w':
+          file.write("Hello, World!")
+          print("File written successfully.")
+      elif mode == 'a':
+          file.write("\nAppended text.")
+          print("Text appended successfully.")
+      
+      file.close()
+      
+  except FileNotFoundError:
+      print("Error: File not found. Please check the filename.")
+      
+  except PermissionError:
+      print("Error: Permission denied. You don't have access to this file.")
+      
+  except IOError:
+      print("Error: Input/Output error. Unable to read or write file.")
+      
+  except ValueError:
+      print("Error: Invalid mode. Use 'r', 'w', or 'a'.")
+      
+  print("Program continues...")
+
+LINE-BY-LINE EXPLANATION:
+Line 1: # Program that handles multiple file operation errors
+        • Comment describing program purpose
+
+Line 2: print("File Operations Program")
+        • Displays program title
+
+Line 4: try:
+        • Starts try block for file operations
+
+Line 5: filename = input("Enter filename: ")
+        • Gets filename from user
+        • User might enter valid or invalid filename
+
+Line 6: mode = input("Enter mode (r/w/a): ")
+        • Gets file mode from user
+        • 'r' = read, 'w' = write, 'a' = append
+        • User might enter invalid mode
+
+Line 9: file = open(filename, mode)
+        • Tries to open file
+        • If file doesn't exist and mode is 'r' → raises FileNotFoundError
+        • If permission denied → raises PermissionError
+        • If other I/O error → raises IOError
+        • If mode is invalid → might raise ValueError
+
+Line 12-14: if mode == 'r':
+        • If reading mode
+        • Reads entire file content
+        • Stores in content variable
+        • Displays content
+
+Line 15-17: elif mode == 'w':
+        • If writing mode
+        • Writes "Hello, World!" to file
+        • Displays success message
+
+Line 18-20: elif mode == 'a':
+        • If append mode
+        • Appends text to file
+        • Displays success message
+
+Line 22: file.close()
+        • Closes the file
+        • Important for resource management
+        • Only executes if no exception occurred
+
+Line 24: except FileNotFoundError:
+        • Catches file not found errors
+        • Specific to missing files
+        • Provides specific error message
+
+Line 25: print("Error: File not found. Please check the filename.")
+        • User-friendly message
+        • Tells user what to check
+
+Line 27: except PermissionError:
+        • Catches permission errors
+        • Specific to access denied situations
+        • Different from file not found
+
+Line 28: print("Error: Permission denied. You don't have access to this file.")
+        • Specific message for permission issues
+        • Helps user understand the problem
+
+Line 30: except IOError:
+        • Catches general I/O errors
+        • Catches errors not caught by above except blocks
+        • Broader category
+
+Line 31: print("Error: Input/Output error. Unable to read or write file.")
+        • General I/O error message
+        • Covers various I/O problems
+
+Line 33: except ValueError:
+        • Catches value errors
+        • Might occur if mode is invalid
+        • Or other value-related issues
+
+Line 34: print("Error: Invalid mode. Use 'r', 'w', or 'a'.")
+        • Specific message for invalid mode
+        • Tells user what values are valid
+
+Line 36: print("Program continues...")
+        • Always executes
+        • Shows program didn't crash
+
+ORDER OF EXCEPT BLOCKS MATTERS
+-------------------------------
+Python checks except blocks in order (top to bottom). More specific exceptions 
+should come before general ones:
+
+CORRECT ORDER:
+  except FileNotFoundError:      # Specific
+      handle_file_not_found()
+  except IOError:                 # General (catches FileNotFoundError's parent)
+      handle_io_error()
+
+INCORRECT ORDER:
+  except IOError:                 # General (catches everything first!)
+      handle_io_error()
+  except FileNotFoundError:       # Never reached (IOError catches it first)
+      handle_file_not_found()
+
+Why this matters:
+• FileNotFoundError is a subclass of IOError
+• If IOError comes first, it catches FileNotFoundError too
+• More specific except blocks should come first
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: WHY CATCHING ALL EXCEPTIONS IS BAD PRACTICE
+---------------------------------------------------------
+
+DEFINITION
+----------
+Catching all exceptions without specifying the exception type (using bare 
+except: or except Exception:) is considered bad practice because it hides 
+errors, makes debugging difficult, and prevents you from handling specific 
+errors appropriately.
+
+DETAILED EXPLANATION
+--------------------
+The original material provides a crucial warning about this practice: "For 
+this except statement you will notice that the type of error to catch is not 
+specified. While this may seem a logical step so the program will catch all 
+errors and not terminate, this is not a best practice."
+
+Let's understand why this is problematic.
+
+SYNTAX FOR CATCHING ALL EXCEPTIONS
+-----------------------------------
+  try:
+      code_here()
+  except:  # Catches ALL exceptions (bad practice)
+      handle_error()
+
+  # OR
+
+  try:
+      code_here()
+  except Exception:  # Also catches all exceptions (still bad practice)
+      handle_error()
+
+WHY IT SEEMS LIKE A GOOD IDEA
+------------------------------
+At first glance, catching all exceptions seems smart:
+• Program never crashes
+• All errors are handled
+• Simple to write
+• No need to know specific exception types
+
+THE PROBLEM: HIDING ERRORS
+---------------------------
+The original material explains: "For example, let's say our small program was 
+just one section of a much larger program that was over a thousand lines of 
+code. Our task was to debug the program as it kept throwing an error causing a 
+disruption for our users. When investigating the program you found this error 
+kept appearing. Because this error had no details you ended up spending hours 
+trying to pinpoint and fix the error."
+
+This is the core problem: catching all exceptions hides important information.
+
+PROBLEM 1: NO ERROR DETAILS
+----------------------------
+  try:
+      result = 10 / 0
+      file = open("data.txt")
+      number = int("hello")
+  except:
+      print("An error occurred")
+
+What's wrong:
+• You don't know WHICH operation failed
+• You don't know WHAT type of error occurred
+• You can't provide specific error messages
+• Debugging becomes nearly impossible
+
+PROBLEM 2: CATCHES ERRORS YOU DIDN'T EXPECT
+--------------------------------------------
+  try:
+      my_list = [1, 2, 3]
+      result = my_list[10]  # IndexError
+  except:
+      print("Error occurred")
+
+What's wrong:
+• IndexError is caught
+• But maybe you wanted to catch ValueError, not IndexError
+• You're catching errors you didn't anticipate
+• This masks bugs in your code
+
+PROBLEM 3: CATCHES SYSTEM-LEVEL ERRORS
+--------------------------------------
+  try:
+      # Your code
+      important_function()
+  except:
+      print("Error occurred")
+      # Continues running
+
+What's wrong:
+• Catches KeyboardInterrupt (Ctrl+C) - user can't exit!
+• Catches SystemExit - program can't exit normally!
+• Catches MemoryError - should probably crash!
+• Catches errors that SHOULD crash the program
+
+PROBLEM 4: MAKES DEBUGGING DIFFICULT
+------------------------------------
+The original material's example perfectly illustrates this:
+
+Scenario:
+• Large program (1000+ lines)
+• Error keeps occurring
+• Exception handler catches all errors
+• No details about what went wrong
+• Hours spent debugging
+
+With specific exceptions:
+  try:
+      code_here()
+  except ValueError as e:
+      print(f"ValueError: {e}")  # Shows exactly what went wrong
+      print(f"At line: {traceback.format_exc()}")  # Shows where
+
+With catch-all:
+  try:
+      code_here()
+  except:
+      print("Error occurred")  # No details!
+
+REAL-WORLD ANALOGY
+------------------
+Catching all exceptions is like having a doctor who says "you're sick" but 
+never tells you:
+• What illness you have
+• What symptoms you're showing
+• What treatment you need
+• How to prevent it in the future
+
+You know something's wrong, but you can't fix it because you don't know what 
+it is!
+
+BETTER APPROACH: SPECIFIC EXCEPTIONS
+-------------------------------------
+  try:
+      result = 10 / 0
+      file = open("data.txt")
+      number = int("hello")
+  except ZeroDivisionError:
+      print("Cannot divide by zero!")
+  except FileNotFoundError:
+      print("File not found!")
+  except ValueError:
+      print("Invalid value!")
+  except Exception as e:
+      print(f"Unexpected error: {e}")  # Log unexpected errors
+      raise  # Re-raise to see full traceback
+
+Benefits:
+• Know exactly what went wrong
+• Provide specific error messages
+• Handle each error appropriately
+• Debug easily when unexpected errors occur
+
+WHEN CATCH-ALL MIGHT BE ACCEPTABLE
+-----------------------------------
+Very rarely, you might use catch-all, but only with logging:
+
+  try:
+      critical_operation()
+  except Exception as e:
+      logger.error(f"Unexpected error: {e}", exc_info=True)
+      # Log full details
+      raise  # Re-raise to see what happened
+      # OR handle gracefully if appropriate
+
+Key points:
+• Always log the exception details
+• Use exc_info=True to get full traceback
+• Usually re-raise or handle very specifically
+• Document why catch-all is necessary
+
+THE GOLDEN RULE
+---------------
+Always catch specific exceptions. Only catch Exception (with logging) if you 
+absolutely must, and always log the details.
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE ELSE CLAUSE
+------------------------------
+
+DEFINITION
+----------
+The else clause in exception handling executes code when the try block 
+completes successfully without raising any exceptions. It provides a way to 
+execute code only when no errors occurred.
+
+DETAILED EXPLANATION
+--------------------
+The original material explains: "So far in our program we have defined that an 
+error message should print out if an error occurs, but we do not receive any 
+messages that the program executed properly. This is where we can now add an 
+else statement to give us that notification."
+
+The else clause solves the problem of knowing when operations succeeded.
+
+BASIC SYNTAX
+------------
+  try:
+      # Code that might raise an exception
+      risky_operation()
+  except SomeException:
+      # Handle the exception
+      handle_error()
+  else:
+      # Execute only if NO exception occurred
+      success_code()
+
+HOW ELSE WORKS
+--------------
+1. Python executes try block
+2. If exception occurs:
+   • Execute except block
+   • Skip else block
+3. If NO exception occurs:
+   • Skip except block
+   • Execute else block
+
+IMPORTANT: else executes ONLY if try block completes without exceptions.
+
+WHY ELSE IS USEFUL
+------------------
+Without else:
+  try:
+      result = calculate()
+      print(f"Result: {result}")  # Is this success or part of try?
+  except ValueError:
+      print("Error occurred")
+
+Problem: You can't tell if print executed because of success or if it's just 
+part of the try block.
+
+With else:
+  try:
+      result = calculate()
+  except ValueError:
+      print("Error occurred")
+  else:
+      print(f"Result: {result}")  # Clearly success code
+
+Benefit: Code in else block clearly indicates success.
+
+DETAILED EXAMPLE: FILE OPERATION WITH ELSE
+-------------------------------------------
+Based on the original material's file example:
+
+  # Program to write to a file
+  print("File Writer Program")
+  
+  try:
+      filename = input("Enter filename: ")
+      file = open(filename, 'w')
+      file.write("Hello, World!")
+      file.close()
+      
+  except IOError:
+      print("Unable to open or read the data in the file.")
+  else:
+      print("The file was written successfully.")
+
+LINE-BY-LINE EXPLANATION:
+Line 1: # Program to write to a file
+        • Comment describing program
+
+Line 2: print("File Writer Program")
+        • Displays program title
+        • Always executes
+
+Line 4: try:
+        • Starts try block
+        • File operations might fail
+
+Line 5: filename = input("Enter filename: ")
+        • Gets filename from user
+        • No exception here (input always works)
+
+Line 6: file = open(filename, 'w')
+        • Tries to open file for writing
+        • If file can't be opened → raises IOError
+        • If successful → file object created
+
+Line 7: file.write("Hello, World!")
+        • Writes text to file
+        • Only executes if file opened successfully
+        • If write fails → might raise IOError
+
+Line 8: file.close()
+        • Closes the file
+        • Only executes if no exception so far
+        • Important for resource cleanup
+
+Line 10: except IOError:
+        • Catches IOError exceptions
+        • Executes if file operation failed
+        • Message from original material
+
+Line 11: print("Unable to open or read the data in the file.")
+        • Displays error message
+        • Only executes if IOError occurred
+
+Line 12: else:
+        • Starts else clause
+        • Executes ONLY if try block succeeded
+
+Line 13: print("The file was written successfully.")
+        • Displays success message
+        • Message from original material
+        • Only executes if no exception occurred
+        • Clearly indicates successful execution
+
+WHAT THE ORIGINAL MATERIAL MEANS
+---------------------------------
+The original material says: "By adding this else statement it will provide us 
+a notification to the console that 'The file was written successfully.'"
+
+This means:
+• Without else: No way to know if operation succeeded
+• With else: Clear notification when operation succeeds
+• else provides positive confirmation, not just error handling
+
+EXECUTION FLOW WITH ELSE
+------------------------
+
+SCENARIO 1: Success (No Exception)
+  try:
+      file = open("data.txt", 'w')  ✓
+      file.write("Hello")           ✓
+      file.close()                  ✓
+  except IOError:
+      # Skipped (no exception)
+  else:
+      print("Success!")             ✓ EXECUTES
+
+SCENARIO 2: Failure (Exception Occurs)
+  try:
+      file = open("nonexistent.txt", 'r')  ✗ IOError raised
+      file.read()                          # Never executes
+      file.close()                         # Never executes
+  except IOError:
+      print("Error!")                      ✓ EXECUTES
+  else:
+      print("Success!")                    # Never executes
+
+COMMON MISTAKE: PUTTING CODE IN TRY INSTEAD OF ELSE
+-----------------------------------------------------
+WRONG:
+  try:
+      result = calculate()
+      print("Success!")  # This executes even if calculate() fails later
+      another_operation()  # If this fails, "Success!" already printed
+  except ValueError:
+      print("Error!")
+
+Problem: "Success!" prints even if another_operation() fails.
+
+RIGHT:
+  try:
+      result = calculate()
+      another_operation()
+  except ValueError:
+      print("Error!")
+  else:
+      print("Success!")  # Only prints if BOTH operations succeed
+
+Benefit: Success message only prints if everything succeeds.
+
+ELSE VS CODE AFTER TRY-EXCEPT
+------------------------------
+  try:
+      operation()
+  except:
+      handle_error()
+  else:
+      print("Success in else")
+  
+  print("This always executes")
+
+Difference:
+• else block: Executes ONLY if try succeeded
+• Code after: Always executes (unless program crashes)
+
+Use else when:
+• You want code that runs ONLY on success
+• You want to clearly separate success code from try code
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: THE FINALLY CLAUSE
+--------------------------------
+
+DEFINITION
+----------
+The finally clause in exception handling executes code regardless of whether 
+an exception occurred or not. It is typically used for cleanup operations that 
+must always happen, such as closing files or releasing resources.
+
+DETAILED EXPLANATION
+--------------------
+The original material explains: "Now that we have defined what will happen if 
+our program executes properly, or if an error occurs there is one last 
+statement to add. For this example, since we are opening a file the last thing 
+we need to do is close the file. By adding a finally statement it will tell 
+the program to close the file no matter the end result and print 'File is now 
+closed' to our console."
+
+The finally clause ensures cleanup code always executes.
+
+BASIC SYNTAX
+------------
+  try:
+      # Code that might raise an exception
+      risky_operation()
+  except SomeException:
+      # Handle the exception
+      handle_error()
+  else:
+      # Execute if no exception
+      success_code()
+  finally:
+      # ALWAYS executes
+      cleanup_code()
+
+HOW FINALLY WORKS
+-----------------
+The finally block ALWAYS executes:
+• If try succeeds → Execute finally
+• If exception occurs and is caught → Execute except, then finally
+• If exception occurs and is NOT caught → Execute finally, then crash
+• Even if return statement in try/except → Execute finally first
+
+ORDER OF EXECUTION:
+1. Execute try block
+2. If exception → Execute except block
+3. If no exception → Execute else block
+4. ALWAYS execute finally block
+
+WHY FINALLY IS ESSENTIAL
+------------------------
+Problem without finally:
+  try:
+      file = open("data.txt", 'w')
+      file.write("Hello")
+      # If exception occurs here, file never closes!
+      file.close()
+  except IOError:
+      print("Error!")
+      # File still not closed if exception occurred!
+
+Problem: File might not close if exception occurs before file.close().
+
+Solution with finally:
+  try:
+      file = open("data.txt", 'w')
+      file.write("Hello")
+  except IOError:
+      print("Error!")
+  finally:
+      file.close()  # ALWAYS executes
+      print("File is now closed")
+
+Benefit: File always closes, no matter what happens.
+
+DETAILED EXAMPLE: COMPLETE FILE OPERATION WITH FINALLY
+-------------------------------------------------------
+Based on the original material's complete example:
+
+  # Complete file operation with exception handling
+  print("File Operations Program")
+  
+  try:
+      filename = input("Enter filename: ")
+      file = open(filename, 'w')
+      file.write("Hello, World!")
+      
+  except IOError:
+      print("Unable to open or read the data in the file.")
+  else:
+      print("The file was written successfully.")
+  finally:
+      file.close()
+      print("File is now closed")
+
+LINE-BY-LINE EXPLANATION:
+Line 1: # Complete file operation with exception handling
+        • Comment describing program
+
+Line 2: print("File Operations Program")
+        • Displays program title
+        • Always executes
+
+Line 4: try:
+        • Starts try block
+        • File operations might fail
+
+Line 5: filename = input("Enter filename: ")
+        • Gets filename from user
+        • No exception here
+
+Line 6: file = open(filename, 'w')
+        • Tries to open file for writing
+        • If successful → file object created
+        • If fails → raises IOError
+
+Line 7: file.write("Hello, World!")
+        • Writes text to file
+        • Only executes if file opened successfully
+        • If write fails → might raise IOError
+
+Line 9: except IOError:
+        • Catches IOError exceptions
+        • Executes if file operation failed
+        • Message from original material
+
+Line 10: print("Unable to open or read the data in the file.")
+        • Displays error message
+        • Only executes if IOError occurred
+
+Line 11: else:
+        • Starts else clause
+        • Executes ONLY if try block succeeded
+
+Line 12: print("The file was written successfully.")
+        • Displays success message
+        • Message from original material
+        • Only executes if no exception occurred
+
+Line 13: finally:
+        • Starts finally clause
+        • ALWAYS executes, no matter what
+
+Line 14: file.close()
+        • Closes the file
+        • ALWAYS executes
+        • Important: What if file was never opened?
+
+IMPORTANT: HANDLING THE CASE WHERE FILE WASN'T OPENED
+------------------------------------------------------
+If open() fails, file variable might not exist. We need to handle this:
+
+  file = None  # Initialize variable
+  
+  try:
+      filename = input("Enter filename: ")
+      file = open(filename, 'w')
+      file.write("Hello, World!")
+      
+  except IOError:
+      print("Unable to open or read the data in the file.")
+  else:
+      print("The file was written successfully.")
+  finally:
+      if file is not None:  # Check if file was opened
+          file.close()
+      print("File is now closed")
+
+WHAT THE ORIGINAL MATERIAL MEANS
+---------------------------------
+The original material says: "By adding a finally statement it will tell the 
+program to close the file no matter the end result and print 'File is now 
+closed' to our console."
+
+This means:
+• finally ensures cleanup code always runs
+• File closing happens regardless of success or failure
+• Provides confirmation that cleanup completed
+• Essential for resource management
+
+EXECUTION FLOW WITH FINALLY
+---------------------------
+
+SCENARIO 1: Success
+  try:
+      file = open("data.txt", 'w')  ✓
+      file.write("Hello")           ✓
+  except IOError:
+      # Skipped
+  else:
+      print("Success!")             ✓
+  finally:
+      file.close()                  ✓ ALWAYS
+      print("File closed")         ✓ ALWAYS
+
+SCENARIO 2: Failure
+  try:
+      file = open("nonexistent.txt", 'r')  ✗ IOError
+      file.read()                          # Never executes
+  except IOError:
+      print("Error!")                      ✓
+  else:
+      # Skipped
+  finally:
+      # But file was never opened! Need to check:
+      if file:  # or if 'file' in locals()
+          file.close()
+      print("File closed")                 ✓ ALWAYS
+
+COMMON USE CASES FOR FINALLY
+-----------------------------
+
+1. Closing Files
+   finally:
+       if file:
+           file.close()
+
+2. Closing Database Connections
+   finally:
+       if connection:
+           connection.close()
+
+3. Releasing Locks
+   finally:
+       lock.release()
+
+4. Cleaning Up Temporary Files
+   finally:
+       if temp_file.exists():
+           temp_file.delete()
+
+5. Restoring State
+   finally:
+       restore_original_state()
+
+FINALLY WITH RETURN STATEMENTS
+------------------------------
+Even return statements don't prevent finally from executing:
+
+  def example():
+      try:
+          return "Success"
+      finally:
+          print("This always executes")
+  
+  result = example()
+  # Output: "This always executes"
+  # result = "Success"
+
+The finally block executes BEFORE the return statement completes.
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: COMPLETE TRY-EXCEPT-ELSE-FINALLY STRUCTURE
+--------------------------------------------------------
+
+DEFINITION
+----------
+The complete exception handling structure combines try, except, else, and 
+finally clauses to provide comprehensive error handling with success 
+notification and guaranteed cleanup.
+
+DETAILED EXPLANATION
+--------------------
+Now that you understand each component, let's see how they all work together 
+in a complete structure.
+
+COMPLETE SYNTAX STRUCTURE
+-------------------------
+  try:
+      # Code that might raise an exception
+      risky_operation()
+      
+  except SpecificException:
+      # Handle specific exception
+      handle_specific_error()
+      
+  except AnotherException:
+      # Handle another exception
+      handle_another_error()
+      
+  except Exception:
+      # Handle any other exception (with logging)
+      log_unexpected_error()
+      
+  else:
+      # Execute only if NO exception occurred
+      success_code()
+      
+  finally:
+      # ALWAYS execute (cleanup)
+      cleanup_code()
+
+EXECUTION ORDER
+---------------
+1. Execute try block
+2. If exception occurs:
+   a. Stop executing try block
+   b. Find matching except block
+   c. Execute matching except block
+   d. Skip other except blocks
+   e. Skip else block
+3. If NO exception occurs:
+   a. Complete try block
+   b. Skip all except blocks
+   c. Execute else block
+4. ALWAYS execute finally block
+
+COMPLETE EXAMPLE: FILE OPERATIONS
+----------------------------------
+  # Complete file operation example
+  print("=" * 50)
+  print("File Operations with Complete Exception Handling")
+  print("=" * 50)
+  
+  file = None  # Initialize to avoid NameError
+  
+  try:
+      # Get filename from user
+      filename = input("\nEnter filename to write: ")
+      
+      # Open file for writing
+      file = open(filename, 'w')
+      
+      # Get content from user
+      content = input("Enter content to write: ")
+      
+      # Write content to file
+      file.write(content)
+      
+      # Flush to ensure data is written
+      file.flush()
+      
+  except FileNotFoundError:
+      print("\nError: File not found or path is invalid.")
+      
+  except PermissionError:
+      print("\nError: Permission denied. Cannot write to this file.")
+      
+  except IOError as e:
+      print(f"\nError: Unable to open or read the data in the file.")
+      print(f"Details: {e}")
+      
+  except KeyboardInterrupt:
+      print("\n\nError: Operation cancelled by user.")
+      
+  else:
+      print("\nThe file was written successfully.")
+      
+  finally:
+      if file is not None:
+          file.close()
+          print("File is now closed.")
+      else:
+          print("No file was opened.")
+      
+      print("Cleanup completed.")
+
+LINE-BY-LINE EXPLANATION:
+Line 1: # Complete file operation example
+        • Comment describing the program
+
+Line 2-4: Header display
+        • Displays formatted header
+        • "=" * 50 creates a line of 50 equals signs
+        • Always executes
+
+Line 6: file = None
+        • Initializes file variable to None
+        • Prevents NameError in finally if open() fails
+        • Important for proper cleanup
+
+Line 8: try:
+        • Starts try block
+        • All file operations here
+
+Line 10: filename = input("\nEnter filename to write: ")
+        • Gets filename from user
+        • \n adds newline for formatting
+        • No exception here (input always works)
+
+Line 13: file = open(filename, 'w')
+        • Tries to open file for writing
+        • If file doesn't exist → creates it
+        • If path invalid → raises FileNotFoundError
+        • If permission denied → raises PermissionError
+        • If other I/O error → raises IOError
+        • If successful → file object created
+
+Line 16: content = input("Enter content to write: ")
+        • Gets content from user
+        • No exception here
+
+Line 19: file.write(content)
+        • Writes content to file
+        • Only executes if file opened successfully
+        • If write fails → might raise IOError
+
+Line 22: file.flush()
+        • Forces data to be written to disk
+        • Ensures data is saved immediately
+        • Only executes if no exception so far
+
+Line 24: except FileNotFoundError:
+        • First except block
+        • Catches file not found errors
+        • Specific to missing files or invalid paths
+
+Line 25: print("\nError: File not found or path is invalid.")
+        • User-friendly error message
+        • Explains what went wrong
+
+Line 27: except PermissionError:
+        • Second except block
+        • Catches permission errors
+        • Specific to access denied situations
+
+Line 28: print("\nError: Permission denied. Cannot write to this file.")
+        • Specific error message for permissions
+        • Helps user understand the issue
+
+Line 30: except IOError as e:
+        • Third except block
+        • Catches general I/O errors
+        • as e stores exception in variable e
+        • Can access exception details
+
+Line 31: print(f"\nError: Unable to open or read the data in the file.")
+        • Error message from original material
+        • Uses f-string for formatting
+
+Line 32: print(f"Details: {e}")
+        • Displays exception details
+        • Provides more information for debugging
+        • {e} inserts exception message
+
+Line 34: except KeyboardInterrupt:
+        • Fourth except block
+        • Catches user cancellation (Ctrl+C)
+        • Important for user experience
+
+Line 35: print("\n\nError: Operation cancelled by user.")
+        • Message when user cancels
+        • \n\n adds extra newlines
+
+Line 37: else:
+        • Starts else clause
+        • Executes ONLY if try block succeeded
+
+Line 38: print("\nThe file was written successfully.")
+        • Success message from original material
+        • Only displays if no exceptions occurred
+        • Confirms successful operation
+
+Line 40: finally:
+        • Starts finally clause
+        • ALWAYS executes
+
+Line 41: if file is not None:
+        • Checks if file was successfully opened
+        • Prevents error if open() failed
+        • Important safety check
+
+Line 42: file.close()
+        • Closes the file
+        • Only executes if file was opened
+        • Essential for resource cleanup
+
+Line 43: print("File is now closed.")
+        • Confirmation message from original material
+        • Always displays (in this branch)
+
+Line 44: else:
+        • else for the if statement (not the try-else)
+        • Executes if file was None
+
+Line 45: print("No file was opened.")
+        • Message when file wasn't opened
+        • Provides information about what happened
+
+Line 47: print("Cleanup completed.")
+        • Always executes
+        • Confirms cleanup finished
+        • Provides closure
+
+TESTING THE COMPLETE STRUCTURE
+-------------------------------
+
+TEST CASE 1: Successful Operation
+  Input: "test.txt", "Hello World"
+  Output:
+    ==================================================
+    File Operations with Complete Exception Handling
+    ==================================================
+    
+    Enter filename to write: test.txt
+    Enter content to write: Hello World
+    
+    The file was written successfully.
+    File is now closed.
+    Cleanup completed.
+
+  Execution Flow:
+  • try block executes successfully ✓
+  • All except blocks skipped ✓
+  • else block executes ✓
+  • finally block executes ✓
+
+TEST CASE 2: File Not Found Error
+  Input: "/invalid/path/file.txt"
+  Output:
+    ==================================================
+    File Operations with Complete Exception Handling
+    ==================================================
+    
+    Enter filename to write: /invalid/path/file.txt
+    Error: File not found or path is invalid.
+    No file was opened.
+    Cleanup completed.
+
+  Execution Flow:
+  • try block raises FileNotFoundError ✗
+  • First except block catches it ✓
+  • Other except blocks skipped ✓
+  • else block skipped ✓
+  • finally block executes ✓
+
+TEST CASE 3: Permission Error
+  Input: "/root/protected.txt" (on Linux/Mac)
+  Output:
+    ==================================================
+    File Operations with Complete Exception Handling
+    ==================================================
+    
+    Enter filename to write: /root/protected.txt
+    Error: Permission denied. Cannot write to this file.
+    No file was opened.
+    Cleanup completed.
+
+  Execution Flow:
+  • try block raises PermissionError ✗
+  • Second except block catches it ✓
+  • Other except blocks skipped ✓
+  • else block skipped ✓
+  • finally block executes ✓
+
+KEY TAKEAWAYS
+-------------
+1. Try block: Code that might fail
+2. Except blocks: Handle specific errors
+3. Else block: Code for successful execution
+4. Finally block: Cleanup that always happens
+5. Order matters: Specific exceptions before general ones
+6. Always initialize variables used in finally
+7. Check if resources exist before cleaning up in finally
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: COMPLETE FILE HANDLING EXAMPLE
+---------------------------------------------
+
+DEFINITION
+----------
+This section provides a complete, production-ready file handling example that 
+demonstrates all exception handling concepts: try, multiple except blocks, 
+else, and finally, with detailed explanations of every line.
+
+DETAILED EXPLANATION
+--------------------
+Based on the original material's file operation example, here's a complete, 
+comprehensive implementation with extensive explanations.
+
+COMPLETE PROGRAM: ROBUST FILE WRITER
+-------------------------------------
+  # ========================================================================
+  # COMPLETE FILE OPERATION EXAMPLE
+  # Based on original material with comprehensive exception handling
+  # ========================================================================
+  
+  def write_to_file():
+      """
+      Safely writes content to a file with comprehensive exception handling.
+      Demonstrates try-except-else-finally structure.
+      """
+      
+      # Initialize file variable to None
+      # This prevents NameError in finally if open() fails
+      file = None
+      
+      try:
+          # ============================================================
+          # STEP 1: Get filename from user
+          # ============================================================
+          print("\n" + "="*60)
+          print("FILE WRITER PROGRAM")
+          print("="*60)
+          
+          filename = input("\nEnter the filename to write: ")
+          
+          # Validate filename is not empty
+          if not filename.strip():
+              raise ValueError("Filename cannot be empty")
+          
+          # ============================================================
+          # STEP 2: Open the file
+          # ============================================================
+          # Attempt to open file for writing
+          # 'w' mode: Opens file for writing, creates if doesn't exist,
+          #           truncates (clears) if exists
+          file = open(filename, 'w')
+          
+          print(f"\nFile '{filename}' opened successfully.")
+          
+          # ============================================================
+          # STEP 3: Get content from user
+          # ============================================================
+          content = input("\nEnter content to write to the file: ")
+          
+          # ============================================================
+          # STEP 4: Write content to file
+          # ============================================================
+          # Write the content to the file
+          # This operation might fail if:
+          # - Disk is full
+          # - File system is read-only
+          # - Network drive is unavailable
+          file.write(content)
+          
+          # Flush the buffer to ensure data is written to disk
+          # This forces Python to write data immediately
+          # Without flush(), data might be in memory buffer
+          file.flush()
+          
+          print(f"\nContent written to file.")
+          
+      # ============================================================
+      # EXCEPTION HANDLING BLOCKS
+      # ============================================================
+      
+      except FileNotFoundError:
+          # This exception occurs when:
+          # - Path doesn't exist and can't be created
+          # - Parent directory doesn't exist
+          # Note: In 'w' mode, FileNotFoundError is rare
+          #       (file is created if doesn't exist)
+          #       But parent directory must exist
+          print("\n" + "-"*60)
+          print("ERROR: File not found or invalid path.")
+          print("The file path you specified does not exist or")
+          print("cannot be created. Please check the path and try again.")
+          print("-"*60)
+          
+      except PermissionError:
+          # This exception occurs when:
+          # - File is read-only
+          # - Directory permissions don't allow writing
+          # - File is locked by another program
+          # - Insufficient user permissions
+          print("\n" + "-"*60)
+          print("ERROR: Permission denied.")
+          print("You do not have permission to write to this file or")
+          print("directory. Please check your permissions or choose")
+          print("a different location.")
+          print("-"*60)
+          
+      except IOError as io_error:
+          # This is a general I/O error
+          # Catches errors not caught by more specific exceptions
+          # The original material mentions this specific error message
+          print("\n" + "-"*60)
+          print("ERROR: Unable to open or read the data in the file.")
+          print("-"*60)
+          print(f"Technical details: {io_error}")
+          print(f"Error type: {type(io_error).__name__}")
+          
+      except ValueError as value_error:
+          # Catches ValueError raised when filename is empty
+          print("\n" + "-"*60)
+          print("ERROR: Invalid input.")
+          print(f"Details: {value_error}")
+          print("-"*60)
+          
+      except KeyboardInterrupt:
+          # Catches when user presses Ctrl+C
+          # Important for good user experience
+          print("\n\n" + "-"*60)
+          print("OPERATION CANCELLED")
+          print("The operation was cancelled by the user.")
+          print("-"*60)
+          
+      except Exception as unexpected_error:
+          # Catches any other unexpected exceptions
+          # This should rarely execute if code is correct
+          # But it's good practice to have a safety net
+          print("\n" + "-"*60)
+          print("ERROR: An unexpected error occurred.")
+          print("-"*60)
+          print(f"Error type: {type(unexpected_error).__name__}")
+          print(f"Error message: {unexpected_error}")
+          print("\nPlease report this error to the developer.")
+          print("-"*60)
+          
+      # ============================================================
+      # ELSE BLOCK: Success notification
+      # ============================================================
+      else:
+          # This block executes ONLY if try block completed successfully
+          # No exceptions were raised
+          # This is the success path
+          print("\n" + "="*60)
+          print("SUCCESS!")
+          print("="*60)
+          # The original material mentions this message:
+          print("The file was written successfully.")
+          print("="*60)
+          
+      # ============================================================
+      # FINALLY BLOCK: Cleanup (always executes)
+      # ============================================================
+      finally:
+          # This block ALWAYS executes, regardless of what happened
+          # Whether try succeeded, exception occurred, or program is exiting
+          # This is where cleanup code goes
+          
+          print("\n" + "-"*60)
+          print("CLEANUP")
+          print("-"*60)
+          
+          # Check if file was successfully opened before trying to close
+          # If open() failed, file might still be None
+          # Trying to close None would raise AttributeError
+          if file is not None:
+              try:
+                  # Attempt to close the file
+                  # Even closing can sometimes fail (rare)
+                  file.close()
+                  # The original material mentions this message:
+                  print("File is now closed.")
+              except Exception as close_error:
+                  # Handle errors during file closing (very rare)
+                  print(f"Warning: Error while closing file: {close_error}")
+          else:
+              # File was never opened (open() failed)
+              print("No file was opened, so no file to close.")
+          
+          print("Cleanup completed.")
+          print("-"*60)
+          
+          # Final message
+          print("\nProgram execution completed.")
+          print("Thank you for using the File Writer Program!")
+  
+  # ============================================================
+  # MAIN EXECUTION
+  # ============================================================
+  if __name__ == "__main__":
+      # This ensures the code only runs when script is executed directly
+      # Not when imported as a module
+      write_to_file()
+
+COMPREHENSIVE LINE-BY-LINE EXPLANATION
+---------------------------------------
+
+FUNCTION DEFINITION (Lines 8-13):
+  def write_to_file():
+      """
+      Safely writes content to a file with comprehensive exception handling.
+      Demonstrates try-except-else-finally structure.
+      """
+• def write_to_file():
+  - Defines a function named write_to_file
+  - Functions allow code reuse and organization
+  - Empty parentheses () means no parameters required
+
+• """..."""
+  - Triple quotes create a docstring
+  - Docstrings document what the function does
+  - Accessible via help(write_to_file)
+
+FILE INITIALIZATION (Line 18):
+  file = None
+• Initializes file variable to None
+• None is Python's way of saying "no value"
+• Prevents NameError in finally if open() fails
+• Critical for proper exception handling
+
+TRY BLOCK START (Line 20):
+  try:
+• Starts the try block
+• All code that might raise exceptions goes here
+• Python will attempt to execute this code
+• If exception occurs, Python looks for except blocks
+
+GETTING FILENAME (Lines 25-32):
+  print("\n" + "="*60)
+  print("FILE WRITER PROGRAM")
+  print("="*60)
+  
+  filename = input("\nEnter the filename to write: ")
+  
+  if not filename.strip():
+      raise ValueError("Filename cannot be empty")
+• print("\n" + "="*60)
+  - \n creates a newline (blank line)
+  - "="*60 creates string of 60 equals signs
+  - + concatenates (combines) strings
+  - Displays formatted header
+
+• filename = input("\nEnter the filename to write: ")
+  - input() displays prompt and waits for user input
+  - User types filename (e.g., "data.txt")
+  - Stores input as string in filename variable
+  - \n adds newline before prompt
+
+• if not filename.strip():
+  - filename.strip() removes leading/trailing whitespace
+  - If result is empty string "", not "" is True
+  - Checks if filename is empty or only whitespace
+
+• raise ValueError("Filename cannot be empty")
+  - raise creates/raises an exception
+  - ValueError indicates invalid value
+  - Message explains what's wrong
+  - Stops execution, jumps to except block
+
+OPENING FILE (Lines 37-42):
+  file = open(filename, 'w')
+  
+  print(f"\nFile '{filename}' opened successfully.")
+• file = open(filename, 'w')
+  - open() attempts to open/create file
+  - filename is the file path/name
+  - 'w' means write mode (creates if doesn't exist)
+  - Returns file object, stores in file variable
+  - Might raise: FileNotFoundError, PermissionError, IOError
+
+• print(f"\nFile '{filename}' opened successfully.")
+  - f-string allows variable interpolation
+  - {filename} inserts value of filename variable
+  - Only executes if open() succeeded
+
+GETTING CONTENT (Line 47):
+  content = input("\nEnter content to write to the file: ")
+• Gets content from user
+• Stores as string in content variable
+• No exception here (input always works)
+
+WRITING TO FILE (Lines 52-62):
+  file.write(content)
+  
+  file.flush()
+  
+  print(f"\nContent written to file.")
+• file.write(content)
+  - Writes content string to file
+  - Content goes to file buffer (memory)
+  - Might raise IOError if write fails
+  - Only executes if file opened successfully
+
+• file.flush()
+  - Forces buffer to write to disk immediately
+  - Without flush(), data might stay in memory
+  - Ensures data is saved
+  - Good practice for important data
+
+• print(f"\nContent written to file.")
+  - Confirms write operation
+  - Only executes if write succeeded
+
+EXCEPT BLOCKS (Lines 67-130):
+Each except block handles a specific exception type:
+
+• except FileNotFoundError: (Lines 69-76)
+  - Catches file not found errors
+  - Provides user-friendly message
+  - Explains what went wrong
+
+• except PermissionError: (Lines 78-85)
+  - Catches permission errors
+  - Specific message for access issues
+  - Helps user understand problem
+
+• except IOError as io_error: (Lines 87-94)
+  - Catches general I/O errors
+  - as io_error stores exception in variable
+  - Uses message from original material
+  - Displays technical details for debugging
+
+• except ValueError: (Lines 96-101)
+  - Catches value errors (empty filename)
+  - Provides specific message
+
+• except KeyboardInterrupt: (Lines 103-108)
+  - Catches user cancellation (Ctrl+C)
+  - Important for user experience
+
+• except Exception: (Lines 110-119)
+  - Catches any other exceptions
+  - Safety net for unexpected errors
+  - Logs error details
+
+ELSE BLOCK (Lines 124-132):
+  else:
+      print("\n" + "="*60)
+      print("SUCCESS!")
+      print("="*60)
+      print("The file was written successfully.")
+• Executes ONLY if try block succeeded
+• No exceptions were raised
+• Displays success message
+• Confirms operation completed successfully
+
+FINALLY BLOCK (Lines 137-165):
+  finally:
+      if file is not None:
+          try:
+              file.close()
+              print("File is now closed.")
+          except Exception as close_error:
+              print(f"Warning: Error while closing file: {close_error}")
+      else:
+          print("No file was opened, so no file to close.")
+• ALWAYS executes
+• if file is not None: checks if file was opened
+• file.close() closes the file
+• Nested try-except handles close errors
+• else handles case where file wasn't opened
+• Ensures cleanup always happens
+
+MAIN EXECUTION (Lines 170-172):
+  if __name__ == "__main__":
+      write_to_file()
+• if __name__ == "__main__":
+  - Special Python variable
+  - "__main__" when script runs directly
+  - Allows code to be imported without executing
+• write_to_file()
+  - Calls the function
+  - Starts program execution
+
+This complete example demonstrates all concepts from the original material with 
+extensive explanations and best practices.
+
+[END SECTION 2.7]
+================================================================================
+
+END OF PART 2
+=============
+
+This concludes Part 2 of the Exception Handling in Python comprehensive study 
+guide. You have learned:
+
+✓ How to handle multiple types of exceptions
+✓ Why catching all exceptions is bad practice
+✓ How to use the else clause for success notifications
+✓ How to use the finally clause for cleanup
+✓ The complete try-except-else-finally structure
+✓ A complete file handling example with detailed explanations
+
+In Part 3, you will learn:
+• Best practices for exception handling
+• Common Python exception types and when to use them
+• Advanced exception handling techniques
+• Summary, key definitions, and quick reference guide
+
+Continue to Part 3 for best practices and advanced techniques!
+
+================================================================================

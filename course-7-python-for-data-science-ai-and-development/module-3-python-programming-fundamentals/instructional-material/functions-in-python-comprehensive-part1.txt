@@ -1,0 +1,1749 @@
+================================================================================
+FUNCTIONS IN PYTHON
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Functions in Python. This comprehensive guide will teach you everything 
+you need to know about functions in Python, from understanding what functions are 
+and why they're essential, to using Python's built-in functions, and finally 
+creating your own custom functions. You'll learn through detailed explanations, 
+extensive examples, and line-by-line code breakdowns that will ensure you 
+understand every concept thoroughly.
+
+ESTIMATED TIME NEEDED
+---------------------
+10 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Explain what functions are and why they're important in programming
+• Understand how functions work conceptually (input, processing, output)
+• Use Python's built-in functions like len(), sum(), and sorted()
+• Differentiate between functions and methods
+• Understand the difference between sorted() function and sort() method
+• Create your own functions using the def keyword
+• Understand function syntax: parameters, code blocks, and return statements
+• Document functions using docstrings
+• Call functions and understand how values are passed to functions
+• Understand how function calls work internally (simplified model)
+
+OVERVIEW
+--------
+Functions are one of the most fundamental concepts in programming. They are 
+essential building blocks that allow you to write reusable, organized, and 
+maintainable code. In Python, functions take some input, then produce some output 
+or perform some change. A function is just a piece of code you can reuse.
+
+You can implement your own functions, but in many cases, you use other people's 
+functions. When using other people's functions, you just need to know how the 
+function works, and in some cases, how to import the functions.
+
+Python has many built-in functions that you can use immediately without any 
+additional setup. You don't have to know how those functions work internally, but 
+simply what task those functions perform.
+
+In this comprehensive guide, we will cover:
+• What functions are and why they matter
+• How functions work conceptually
+• Python's built-in functions
+• Creating your own functions
+• Function parameters and arguments
+• Return values
+• Function documentation
+• And much more!
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of functions and built-in functions:
+
+PART 1: UNDERSTANDING FUNCTIONS
+  SECTION 1.1: WHAT ARE FUNCTIONS?
+  SECTION 1.2: WHY USE FUNCTIONS?
+  SECTION 1.3: HOW FUNCTIONS WORK CONCEPTUALLY
+  SECTION 1.4: FUNCTIONS VS METHODS
+
+PART 2: PYTHON'S BUILT-IN FUNCTIONS
+  SECTION 2.1: INTRODUCTION TO BUILT-IN FUNCTIONS
+  SECTION 2.2: THE len() FUNCTION
+  SECTION 2.3: THE sum() FUNCTION
+  SECTION 2.4: THE sorted() FUNCTION
+  SECTION 2.5: THE sort() METHOD
+  SECTION 2.6: COMPARING sorted() FUNCTION VS sort() METHOD
+
+PART 3: CREATING YOUR OWN FUNCTIONS
+  SECTION 3.1: INTRODUCTION TO CREATING FUNCTIONS
+  SECTION 3.2: FUNCTION SYNTAX AND STRUCTURE
+  SECTION 3.3: YOUR FIRST FUNCTION
+  SECTION 3.4: HOW FUNCTION CALLS WORK
+  SECTION 3.5: FUNCTION DOCUMENTATION (DOCSTRINGS)
+
+NOTE: Part 2 of this guide covers:
+  • Function parameters (single and multiple)
+  • Return values and the None object
+  • Functions without return statements
+  • The pass keyword
+  • Functions that perform multiple tasks
+  • Using loops in functions
+
+NOTE: Part 3 of this guide covers:
+  • Variadic parameters (*args)
+  • Variable scope (global vs local)
+  • The global keyword
+  • Advanced function concepts
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: UNDERSTANDING FUNCTIONS
+================================================================================
+
+SECTION 1.1: WHAT ARE FUNCTIONS?
+---------------------------------
+
+DEFINITION
+----------
+Functions take some input, then produce some output or change. The function is 
+just a piece of code you can reuse.
+
+DETAILED EXPLANATION
+--------------------
+A function is a named block of code that:
+• Takes input (called arguments or parameters)
+• Performs a specific task or set of tasks
+• Produces output (called a return value) or causes some change
+• Can be called (invoked) multiple times from different parts of your program
+• Encapsulates a specific piece of functionality
+
+Think of a function like a recipe:
+• The recipe (function) has a name (function name)
+• It takes ingredients (input/parameters)
+• It has steps to follow (code inside the function)
+• It produces a dish (output/return value)
+• You can use the same recipe (function) many times with different ingredients 
+  (different inputs)
+
+KEY CHARACTERISTICS OF FUNCTIONS:
+• Reusability: Write once, use many times
+• Modularity: Break complex problems into smaller, manageable pieces
+• Abstraction: Hide implementation details - you don't need to know HOW it works, 
+  just WHAT it does
+• Organization: Group related code together
+• Testing: Easier to test individual functions
+• Maintenance: Easier to fix bugs and update code
+
+REAL-WORLD ANALOGY
+------------------
+Think of functions like tools in a toolbox:
+• A hammer (function) has a specific purpose (driving nails)
+• You give it input (a nail and a board)
+• It performs its task (hammers the nail)
+• It produces output (a nail driven into the board)
+• You can use the same hammer (function) many times for different nails 
+  (different inputs)
+• You don't need to know HOW the hammer works internally - you just need to know 
+  HOW TO USE IT
+
+Another analogy: Think of functions like vending machines:
+• You insert money (input)
+• You press a button (call the function)
+• The machine processes your request (function executes)
+• You get a snack (output)
+• The same machine (function) can serve many customers (be called many times)
+
+TYPES OF FUNCTIONS IN PYTHON
+-----------------------------
+1. BUILT-IN FUNCTIONS:
+   • Provided by Python itself
+   • Available immediately without importing
+   • Examples: len(), sum(), print(), sorted()
+
+2. USER-DEFINED FUNCTIONS:
+   • Functions you create yourself
+   • Defined using the def keyword
+   • Customized for your specific needs
+
+3. FUNCTIONS FROM MODULES:
+   • Functions from imported modules
+   • Examples: math.sqrt(), random.randint()
+   • Need to import the module first
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: WHY USE FUNCTIONS?
+--------------------------------
+
+THE BENEFITS OF USING FUNCTIONS
+--------------------------------
+Functions are essential because they allow you to write reusable, organized, and 
+maintainable code. Instead of writing the same code multiple times, you can write 
+it once in a function and call it whenever needed.
+
+BENEFIT 1: CODE REUSABILITY
+----------------------------
+Write code once and use it many times. This follows the DRY principle (Don't 
+Repeat Yourself).
+
+EXAMPLE WITHOUT FUNCTIONS (BAD PRACTICE):
+----------------------------------------
+Imagine you need to calculate the area of a circle in three different places:
+
+  # First place - calculating area
+  radius1 = 5
+  area1 = 3.14159 * radius1 * radius1
+  print(f"Area 1: {area1}")
+
+  # Second place - calculating area (duplicated code!)
+  radius2 = 7
+  area2 = 3.14159 * radius2 * radius2
+  print(f"Area 2: {area2}")
+
+  # Third place - calculating area (duplicated again!)
+  radius3 = 10
+  area3 = 3.14159 * radius3 * radius3
+  print(f"Area 3: {area3}")
+
+PROBLEMS WITH THIS APPROACH:
+• Code duplication - same logic repeated three times
+• Hard to maintain - if you need to change the formula, you must change it in 
+  three places
+• More prone to errors - easy to make mistakes when copying code
+• Longer code - more lines to write and read
+
+EXAMPLE WITH FUNCTIONS (GOOD PRACTICE):
+----------------------------------------
+  # Define the function once
+  def calculate_circle_area(radius):
+      """
+      Calculate the area of a circle given its radius.
+      Formula: π * r²
+      """
+      pi = 3.14159
+      area = pi * radius * radius
+      return area
+
+  # Use the function multiple times
+  area1 = calculate_circle_area(5)
+  print(f"Area 1: {area1}")
+
+  area2 = calculate_circle_area(7)
+  print(f"Area 2: {area2}")
+
+  area3 = calculate_circle_area(10)
+  print(f"Area 3: {area3}")
+
+ADVANTAGES OF THIS APPROACH:
+• No code duplication - function defined once
+• Easy to maintain - change the formula in one place
+• Less error-prone - logic is centralized
+• Shorter code - cleaner and more readable
+• Reusable - can use the function anywhere in your program
+
+BENEFIT 2: CODE ORGANIZATION
+----------------------------
+Functions help organize code by grouping related operations together.
+
+EXAMPLE:
+--------
+Instead of having all your code in one long sequence:
+
+  # Messy, unorganized code
+  name = input("Enter your name: ")
+  name = name.strip()
+  name = name.title()
+  print(f"Hello, {name}!")
+  
+  age = input("Enter your age: ")
+  age = int(age)
+  if age >= 18:
+      print("You are an adult")
+  else:
+      print("You are a minor")
+  
+  email = input("Enter your email: ")
+  email = email.strip()
+  email = email.lower()
+  if "@" in email:
+      print("Valid email format")
+  else:
+      print("Invalid email format")
+
+You can organize it into functions:
+
+  def format_name(name):
+      """Format a name by stripping whitespace and capitalizing."""
+      name = name.strip()
+      name = name.title()
+      return name
+
+  def check_age_category(age):
+      """Check if a person is an adult or minor."""
+      age = int(age)
+      if age >= 18:
+          return "adult"
+      else:
+          return "minor"
+
+  def validate_email(email):
+      """Validate email format."""
+      email = email.strip()
+      email = email.lower()
+      if "@" in email:
+          return True
+      else:
+          return False
+
+  # Main program - much cleaner!
+  name = format_name(input("Enter your name: "))
+  print(f"Hello, {name}!")
+  
+  age_category = check_age_category(input("Enter your age: "))
+  print(f"You are an {age_category}")
+  
+  is_valid = validate_email(input("Enter your email: "))
+  if is_valid:
+      print("Valid email format")
+  else:
+      print("Invalid email format")
+
+BENEFIT 3: ABSTRACTION
+----------------------
+Functions hide implementation details. You don't need to know HOW a function works 
+internally - you just need to know WHAT it does and HOW TO USE IT.
+
+EXAMPLE:
+--------
+You can use Python's built-in len() function without knowing how it counts 
+elements:
+
+  my_list = [1, 2, 3, 4, 5]
+  length = len(my_list)  # You don't need to know HOW len() works internally
+  print(length)  # Output: 5
+
+You trust that len() will correctly count the elements. The implementation 
+details are hidden from you, which makes your code simpler and easier to 
+understand.
+
+BENEFIT 4: TESTING AND DEBUGGING
+---------------------------------
+Functions make it easier to test and debug code because you can test each 
+function independently.
+
+EXAMPLE:
+--------
+  def add_numbers(a, b):
+      """Add two numbers together."""
+      return a + b
+
+  # Test the function
+  result1 = add_numbers(2, 3)
+  print(result1)  # Should output: 5
+
+  result2 = add_numbers(10, 20)
+  print(result2)  # Should output: 30
+
+  result3 = add_numbers(-5, 5)
+  print(result3)  # Should output: 0
+
+If there's a problem, you know it's in the add_numbers function, making debugging 
+much easier.
+
+BENEFIT 5: COLLABORATION
+-------------------------
+Functions make it easier for multiple programmers to work on the same project. 
+Each programmer can work on different functions without interfering with each 
+other.
+
+VISUAL REPRESENTATION: CODE REUSABILITY
+---------------------------------------
+Let the orange and yellow squares represent similar blocks of code:
+
+WITHOUT FUNCTIONS:
+  [Orange Square - Code Block 1]
+  [Yellow Square - Code Block 2]
+  [Orange Square - Code Block 1]  ← Duplicated!
+  [Yellow Square - Code Block 2]  ← Duplicated!
+  [Orange Square - Code Block 1]  ← Duplicated again!
+
+WITH FUNCTIONS:
+  [Function Definition - Orange Square]
+  [Function Definition - Yellow Square]
+  
+  [Small Square - Call Function 1]
+  [Small Square - Call Function 2]
+  [Small Square - Call Function 1]  ← Just call it!
+  [Small Square - Call Function 2]  ← Just call it!
+  [Small Square - Call Function 1]  ← Just call it!
+
+The code is much shorter, and we can replace these long lines of code by just 
+calling the function a few times. The code performs the same task, but it's 
+cleaner and more maintainable.
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: HOW FUNCTIONS WORK CONCEPTUALLY
+---------------------------------------------
+
+THE FUNCTION EXECUTION MODEL
+-----------------------------
+You can think of the process like this: When we call a function, we pass an input 
+to the function. These values are passed to all those lines of code you wrote. 
+This returns a value. You can use the value.
+
+STEP-BY-STEP PROCESS
+--------------------
+1. FUNCTION CALL: You call the function with some input (arguments)
+2. INPUT PASSING: The input values are passed to the function
+3. EXECUTION: The function's code executes with those input values
+4. OUTPUT RETURN: The function returns a value (or performs a side effect)
+5. RESULT USAGE: You can use the returned value in your program
+
+VISUAL REPRESENTATION
+---------------------
+When we call the function f1, we pass an input to the function:
+
+  Input → [Function f1] → Output
+           (Your code)
+
+These values are passed to all those lines of code you wrote. This returns a 
+value. You can use the value.
+
+CHAINING FUNCTIONS
+------------------
+For example, you can input this value to a new function, f2. When we call this 
+new function, f2, the value is passed to another set of lines of code. The 
+function returns a value. The process is repeated, passing the values to the 
+function you call.
+
+VISUAL REPRESENTATION OF CHAINING:
+----------------------------------
+  Input → [Function f1] → Output1 → [Function f2] → Output2 → [Function f3] → Final Output
+           (Code 1)                  (Code 2)                  (Code 3)
+
+EXAMPLE OF CHAINING FUNCTIONS:
+-------------------------------
+  def add_one(x):
+      """Add 1 to a number."""
+      return x + 1
+
+  def multiply_by_two(x):
+      """Multiply a number by 2."""
+      return x * 2
+
+  def square(x):
+      """Square a number."""
+      return x ** 2
+
+  # Chain the functions together
+  number = 5
+  result1 = add_one(number)           # 5 + 1 = 6
+  result2 = multiply_by_two(result1)  # 6 * 2 = 12
+  final_result = square(result2)       # 12 ** 2 = 144
+  
+  print(final_result)  # Output: 144
+
+  # Or chain them in one line
+  final_result = square(multiply_by_two(add_one(5)))
+  print(final_result)  # Output: 144
+
+HOW IT WORKS:
+• add_one(5) returns 6
+• multiply_by_two(6) returns 12
+• square(12) returns 144
+
+REUSING FUNCTIONS
+-----------------
+You can save these functions and reuse them, or use other people's functions. 
+Once you define a function, you can call it as many times as you want with 
+different inputs.
+
+EXAMPLE:
+--------
+  def greet(name):
+      """Greet a person by name."""
+      return f"Hello, {name}!"
+
+  # Reuse the function multiple times
+  greeting1 = greet("Alice")
+  greeting2 = greet("Bob")
+  greeting3 = greet("Charlie")
+  
+  print(greeting1)  # Output: Hello, Alice!
+  print(greeting2)  # Output: Hello, Bob!
+  print(greeting3)  # Output: Hello, Charlie!
+
+The same function, different inputs, different outputs!
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: FUNCTIONS VS METHODS
+----------------------------------
+
+DEFINITION
+----------
+Methods are similar to functions. The main difference is that methods are 
+associated with objects (like lists, strings, dictionaries), while functions 
+stand alone.
+
+DETAILED EXPLANATION
+---------------------
+FUNCTIONS:
+• Standalone pieces of code
+• Called independently: function_name(argument)
+• Examples: len(), sum(), sorted()
+• Not tied to any specific object
+
+METHODS:
+• Functions that belong to objects
+• Called on objects: object.method_name(argument)
+• Examples: list.sort(), string.upper(), list.append()
+• Tied to a specific object type
+
+KEY DIFFERENCES
+---------------
+1. SYNTAX:
+   Function: function_name(argument)
+   Method: object.method_name(argument)
+
+2. OWNERSHIP:
+   Function: Doesn't belong to any object
+   Method: Belongs to a specific object type
+
+3. AVAILABILITY:
+   Function: Available globally (if imported)
+   Method: Only available on objects of that type
+
+EXAMPLES
+--------
+FUNCTION EXAMPLE (sorted):
+  my_list = [3, 1, 4, 1, 5]
+  sorted_list = sorted(my_list)  # Function call
+  print(sorted_list)  # Output: [1, 1, 3, 4, 5]
+
+METHOD EXAMPLE (sort):
+  my_list = [3, 1, 4, 1, 5]
+  my_list.sort()  # Method call - note the dot notation
+  print(my_list)  # Output: [1, 1, 3, 4, 5]
+
+VISUAL COMPARISON
+-----------------
+FUNCTION:
+  sorted(my_list)  ← Function name, then argument in parentheses
+
+METHOD:
+  my_list.sort()  ← Object, then dot, then method name, then parentheses
+
+ANALOGY
+-------
+Think of functions like tools in a toolbox:
+• sorted() is like a hammer - you pick it up and use it
+• You can use it on different materials (different lists)
+
+Think of methods like features of a car:
+• list.sort() is like the car's radio - it's part of the car (list)
+• You can only use it when you have that specific car (list object)
+
+[END SECTION 1.4]
+================================================================================
+
+PART 2: PYTHON'S BUILT-IN FUNCTIONS
+================================================================================
+
+SECTION 2.1: INTRODUCTION TO BUILT-IN FUNCTIONS
+------------------------------------------------
+
+DEFINITION
+----------
+Python has many built-in functions. You don't have to know how those functions 
+work internally, but simply what task those functions perform.
+
+DETAILED EXPLANATION
+--------------------
+Built-in functions are functions that come with Python automatically. You don't 
+need to import anything or install anything - they're available as soon as you 
+start Python.
+
+CHARACTERISTICS OF BUILT-IN FUNCTIONS:
+• Available immediately - no import needed
+• Well-tested and optimized
+• Part of the Python standard library
+• Documented in Python's official documentation
+• Work consistently across different Python versions
+
+COMMON BUILT-IN FUNCTIONS:
+• len() - Get the length of a sequence or collection
+• sum() - Sum all elements in an iterable
+• sorted() - Return a new sorted list
+• print() - Display output to the console
+• input() - Get input from the user
+• type() - Get the type of an object
+• range() - Generate a sequence of numbers
+• abs() - Get the absolute value
+• max() - Get the maximum value
+• min() - Get the minimum value
+• And many more!
+
+WHY USE BUILT-IN FUNCTIONS?
+----------------------------
+1. RELIABILITY: They're tested and proven to work correctly
+2. PERFORMANCE: They're optimized for speed
+3. CONVENIENCE: No need to write your own implementation
+4. STANDARDIZATION: Everyone uses the same functions, making code more readable
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: THE len() FUNCTION
+--------------------------------
+
+DEFINITION
+----------
+The function len takes in an input of type sequence, such as a string or list, or 
+type collection, such as a dictionary or set, and returns the length of that 
+sequence or collection.
+
+DETAILED EXPLANATION
+--------------------
+The len() function counts how many items are in a sequence (like a string or 
+list) or collection (like a dictionary or set). It returns an integer 
+representing the count.
+
+SYNTAX:
+  length = len(sequence_or_collection)
+
+PARAMETERS:
+• sequence_or_collection: A sequence (string, list, tuple) or collection 
+  (dictionary, set)
+
+RETURN VALUE:
+• An integer representing the number of items
+
+WHAT len() WORKS WITH:
+• Strings: Counts characters
+• Lists: Counts elements
+• Tuples: Counts elements
+• Dictionaries: Counts key-value pairs
+• Sets: Counts elements
+
+EXAMPLE 1: LEN() WITH A LIST
+-----------------------------
+Consider the following list:
+
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+
+The len function takes this list as an argument, and we assign the result to the 
+variable l:
+
+  l = len(album_ratings)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+         • Creates a list called album_ratings
+         • Contains 8 integer values representing album ratings
+         • Square brackets [] indicate a list
+         • Commas separate the elements
+
+Line 2: l = len(album_ratings)
+         • Calls the len() function with album_ratings as the argument
+         • len() counts the number of elements in the list
+         • The function determines there are eight items in the list
+         • Returns the length of the list, in this case, eight
+         • Assigns the result (8) to the variable l
+
+The function determines there are eight items in the list, then returns the 
+length of the list, in this case, eight.
+
+  print(l)  # Output: 8
+
+EXAMPLE 2: LEN() WITH A STRING
+-------------------------------
+  my_string = "Hello, World!"
+  length = len(my_string)
+  print(length)  # Output: 13
+
+EXPLANATION:
+• The string "Hello, World!" has 13 characters (including the comma, space, and 
+  exclamation mark)
+• len() counts each character, including spaces and punctuation
+
+EXAMPLE 3: LEN() WITH A DICTIONARY
+-----------------------------------
+  my_dict = {"name": "Alice", "age": 30, "city": "New York"}
+  length = len(my_dict)
+  print(length)  # Output: 3
+
+EXPLANATION:
+• The dictionary has 3 key-value pairs
+• len() counts the number of keys (or key-value pairs)
+
+EXAMPLE 4: LEN() WITH A TUPLE
+-------------------------------
+  my_tuple = (1, 2, 3, 4, 5)
+  length = len(my_tuple)
+  print(length)  # Output: 5
+
+EXPLANATION:
+• The tuple has 5 elements
+• len() counts the number of elements
+
+EXAMPLE 5: LEN() WITH A SET
+----------------------------
+  my_set = {1, 2, 3, 4, 5}
+  length = len(my_set)
+  print(length)  # Output: 5
+
+EXPLANATION:
+• The set has 5 unique elements
+• len() counts the number of elements
+
+COMMON USE CASES
+----------------
+1. CHECKING IF A COLLECTION IS EMPTY:
+   if len(my_list) == 0:
+       print("List is empty")
+
+2. ITERATING THROUGH A COLLECTION:
+   for i in range(len(my_list)):
+       print(my_list[i])
+
+3. VALIDATING INPUT LENGTH:
+   if len(password) < 8:
+       print("Password too short")
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: THE sum() FUNCTION
+--------------------------------
+
+DEFINITION
+----------
+The function sum takes in an iterable, like a tuple or list, and returns the 
+total of all the elements.
+
+DETAILED EXPLANATION
+--------------------
+The sum() function adds up all the numeric elements in an iterable (like a list 
+or tuple) and returns the total.
+
+SYNTAX:
+  total = sum(iterable)
+
+PARAMETERS:
+• iterable: A sequence of numbers (list, tuple, etc.)
+
+RETURN VALUE:
+• The sum of all elements in the iterable
+
+WHAT sum() WORKS WITH:
+• Lists of numbers
+• Tuples of numbers
+• Any iterable containing numeric values
+
+EXAMPLE 1: sum() WITH A LIST
+-----------------------------
+Consider the following list:
+
+  numbers = [10, 20, 30, 10]
+
+We pass the list into the sum function and assign the result to the variable s:
+
+  s = sum(numbers)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: numbers = [10, 20, 30, 10]
+         • Creates a list called numbers
+         • Contains 4 integer values: 10, 20, 30, and 10
+         • Square brackets [] indicate a list
+
+Line 2: s = sum(numbers)
+         • Calls the sum() function with numbers as the argument
+         • sum() adds all the elements together: 10 + 20 + 30 + 10
+         • The function determines the total of all the elements
+         • Returns the sum, in this case, 70
+         • Assigns the result (70) to the variable s
+
+The function determines the total of all the elements, then returns it. In this 
+case, the value is 70.
+
+  print(s)  # Output: 70
+
+EXAMPLE 2: sum() WITH A TUPLE
+------------------------------
+  numbers = (5, 10, 15, 20)
+  total = sum(numbers)
+  print(total)  # Output: 50
+
+EXPLANATION:
+• The tuple contains: 5, 10, 15, 20
+• sum() calculates: 5 + 10 + 15 + 20 = 50
+
+EXAMPLE 3: sum() WITH FLOATING POINT NUMBERS
+---------------------------------------------
+  prices = [9.99, 14.50, 19.99, 4.99]
+  total_price = sum(prices)
+  print(total_price)  # Output: 49.47
+
+EXPLANATION:
+• sum() works with floating point numbers too
+• Calculates: 9.99 + 14.50 + 19.99 + 4.99 = 49.47
+
+EXAMPLE 4: sum() WITH AN EMPTY LIST
+------------------------------------
+  empty_list = []
+  total = sum(empty_list)
+  print(total)  # Output: 0
+
+EXPLANATION:
+• sum() of an empty list returns 0
+• This is the mathematical identity for addition
+
+EXAMPLE 5: sum() WITH START VALUE
+----------------------------------
+  numbers = [1, 2, 3]
+  total = sum(numbers, 10)  # Start with 10
+  print(total)  # Output: 16
+
+EXPLANATION:
+• The second argument (10) is the starting value
+• sum() calculates: 10 + 1 + 2 + 3 = 16
+• Useful when you want to add a base amount
+
+COMMON USE CASES
+----------------
+1. CALCULATING TOTALS:
+   sales = [100, 200, 150, 300]
+   total_sales = sum(sales)
+
+2. AVERAGE CALCULATION:
+   numbers = [10, 20, 30, 40]
+   average = sum(numbers) / len(numbers)
+
+3. ACCUMULATING VALUES:
+   scores = [85, 90, 78, 92]
+   total_score = sum(scores)
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE sorted() FUNCTION
+-----------------------------------
+
+DEFINITION
+----------
+There are two ways to sort a list. The first is using the function sorted. The 
+function sorted returns a new sorted list or tuple.
+
+DETAILED EXPLANATION
+--------------------
+The sorted() function takes an iterable (like a list or tuple) and returns a NEW 
+sorted list. The original list remains unchanged.
+
+SYNTAX:
+  sorted_list = sorted(iterable)
+
+PARAMETERS:
+• iterable: A sequence to sort (list, tuple, string, etc.)
+
+RETURN VALUE:
+• A new sorted list (always returns a list, even if input is a tuple)
+
+KEY CHARACTERISTICS:
+• Returns a NEW list - original is not modified
+• Works with any iterable
+• Always returns a list (even if input is a tuple or string)
+
+EXAMPLE 1: sorted() WITH A LIST
+--------------------------------
+Consider the list album_ratings:
+
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+
+We can apply the function sorted to the list album_ratings and get a new list 
+sorted_album_rating:
+
+  sorted_album_rating = sorted(album_ratings)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+         • Creates a list called album_ratings
+         • Contains 8 integer values: 10, 8, 9, 7, 10, 9, 8, 9
+         • Values are in unsorted order
+
+Line 2: sorted_album_rating = sorted(album_ratings)
+         • Calls the sorted() function with album_ratings as the argument
+         • sorted() creates a NEW list with sorted values
+         • Sorts the values in ascending order: [7, 8, 8, 9, 9, 9, 10, 10]
+         • Assigns the new sorted list to sorted_album_rating
+         • The original album_ratings list is NOT modified
+
+The result is a new sorted list. If we look at the list album_ratings, nothing 
+has changed.
+
+  print(sorted_album_rating)  # Output: [7, 8, 8, 9, 9, 9, 10, 10]
+  print(album_ratings)        # Output: [10, 8, 9, 7, 10, 9, 8, 9] (unchanged!)
+
+Generally, functions take an input, in this case, a list. They produce a new 
+output, in this instance, a sorted list.
+
+EXAMPLE 2: sorted() WITH A TUPLE
+---------------------------------
+  numbers = (3, 1, 4, 1, 5)
+  sorted_numbers = sorted(numbers)
+  print(sorted_numbers)  # Output: [1, 1, 3, 4, 5] (returns a LIST!)
+  print(numbers)         # Output: (3, 1, 4, 1, 5) (unchanged!)
+
+EXPLANATION:
+• sorted() works with tuples too
+• Returns a list (not a tuple) even though input was a tuple
+• Original tuple remains unchanged
+
+EXAMPLE 3: sorted() WITH DESCENDING ORDER
+------------------------------------------
+  numbers = [3, 1, 4, 1, 5]
+  sorted_desc = sorted(numbers, reverse=True)
+  print(sorted_desc)  # Output: [5, 4, 3, 1, 1]
+
+EXPLANATION:
+• reverse=True sorts in descending order
+• Original list unchanged
+
+EXAMPLE 4: sorted() WITH STRINGS
+---------------------------------
+  words = ["banana", "apple", "cherry"]
+  sorted_words = sorted(words)
+  print(sorted_words)  # Output: ['apple', 'banana', 'cherry']
+
+EXPLANATION:
+• sorted() sorts strings alphabetically
+• Original list unchanged
+
+VISUAL REPRESENTATION
+---------------------
+ORIGINAL LIST:
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+                  └─────────────────────────┘
+                           │
+                           │ sorted() function
+                           │
+                           ▼
+NEW SORTED LIST:
+  sorted_album_rating = [7, 8, 8, 9, 9, 9, 10, 10]
+
+ORIGINAL LIST (UNCHANGED):
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]  ← Still the same!
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: THE sort() METHOD
+--------------------------------
+
+DEFINITION
+----------
+We can also use the list method sort. If we use the method sort, the list album 
+ratings will change and no new list will be created.
+
+DETAILED EXPLANATION
+--------------------
+The sort() method is a method that belongs to list objects. It sorts the list 
+IN-PLACE, meaning it modifies the original list directly. No new list is created.
+
+SYNTAX:
+  list.sort()
+
+PARAMETERS:
+• No required parameters (sorts in ascending order by default)
+• Optional: reverse=True for descending order
+
+RETURN VALUE:
+• None (returns nothing - it modifies the list in-place)
+
+KEY CHARACTERISTICS:
+• Modifies the original list - list is changed
+• Returns None (not a new list)
+• Only works on lists (not tuples or other sequences)
+• Method syntax: list.sort() (note the dot)
+
+EXAMPLE 1: sort() METHOD
+-------------------------
+Consider the list album_ratings:
+
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+
+If we use the method sort, the list album_ratings will change:
+
+  album_ratings.sort()
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+         • Creates a list called album_ratings
+         • Contains 8 integer values in unsorted order
+
+Line 2: album_ratings.sort()
+         • Calls the sort() METHOD on the album_ratings list
+         • Note the dot notation: album_ratings.sort()
+         • sort() modifies the list IN-PLACE
+         • Sorts the values: [7, 8, 8, 9, 9, 9, 10, 10]
+         • The original list is CHANGED
+         • No new list is created
+         • Returns None (nothing)
+
+Unlike the previous case (with sorted()), we see that the list album_rating has 
+changed. In this case, no new list is created.
+
+  print(album_ratings)  # Output: [7, 8, 8, 9, 9, 9, 10, 10] (CHANGED!)
+
+EXAMPLE 2: sort() WITH DESCENDING ORDER
+---------------------------------------
+  numbers = [3, 1, 4, 1, 5]
+  numbers.sort(reverse=True)
+  print(numbers)  # Output: [5, 4, 3, 1, 1]
+
+EXPLANATION:
+• reverse=True sorts in descending order
+• Original list is modified
+
+EXAMPLE 3: ATTEMPTING TO USE sort() ON A TUPLE (ERROR)
+-------------------------------------------------------
+  numbers = (3, 1, 4, 1, 5)  # This is a tuple, not a list
+  numbers.sort()  # ERROR! Tuples don't have a sort() method
+
+EXPLANATION:
+• sort() only works on lists
+• Tuples are immutable (cannot be changed)
+• You must use sorted() function for tuples
+
+VISUAL REPRESENTATION
+---------------------
+ORIGINAL LIST:
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+                  └─────────────────────────┘
+                           │
+                           │ .sort() method
+                           │
+                           ▼
+SAME LIST (MODIFIED):
+  album_ratings = [7, 8, 8, 9, 9, 9, 10, 10]  ← Changed!
+
+No new list created - the original list is modified in-place.
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: COMPARING sorted() FUNCTION VS sort() METHOD
+-----------------------------------------------------------
+
+SIDE-BY-SIDE COMPARISON
+-----------------------
+Let's use this as an example to illustrate the difference between the function 
+sorted and the method sort.
+
+KEY DIFFERENCES
+---------------
+1. SYNTAX:
+   sorted() FUNCTION: sorted(list)
+   sort() METHOD: list.sort()
+
+2. RETURN VALUE:
+   sorted() FUNCTION: Returns a new sorted list
+   sort() METHOD: Returns None (modifies in-place)
+
+3. ORIGINAL LIST:
+   sorted() FUNCTION: Original list unchanged
+   sort() METHOD: Original list is modified
+
+4. WORKS WITH:
+   sorted() FUNCTION: Lists, tuples, strings, any iterable
+   sort() METHOD: Only lists
+
+5. MEMORY:
+   sorted() FUNCTION: Creates a new list (uses more memory)
+   sort() METHOD: Modifies existing list (uses less memory)
+
+DETAILED COMPARISON EXAMPLE
+----------------------------
+Consider the list album_ratings:
+
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+
+USING sorted() FUNCTION:
+-------------------------
+  sorted_album_rating = sorted(album_ratings)
+  
+  print(sorted_album_rating)  # Output: [7, 8, 8, 9, 9, 9, 10, 10]
+  print(album_ratings)         # Output: [10, 8, 9, 7, 10, 9, 8, 9] (unchanged!)
+
+EXPLANATION:
+• sorted() creates a NEW list
+• Original list remains unchanged
+• You can keep both the original and sorted versions
+
+USING sort() METHOD:
+--------------------
+  album_ratings.sort()
+  
+  print(album_ratings)  # Output: [7, 8, 8, 9, 9, 9, 10, 10] (changed!)
+
+EXPLANATION:
+• sort() modifies the original list
+• No new list is created
+• Original order is lost
+
+VISUAL DIAGRAM COMPARISON
+-------------------------
+Let's use the diagram to help illustrate the process.
+
+sorted() FUNCTION:
+  [Original List] → sorted() → [New Sorted List]
+  [Original List] ← Still exists unchanged!
+
+sort() METHOD:
+  [Original List] → .sort() → [Same List, Now Sorted]
+                    (modified in-place)
+
+WHEN TO USE sorted() FUNCTION
+-----------------------------
+Use sorted() when:
+• You want to keep the original list unchanged
+• You're working with tuples or other iterables (not just lists)
+• You want to assign the sorted result to a new variable
+• You need both the original and sorted versions
+
+EXAMPLE:
+  original = [3, 1, 4, 1, 5]
+  sorted_version = sorted(original)
+  print(original)        # [3, 1, 4, 1, 5] - still original
+  print(sorted_version)  # [1, 1, 3, 4, 5] - sorted copy
+
+WHEN TO USE sort() METHOD
+-------------------------
+Use sort() when:
+• You don't need the original order
+• You want to save memory (no new list created)
+• You're only working with lists
+• You want to modify the list in-place
+
+EXAMPLE:
+  numbers = [3, 1, 4, 1, 5]
+  numbers.sort()
+  print(numbers)  # [1, 1, 3, 4, 5] - original is now sorted
+
+MEMORY CONSIDERATION
+--------------------
+sorted() FUNCTION:
+• Creates a new list in memory
+• Uses more memory (both lists exist)
+• Good when you need both versions
+
+sort() METHOD:
+• Modifies existing list
+• Uses less memory (only one list)
+• Good when you don't need original order
+
+SUMMARY TABLE
+-------------
+Feature              | sorted() Function | sort() Method
+---------------------|-------------------|---------------
+Syntax               | sorted(list)      | list.sort()
+Returns              | New sorted list   | None
+Original list        | Unchanged         | Modified
+Works with tuples    | Yes               | No
+Works with lists     | Yes               | Yes
+Memory usage         | More (2 lists)    | Less (1 list)
+When to use          | Keep original     | Don't need original
+
+[END SECTION 2.6]
+================================================================================
+
+PART 3: CREATING YOUR OWN FUNCTIONS
+================================================================================
+
+SECTION 3.1: INTRODUCTION TO CREATING FUNCTIONS
+-----------------------------------------------
+
+DEFINITION
+----------
+Now that we've gone over how to use functions in Python, let's see how to build 
+our own functions. We will now get you started on building your own functions in 
+Python.
+
+DETAILED EXPLANATION
+--------------------
+Creating your own functions allows you to:
+• Write reusable code tailored to your specific needs
+• Organize your code into logical, manageable pieces
+• Solve complex problems by breaking them into smaller functions
+• Make your code more readable and maintainable
+
+WHY CREATE YOUR OWN FUNCTIONS?
+-------------------------------
+1. CUSTOM FUNCTIONALITY: Built-in functions don't cover everything you need
+2. CODE ORGANIZATION: Group related operations together
+3. REUSABILITY: Write once, use many times
+4. TESTING: Easier to test individual pieces of functionality
+5. COLLABORATION: Others can use your functions without understanding the 
+   implementation
+
+THE PROCESS OF CREATING FUNCTIONS
+----------------------------------
+1. DEFINE: Write the function using the def keyword
+2. DOCUMENT: Add a docstring explaining what the function does
+3. IMPLEMENT: Write the code that performs the task
+4. RETURN: Specify what value to return (if any)
+5. CALL: Use the function in your program
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: FUNCTION SYNTAX AND STRUCTURE
+-------------------------------------------
+
+DEFINITION
+----------
+To define a function, we start with the keyword def. The name of the function 
+should be descriptive of what it does. We have the function formal parameter a 
+in parentheses, followed by a colon. We have a code block with an indent.
+
+BASIC SYNTAX
+------------
+  def function_name(parameter1, parameter2, ...):
+      """Optional docstring describing the function."""
+      # Function body (indented code)
+      statement1
+      statement2
+      return value  # Optional return statement
+
+COMPONENTS EXPLAINED
+--------------------
+1. def KEYWORD:
+   • Starts the function definition
+   • Tells Python "I'm defining a function"
+   • Required - cannot be omitted
+
+2. FUNCTION NAME:
+   • Should be descriptive of what the function does
+   • Follows Python naming conventions (lowercase with underscores)
+   • Examples: calculate_total, get_user_name, process_data
+   • Cannot start with a number
+   • Cannot use Python keywords (if, for, def, etc.)
+
+3. PARAMETERS (in parentheses):
+   • Input values the function receives
+   • Can have zero, one, or multiple parameters
+   • Separated by commas if multiple
+   • Optional - can have no parameters: def function_name():
+
+4. COLON (:):
+   • Required after the parentheses
+   • Indicates the start of the function body
+   • Cannot be omitted
+
+5. FUNCTION BODY (indented):
+   • The code that executes when the function is called
+   • Must be indented (typically 4 spaces)
+   • Can contain any Python code
+   • Can have multiple statements
+
+6. RETURN STATEMENT (optional):
+   • Specifies what value to return
+   • Can return a value, multiple values, or nothing
+   • If omitted, function returns None
+
+INDENTATION RULES
+-----------------
+• Function body MUST be indented
+• Standard indentation is 4 spaces (or 1 tab)
+• All code inside the function must be at the same indentation level
+• Python uses indentation to determine what code belongs to the function
+
+EXAMPLE OF CORRECT INDENTATION:
+  def my_function():
+      print("This is indented")      # 4 spaces - correct
+      print("This too")              # 4 spaces - correct
+      return "Done"                  # 4 spaces - correct
+
+EXAMPLE OF INCORRECT INDENTATION:
+  def my_function():
+  print("This is NOT indented")     # ERROR! Not indented
+      print("This is indented")     # Correct, but mixed indentation causes error
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: YOUR FIRST FUNCTION
+---------------------------------
+
+DEFINITION
+----------
+This is an example of a function in Python that returns its input value plus one.
+
+EXAMPLE FUNCTION
+----------------
+  def add_one(a):
+      b = a + 1
+      return b
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def add_one(a):
+         • def - Python keyword that starts a function definition
+         • add_one - The name of the function (descriptive: it adds one)
+         • (a) - The parameter (input) the function receives
+                  The parameter 'a' is called a "formal parameter"
+                  It's a placeholder for the actual value that will be passed in
+         • : - Colon indicates the start of the function body
+
+Line 2:     b = a + 1
+         • Indented (4 spaces) - this is inside the function body
+         • b - A variable to store the result
+         • = - Assignment operator
+         • a + 1 - Takes the input value 'a' and adds 1 to it
+         • This calculates the result
+
+Line 3:     return b
+         • return - Python keyword that sends a value back from the function
+         • b - The value to return (the result of a + 1)
+         • This is the output of the function
+
+CALLING THE FUNCTION
+--------------------
+After we define the function, we can call it. The function will add one to five 
+and return a six.
+
+EXAMPLE 1: CALLING WITH A NUMBER
+---------------------------------
+  result = add_one(5)
+  print(result)  # Output: 6
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: result = add_one(5)
+         • add_one(5) - Calls the function add_one with the argument 5
+         • The value 5 is passed to the function
+         • Inside the function, 'a' becomes 5
+         • Function calculates: b = 5 + 1 = 6
+         • Function returns 6
+         • result - Variable that receives the returned value (6)
+         • = - Assignment operator assigns 6 to result
+
+Line 2: print(result)
+         • Prints the value stored in result
+         • Output: 6
+
+EXAMPLE 2: CALLING AGAIN WITH DIFFERENT VALUE
+----------------------------------------------
+We can call the function again, this time assign it to the variable c:
+
+  c = add_one(10)
+  print(c)  # Output: 11
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: c = add_one(10)
+         • Calls add_one() again, this time with 10 as the argument
+         • Inside function: a = 10, b = 10 + 1 = 11
+         • Function returns 11
+         • c receives the value 11
+
+Line 2: print(c)
+         • Prints the value of c
+         • Output: 11
+
+COMPLETE EXAMPLE
+----------------
+  # Define the function
+  def add_one(a):
+      b = a + 1
+      return b
+
+  # Call the function multiple times
+  result1 = add_one(5)
+  print(result1)  # Output: 6
+
+  result2 = add_one(10)
+  print(result2)  # Output: 11
+
+  result3 = add_one(0)
+  print(result3)  # Output: 1
+
+  result4 = add_one(-5)
+  print(result4)  # Output: -4
+
+EXPLANATION:
+• Same function, different inputs, different outputs
+• The function is reusable - we define it once and call it many times
+• Each call is independent - they don't affect each other
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: HOW FUNCTION CALLS WORK
+--------------------------------------
+
+DEFINITION
+----------
+Let's explore this further. Let's go over an example when you call a function. It 
+should be noted that this is a simplified model of Python, and Python does not 
+work like this under the hood.
+
+DETAILED EXPLANATION
+--------------------
+Understanding how function calls work helps you write better code and debug 
+problems. While the actual implementation in Python is more complex, this 
+simplified model helps you understand the concept.
+
+THE SIMPLIFIED MODEL
+--------------------
+When you call a function, Python:
+1. Receives the input values (arguments)
+2. Passes them to the function's parameters
+3. Executes the function's code
+4. Returns a value (if there's a return statement)
+5. Continues execution after the function call
+
+STEP-BY-STEP BREAKDOWN
+-----------------------
+Let's trace through what happens when we call add_one(5):
+
+FUNCTION DEFINITION:
+  def add_one(a):
+      b = a + 1
+      return b
+
+FUNCTION CALL:
+  result = add_one(5)
+
+STEP 1: FUNCTION CALL INITIATED
+  result = add_one(5)
+         • Python sees the function call add_one(5)
+         • The argument 5 is prepared to be passed
+
+STEP 2: VALUE PASSED TO FUNCTION
+  It helps to think of the value of five as being passed to the function.
+         • The value 5 is passed to the function
+         • Inside the function, the parameter 'a' receives the value 5
+         • Now a = 5 inside the function
+
+STEP 3: FUNCTION CODE EXECUTES
+  Now the sequences of commands are run. The value of a is five.
+         • Python executes the code inside the function
+         • First statement: b = a + 1
+         • Since a = 5, this becomes: b = 5 + 1
+         • b would be assigned a value of six
+
+STEP 4: RETURN VALUE
+  We then return the value of b. In this case, as b was assigned a value of six, 
+  the function returns a six.
+         • Python encounters the return statement
+         • return b means "send back the value of b"
+         • Since b = 6, the function returns 6
+
+STEP 5: VALUE ASSIGNED TO VARIABLE
+         • The returned value (6) is assigned to result
+         • result = 6
+         • Execution continues after the function call
+
+VISUAL REPRESENTATION
+---------------------
+  [Main Program]
+       │
+       │ result = add_one(5)
+       │
+       ▼
+  [Function Call]
+       │
+       │ Pass: 5 → parameter 'a'
+       │
+       ▼
+  [Inside Function]
+       │ a = 5
+       │ b = a + 1  → b = 6
+       │ return b   → returns 6
+       │
+       ▼
+  [Back to Main Program]
+       │ result = 6
+       │ (continue execution)
+
+CALLING THE FUNCTION AGAIN
+---------------------------
+If we call the function again, the process starts from scratch. We pass in an 
+eight. The subsequent operations are performed. Everything that happened the 
+last call will happen again, with a different value of a. The function returns a 
+value, in this case, nine.
+
+EXAMPLE:
+  result1 = add_one(5)   # First call
+  result2 = add_one(8)   # Second call
+
+FIRST CALL (add_one(5)):
+  • a = 5
+  • b = 5 + 1 = 6
+  • return 6
+  • result1 = 6
+
+SECOND CALL (add_one(8)):
+  • Process starts from scratch (completely independent)
+  • a = 8 (new value, doesn't remember the previous call)
+  • b = 8 + 1 = 9
+  • return 9
+  • result2 = 9
+
+IMPORTANT POINTS
+----------------
+1. EACH CALL IS INDEPENDENT:
+   • Function calls don't remember previous calls
+   • Each call starts fresh with new parameter values
+   • Variables inside functions are local to that call
+
+2. PARAMETERS ARE LOCAL:
+   • The parameter 'a' only exists inside the function
+   • It doesn't affect variables outside the function
+   • Each call gets its own copy of the parameters
+
+3. RETURN ENDS THE FUNCTION:
+   • When Python encounters return, it immediately exits the function
+   • Code after return (in the same function) won't execute
+   • The return value is sent back to the caller
+
+EXAMPLE SHOWING INDEPENDENCE:
+  def add_one(a):
+      b = a + 1
+      return b
+
+  x = 100  # Variable in main program
+  result = add_one(5)  # Call function
+  print(x)  # Still 100 - function didn't change it
+  print(result)  # 6
+
+AGAIN, THIS IS A SIMPLIFIED MODEL
+----------------------------------
+Again, this is just a helpful analogy. The actual implementation in Python is 
+more complex and involves:
+• Stack frames
+• Namespace management
+• Memory allocation
+• And other advanced concepts
+
+But for learning purposes, this simplified model is perfect for understanding 
+how functions work!
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: FUNCTION DOCUMENTATION (DOCSTRINGS)
+--------------------------------------------------
+
+DEFINITION
+----------
+It's customary to document the function on the first few lines. This tells 
+anyone who uses the function what it does. This documentation is surrounded in 
+triple quotes.
+
+DETAILED EXPLANATION
+--------------------
+Documentation strings (docstrings) are special strings that describe what a 
+function does. They're placed immediately after the function definition and are 
+enclosed in triple quotes (""" or ''').
+
+WHY DOCUMENT FUNCTIONS?
+-----------------------
+1. CLARITY: Explains what the function does
+2. USAGE: Shows how to use the function
+3. MAINTENANCE: Helps future you (and others) understand the code
+4. PROFESSIONALISM: Good coding practice
+5. HELP SYSTEM: Python can display docstrings using help()
+
+SYNTAX
+------
+  def function_name(parameters):
+      """
+      Description of what the function does.
+      
+      More detailed explanation if needed.
+      """
+      # Function code here
+
+EXAMPLE: FUNCTION WITH DOCSTRING
+---------------------------------
+Let's try and make this function more complex. It's customary to document the 
+function on the first few lines:
+
+  def add_one(a):
+      """
+      Add one to a number.
+      
+      This function takes a number as input and returns that number plus one.
+      
+      Parameters:
+      -----------
+      a : int or float
+          The number to add one to
+      
+      Returns:
+      --------
+      int or float
+          The input number plus one
+      
+      Examples:
+      --------
+      >>> add_one(5)
+      6
+      >>> add_one(10)
+      11
+      """
+      b = a + 1
+      return b
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def add_one(a):
+         • Function definition (as before)
+
+Line 2-15: """ ... """
+         • Triple quotes start and end the docstring
+         • This is the function documentation
+         • Explains what the function does
+         • Describes parameters and return value
+         • Includes usage examples
+         • This documentation is stored with the function
+
+Line 16:     b = a + 1
+         • Function code (as before)
+
+Line 17:     return b
+         • Return statement (as before)
+
+ACCESSING DOCUMENTATION
+-----------------------
+You can use the help command on the function to display the documentation as 
+follows. This will print out the function name and the documentation.
+
+EXAMPLE:
+  help(add_one)
+
+OUTPUT:
+  Help on function add_one in module __main__:
+
+  add_one(a)
+      Add one to a number.
+      
+      This function takes a number as input and returns that number plus one.
+      
+      Parameters:
+      -----------
+      a : int or float
+          The number to add one to
+      
+      Returns:
+      --------
+      int or float
+          The input number plus one
+      
+      Examples:
+      --------
+      >>> add_one(5)
+      6
+      >>> add_one(10)
+      11
+
+ANOTHER WAY TO ACCESS DOCSTRING:
+  print(add_one.__doc__)
+
+OUTPUT:
+  Add one to a number.
+  
+  This function takes a number as input and returns that number plus one.
+  ...
+
+DOCSTRING CONVENTIONS
+---------------------
+While docstrings can be simple one-liners, it's common to follow conventions:
+
+1. ONE-LINE DOCSTRING (simple functions):
+   def add_one(a):
+       """Add one to a number."""
+       return a + 1
+
+2. MULTI-LINE DOCSTRING (complex functions):
+   def complex_function(param1, param2):
+       """
+       Brief description.
+       
+       More detailed explanation.
+       
+       Parameters:
+       -----------
+       param1 : type
+           Description of param1
+       param2 : type
+           Description of param2
+       
+       Returns:
+       --------
+       type
+           Description of return value
+       """
+
+NOTE ABOUT EXAMPLES
+-------------------
+We will not include the documentation in the rest of the examples in this guide 
+to keep them concise, but in real code, you should always include docstrings!
+
+BENEFITS OF DOCSTRINGS
+----------------------
+1. SELF-DOCUMENTING CODE: Code explains itself
+2. IDE SUPPORT: Many IDEs show docstrings when you hover over functions
+3. AUTOMATED DOCUMENTATION: Tools can generate documentation from docstrings
+4. LEARNING TOOL: Helps others (and you) understand code quickly
+
+[END SECTION 3.5]
+================================================================================
+
+END OF PART 1
+=============
+
+Congratulations! You've completed Part 1 of the Functions in Python 
+comprehensive study guide. You've learned:
+
+✓ What functions are and why they're important
+✓ How functions work conceptually
+✓ Python's built-in functions (len, sum, sorted)
+✓ The difference between functions and methods
+✓ How to create your own functions
+✓ Function syntax and structure
+✓ How function calls work
+✓ Function documentation (docstrings)
+
+Continue to Part 2 to learn about:
+• Function parameters (single and multiple)
+• Return values and the None object
+• Functions without return statements
+• The pass keyword
+• Functions that perform multiple tasks
+• Using loops in functions
+
+================================================================================

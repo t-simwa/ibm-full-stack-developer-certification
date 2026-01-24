@@ -1,0 +1,1473 @@
+================================================================================
+OBJECTS AND CLASSES IN PYTHON
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+This part continues from Parts 1 and 2 and covers methods, advanced class 
+concepts, and tools for exploring objects. You'll learn how to add behavior to 
+your classes through methods and understand how methods interact with object data.
+
+ESTIMATED TIME NEEDED
+---------------------
+15 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Explain what methods are and why they're important
+• Define methods in your custom classes
+• Understand how methods interact with object data
+• Create methods that modify object state
+• Understand the add_radius method example
+• Use default parameter values in constructors
+• Explain the drawCircle and drawRectangle methods
+• Use the dir() function to explore objects
+• Understand the difference between methods and data attributes
+• Apply best practices for class design
+
+OVERVIEW
+--------
+In Parts 1 and 2, we learned about objects, types, and how to create classes 
+with data attributes. In this part, we'll add behavior to our classes through 
+methods. Methods are functions that belong to objects and allow them to perform 
+actions and interact with their data.
+
+We'll continue with the Circle and Rectangle examples, adding methods that make 
+these classes more useful and demonstrate key concepts.
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+PART 3: METHODS AND ADVANCED CONCEPTS
+  SECTION 3.1: UNDERSTANDING METHODS IN CLASSES
+  SECTION 3.2: WHY USE METHODS INSTEAD OF DIRECT MODIFICATION?
+  SECTION 3.3: DEFINING METHODS IN YOUR CLASSES
+  SECTION 3.4: THE ADD_RADIUS METHOD EXAMPLE
+  SECTION 3.5: HOW METHODS WORK WITH OBJECTS
+  SECTION 3.6: METHODS WITH NO PARAMETERS (EXCEPT SELF)
+  SECTION 3.7: DEFAULT PARAMETER VALUES IN CONSTRUCTORS
+  SECTION 3.8: THE DRAWCIRCLE AND DRAWRECTANGLE METHODS
+  SECTION 3.9: COMPLETE CIRCLE AND RECTANGLE EXAMPLES
+  SECTION 3.10: THE DIR() FUNCTION
+  SECTION 3.11: UNDERSTANDING ATTRIBUTE NAMES WITH UNDERSCORES
+  SECTION 3.12: SUMMARY AND BEST PRACTICES
+
+================================================================================
+PART 3: METHODS AND ADVANCED CONCEPTS
+================================================================================
+
+SECTION 3.1: UNDERSTANDING METHODS IN CLASSES
+----------------------------------------------
+
+DEFINITION
+----------
+We have seen how data attributes consist of the data defining the objects. 
+Methods are functions that interact and change the data attributes, changing or 
+using the data attributes of the object.
+
+DETAILED EXPLANATION
+--------------------
+So far, we've learned about data attributes (the information objects store). 
+Now we'll learn about methods (the actions objects can perform).
+
+WHAT ARE METHODS?
+-----------------
+Methods are functions that belong to a class. They:
+• Are defined inside the class
+• Have access to the object's data attributes (through self)
+• Can modify the object's data
+• Can perform calculations using the object's data
+• Can return values based on the object's state
+
+THE RELATIONSHIP BETWEEN DATA AND METHODS
+------------------------------------------
+Think of it this way:
+• DATA ATTRIBUTES = What the object knows (its information)
+• METHODS = What the object can do (its actions)
+
+For example, a Circle object:
+• KNOWS: its radius and color (data attributes)
+• CAN DO: calculate its area, draw itself, resize itself (methods)
+
+REAL-WORLD ANALOGY
+------------------
+Think of a car:
+• DATA ATTRIBUTES: color, make, model, mileage, fuel level
+• METHODS: start_engine(), accelerate(), brake(), turn(), refuel()
+
+The car knows things (data) and can do things (methods). Both are essential.
+
+WHY METHODS MATTER
+------------------
+Methods are important because:
+1. THEY ENCAPSULATE BEHAVIOR
+   Methods keep the code that works with an object's data together with the object.
+
+2. THEY PROVIDE A CONTROLLED INTERFACE
+   Instead of directly modifying attributes, methods can validate and control changes.
+
+3. THEY MAKE CODE MORE READABLE
+   circle.calculate_area() is clearer than manually calculating area.
+
+4. THEY ALLOW OBJECTS TO ACT ON THEIR OWN DATA
+   Methods can access and modify the object's data attributes.
+
+5. THEY PROMOTE REUSABILITY
+   Write the method once, use it on any object of that class.
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: WHY USE METHODS INSTEAD OF DIRECT MODIFICATION?
+-------------------------------------------------------------
+
+DEFINITION
+----------
+Usually, in order to change the data in an object, we define methods in the 
+class. While you can modify attributes directly, using methods is the preferred 
+approach.
+
+DETAILED EXPLANATION
+--------------------
+In Part 2, we learned you can modify attributes directly:
+circle.radius = 10
+
+While this works, using methods is generally better. Let's understand why.
+
+PROBLEMS WITH DIRECT MODIFICATION
+---------------------------------
+1. NO VALIDATION
+   What if someone tries to set radius to -5? That doesn't make sense for a 
+   circle, but direct modification allows it.
+
+2. NO ADDITIONAL ACTIONS
+   What if changing the radius should also update a "last_modified" timestamp? 
+   Direct modification can't do that.
+
+3. INCONSISTENT INTERFACE
+   Some changes use methods, some use direct assignment - confusing!
+
+4. HARDER TO DEBUG
+   If something goes wrong, it's harder to track down where the change happened.
+
+BENEFITS OF USING METHODS
+-------------------------
+1. VALIDATION
+   Methods can check if the new value is valid before setting it.
+
+2. AUTOMATIC ACTIONS
+   Methods can perform additional tasks when data changes.
+
+3. CONSISTENT INTERFACE
+   All changes go through methods - predictable and clear.
+
+4. EASIER TO DEBUG
+   You can add print statements or logging in methods to track changes.
+
+5. ENCAPSULATION
+   Methods hide the internal details of how data is stored and modified.
+
+EXAMPLE: WHY METHODS ARE BETTER
+--------------------------------
+Direct modification (problematic):
+circle.radius = -5  # Negative radius? That doesn't make sense!
+
+Method approach (better):
+def set_radius(self, new_radius):
+    if new_radius < 0:
+        print("Error: Radius cannot be negative!")
+        return
+    self.radius = new_radius
+    print(f"Radius changed to {new_radius}")
+
+Now: circle.set_radius(-5)  # Will catch the error!
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: DEFINING METHODS IN YOUR CLASSES
+----------------------------------------------
+
+DEFINITION
+----------
+Methods are functions defined inside a class. They have self as the first 
+parameter and can have additional parameters. Methods are defined using the 
+same def keyword as regular functions.
+
+DETAILED EXPLANATION
+--------------------
+Defining a method is very similar to defining a function, but with one crucial 
+difference: methods are defined inside a class and always have self as the 
+first parameter.
+
+BASIC METHOD SYNTAX
+-------------------
+class ClassName(object):
+    def method_name(self, parameter1, parameter2, ...):
+        """Method documentation"""
+        # Method body
+        # Access object data with self.attribute
+        # Modify object data with self.attribute = value
+        return value  # Optional
+
+KEY COMPONENTS
+--------------
+1. def
+   - Keyword that starts a function/method definition
+
+2. method_name
+   - The name of the method
+   - Follow Python naming conventions (lowercase_with_underscores)
+
+3. self
+   - Always the first parameter
+   - Refers to the object the method is called on
+   - Python passes this automatically
+
+4. Additional parameters
+   - Any other values the method needs
+   - These are passed when calling the method
+
+5. Method body
+   - The code that runs when the method is called
+   - Can access self.attribute to get/set object data
+
+CALLING METHODS
+---------------
+To call a method, use dot notation:
+object_name.method_name(arguments)
+
+Python automatically passes the object as self, so you don't include it in the 
+arguments.
+
+EXAMPLE: SIMPLE METHOD
+----------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def get_area(self):
+        """Calculate and return the area of the circle"""
+        area = 3.14159 * self.radius * self.radius
+        return area
+
+Line-by-line explanation:
+• class Circle(object):
+  - Defines the Circle class
+  
+• def __init__(self, radius, color):
+  - Constructor method (we learned this in Part 2)
+  
+• def get_area(self):
+  - "def" starts the method definition
+  - "get_area" is the method name
+  - "self" is the first parameter (always required)
+  - ":" starts the method body
+  
+• """Calculate and return the area of the circle"""
+  - Documentation string (docstring) explaining what the method does
+  
+• area = 3.14159 * self.radius * self.radius
+  - Calculates the area using the formula π * r²
+  - "self.radius" accesses the radius attribute of this object
+  - Stores the result in a local variable "area"
+  
+• return area
+  - Returns the calculated area value
+
+Using the method:
+my_circle = Circle(radius=5, color="red")
+area = my_circle.get_area()
+print(area)  # Output: 78.53975
+
+When calling: my_circle.get_area()
+• Python automatically passes my_circle as self
+• Inside the method, self.radius refers to my_circle.radius (which is 5)
+• The method calculates and returns the area
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: THE ADD_RADIUS METHOD EXAMPLE
+-------------------------------------------
+
+DEFINITION
+----------
+Let's say we would like to change the size of a circle. This involves changing 
+the radius attribute. We add a method add_radius to the class circle. The 
+method is a function that requires a self as well as other parameters.
+
+DETAILED EXPLANATION
+--------------------
+This is a concrete example that demonstrates how methods modify object data. 
+The add_radius method will add a value to the circle's current radius.
+
+WHAT WE WANT TO DO
+------------------
+We want to be able to increase a circle's radius by a certain amount. Instead of 
+directly modifying the radius, we'll create a method that does it.
+
+THE METHOD DEFINITION
+---------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def add_radius(self, r):
+        self.radius = self.radius + r
+
+Line-by-line explanation:
+• class Circle(object):
+  - Defines the Circle class
+  
+• def __init__(self, radius, color):
+  - Constructor (from Part 2)
+  
+• def add_radius(self, r):
+  - "def" starts method definition
+  - "add_radius" is the method name
+  - "self" is the first parameter (the object)
+  - "r" is a parameter representing the value to add to the radius
+  - In this case, we are going to add a value to the radius. We denote that 
+    value as r.
+  
+• self.radius = self.radius + r
+  - "self.radius" on the left is the radius attribute we're modifying
+  - "=" assigns a new value
+  - "self.radius" on the right gets the current radius value
+  - "+ r" adds the parameter r to the current radius
+  - We are going to add r to the data attribute radius
+  - This updates the object's radius to the new value
+
+WHAT THIS METHOD DOES
+---------------------
+The add_radius method:
+1. Takes the current radius (self.radius)
+2. Adds the value r to it
+3. Stores the result back in self.radius
+4. This changes the object's state
+
+VISUAL REPRESENTATION
+---------------------
+Before calling add_radius(5):
+┌─────────────────────────┐
+│      Circle Object      │
+├─────────────────────────┤
+│  radius: 2              │
+│  color: "red"           │
+└─────────────────────────┘
+
+After calling add_radius(5):
+┌─────────────────────────┐
+│      Circle Object      │
+├─────────────────────────┤
+│  radius: 7              │  ← Changed! (2 + 5 = 7)
+│  color: "red"           │
+└─────────────────────────┘
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: HOW METHODS WORK WITH OBJECTS
+--------------------------------------------
+
+DEFINITION
+----------
+Let's see how this part of the code works when we create an object and call the 
+add_radius method. Methods are called using dot notation, and Python 
+automatically handles the self parameter.
+
+DETAILED EXPLANATION WITH EXAMPLE
+----------------------------------
+Let's trace through a complete example to see exactly how methods work with 
+objects.
+
+COMPLETE EXAMPLE: USING ADD_RADIUS
+----------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def add_radius(self, r):
+        self.radius = self.radius + r
+
+# Create an object
+RedCircle = Circle(radius=2, color="red")
+
+# Check initial state
+print("Initial radius:", RedCircle.radius)
+
+# Call the method
+RedCircle.add_radius(8)
+
+# Check new state
+print("New radius:", RedCircle.radius)
+
+STEP-BY-STEP EXPLANATION
+-----------------------
+STEP 1: CREATING THE OBJECT
+• RedCircle = Circle(radius=2, color="red")
+  - Creates a new Circle object
+  - As before, we create an object with the object constructor
+  - We pass two arguments to the constructor
+  - The radius is set to two and the color is set to red
+  - In the constructor's body, the data attributes are set
+  - We can use the box analogy to see the current state of the object
+
+Current state:
+┌─────────────────────────┐
+│      RedCircle          │
+│      (The Box)          │
+├─────────────────────────┤
+│  radius: 2              │
+│  color: "red"           │
+└─────────────────────────┘
+
+STEP 2: CHECKING INITIAL STATE
+• print("Initial radius:", RedCircle.radius)
+  - Accesses the radius attribute
+  - Displays: Initial radius: 2
+
+STEP 3: CALLING THE METHOD
+• RedCircle.add_radius(8)
+  - "RedCircle" refers to our circle object
+  - "." accesses a method
+  - "add_radius" is the method name
+  - "(8)" passes 8 as the argument for parameter r
+  - We call the method by adding a dot followed by the method name and 
+    parentheses
+  - In this case, the argument of the function is the amount we would like to 
+    add
+  - We do not need to worry about the self parameter when calling the method
+  - Just like with the constructor, Python will take care of that for us
+
+What Python does internally:
+1. Python sees: RedCircle.add_radius(8)
+2. Python automatically converts it to: Circle.add_radius(self=RedCircle, r=8)
+3. Python calls the method with self pointing to RedCircle and r=8
+
+STEP 4: INSIDE THE METHOD
+• Inside add_radius:
+  - self refers to RedCircle
+  - r is 8
+  - self.radius = self.radius + r
+    * self.radius (right side) = 2 (current radius)
+    * + r = + 8
+    * 2 + 8 = 10
+    * self.radius (left side) = 10 (new radius)
+  - Internally, the method is called with a value of eight and the proper self 
+    object
+  - The method assigns a new value to self.radius
+  - This changes the object, in particular, the radius data attribute
+
+New state:
+┌─────────────────────────┐
+│      RedCircle          │
+│      (The Box)          │
+├─────────────────────────┤
+│  radius: 10             │  ← Changed! (2 + 8)
+│  color: "red"           │
+└─────────────────────────┘
+
+STEP 5: VERIFYING THE CHANGE
+• print("New radius:", RedCircle.radius)
+  - Accesses the radius attribute again
+  - Displays: New radius: 10
+
+When we call the add_radius method, this changes the object by changing the 
+value of the radius data attribute.
+
+OUTPUT
+------
+Initial radius: 2
+New radius: 10
+
+KEY POINTS
+----------
+1. METHODS MODIFY OBJECTS
+   When you call add_radius, it changes the object's radius attribute.
+
+2. SELF IS AUTOMATIC
+   You don't pass self when calling the method - Python does it automatically.
+
+3. THE OBJECT'S STATE CHANGES
+   The same object, but its data has changed.
+
+4. METHODS OPERATE ON THE OBJECT'S DATA
+   The method uses self.radius to access and modify the object's data.
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: METHODS WITH NO PARAMETERS (EXCEPT SELF)
+------------------------------------------------------
+
+DEFINITION
+----------
+In many cases, there may not be any parameters other than self specified in the 
+method's definition, so we don't pass any arguments when calling the function.
+
+DETAILED EXPLANATION
+--------------------
+Not all methods need additional parameters. Some methods only work with the 
+object's existing data and don't need any input.
+
+EXAMPLE: METHOD THAT RETURNS INFORMATION
+----------------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def get_radius(self):
+        """Return the current radius"""
+        return self.radius
+    
+    def get_color(self):
+        """Return the current color"""
+        return self.color
+
+Using these methods:
+my_circle = Circle(radius=5, color="blue")
+
+# Call methods with no arguments (except self)
+radius = my_circle.get_radius()  # No arguments needed!
+color = my_circle.get_color()    # No arguments needed!
+
+print(radius)  # Output: 5
+print(color)   # Output: blue
+
+Line-by-line explanation:
+• def get_radius(self):
+  - Method definition
+  - Only has self parameter
+  - No other parameters needed
+  
+• return self.radius
+  - Returns the radius value
+  - Uses self to access the object's data
+  
+• my_circle.get_radius()
+  - Calling the method
+  - No arguments passed (only self, which Python handles automatically)
+  - The parentheses are empty: ()
+
+EXAMPLE: METHOD THAT PERFORMS AN ACTION
+---------------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def double_radius(self):
+        """Double the current radius"""
+        self.radius = self.radius * 2
+
+Using the method:
+my_circle = Circle(radius=3, color="red")
+print("Before:", my_circle.radius)  # Output: 3
+
+my_circle.double_radius()  # No arguments!
+print("After:", my_circle.radius)   # Output: 6
+
+Line-by-line explanation:
+• def double_radius(self):
+  - Only has self parameter
+  - No other parameters needed
+  
+• self.radius = self.radius * 2
+  - Doubles the current radius
+  - Uses only the object's existing data
+  
+• my_circle.double_radius()
+  - Empty parentheses - no arguments
+  - Python automatically passes my_circle as self
+
+KEY POINTS
+----------
+1. METHODS CAN HAVE ONLY SELF
+   If a method doesn't need input, it only needs self.
+
+2. EMPTY PARENTHESES WHEN CALLING
+   When calling methods with no parameters (except self), use empty parentheses: 
+   object.method()
+
+3. SELF IS ALWAYS REQUIRED
+   Even if the method doesn't need other parameters, self is always required 
+   in the definition.
+
+4. METHODS CAN STILL MODIFY OBJECTS
+   Even without parameters, methods can change object state using self.
+
+[END SECTION 3.6]
+================================================================================
+
+SECTION 3.7: DEFAULT PARAMETER VALUES IN CONSTRUCTORS
+------------------------------------------------------
+
+DEFINITION
+----------
+We can add default values to the parameters of a class's constructor. This 
+allows you to create objects without providing all parameters - the missing 
+ones will use their default values.
+
+DETAILED EXPLANATION
+--------------------
+Sometimes you want to make certain parameters optional when creating objects. 
+Default values let you do this.
+
+SYNTAX
+------
+def __init__(self, parameter1=default_value1, parameter2=default_value2):
+    self.attribute1 = parameter1
+    self.attribute2 = parameter2
+
+EXAMPLE: CIRCLE WITH DEFAULT COLOR
+----------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color="blue"):
+        self.radius = radius
+        self.color = color
+
+Line-by-line explanation:
+• def __init__(self, radius, color="blue"):
+  - "radius" has no default - must be provided
+  - "color" has default value "blue"
+  - If color is not provided, it will be "blue"
+
+USING DEFAULT VALUES
+--------------------
+# Provide both parameters
+circle1 = Circle(radius=5, color="red")
+print(circle1.color)  # Output: red
+
+# Use default color
+circle2 = Circle(radius=5)  # No color specified!
+print(circle2.color)  # Output: blue (default used)
+
+# Provide color explicitly
+circle3 = Circle(radius=5, color="green")
+print(circle3.color)  # Output: green
+
+Line-by-line explanation:
+• circle1 = Circle(radius=5, color="red")
+  - Provides both parameters
+  - color="red" overrides the default
+  
+• circle2 = Circle(radius=5)
+  - Only provides radius
+  - color parameter is omitted
+  - Python uses the default value "blue"
+  
+• circle3 = Circle(radius=5, color="green")
+  - Explicitly provides color
+  - Overrides the default
+
+EXAMPLE: MULTIPLE DEFAULT VALUES
+--------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius=1, color="blue"):
+        self.radius = radius
+        self.color = color
+
+Now both have defaults:
+# Use all defaults
+circle1 = Circle()  # radius=1, color="blue"
+
+# Override radius only
+circle2 = Circle(radius=5)  # radius=5, color="blue"
+
+# Override color only
+circle3 = Circle(color="red")  # radius=1, color="red"
+
+# Override both
+circle4 = Circle(radius=10, color="green")  # radius=10, color="green"
+
+BENEFITS OF DEFAULT VALUES
+--------------------------
+1. FLEXIBILITY
+   You can create objects with minimal information.
+
+2. CONVENIENCE
+   Common values don't need to be specified every time.
+
+3. BACKWARD COMPATIBILITY
+   Existing code still works if you add new parameters with defaults.
+
+4. READABILITY
+   Makes it clear what the "typical" or "default" values are.
+
+[END SECTION 3.7]
+================================================================================
+
+SECTION 3.8: THE DRAWCIRCLE AND DRAWRECTANGLE METHODS
+------------------------------------------------------
+
+DEFINITION
+----------
+In the labs, we also create the method called drawCircle. See the lab for the 
+implementation of drawCircle. Similarly, there's a drawRectangle method for 
+the Rectangle class.
+
+DETAILED EXPLANATION
+--------------------
+These methods demonstrate how methods can perform actions using the object's 
+data. While we won't show the full implementation (as it depends on specific 
+graphics libraries), we'll explain the concept.
+
+WHAT THESE METHODS DO
+---------------------
+The drawCircle method uses the circle's radius and color to draw a visual 
+representation of the circle. Similarly, drawRectangle uses the rectangle's 
+height, width, and color to draw it.
+
+CONCEPTUAL IMPLEMENTATION
+-------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def drawCircle(self):
+        """Draw the circle using its radius and color"""
+        # This would use a graphics library to draw
+        # For now, we'll just print information
+        print(f"Drawing a {self.color} circle with radius {self.radius}")
+
+Line-by-line explanation:
+• def drawCircle(self):
+  - Method definition
+  - Only needs self (no other parameters)
+  - Uses the object's own data (radius and color)
+  
+• print(f"Drawing a {self.color} circle with radius {self.radius}")
+  - Uses f-string formatting
+  - Accesses self.color and self.radius
+  - Displays information about what would be drawn
+
+USING DRAWCIRCLE
+----------------
+Code:
+# In the labs, we can create a new object of type circle using the constructor
+RedCircle = Circle(radius=3, color="red")
+
+# We can access the data attribute radius
+print("Radius:", RedCircle.radius)
+
+# We can access the attribute color
+print("Color:", RedCircle.color)
+
+# Finally, we can use the method drawCircle to draw the circle
+RedCircle.drawCircle()
+
+Line-by-line explanation:
+• RedCircle = Circle(radius=3, color="red")
+  - Creates a circle object
+  - The color will be red and the radius will be three
+  
+• print("Radius:", RedCircle.radius)
+  - Accesses and displays the radius attribute
+  
+• print("Color:", RedCircle.color)
+  - Accesses and displays the color attribute
+  
+• RedCircle.drawCircle()
+  - Calls the drawCircle method
+  - The method uses the object's radius and color to draw
+
+Output:
+Radius: 3
+Color: red
+Drawing a red circle with radius 3
+
+SIMILARLY FOR BLUECIRCLE
+------------------------
+Code:
+# Similarly, we can create a new object of type circle
+BlueCircle = Circle(radius=10, color="blue")
+
+# We can access the data attribute of radius
+print("Radius:", BlueCircle.radius)
+
+# We can access the data attribute color
+print("Color:", BlueCircle.color)
+
+# We can use the method drawCircle to draw the circle
+BlueCircle.drawCircle()
+
+Output:
+Radius: 10
+Color: blue
+Drawing a blue circle with radius 10
+
+DRAWRECTANGLE METHOD
+--------------------
+Code:
+class Rectangle(object):
+    def __init__(self, color, height, width):
+        self.color = color
+        self.height = height
+        self.width = width
+    
+    def drawRectangle(self):
+        """Draw the rectangle using its dimensions and color"""
+        print(f"Drawing a {self.color} rectangle: {self.width}x{self.height}")
+
+Using it:
+# In the lab, we have a similar class for rectangle
+BlueRect = Rectangle(color="blue", height=2, width=2)
+
+# We can create a new object of type rectangle using the constructor
+# We can access a data attribute of height
+print("Height:", BlueRect.height)
+
+# We can also access the data attribute of width
+print("Width:", BlueRect.width)
+
+# We can do the same for the data attribute of color
+print("Color:", BlueRect.color)
+
+# We can use the method drawRectangle to draw the rectangle
+BlueRect.drawRectangle()
+
+Output:
+Height: 2
+Width: 2
+Color: blue
+Drawing a blue rectangle: 2x2
+
+SUMMARY OF OBJECTS CREATED
+---------------------------
+In summary, we have created an object of class circle called RedCircle with a 
+radius attribute of three and a color attribute of red. We also created an 
+object of class circle called BlueCircle with a radius attribute of 10 and a 
+color attribute of blue.
+
+[END SECTION 3.8]
+================================================================================
+
+SECTION 3.9: COMPLETE CIRCLE AND RECTANGLE EXAMPLES
+----------------------------------------------------
+
+DEFINITION
+----------
+We have a class, and an object that is a realization or instantiation of that 
+class. For example, we can create two objects of class circle or two objects of 
+class rectangle.
+
+DETAILED EXPLANATION
+--------------------
+Let's put everything together with complete, working examples that demonstrate 
+all the concepts we've learned.
+
+COMPLETE CIRCLE CLASS
+---------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color="blue"):
+        self.radius = radius
+        self.color = color
+    
+    def add_radius(self, r):
+        """Add a value to the radius"""
+        self.radius = self.radius + r
+    
+    def get_area(self):
+        """Calculate and return the area"""
+        import math
+        return math.pi * self.radius * self.radius
+    
+    def get_circumference(self):
+        """Calculate and return the circumference"""
+        import math
+        return 2 * math.pi * self.radius
+    
+    def drawCircle(self):
+        """Draw the circle (conceptual)"""
+        print(f"Drawing a {self.color} circle with radius {self.radius}")
+
+Line-by-line explanation:
+• class Circle(object):
+  - Defines the Circle class
+  
+• def __init__(self, radius, color="blue"):
+  - Constructor with default color
+  - Initializes radius and color attributes
+  
+• def add_radius(self, r):
+  - Method to increase radius
+  - Modifies the object's state
+  
+• def get_area(self):
+  - Method that calculates area using πr²
+  - Returns a value without modifying the object
+  
+• def get_circumference(self):
+  - Method that calculates circumference using 2πr
+  - Returns a value without modifying the object
+  
+• def drawCircle(self):
+  - Method that would draw the circle
+  - Uses the object's color and radius
+
+USING THE COMPLETE CIRCLE CLASS
+-------------------------------
+Code:
+# Create circle objects
+circle1 = Circle(radius=5, color="red")
+circle2 = Circle(radius=3)  # Uses default color "blue"
+
+# Access attributes
+print("Circle 1 - Radius:", circle1.radius, "Color:", circle1.color)
+print("Circle 2 - Radius:", circle2.radius, "Color:", circle2.color)
+
+# Use methods
+print("\nCircle 1 Area:", circle1.get_area())
+print("Circle 1 Circumference:", circle1.get_circumference())
+
+# Modify using method
+circle1.add_radius(2)
+print("\nAfter adding 2 to radius:")
+print("Circle 1 - Radius:", circle1.radius)
+print("Circle 1 Area:", circle1.get_area())
+
+# Draw circles
+circle1.drawCircle()
+circle2.drawCircle()
+
+Output:
+Circle 1 - Radius: 5 Color: red
+Circle 2 - Radius: 3 Color: blue
+
+Circle 1 Area: 78.53981633974483
+Circle 1 Circumference: 31.41592653589793
+
+After adding 2 to radius:
+Circle 1 - Radius: 7
+Circle 1 Area: 153.93804002589985
+
+Drawing a red circle with radius 7
+Drawing a blue circle with radius 3
+
+COMPLETE RECTANGLE CLASS
+-------------------------
+Code:
+class Rectangle(object):
+    def __init__(self, color, height, width):
+        self.color = color
+        self.height = height
+        self.width = width
+    
+    def get_area(self):
+        """Calculate and return the area"""
+        return self.height * self.width
+    
+    def get_perimeter(self):
+        """Calculate and return the perimeter"""
+        return 2 * (self.height + self.width)
+    
+    def resize(self, new_height, new_width):
+        """Change the dimensions"""
+        self.height = new_height
+        self.width = new_width
+    
+    def drawRectangle(self):
+        """Draw the rectangle (conceptual)"""
+        print(f"Drawing a {self.color} rectangle: {self.width}x{self.height}")
+
+USING THE COMPLETE RECTANGLE CLASS
+-----------------------------------
+Code:
+# Create rectangle objects
+rect1 = Rectangle(color="blue", height=2, width=2)
+rect2 = Rectangle(color="yellow", height=1, width=3)
+
+# Access attributes
+print("Rectangle 1 - Color:", rect1.color, "Height:", rect1.height, "Width:", rect1.width)
+print("Rectangle 2 - Color:", rect2.color, "Height:", rect2.height, "Width:", rect2.width)
+
+# Use methods
+print("\nRectangle 1 Area:", rect1.get_area())
+print("Rectangle 1 Perimeter:", rect1.get_perimeter())
+
+# Modify using method
+rect1.resize(new_height=4, new_width=5)
+print("\nAfter resizing:")
+print("Rectangle 1 - Height:", rect1.height, "Width:", rect1.width)
+print("Rectangle 1 Area:", rect1.get_area())
+
+# Draw rectangles
+rect1.drawRectangle()
+rect2.drawRectangle()
+
+Output:
+Rectangle 1 - Color: blue Height: 2 Width: 2
+Rectangle 2 - Color: yellow Height: 1 Width: 3
+
+Rectangle 1 Area: 4
+Rectangle 1 Perimeter: 8
+
+After resizing:
+Rectangle 1 - Height: 4 Width: 5
+Rectangle 1 Area: 20
+
+Drawing a blue rectangle: 5x4
+Drawing a yellow rectangle: 3x1
+
+KEY CONCEPTS DEMONSTRATED
+-------------------------
+1. CLASS DEFINITION
+   - Defining classes with data attributes and methods
+
+2. OBJECT CREATION
+   - Creating multiple objects from one class
+
+3. ATTRIBUTE ACCESS
+   - Reading object data attributes
+
+4. METHOD CALLS
+   - Calling methods that return values
+   - Calling methods that modify objects
+
+5. OBJECT INDEPENDENCE
+   - Each object maintains its own data
+
+[END SECTION 3.9]
+================================================================================
+
+SECTION 3.10: THE DIR() FUNCTION
+---------------------------------
+
+DEFINITION
+----------
+The dir function is useful for obtaining the list of data attributes and 
+methods associated with a class. The object you're interested in is passed as 
+an argument. The return value is a list of that object's data attributes and 
+methods.
+
+DETAILED EXPLANATION
+--------------------
+The dir() function is a built-in Python function that shows you everything 
+available on an object. It's incredibly useful for exploring and understanding 
+objects.
+
+SYNTAX
+------
+dir(object)
+
+Where:
+• dir is the function name
+• object is the object you want to explore
+• Returns a list of attribute and method names
+
+WHAT DIR() SHOWS
+----------------
+The dir() function returns a list containing:
+• Data attributes (like radius, color)
+• Methods (like add_radius, get_area)
+• Special attributes (those with double underscores)
+
+EXAMPLE: USING DIR() ON A CIRCLE OBJECT
+---------------------------------------
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+    
+    def add_radius(self, r):
+        self.radius = self.radius + r
+    
+    def get_area(self):
+        import math
+        return math.pi * self.radius * self.radius
+
+# Create an object
+my_circle = Circle(radius=5, color="red")
+
+# Use dir() to explore the object
+attributes_and_methods = dir(my_circle)
+print(attributes_and_methods)
+
+Line-by-line explanation:
+• my_circle = Circle(radius=5, color="red")
+  - Creates a circle object
+  
+• attributes_and_methods = dir(my_circle)
+  - Calls dir() with my_circle as the argument
+  - The object you're interested in is passed as an argument
+  - Returns a list of attribute and method names
+  - Stores the result in a variable
+
+• print(attributes_and_methods)
+  - Displays the list
+
+Output (abbreviated):
+['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', 
+'__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', 
+'__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', 
+'__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', 
+'__subclasshook__', '__weakref__', 'add_radius', 'color', 'get_area', 'radius']
+
+UNDERSTANDING THE OUTPUT
+------------------------
+The attributes surrounded by underscores are for internal use, and you shouldn't 
+have to worry about them. These are special methods and attributes that Python 
+uses internally.
+
+The regular looking attributes are the ones you should concern yourself with. 
+These are the object's methods and data attributes.
+
+From our example:
+• 'radius' - our data attribute
+• 'color' - our data attribute
+• 'add_radius' - our method
+• 'get_area' - our method
+• Everything with __ is for internal use
+
+FILTERING THE OUTPUT
+--------------------
+Code:
+# Get only our custom attributes and methods
+my_circle = Circle(radius=5, color="red")
+all_items = dir(my_circle)
+
+# Filter out the special attributes (those starting with __)
+custom_items = [item for item in all_items if not item.startswith('__')]
+
+print("Custom attributes and methods:")
+for item in custom_items:
+    print(f"  - {item}")
+
+Output:
+Custom attributes and methods:
+  - add_radius
+  - color
+  - get_area
+  - radius
+
+USING DIR() FOR EXPLORATION
+---------------------------
+The dir() function is useful for:
+• Discovering what methods are available on an object
+• Learning about built-in types
+• Debugging - seeing what's available
+• Understanding object structure
+• Exploring libraries and modules
+
+EXAMPLE: EXPLORING BUILT-IN TYPES
+---------------------------------
+Code:
+# Explore a list object
+my_list = [1, 2, 3]
+print("List methods and attributes:")
+for item in dir(my_list):
+    if not item.startswith('__'):
+        print(f"  - {item}")
+
+Output (abbreviated):
+List methods and attributes:
+  - append
+  - clear
+  - copy
+  - count
+  - extend
+  - index
+  - insert
+  - pop
+  - remove
+  - reverse
+  - sort
+
+This shows you all the methods available on lists!
+
+KEY POINTS
+----------
+1. DIR() SHOWS EVERYTHING
+   It lists all attributes and methods, including internal ones.
+
+2. FOCUS ON NON-UNDERSCORE ITEMS
+   The regular-looking names are what you'll typically use.
+
+3. GREAT FOR EXPLORATION
+   Use dir() to discover what's available on objects.
+
+4. HELPS WITH LEARNING
+   Seeing what's available helps you understand objects better.
+
+[END SECTION 3.10]
+================================================================================
+
+SECTION 3.11: UNDERSTANDING ATTRIBUTE NAMES WITH UNDERSCORES
+---------------------------------------------------------------
+
+DEFINITION
+----------
+The attributes surrounded by underscores are for internal use, and you 
+shouldn't have to worry about them. The regular looking attributes are the 
+ones you should concern yourself with.
+
+DETAILED EXPLANATION
+--------------------
+When you use dir(), you'll see many attributes with double underscores (like 
+__init__, __str__, __len__). These are special and have specific meanings in 
+Python.
+
+WHAT ARE DOUBLE UNDERSCORE ATTRIBUTES?
+--------------------------------------
+Attributes with double underscores (__attribute__) are called "dunder" 
+attributes (short for "double underscore"). They're special methods and 
+attributes that Python uses internally.
+
+COMMON DUNDER ATTRIBUTES
+------------------------
+• __init__ - Constructor method (we've used this!)
+• __str__ - Defines how the object is displayed as a string
+• __len__ - Defines what len(object) returns
+• __add__ - Defines what happens with the + operator
+• __eq__ - Defines what happens with the == operator
+• __class__ - The class this object belongs to
+• __dict__ - Dictionary containing the object's attributes
+
+YOU DON'T NEED TO WORRY ABOUT MOST OF THEM
+------------------------------------------
+For now, you only need to know:
+• __init__ - The constructor (you've already learned this)
+• Everything else - Python handles automatically
+
+The regular looking attributes (without double underscores) are what you'll use 
+in your code:
+• Data attributes: radius, color, height, width
+• Methods: add_radius, get_area, drawCircle
+
+EXAMPLE: FOCUSING ON WHAT MATTERS
+----------------------------------
+Code:
+my_circle = Circle(radius=5, color="red")
+
+# These are what you'll use:
+print(my_circle.radius)      # Data attribute
+print(my_circle.color)       # Data attribute
+my_circle.add_radius(2)      # Method
+area = my_circle.get_area()  # Method
+
+# You typically won't use these directly:
+# my_circle.__init__()  # Python calls this automatically
+# my_circle.__str__()   # Python calls this automatically
+# etc.
+
+KEY POINT
+---------
+In many cases, you don't have to know the inner workings of the class and its 
+methods, you just have to know how to use them. The dir() function helps you 
+discover what's available, but you can focus on the non-underscore attributes 
+and methods.
+
+[END SECTION 3.11]
+================================================================================
+
+SECTION 3.12: SUMMARY AND BEST PRACTICES
+------------------------------------------
+
+DEFINITION
+----------
+There is a lot more you can do with objects in Python. Check python.org for 
+more info. This section summarizes what we've learned and provides best 
+practices.
+
+COMPREHENSIVE SUMMARY
+---------------------
+We've covered a lot! Let's review the key concepts:
+
+1. EVERYTHING IS AN OBJECT
+   • Every piece of data in Python is an object
+   • Objects have type, internal representation, and methods
+
+2. OBJECTS ARE INSTANCES OF TYPES
+   • Types (classes) are blueprints
+   • Objects are specific instances created from classes
+
+3. CREATING YOUR OWN CLASSES
+   • Use class ClassName(object): to define classes
+   • Define data attributes to store information
+   • Define methods to perform actions
+
+4. CONSTRUCTORS
+   • __init__ is the constructor method
+   • It initializes objects with data attributes
+   • self refers to the object being created
+
+5. CREATING OBJECTS
+   • Use ClassName(arguments) to create objects
+   • Each object is independent
+   • Objects share the class's methods but have separate data
+
+6. ACCESSING ATTRIBUTES
+   • Use object.attribute to access data
+   • Use object.method() to call methods
+
+7. METHODS
+   • Methods are functions that belong to classes
+   • They can access and modify object data through self
+   • They provide a controlled way to interact with objects
+
+8. EXPLORING OBJECTS
+   • Use dir() to see what's available
+   • Focus on non-underscore attributes and methods
+
+BEST PRACTICES
+--------------
+1. USE MEANINGFUL NAMES
+   • Class names: Capitalize first letter (Circle, Rectangle)
+   • Method names: lowercase_with_underscores (add_radius, get_area)
+   • Attribute names: lowercase_with_underscores (radius, color)
+
+2. DOCUMENT YOUR CLASSES
+   • Add docstrings to explain what your class does
+   • Document methods with docstrings
+
+3. USE METHODS INSTEAD OF DIRECT MODIFICATION
+   • Prefer methods over direct attribute modification
+   • Methods can validate and control changes
+
+4. KEEP CLASSES FOCUSED
+   • Each class should have a single, clear purpose
+   • Don't make classes too complex
+
+5. INITIALIZE ALL ATTRIBUTES IN __init__
+   • Set all data attributes in the constructor
+   • Use default values when appropriate
+
+6. USE SELF CONSISTENTLY
+   • Always use self as the first parameter
+   • Always use self.attribute to access object data
+
+WHAT'S NEXT?
+------------
+There is a lot more you can do with objects in Python. Some advanced topics to 
+explore:
+
+• INHERITANCE
+  - Creating new classes based on existing classes
+  - Reusing code from parent classes
+
+• POLYMORPHISM
+  - Different classes can have methods with the same name
+  - Objects can be used interchangeably
+
+• ENCAPSULATION
+  - Controlling access to object data
+  - Private attributes and methods
+
+• SPECIAL METHODS
+  - __str__, __len__, __add__, etc.
+  - Customizing how objects behave with operators
+
+• CLASS METHODS AND STATIC METHODS
+  - Methods that belong to the class, not instances
+
+• PROPERTIES
+  - Controlled access to attributes
+  - Computed attributes
+
+Check python.org for more info and advanced topics!
+
+PRACTICE RECOMMENDATIONS
+-------------------------
+1. CREATE YOUR OWN CLASSES
+   • Try creating classes for things you're interested in
+   • Practice with different data types
+
+2. EXPERIMENT WITH METHODS
+   • Create methods that modify objects
+   • Create methods that return values
+   • Create methods with different numbers of parameters
+
+3. USE DIR() TO EXPLORE
+   • Explore built-in types
+   • See what methods are available
+   • Learn by discovery
+
+4. BUILD COMPLETE EXAMPLES
+   • Create classes with multiple methods
+   • Create multiple objects
+   • See how they interact
+
+5. READ OTHER PEOPLE'S CODE
+   • Look at how others structure classes
+   • Learn from examples
+   • Understand different approaches
+
+FINAL THOUGHTS
+--------------
+You've learned the fundamentals of objects and classes in Python! This is a 
+powerful concept that will serve you well as you continue programming. 
+
+Remember:
+• Classes are blueprints
+• Objects are instances
+• Methods provide behavior
+• Practice makes perfect!
+
+Keep experimenting, keep learning, and most importantly, keep coding!
+
+[END SECTION 3.12]
+================================================================================
+
+FINAL SUMMARY
+=============
+
+CONGRATULATIONS!
+----------------
+You've completed the comprehensive study guide on Objects and Classes in Python! 
+You now understand:
+
+✓ What objects are and that everything in Python is an object
+✓ The three components of objects (type, internal representation, methods)
+✓ How to create your own custom classes
+✓ How to define data attributes and methods
+✓ How constructors work and what self means
+✓ How to create and work with objects
+✓ How methods interact with object data
+✓ How to explore objects using dir()
+
+KEY TAKEAWAYS
+-------------
+1. Everything in Python is an object
+2. Classes are blueprints for creating objects
+3. Objects are instances of classes
+4. Data attributes store information
+5. Methods provide behavior
+6. Self refers to the object itself
+7. Methods can modify object state
+8. Each object is independent
+
+NEXT STEPS
+----------
+• Practice creating your own classes
+• Experiment with different types of methods
+• Explore Python's built-in classes
+• Read more advanced Python OOP topics
+• Build projects using classes
+
+Remember: There is a lot more you can do with objects in Python. Check 
+python.org for more info!
+
+================================================================================
+END OF PART 3 - END OF COMPREHENSIVE GUIDE
+================================================================================

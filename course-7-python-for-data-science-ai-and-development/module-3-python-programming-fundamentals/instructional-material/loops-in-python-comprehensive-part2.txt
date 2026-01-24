@@ -1,0 +1,1300 @@
+================================================================================
+LOOPS IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This part covers for loops in detail, including how to iterate through lists 
+and tuples, use the enumerate() function, and understand nested loops and loop 
+control statements.
+
+ESTIMATED TIME NEEDED
+---------------------
+15 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 3: FOR LOOPS
+  SECTION 3.1: INTRODUCTION TO FOR LOOPS
+  SECTION 3.2: FOR LOOPS WITH range()
+  SECTION 3.3: FOR LOOPS WITH LISTS AND TUPLES
+  SECTION 3.4: ITERATING DIRECTLY THROUGH SEQUENCES
+  SECTION 3.5: THE enumerate() FUNCTION
+  SECTION 3.6: NESTED FOR LOOPS
+  SECTION 3.7: LOOP CONTROL STATEMENTS (break, continue, pass)
+
+NOTE: Part 3 of this guide covers:
+  • While loops in detail
+  • Conditional iteration
+  • Infinite loops and how to avoid them
+  • Comparing for loops vs while loops
+  • Real-world applications and examples
+
+================================================================================
+PART 3: FOR LOOPS
+================================================================================
+
+SECTION 3.1: INTRODUCTION TO FOR LOOPS
+---------------------------------------
+
+DEFINITION
+----------
+A for loop repeats a block of code for each item in a sequence (like a list, 
+tuple, or string) or a specific number of times (using range()).
+
+DETAILED EXPLANATION
+--------------------
+For loops are the most common type of loop in Python. They allow you to:
+• Execute code a specific number of times
+• Process each element in a collection
+• Automatically move to the next item
+• Avoid manual index management (in most cases)
+
+BASIC SYNTAX
+------------
+  for variable in sequence:
+      # Code to execute for each iteration
+      # This code is indented
+
+COMPONENTS EXPLAINED
+--------------------
+• for - Python keyword that starts the for loop
+• variable - A variable name that holds the current item/value
+• in - Python keyword meaning "for each value in"
+• sequence - The collection to iterate through (list, tuple, range, etc.)
+• : - Colon indicates the start of the loop body
+• Indented code - The code that executes for each iteration
+
+REAL-WORLD ANALOGY
+------------------
+Think of a for loop like going through a shopping list:
+• You have a list of items to buy
+• You go through each item one by one
+• For each item, you perform the same action (put it in your cart)
+• You automatically move to the next item
+• You stop when you've gone through all items
+
+VISUAL EXAMPLE FROM THE ORIGINAL MATERIAL
+------------------------------------------
+Consider the group of colored squares. Let's say we would like to replace each 
+colored square with a white square. Let's give each square a number to make 
+things a little easier, and refer to all the group of squares as squares.
+
+If we wanted to tell someone to replace square 0 with a white square, we would 
+say: "Replace square 0 with a white square."
+
+Or we can say: "For square 0 in squares, square 0 equals white square."
+
+Similarly, for the next square, we can say: "For square 1 in squares, square 
+1 equals white square."
+
+For the next square, we can say: "For square 2 in squares, square 2 equals 
+white square."
+
+We repeat the process for each square. The only thing that changes is the 
+index of the square we are referring to.
+
+If we are going to perform a similar task in Python, we cannot use actual 
+squares. So let's use a list to represent the boxes. Each element in the list 
+is a string representing the color. We want to change the name of the color in 
+each element to white.
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: FOR LOOPS WITH range()
+------------------------------------
+
+DEFINITION
+----------
+You can use for loops with the range() function to execute code a specific 
+number of times.
+
+BASIC SYNTAX
+------------
+  for i in range(n):
+      # Code executes n times
+      # i will be 0, 1, 2, ..., n-1
+
+DETAILED EXPLANATION
+--------------------
+This is a syntax to perform a loop in Python. Notice the indent. The range 
+function generates a list. The code will simply repeat everything in the 
+indent 5 times. If you were to change the value to 6, it would do it 6 times. 
+However, the value of i is incremented by 1 each time.
+
+HOW IT WORKS STEP-BY-STEP
+-------------------------
+In this segment, we change the ith element of the list to the string white. 
+The value of i is set to 0. Each iteration of the loop starts at the 
+beginning of the indent. We then run everything in the indent. The first 
+element in the list is set to white. We then go to the start of the indent. 
+We progress down each line. When we reach the line to change the value of the 
+list, we set the value of index 1 to white. The value of i increases by 1. We 
+repeat the process for index 2. The process continues for the next index 
+until we have reached the final element.
+
+EXAMPLE 1: CHANGING ALL SQUARES TO WHITE
+-----------------------------------------
+CODE:
+  squares = ["red", "yellow", "green", "blue", "purple"]
+  
+  for i in range(5):
+      squares[i] = "white"
+  
+  print(squares)
+
+OUTPUT:
+  ['white', 'white', 'white', 'white', 'white']
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green", "blue", "purple"]
+           • Creates a list with 5 color strings
+           • Each element represents a colored square
+           • Indices: 0=red, 1=yellow, 2=green, 3=blue, 4=purple
+  
+  Line 3: for i in range(5):
+           • range(5) generates the sequence [0, 1, 2, 3, 4]
+           • i will take each value: 0, then 1, then 2, then 3, then 4
+           • The loop will execute 5 times (once for each value)
+           • : indicates the start of the loop body
+  
+  Line 4:     squares[i] = "white"
+           • This line is indented, so it's inside the loop
+           • squares[i] accesses the element at index i
+           • = "white" assigns the string "white" to that element
+           • Iteration 1: squares[0] = "white" (red → white)
+           • Iteration 2: squares[1] = "white" (yellow → white)
+           • Iteration 3: squares[2] = "white" (green → white)
+           • Iteration 4: squares[3] = "white" (blue → white)
+           • Iteration 5: squares[4] = "white" (purple → white)
+  
+  Line 6: print(squares)
+           • After the loop completes, prints the modified list
+           • All elements are now "white"
+
+STEP-BY-STEP EXECUTION
+----------------------
+ITERATION 1:
+  • i = 0
+  • squares[0] = "white"
+  • squares = ["white", "yellow", "green", "blue", "purple"]
+
+ITERATION 2:
+  • i = 1
+  • squares[1] = "white"
+  • squares = ["white", "white", "green", "blue", "purple"]
+
+ITERATION 3:
+  • i = 2
+  • squares[2] = "white"
+  • squares = ["white", "white", "white", "blue", "purple"]
+
+ITERATION 4:
+  • i = 3
+  • squares[3] = "white"
+  • squares = ["white", "white", "white", "white", "purple"]
+
+ITERATION 5:
+  • i = 4
+  • squares[4] = "white"
+  • squares = ["white", "white", "white", "white", "white"]
+
+EXAMPLE 2: USING len() FOR FLEXIBILITY
+---------------------------------------
+CODE:
+  squares = ["red", "yellow", "green"]
+  
+  for i in range(len(squares)):
+      squares[i] = "white"
+  
+  print(squares)
+
+OUTPUT:
+  ['white', 'white', 'white']
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green"]
+           • Creates a list with 3 elements
+  
+  Line 3: for i in range(len(squares)):
+           • len(squares) returns 3 (the length of the list)
+           • range(3) generates [0, 1, 2]
+           • i will be 0, then 1, then 2
+           • This approach is better because it works for any list size
+  
+  Line 4:     squares[i] = "white"
+           • Changes each element to "white"
+           • Works for lists of any size
+  
+  Line 6: print(squares)
+           • Shows the result: all white squares
+
+WHY USE len()?
+-------------
+Using len() makes your code more flexible:
+• Works with lists of any size
+• No need to manually count elements
+• Automatically adapts if the list changes
+• Less error-prone (no risk of wrong count)
+
+EXAMPLE 3: PRINTING NUMBERS
+----------------------------
+CODE:
+  for i in range(5):
+      print(f"Number: {i}")
+
+OUTPUT:
+  Number: 0
+  Number: 1
+  Number: 2
+  Number: 3
+  Number: 4
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: for i in range(5):
+           • Creates a loop that runs 5 times
+           • i takes values 0, 1, 2, 3, 4
+  
+  Line 2:     print(f"Number: {i}")
+           • f"..." is an f-string (formatted string)
+           • {i} inserts the current value of i
+           • Prints a different number each iteration
+
+EXAMPLE 4: CALCULATING SUM
+---------------------------
+CODE:
+  total = 0
+  
+  for i in range(10):
+      total = total + i
+  
+  print(f"Sum of 0 to 9: {total}")
+
+OUTPUT:
+  Sum of 0 to 9: 45
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: total = 0
+           • Initialize a variable to store the sum
+           • Starts at 0
+  
+  Line 3: for i in range(10):
+           • range(10) generates [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+           • Loop runs 10 times
+  
+  Line 4:     total = total + i
+           • Adds the current value of i to total
+           • Iteration 1: total = 0 + 0 = 0
+           • Iteration 2: total = 0 + 1 = 1
+           • Iteration 3: total = 1 + 2 = 3
+           • Iteration 4: total = 3 + 3 = 6
+           • ... and so on until total = 45
+  
+  Line 6: print(f"Sum of 0 to 9: {total}")
+           • Displays the final sum
+
+STEP-BY-STEP EXECUTION:
+  Iteration 1: i=0, total=0+0=0
+  Iteration 2: i=1, total=0+1=1
+  Iteration 3: i=2, total=1+2=3
+  Iteration 4: i=3, total=3+3=6
+  Iteration 5: i=4, total=6+4=10
+  Iteration 6: i=5, total=10+5=15
+  Iteration 7: i=6, total=15+6=21
+  Iteration 8: i=7, total=21+7=28
+  Iteration 9: i=8, total=28+8=36
+  Iteration 10: i=9, total=36+9=45
+
+INDENTATION IS CRITICAL
+-----------------------
+Python uses indentation to determine what code belongs to the loop:
+
+CORRECT:
+  for i in range(5):
+      print(i)      # This is INSIDE the loop
+      print(i * 2)  # This is also INSIDE the loop
+
+INCORRECT:
+  for i in range(5):
+  print(i)          # ERROR! Not indented, not in the loop
+
+CORRECT WITH MULTIPLE LINES:
+  for i in range(5):
+      print(f"Number: {i}")
+      squared = i * i
+      print(f"Squared: {squared}")
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: FOR LOOPS WITH LISTS AND TUPLES
+----------------------------------------------
+
+DEFINITION
+----------
+You can iterate directly through lists and tuples without using range() and 
+indices. Python automatically gives you each element.
+
+BASIC SYNTAX
+------------
+  for item in sequence:
+      # Code executes for each item
+      # item contains the actual element, not the index
+
+DETAILED EXPLANATION
+--------------------
+We can also iterate through a list or tuple directly in Python. We do not even 
+need to use indices. Here is the list squares. Each iteration of the list we 
+pass one element of the list squares to the variable square.
+
+HOW IT WORKS
+------------
+When you use a for loop with a list or tuple:
+• Python automatically goes through each element
+• You get the actual element value (not the index)
+• No need to use range() or len()
+• Simpler and more Pythonic code
+
+EXAMPLE 1: ITERATING THROUGH A LIST OF COLORS
+----------------------------------------------
+CODE:
+  squares = ["red", "yellow", "green"]
+  
+  for square in squares:
+      print(square)
+
+OUTPUT:
+  red
+  yellow
+  green
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green"]
+           • Creates a list with 3 color strings
+  
+  Line 3: for square in squares:
+           • for - Starts the for loop
+           • square - Variable name that will hold each element
+           • in - Python keyword
+           • squares - The list to iterate through
+           • : - Starts the loop body
+           • Python automatically goes through each element
+  
+  Line 4:     print(square)
+           • Prints the current element
+           • Iteration 1: square = "red", prints "red"
+           • Iteration 2: square = "yellow", prints "yellow"
+           • Iteration 3: square = "green", prints "green"
+
+STEP-BY-STEP EXECUTION
+----------------------
+ITERATION 1:
+  • square = "red" (first element)
+  • print("red")
+  • Output: red
+
+ITERATION 2:
+  • square = "yellow" (second element)
+  • print("yellow")
+  • Output: yellow
+
+ITERATION 3:
+  • square = "green" (third element)
+  • print("green")
+  • Output: green
+
+VISUAL REPRESENTATION FROM ORIGINAL MATERIAL
+--------------------------------------------
+Let's display the value of the variable square on this section. For the first 
+iteration, the value of square is red. We then start the second iteration. For 
+the second iteration, the value of square is yellow. We then start the third 
+iteration. For the final iteration, the value of square is green.
+
+EXAMPLE 2: PROCESSING NUMBERS
+------------------------------
+CODE:
+  numbers = [10, 20, 30, 40, 50]
+  
+  for number in numbers:
+      doubled = number * 2
+      print(f"{number} doubled is {doubled}")
+
+OUTPUT:
+  10 doubled is 20
+  20 doubled is 40
+  30 doubled is 60
+  40 doubled is 80
+  50 doubled is 100
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: numbers = [10, 20, 30, 40, 50]
+           • Creates a list of numbers
+  
+  Line 3: for number in numbers:
+           • Iterates through each number
+           • number will be 10, then 20, then 30, then 40, then 50
+  
+  Line 4:     doubled = number * 2
+           • Calculates double of the current number
+           • Iteration 1: doubled = 10 * 2 = 20
+           • Iteration 2: doubled = 20 * 2 = 40
+           • And so on...
+  
+  Line 5:     print(f"{number} doubled is {doubled}")
+           • Prints the original and doubled value
+
+EXAMPLE 3: WORKING WITH TUPLES
+-------------------------------
+CODE:
+  coordinates = [(0, 0), (1, 2), (3, 4), (5, 6)]
+  
+  for coord in coordinates:
+      x, y = coord
+      print(f"Point at ({x}, {y})")
+
+OUTPUT:
+  Point at (0, 0)
+  Point at (1, 2)
+  Point at (3, 4)
+  Point at (5, 6)
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: coordinates = [(0, 0), (1, 2), (3, 4), (5, 6)]
+           • Creates a list of tuples
+           • Each tuple represents a coordinate point
+  
+  Line 3: for coord in coordinates:
+           • Iterates through each tuple
+           • coord will be (0, 0), then (1, 2), then (3, 4), then (5, 6)
+  
+  Line 4:     x, y = coord
+           • Unpacks the tuple into x and y variables
+           • Iteration 1: x=0, y=0
+           • Iteration 2: x=1, y=2
+           • And so on...
+  
+  Line 5:     print(f"Point at ({x}, {y})")
+           • Prints the coordinates in a readable format
+
+EXAMPLE 4: FINDING THE MAXIMUM VALUE
+-------------------------------------
+CODE:
+  numbers = [5, 2, 8, 1, 9, 3]
+  maximum = numbers[0]  # Start with first element
+  
+  for number in numbers:
+      if number > maximum:
+          maximum = number
+  
+  print(f"Maximum value: {maximum}")
+
+OUTPUT:
+  Maximum value: 9
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: numbers = [5, 2, 8, 1, 9, 3]
+           • List of numbers to find maximum
+  
+  Line 2: maximum = numbers[0]
+           • Initialize maximum with first element (5)
+           • This ensures we have a starting value
+  
+  Line 4: for number in numbers:
+           • Iterates through each number
+  
+  Line 5:     if number > maximum:
+           • Checks if current number is greater than current maximum
+           • Iteration 1: 5 > 5? No, maximum stays 5
+           • Iteration 2: 2 > 5? No, maximum stays 5
+           • Iteration 3: 8 > 5? Yes, maximum becomes 8
+           • Iteration 4: 1 > 8? No, maximum stays 8
+           • Iteration 5: 9 > 8? Yes, maximum becomes 9
+           • Iteration 6: 3 > 9? No, maximum stays 9
+  
+  Line 6:         maximum = number
+           • Updates maximum if we found a larger number
+  
+  Line 8: print(f"Maximum value: {maximum}")
+           • Prints the final maximum value
+
+COMPARISON: WITH INDICES VS WITHOUT INDICES
+-------------------------------------------
+
+APPROACH 1: USING INDICES (range())
+  squares = ["red", "yellow", "green"]
+  
+  for i in range(len(squares)):
+      print(squares[i])
+
+APPROACH 2: DIRECT ITERATION (SIMPLER)
+  squares = ["red", "yellow", "green"]
+  
+  for square in squares:
+      print(square)
+
+BOTH APPROACHES PRODUCE THE SAME OUTPUT, BUT:
+• Approach 2 is simpler and more Pythonic
+• Approach 2 is easier to read
+• Approach 2 is less error-prone
+• Use Approach 1 only when you need the index
+
+WHEN TO USE EACH APPROACH
+-------------------------
+USE DIRECT ITERATION (for item in list) when:
+• You only need the element value
+• You don't need to modify the list
+• You don't need the index
+• You want simpler, cleaner code
+
+USE INDICES (for i in range(len(list))) when:
+• You need to modify list elements
+• You need the index for calculations
+• You need to access multiple lists with the same index
+• You need to skip certain indices
+
+EXAMPLE: WHEN YOU NEED INDICES
+-------------------------------
+CODE:
+  # Need to modify elements, so we need indices
+  squares = ["red", "yellow", "green"]
+  
+  for i in range(len(squares)):
+      squares[i] = squares[i].upper()  # Convert to uppercase
+  
+  print(squares)  # Output: ['RED', 'YELLOW', 'GREEN']
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green"]
+  
+  Line 3: for i in range(len(squares)):
+           • Need indices to modify elements
+  
+  Line 4:     squares[i] = squares[i].upper()
+           • squares[i] accesses element at index i
+           • .upper() converts string to uppercase
+           • squares[i] = ... modifies the element
+           • Can't do this with direct iteration (can't modify during iteration)
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: ITERATING DIRECTLY THROUGH SEQUENCES
+-------------------------------------------------
+
+DEFINITION
+----------
+Python allows you to iterate directly through sequences (lists, tuples, 
+strings) without needing to use range() or indices. This is the most Pythonic 
+way to iterate.
+
+DETAILED EXPLANATION
+--------------------
+We can also iterate through a list or tuple directly in Python. We do not 
+even need to use indices. Here is the list squares. Each iteration of the list 
+we pass one element of the list squares to the variable square.
+
+ADVANTAGES OF DIRECT ITERATION
+-------------------------------
+1. SIMPLICITY: Less code, easier to read
+2. SAFETY: No index errors (can't go out of bounds)
+3. PYTHONIC: Follows Python best practices
+4. EFFICIENCY: Slightly faster (no index lookups)
+5. CLARITY: Intent is clear - "do this for each item"
+
+EXAMPLE 1: PROCESSING STRINGS IN A LIST
+----------------------------------------
+CODE:
+  names = ["Alice", "Bob", "Charlie"]
+  
+  for name in names:
+      print(f"Hello, {name}!")
+
+OUTPUT:
+  Hello, Alice!
+  Hello, Bob!
+  Hello, Charlie!
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: names = ["Alice", "Bob", "Charlie"]
+           • List of name strings
+  
+  Line 3: for name in names:
+           • Directly iterates through the list
+           • name gets each string value
+  
+  Line 4:     print(f"Hello, {name}!")
+           • Prints a greeting for each name
+
+EXAMPLE 2: ITERATING THROUGH A STRING
+--------------------------------------
+CODE:
+  word = "Python"
+  
+  for letter in word:
+      print(letter)
+
+OUTPUT:
+  P
+  y
+  t
+  h
+  o
+  n
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: word = "Python"
+           • A string (strings are sequences of characters)
+  
+  Line 3: for letter in word:
+           • Iterates through each character in the string
+           • letter gets each character: 'P', 'y', 't', 'h', 'o', 'n'
+  
+  Line 4:     print(letter)
+           • Prints each character on a new line
+
+EXAMPLE 3: COUNTING CHARACTERS
+--------------------------------
+CODE:
+  text = "hello"
+  count = 0
+  
+  for char in text:
+      count = count + 1
+  
+  print(f"'{text}' has {count} characters")
+
+OUTPUT:
+  'hello' has 5 characters
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: text = "hello"
+  
+  Line 2: count = 0
+           • Initialize counter
+  
+  Line 4: for char in text:
+           • Iterates through each character
+  
+  Line 5:     count = count + 1
+           • Increments counter for each character
+           • Iteration 1: count = 0 + 1 = 1 ('h')
+           • Iteration 2: count = 1 + 1 = 2 ('e')
+           • Iteration 3: count = 2 + 1 = 3 ('l')
+           • Iteration 4: count = 3 + 1 = 4 ('l')
+           • Iteration 5: count = 4 + 1 = 5 ('o')
+  
+  Line 7: print(f"'{text}' has {count} characters")
+           • Shows the final count
+
+EXAMPLE 4: PROCESSING NESTED DATA
+----------------------------------
+CODE:
+  students = [
+      {"name": "Alice", "grade": 85},
+      {"name": "Bob", "grade": 92},
+      {"name": "Charlie", "grade": 78}
+  ]
+  
+  for student in students:
+      name = student["name"]
+      grade = student["grade"]
+      print(f"{name} got {grade}")
+
+OUTPUT:
+  Alice got 85
+  Bob got 92
+  Charlie got 78
+
+LINE-BY-LINE EXPLANATION:
+  Line 1-5: students = [...]
+           • List of dictionaries
+           • Each dictionary represents a student
+  
+  Line 7: for student in students:
+           • Iterates through each dictionary
+           • student is a dictionary in each iteration
+  
+  Line 8:     name = student["name"]
+           • Accesses the "name" key in the dictionary
+           • Gets the student's name
+  
+  Line 9:     grade = student["grade"]
+           • Accesses the "grade" key
+           • Gets the student's grade
+  
+  Line 10:    print(f"{name} got {grade}")
+           • Prints the information
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: THE enumerate() FUNCTION
+--------------------------------------
+
+DEFINITION
+----------
+A useful function for iterating data is enumerate. It can be used to obtain 
+the index and the element in the list.
+
+SYNTAX
+------
+  for index, element in enumerate(sequence):
+      # Code that uses both index and element
+
+PARAMETERS
+----------
+• sequence: The list, tuple, or other sequence to iterate through
+• index: The current index (starts at 0)
+• element: The current element value
+
+HOW IT WORKS
+------------
+enumerate() returns pairs of (index, element) for each item in the sequence. 
+This allows you to access both the index and the value simultaneously.
+
+DETAILED EXPLANATION
+--------------------
+Let's use the box analogy with the numbers representing the index of each 
+square. This is the syntax to iterate through a list and provide the index 
+of each element. We use the list squares and use the names of the colors to 
+represent the colored squares. The argument of the function enumerate is the 
+list, in this case squares. The variable i is the index and the variable 
+square is the corresponding element in the list.
+
+REAL-WORLD ANALOGY
+------------------
+Think of enumerate() like a numbered list:
+• Without enumerate: You have items but don't know their position
+• With enumerate: Each item has a number showing its position
+• Like a shopping list: "1. Milk, 2. Bread, 3. Eggs"
+
+EXAMPLE 1: BASIC USAGE
+-----------------------
+CODE:
+  squares = ["red", "yellow", "green"]
+  
+  for i, square in enumerate(squares):
+      print(f"Index {i}: {square}")
+
+OUTPUT:
+  Index 0: red
+  Index 1: yellow
+  Index 2: green
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green"]
+           • List of color strings
+  
+  Line 3: for i, square in enumerate(squares):
+           • enumerate(squares) generates pairs: (0, "red"), (1, "yellow"), (2, "green")
+           • i receives the index (0, 1, 2)
+           • square receives the element ("red", "yellow", "green")
+           • This is called "unpacking" - Python automatically splits the pair
+  
+  Line 4:     print(f"Index {i}: {square}")
+           • Prints both the index and the element
+           • Iteration 1: i=0, square="red"
+           • Iteration 2: i=1, square="yellow"
+           • Iteration 3: i=2, square="green"
+
+STEP-BY-STEP EXECUTION FROM ORIGINAL MATERIAL
+----------------------------------------------
+Let's use the left part of the screen to display the different values of the 
+variable square and i for the various iterations of the loop. For the first 
+iteration, the value of the variable is red, corresponding to the zeroth index 
+and the value for i is zero. For the second iteration, the value of the 
+variable square is yellow and the value of i corresponds to its index, i.e. 1. 
+We repeat the process for the last index.
+
+VISUAL REPRESENTATION
+---------------------
+ITERATION 1:
+  i = 0
+  square = "red"
+  Output: "Index 0: red"
+
+ITERATION 2:
+  i = 1
+  square = "yellow"
+  Output: "Index 1: yellow"
+
+ITERATION 3:
+  i = 2
+  square = "green"
+  Output: "Index 2: green"
+
+EXAMPLE 2: MODIFYING ELEMENTS WITH INDEX
+-----------------------------------------
+CODE:
+  squares = ["red", "yellow", "green"]
+  
+  for i, square in enumerate(squares):
+      squares[i] = square.upper()
+  
+  print(squares)
+
+OUTPUT:
+  ['RED', 'YELLOW', 'GREEN']
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: squares = ["red", "yellow", "green"]
+  
+  Line 3: for i, square in enumerate(squares):
+           • Gets both index (i) and value (square)
+  
+  Line 4:     squares[i] = square.upper()
+           • square.upper() converts to uppercase
+           • squares[i] = ... modifies the element at index i
+           • This is why we need enumerate() - we need the index to modify
+  
+  Line 6: print(squares)
+           • Shows the modified list
+
+EXAMPLE 3: STARTING INDEX FROM 1
+----------------------------------
+CODE:
+  items = ["apple", "banana", "cherry"]
+  
+  for i, item in enumerate(items, start=1):
+      print(f"{i}. {item}")
+
+OUTPUT:
+  1. apple
+  2. banana
+  3. cherry
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: items = ["apple", "banana", "cherry"]
+  
+  Line 3: for i, item in enumerate(items, start=1):
+           • start=1 makes the index start at 1 instead of 0
+           • Useful for user-facing output (people count from 1)
+  
+  Line 4:     print(f"{i}. {item}")
+           • Prints numbered list starting from 1
+
+EXAMPLE 4: FINDING POSITIONS
+-----------------------------
+CODE:
+  colors = ["red", "blue", "green", "blue", "yellow"]
+  
+  for i, color in enumerate(colors):
+      if color == "blue":
+          print(f"Found blue at index {i}")
+
+OUTPUT:
+  Found blue at index 1
+  Found blue at index 3
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: colors = ["red", "blue", "green", "blue", "yellow"]
+           • List with "blue" appearing twice
+  
+  Line 3: for i, color in enumerate(colors):
+           • Gets index and color for each element
+  
+  Line 4:     if color == "blue":
+           • Checks if current color is "blue"
+  
+  Line 5:         print(f"Found blue at index {i}")
+           • Prints the index when blue is found
+           • Finds it at indices 1 and 3
+
+WHEN TO USE enumerate()
+-----------------------
+USE enumerate() when you need:
+• Both the index and the element value
+• To modify elements while iterating
+• To track positions of items
+• To create numbered lists
+
+DON'T USE enumerate() when:
+• You only need the element value (use direct iteration)
+• You only need the index (use range(len()))
+• You're not modifying the list
+
+COMPARISON OF APPROACHES
+------------------------
+
+APPROACH 1: Using range(len())
+  squares = ["red", "yellow", "green"]
+  for i in range(len(squares)):
+      print(f"{i}: {squares[i]}")
+
+APPROACH 2: Using enumerate() (BETTER)
+  squares = ["red", "yellow", "green"]
+  for i, square in enumerate(squares):
+      print(f"{i}: {square}")
+
+BOTH WORK, BUT:
+• enumerate() is more Pythonic
+• enumerate() is clearer (shows you need both index and value)
+• enumerate() is slightly more efficient
+• enumerate() works with any iterable, not just lists
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: NESTED FOR LOOPS
+------------------------------
+
+DEFINITION
+----------
+A nested for loop is a for loop inside another for loop. This allows you to 
+iterate through multiple dimensions or create combinations.
+
+BASIC SYNTAX
+------------
+  for outer_item in outer_sequence:
+      # Outer loop code
+      for inner_item in inner_sequence:
+          # Inner loop code
+          # This code runs for each combination
+
+HOW IT WORKS
+------------
+• The outer loop runs once
+• For each iteration of the outer loop, the inner loop runs completely
+• Total iterations = outer_iterations × inner_iterations
+
+REAL-WORLD ANALOGY
+------------------
+Think of nested loops like a grid:
+• Outer loop: Go through each row
+• Inner loop: For each row, go through each column
+• Like reading a book: For each page (outer), read each line (inner)
+
+EXAMPLE 1: MULTIPLICATION TABLE
+---------------------------------
+CODE:
+  for i in range(1, 4):
+      for j in range(1, 4):
+          result = i * j
+          print(f"{i} × {j} = {result}")
+      print()  # Empty line after each row
+
+OUTPUT:
+  1 × 1 = 1
+  1 × 2 = 2
+  1 × 3 = 3
+
+  2 × 1 = 2
+  2 × 2 = 4
+  2 × 3 = 6
+
+  3 × 1 = 3
+  3 × 2 = 6
+  3 × 3 = 9
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: for i in range(1, 4):
+           • Outer loop: i will be 1, then 2, then 3
+           • Runs 3 times
+  
+  Line 2:     for j in range(1, 4):
+           • Inner loop: j will be 1, then 2, then 3
+           • Runs 3 times FOR EACH outer iteration
+           • Total: 3 × 3 = 9 iterations
+  
+  Line 3:         result = i * j
+           • Calculates the product
+           • Indented twice (inside both loops)
+  
+  Line 4:         print(f"{i} × {j} = {result}")
+           • Prints the multiplication
+  
+  Line 5:     print()
+           • Empty line after each row
+           • Indented once (only in outer loop)
+
+STEP-BY-STEP EXECUTION:
+  Outer iteration 1 (i=1):
+    Inner iteration 1 (j=1): 1 × 1 = 1
+    Inner iteration 2 (j=2): 1 × 2 = 2
+    Inner iteration 3 (j=3): 1 × 3 = 3
+    Print empty line
+  
+  Outer iteration 2 (i=2):
+    Inner iteration 1 (j=1): 2 × 1 = 2
+    Inner iteration 2 (j=2): 2 × 2 = 4
+    Inner iteration 3 (j=3): 2 × 3 = 6
+    Print empty line
+  
+  Outer iteration 3 (i=3):
+    Inner iteration 1 (j=1): 3 × 1 = 3
+    Inner iteration 2 (j=2): 3 × 2 = 6
+    Inner iteration 3 (j=3): 3 × 3 = 9
+    Print empty line
+
+EXAMPLE 2: PROCESSING A 2D LIST
+---------------------------------
+CODE:
+  matrix = [
+      [1, 2, 3],
+      [4, 5, 6],
+      [7, 8, 9]
+  ]
+  
+  for row in matrix:
+      for element in row:
+          print(element, end=" ")
+      print()  # New line after each row
+
+OUTPUT:
+  1 2 3
+  4 5 6
+  7 8 9
+
+LINE-BY-LINE EXPLANATION:
+  Line 1-5: matrix = [[...], [...], [...]]
+           • 2D list (list of lists)
+           • Each inner list is a row
+  
+  Line 7: for row in matrix:
+           • Outer loop: Iterates through each row
+           • row will be [1,2,3], then [4,5,6], then [7,8,9]
+  
+  Line 8:     for element in row:
+           • Inner loop: Iterates through each element in the current row
+           • For row [1,2,3]: element will be 1, then 2, then 3
+  
+  Line 9:         print(element, end=" ")
+           • Prints element with space (not newline)
+           • end=" " keeps everything on same line
+  
+  Line 10:    print()
+           • Prints newline after each row
+           • Only indented once (in outer loop)
+
+EXAMPLE 3: COMBINING LISTS
+---------------------------
+CODE:
+  colors = ["red", "blue"]
+  sizes = ["small", "large"]
+  
+  for color in colors:
+      for size in sizes:
+          print(f"{size} {color}")
+
+OUTPUT:
+  small red
+  large red
+  small blue
+  large blue
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: colors = ["red", "blue"]
+  
+  Line 2: sizes = ["small", "large"]
+  
+  Line 4: for color in colors:
+           • Outer loop: color will be "red", then "blue"
+  
+  Line 5:     for size in sizes:
+           • Inner loop: For each color, iterate through all sizes
+           • Creates all combinations
+  
+  Line 6:         print(f"{size} {color}")
+           • Prints each combination
+           • Total: 2 colors × 2 sizes = 4 combinations
+
+INDENTATION IN NESTED LOOPS
+---------------------------
+Indentation determines which loop code belongs to:
+
+  for i in range(3):           # Outer loop
+      print(f"Outer: {i}")      # In outer loop only
+      for j in range(2):        # Inner loop
+          print(f"  Inner: {j}") # In both loops
+      print("End of outer")     # In outer loop only
+
+OUTPUT:
+  Outer: 0
+    Inner: 0
+    Inner: 1
+  End of outer
+  Outer: 1
+    Inner: 0
+    Inner: 1
+  End of outer
+  Outer: 2
+    Inner: 0
+    Inner: 1
+  End of outer
+
+[END SECTION 3.6]
+================================================================================
+
+SECTION 3.7: LOOP CONTROL STATEMENTS
+--------------------------------------
+
+DEFINITION
+----------
+Loop control statements allow you to change the normal flow of a loop:
+• break: Exits the loop immediately
+• continue: Skips the rest of the current iteration
+• pass: Does nothing (placeholder)
+
+THE break STATEMENT
+-------------------
+DEFINITION:
+The break statement immediately exits the loop, even if there are more 
+iterations remaining.
+
+SYNTAX:
+  for item in sequence:
+      if condition:
+          break  # Exits the loop
+      # This code won't run if break executes
+
+EXAMPLE:
+  numbers = [1, 2, 3, 4, 5]
+  
+  for num in numbers:
+      if num == 3:
+          break
+      print(num)
+  
+  OUTPUT:
+  1
+  2
+  # Loop stops when num == 3
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: numbers = [1, 2, 3, 4, 5]
+  
+  Line 3: for num in numbers:
+           • Would normally iterate 5 times
+  
+  Line 4:     if num == 3:
+           • Checks if current number is 3
+  
+  Line 5:         break
+           • Immediately exits the loop
+           • Skips remaining iterations (4 and 5)
+  
+  Line 6:     print(num)
+           • Only executes if break didn't execute
+           • Prints 1 and 2, but not 3, 4, or 5
+
+THE continue STATEMENT
+----------------------
+DEFINITION:
+The continue statement skips the rest of the current iteration and moves to 
+the next iteration.
+
+SYNTAX:
+  for item in sequence:
+      if condition:
+          continue  # Skips to next iteration
+      # This code is skipped if continue executes
+
+EXAMPLE:
+  numbers = [1, 2, 3, 4, 5]
+  
+  for num in numbers:
+      if num == 3:
+          continue
+      print(num)
+  
+  OUTPUT:
+  1
+  2
+  4
+  5
+  # Skips 3, but continues with 4 and 5
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: numbers = [1, 2, 3, 4, 5]
+  
+  Line 3: for num in numbers:
+           • Iterates through all numbers
+  
+  Line 4:     if num == 3:
+           • Checks if number is 3
+  
+  Line 5:         continue
+           • Skips the rest of this iteration
+           • Moves to next iteration (num = 4)
+           • print(num) is skipped for num == 3
+  
+  Line 6:     print(num)
+           • Executes for all numbers except 3
+
+THE pass STATEMENT
+-------------------
+DEFINITION:
+The pass statement does nothing. It's a placeholder for code you'll write 
+later.
+
+SYNTAX:
+  for item in sequence:
+      if condition:
+          pass  # Does nothing, continues normally
+      # Code continues as normal
+
+EXAMPLE:
+  numbers = [1, 2, 3, 4, 5]
+  
+  for num in numbers:
+      if num == 3:
+          pass  # TODO: Add handling for 3
+      print(num)
+  
+  OUTPUT:
+  1
+  2
+  3
+  4
+  5
+  # All numbers printed (pass does nothing)
+
+LINE-BY-LINE EXPLANATION:
+  Line 1: numbers = [1, 2, 3, 4, 5]
+  
+  Line 3: for num in numbers:
+  
+  Line 4:     if num == 3:
+  
+  Line 5:         pass
+           • Does nothing
+           • Code continues normally
+           • Useful when you need syntax but no action yet
+  
+  Line 6:     print(num)
+           • Executes for all numbers including 3
+
+COMPARISON TABLE
+----------------
+STATEMENT | ACTION                    | LOOP CONTINUES?
+----------|---------------------------|----------------
+break     | Exits loop immediately    | No
+continue  | Skips to next iteration   | Yes
+pass      | Does nothing              | Yes
+
+[END SECTION 3.7]
+================================================================================
+
+SUMMARY OF PART 2
+==================
+
+KEY CONCEPTS COVERED:
+• For loops with range()
+• Iterating directly through lists and tuples
+• The enumerate() function
+• Nested for loops
+• Loop control statements (break, continue, pass)
+
+NEXT STEPS:
+• Continue to Part 3 to learn about while loops
+• Practice writing for loops with different sequences
+• Try using enumerate() when you need both index and value
+
+================================================================================
+END OF PART 2
+================================================================================

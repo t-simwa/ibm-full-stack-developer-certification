@@ -1,0 +1,1450 @@
+================================================================================
+FUNCTIONS IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME
+-------
+Welcome to Part 2 of Functions in Python. This part continues from Part 1 and 
+covers function parameters, return values, functions without return statements, 
+the pass keyword, functions that perform multiple tasks, and using loops in 
+functions. You'll learn through detailed explanations, extensive examples, and 
+line-by-line code breakdowns.
+
+ESTIMATED TIME NEEDED
+---------------------
+10 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand function parameters (single and multiple)
+• Work with different data types as function parameters
+• Understand return values and the None object
+• Create functions without return statements
+• Use the pass keyword in functions
+• Create functions that perform multiple tasks
+• Use loops inside functions
+• Understand variadic parameters (*args)
+• Work with variable numbers of arguments
+
+OVERVIEW
+--------
+In Part 1, you learned the fundamentals of functions. In Part 2, we'll dive deeper 
+into:
+• How to work with multiple parameters
+• What happens when functions don't return values
+• How to create functions that do multiple things
+• How to use loops within functions
+• How to accept variable numbers of arguments
+
+This knowledge will help you write more flexible and powerful functions.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 1: FUNCTION PARAMETERS
+  SECTION 1.1: SINGLE PARAMETER FUNCTIONS (REVIEW)
+  SECTION 1.2: MULTIPLE PARAMETER FUNCTIONS
+  SECTION 1.3: PARAMETERS WITH DIFFERENT DATA TYPES
+  SECTION 1.4: PARAMETER ORDER AND POSITIONAL ARGUMENTS
+
+PART 2: RETURN VALUES
+  SECTION 2.1: FUNCTIONS WITH RETURN STATEMENTS
+  SECTION 2.2: FUNCTIONS WITHOUT RETURN STATEMENTS
+  SECTION 2.3: THE None OBJECT
+  SECTION 2.4: THE pass KEYWORD
+
+PART 3: FUNCTIONS WITH MULTIPLE TASKS
+  SECTION 3.1: FUNCTIONS THAT PRINT AND RETURN
+  SECTION 3.2: FUNCTIONS WITH MULTIPLE STATEMENTS
+
+PART 4: LOOPS IN FUNCTIONS
+  SECTION 4.1: INTRODUCTION TO LOOPS IN FUNCTIONS
+  SECTION 4.2: USING FOR LOOPS IN FUNCTIONS
+  SECTION 4.3: USING enumerate() IN FUNCTIONS
+  SECTION 4.4: COMPLETE LOOP EXAMPLE
+
+PART 5: VARIADIC PARAMETERS
+  SECTION 5.1: INTRODUCTION TO VARIADIC PARAMETERS
+  SECTION 5.2: USING *args (ARBITRARY ARGUMENTS)
+  SECTION 5.3: WORKING WITH VARIABLE NUMBERS OF ARGUMENTS
+  SECTION 5.4: PRACTICAL EXAMPLES OF VARIADIC PARAMETERS
+
+NOTE: Part 3 of this guide covers:
+  • Variable scope (global vs local)
+  • The global keyword
+  • Advanced scope concepts
+  • Best practices and summary
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: FUNCTION PARAMETERS
+================================================================================
+
+SECTION 1.1: SINGLE PARAMETER FUNCTIONS (REVIEW)
+-------------------------------------------------
+
+DEFINITION
+----------
+A function can have one parameter. We've already seen this in Part 1 with the 
+add_one(a) function.
+
+QUICK REVIEW
+------------
+  def add_one(a):
+      b = a + 1
+      return b
+
+EXPLANATION:
+• The function has one parameter: a
+• When called: add_one(5), the value 5 is assigned to a
+• The function uses a to perform calculations
+• Returns the result
+
+This is a single parameter function - it takes one input value.
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: MULTIPLE PARAMETER FUNCTIONS
+------------------------------------------
+
+DEFINITION
+----------
+A function can have multiple parameters. The function mult multiplies two numbers. 
+In other words, it finds their product.
+
+DETAILED EXPLANATION
+--------------------
+Functions can accept multiple inputs by defining multiple parameters. Each 
+parameter is separated by a comma in the function definition.
+
+SYNTAX:
+  def function_name(parameter1, parameter2, parameter3, ...):
+      # Function body
+      return value
+
+EXAMPLE: MULTIPLYING TWO NUMBERS
+---------------------------------
+  def mult(a, b):
+      product = a * b
+      return product
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def mult(a, b):
+         • def - Keyword to define a function
+         • mult - Function name (short for multiply)
+         • (a, b) - Two parameters separated by a comma
+                   a is the first parameter
+                   b is the second parameter
+         • : - Colon indicates start of function body
+
+Line 2:     product = a * b
+         • product - Variable to store the result
+         • = - Assignment operator
+         • a * b - Multiplies the two parameters together
+         • This calculates the product
+
+Line 3:     return product
+         • return - Sends the result back
+         • product - The value to return (the product of a and b)
+
+CALLING THE FUNCTION WITH MULTIPLE ARGUMENTS
+--------------------------------------------
+When calling a function with multiple parameters, you provide the arguments in 
+the same order as the parameters are defined.
+
+EXAMPLE 1: MULTIPLYING TWO INTEGERS
+------------------------------------
+If we pass the integers two and three, the result is a new integer:
+
+  result = mult(2, 3)
+  print(result)  # Output: 6
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: result = mult(2, 3)
+         • mult(2, 3) - Calls the function with two arguments
+         • First argument: 2 → assigned to parameter 'a'
+         • Second argument: 3 → assigned to parameter 'b'
+         • Inside function: a = 2, b = 3
+         • product = 2 * 3 = 6
+         • Function returns 6
+         • result receives the value 6
+
+Line 2: print(result)
+         • Prints the value stored in result
+         • Output: 6
+
+EXAMPLE 2: MULTIPLYING INTEGER AND FLOAT
+-----------------------------------------
+If we pass the integer 10 and the float 3.14, the result is a float 31.4:
+
+  result = mult(10, 3.14)
+  print(result)  # Output: 31.4
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: result = mult(10, 3.14)
+         • First argument: 10 (integer) → assigned to 'a'
+         • Second argument: 3.14 (float) → assigned to 'b'
+         • Inside function: a = 10, b = 3.14
+         • product = 10 * 3.14 = 31.4
+         • Function returns 31.4 (float)
+         • result receives 31.4
+
+Line 2: print(result)
+         • Output: 31.4
+
+EXAMPLE 3: MULTIPLYING INTEGER AND STRING (UNEXPECTED BEHAVIOR)
+----------------------------------------------------------------
+If we pass in the integer two and the string Michael Jackson, the string Michael 
+Jackson is repeated two times. This is because the multiplication symbol can also 
+mean repeat a sequence.
+
+  result = mult(2, "Michael Jackson")
+  print(result)  # Output: Michael JacksonMichael Jackson
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: result = mult(2, "Michael Jackson")
+         • First argument: 2 (integer) → assigned to 'a'
+         • Second argument: "Michael Jackson" (string) → assigned to 'b'
+         • Inside function: a = 2, b = "Michael Jackson"
+         • product = 2 * "Michael Jackson"
+         • In Python, multiplying a string by an integer repeats the string
+         • Result: "Michael Jackson" + "Michael Jackson" = "Michael JacksonMichael Jackson"
+         • Function returns the repeated string
+
+Line 2: print(result)
+         • Output: Michael JacksonMichael Jackson
+
+IMPORTANT WARNING ABOUT TYPE MIXING
+-----------------------------------
+If you accidentally multiply an integer with a string instead of two integers, you 
+won't get an error. Instead, you will get a string and your program will progress, 
+potentially failing later because you have a string where you expected an integer.
+
+EXAMPLE OF THE PROBLEM:
+  def calculate_total(price, quantity):
+      total = price * quantity
+      return total
+
+  # Intended usage:
+  total1 = calculate_total(10, 5)  # 10 * 5 = 50 ✓ Correct
+
+  # Accidental misuse:
+  total2 = calculate_total(10, "5")  # 10 * "5" = "5555555555" ✗ Wrong!
+  # Now total2 is a string, not a number!
+  # Later code expecting a number will fail
+
+This property will make coding simpler, but you must test your code more 
+thoroughly.
+
+SOLUTION: TYPE CHECKING (ADVANCED)
+-----------------------------------
+You can add type checking to prevent this:
+
+  def mult(a, b):
+      # Ensure both are numbers
+      if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+          raise TypeError("Both arguments must be numbers")
+      product = a * b
+      return product
+
+MORE EXAMPLES WITH MULTIPLE PARAMETERS
+--------------------------------------
+EXAMPLE 4: ADDING THREE NUMBERS
+  def add_three(a, b, c):
+      total = a + b + c
+      return total
+
+  result = add_three(1, 2, 3)
+  print(result)  # Output: 6
+
+EXAMPLE 5: CALCULATING AREA OF RECTANGLE
+  def rectangle_area(length, width):
+      area = length * width
+      return area
+
+  area = rectangle_area(5, 3)
+  print(area)  # Output: 15
+
+EXAMPLE 6: GREETING WITH NAME AND AGE
+  def greet(name, age):
+      message = f"Hello, {name}! You are {age} years old."
+      return message
+
+  greeting = greet("Alice", 25)
+  print(greeting)  # Output: Hello, Alice! You are 25 years old.
+
+PARAMETER ORDER MATTERS
+-----------------------
+The order of arguments must match the order of parameters:
+
+  def subtract(a, b):
+      return a - b
+
+  result1 = subtract(10, 3)  # 10 - 3 = 7 ✓ Correct
+  result2 = subtract(3, 10)  # 3 - 10 = -7 ✓ Also correct, but different result!
+
+The order matters! subtract(10, 3) is different from subtract(3, 10).
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: PARAMETERS WITH DIFFERENT DATA TYPES
+-------------------------------------------------
+
+DEFINITION
+----------
+Functions can accept parameters of any data type: integers, floats, strings, 
+lists, dictionaries, etc.
+
+DETAILED EXPLANATION
+--------------------
+Python is dynamically typed, meaning you don't need to specify the type of 
+parameters. The same function can work with different data types, but the 
+behavior may differ based on the types.
+
+EXAMPLES WITH DIFFERENT DATA TYPES
+----------------------------------
+EXAMPLE 1: WORKING WITH NUMBERS
+  def multiply(a, b):
+      return a * b
+
+  # With integers
+  result1 = multiply(5, 3)  # Output: 15
+
+  # With floats
+  result2 = multiply(2.5, 4.0)  # Output: 10.0
+
+  # Mixed types
+  result3 = multiply(5, 2.5)  # Output: 12.5
+
+EXAMPLE 2: WORKING WITH STRINGS
+  def combine_strings(str1, str2):
+      return str1 + str2
+
+  result = combine_strings("Hello", " World")
+  print(result)  # Output: Hello World
+
+EXAMPLE 3: WORKING WITH LISTS
+  def combine_lists(list1, list2):
+      return list1 + list2
+
+  result = combine_lists([1, 2], [3, 4])
+  print(result)  # Output: [1, 2, 3, 4]
+
+EXAMPLE 4: MIXED DATA TYPES
+  def process_data(name, age, scores):
+      """
+      Process person data.
+      name: string
+      age: integer
+      scores: list of numbers
+      """
+      average = sum(scores) / len(scores)
+      return f"{name} (age {age}) has an average score of {average}"
+
+  result = process_data("Alice", 25, [85, 90, 78, 92])
+  print(result)  # Output: Alice (age 25) has an average score of 86.25
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: PARAMETER ORDER AND POSITIONAL ARGUMENTS
+------------------------------------------------------
+
+DEFINITION
+----------
+When you call a function, the arguments are matched to parameters by position. 
+The first argument goes to the first parameter, the second argument goes to the 
+second parameter, and so on.
+
+DETAILED EXPLANATION
+--------------------
+Positional arguments are arguments that are matched to parameters based on their 
+position (order) in the function call.
+
+EXAMPLE:
+  def greet(first_name, last_name, age):
+      return f"Hello, {first_name} {last_name}! You are {age} years old."
+
+  # Positional arguments - order matters!
+  greeting = greet("John", "Doe", 30)
+  # "John" → first_name
+  # "Doe" → last_name
+  # 30 → age
+
+  print(greeting)  # Output: Hello, John Doe! You are 30 years old.
+
+WHAT HAPPENS IF ORDER IS WRONG?
+  greeting = greet(30, "John", "Doe")
+  # 30 → first_name (wrong!)
+  # "John" → last_name (wrong!)
+  # "Doe" → age (wrong! - will cause error)
+
+  print(greeting)  # Error or unexpected output!
+
+The order of arguments must match the order of parameters.
+
+[END SECTION 1.4]
+================================================================================
+
+PART 2: RETURN VALUES
+================================================================================
+
+SECTION 2.1: FUNCTIONS WITH RETURN STATEMENTS
+----------------------------------------------
+
+DEFINITION
+----------
+Functions can return values using the return statement. The return value can be 
+used by the caller of the function.
+
+DETAILED EXPLANATION
+--------------------
+When a function has a return statement, it sends a value back to the code that 
+called it. This value can be stored in a variable, used in expressions, or 
+passed to other functions.
+
+SYNTAX:
+  def function_name(parameters):
+      # Code here
+      return value
+
+EXAMPLE:
+  def add(a, b):
+      result = a + b
+      return result
+
+  sum_value = add(5, 3)  # Function returns 8, stored in sum_value
+  print(sum_value)  # Output: 8
+
+RETURNING DIFFERENT TYPES
+-------------------------
+Functions can return any data type:
+
+EXAMPLE 1: RETURNING A NUMBER
+  def get_double(x):
+      return x * 2
+
+  result = get_double(5)
+  print(result)  # Output: 10
+
+EXAMPLE 2: RETURNING A STRING
+  def get_greeting(name):
+      return f"Hello, {name}!"
+
+  greeting = get_greeting("Alice")
+  print(greeting)  # Output: Hello, Alice!
+
+EXAMPLE 3: RETURNING A LIST
+  def get_squares(numbers):
+      squares = [x**2 for x in numbers]
+      return squares
+
+  result = get_squares([1, 2, 3, 4])
+  print(result)  # Output: [1, 4, 9, 16]
+
+EXAMPLE 4: RETURNING MULTIPLE VALUES (AS TUPLE)
+  def get_name_and_age():
+      name = "Alice"
+      age = 25
+      return name, age  # Returns a tuple
+
+  result = get_name_and_age()
+  print(result)  # Output: ('Alice', 25)
+
+  # Can unpack the tuple
+  name, age = get_name_and_age()
+  print(name)  # Output: Alice
+  print(age)   # Output: 25
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: FUNCTIONS WITHOUT RETURN STATEMENTS
+-------------------------------------------------
+
+DEFINITION
+----------
+In many cases, a function does not have a return statement. In these cases, 
+Python will return the special none object.
+
+DETAILED EXPLANATION
+--------------------
+Not all functions need to return a value. Some functions perform actions (like 
+printing) without returning anything. When a function doesn't have a return 
+statement, Python automatically returns None.
+
+SYNTAX:
+  def function_name(parameters):
+      # Code here
+      # No return statement
+
+EXAMPLE: FUNCTION THAT PRINTS BUT DOESN'T RETURN
+------------------------------------------------
+The function MJ simply prints the name Michael Jackson:
+
+  def MJ():
+      print("Michael Jackson")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def MJ():
+         • def - Keyword to define function
+         • MJ - Function name (abbreviation for Michael Jackson)
+         • () - No parameters (empty parentheses)
+         • : - Colon starts function body
+
+Line 2:     print("Michael Jackson")
+         • print() - Built-in function that displays output
+         • "Michael Jackson" - String to print
+         • This performs an action (printing) but doesn't return a value
+         • No return statement - function will return None automatically
+
+CALLING THE FUNCTION
+--------------------
+We call the function. The function prints Michael Jackson:
+
+  MJ()
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: MJ()
+         • Calls the function MJ
+         • Function executes: prints "Michael Jackson"
+         • Function returns None (automatically)
+         • Output displayed: Michael Jackson
+
+WHAT HAPPENS TO THE RETURN VALUE?
+  result = MJ()
+  # Output: Michael Jackson (printed to console)
+  print(result)  # Output: None
+
+The function printed "Michael Jackson" but returned None, which is stored in 
+result.
+
+PRACTICALLY SPEAKING
+--------------------
+Practically speaking, if your function has no return statement, you can treat it 
+as if the function returns nothing at all. You typically don't need to capture 
+the return value.
+
+EXAMPLE:
+  def display_message(message):
+      print(message)
+      # No return statement
+
+  display_message("Hello!")  # Just call it, don't need to capture return value
+  # Output: Hello!
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: THE None OBJECT
+------------------------------
+
+DEFINITION
+----------
+In the background, if the return statement is not called, Python will automatically 
+return a none. None is a special object in Python that represents "nothing" or 
+"no value".
+
+DETAILED EXPLANATION
+--------------------
+None is a built-in constant in Python that represents the absence of a value. It 
+is the return value of functions that don't explicitly return anything.
+
+CHARACTERISTICS OF None:
+• It's a special object (not the same as 0, False, or empty string)
+• It represents "no value" or "nothing"
+• It's the default return value for functions without return statements
+• It's falsy (evaluates to False in boolean context)
+
+EXAMPLE 1: FUNCTION RETURNING None EXPLICITLY
+----------------------------------------------
+It is helpful to view the function no work with the following return statement:
+
+  def no_work():
+      return None
+
+  result = no_work()
+  print(result)  # Output: None
+  print(type(result))  # Output: <class 'NoneType'>
+
+EXAMPLE 2: FUNCTION RETURNING None IMPLICITLY
+----------------------------------------------
+  def do_nothing():
+      pass  # Does nothing, no return statement
+
+  result = do_nothing()
+  print(result)  # Output: None (automatically returned)
+
+CHECKING FOR None
+-----------------
+You can check if a function returned None:
+
+  def might_return_value(x):
+      if x > 0:
+          return x * 2
+      # No return statement if x <= 0
+
+  result1 = might_return_value(5)
+  print(result1)  # Output: 10
+
+  result2 = might_return_value(-5)
+  print(result2)  # Output: None
+
+  # Check for None
+  if result2 is None:
+      print("Function returned nothing")
+
+None vs OTHER "EMPTY" VALUES
+-----------------------------
+None is different from:
+• 0 (zero) - a number
+• "" (empty string) - a string with no characters
+• [] (empty list) - a list with no elements
+• False - a boolean value
+
+EXAMPLE:
+  print(None == 0)      # False
+  print(None == "")      # False
+  print(None == [])      # False
+  print(None == False)   # False
+  print(None is None)    # True (use 'is' to check for None)
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE pass KEYWORD
+------------------------------
+
+DEFINITION
+----------
+Let's define the function no work that performs no task. Python doesn't allow a 
+function to have an empty body, so we can use the keyword pass, which doesn't do 
+anything, but satisfies the requirement of a non-empty body.
+
+DETAILED EXPLANATION
+--------------------
+The pass keyword is a null operation - it does nothing when executed. It's used 
+as a placeholder when syntactically some code is required but you don't want to 
+execute anything.
+
+WHY IS pass NEEDED?
+-------------------
+Python requires that function bodies (and other code blocks) are not empty. If you 
+try to create an empty function, you'll get a syntax error:
+
+  def empty_function():
+      # SyntaxError! Function body cannot be empty
+
+The pass statement allows you to create an empty function that does nothing but 
+is syntactically valid.
+
+EXAMPLE: FUNCTION WITH pass
+----------------------------
+  def no_work():
+      pass
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def no_work():
+         • Function definition
+         • Function name: no_work
+         • No parameters
+
+Line 2:     pass
+         • pass - Python keyword that does nothing
+         • Satisfies the requirement that function body is not empty
+         • Function will return None when called
+
+CALLING THE FUNCTION
+--------------------
+If we call the function and print it out, the function returns a none:
+
+  result = no_work()
+  print(result)  # Output: None
+
+EXPLANATION:
+• Function is called
+• pass executes (does nothing)
+• Function returns None (automatically)
+• result receives None
+
+COMMON USE CASES FOR pass
+-------------------------
+1. PLACEHOLDER FOR FUTURE CODE:
+   def function_to_implement_later():
+       pass  # Will implement later
+
+2. EMPTY CLASS OR FUNCTION:
+   class EmptyClass:
+       pass
+
+   def empty_function():
+       pass
+
+3. IN CONDITIONAL STATEMENTS:
+   if condition:
+       pass  # Do nothing if condition is true
+   else:
+       do_something()
+
+4. IN EXCEPTION HANDLING:
+   try:
+       risky_operation()
+   except:
+       pass  # Ignore errors
+
+EXAMPLE: FUNCTION WITH pass AS PLACEHOLDER
+------------------------------------------
+  def calculate_tax(price):
+      # TODO: Implement tax calculation
+      pass
+
+  # Later, you can implement it:
+  def calculate_tax(price):
+      tax_rate = 0.1
+      return price * tax_rate
+
+[END SECTION 2.4]
+================================================================================
+
+PART 3: FUNCTIONS WITH MULTIPLE TASKS
+================================================================================
+
+SECTION 3.1: FUNCTIONS THAT PRINT AND RETURN
+--------------------------------------------
+
+DEFINITION
+----------
+Usually, functions perform more than one task. This function prints a statement 
+then returns a value.
+
+DETAILED EXPLANATION
+--------------------
+Functions can do multiple things:
+• Perform calculations
+• Print output
+• Modify data
+• Return values
+• And more!
+
+A function can both print something (a side effect) and return a value. This is 
+perfectly valid and common.
+
+EXAMPLE: FUNCTION THAT PRINTS AND RETURNS
+-----------------------------------------
+  def add_one_print(a):
+      b = a + 1
+      print(f"The value of a is {a} and the value of b is {b}")
+      return b
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def add_one_print(a):
+         • Function definition
+         • Parameter: a
+
+Line 2:     b = a + 1
+         • Calculates a + 1
+         • Stores result in b
+
+Line 3:     print(f"The value of a is {a} and the value of b is {b}")
+         • Prints a formatted string
+         • Shows the values of a and b
+         • This is a side effect (something that happens besides returning)
+
+Line 4:     return b
+         • Returns the value of b
+         • Function can be used in expressions
+
+CALLING THE FUNCTION
+--------------------
+Let's use this table to represent the different values as the function is called. 
+We call the function with an input of 2:
+
+  result = add_one_print(2)
+
+EXECUTION FLOW:
+--------------
+Step 1: Function called with argument 2
+  • a = 2 (parameter receives the value)
+
+Step 2: Calculate b
+  • b = a + 1 = 2 + 1 = 3
+  • We find the value of b
+
+Step 3: Print statement
+  • The function prints the statement with the value of a and b
+  • Output: The value of a is 2 and the value of b is 3
+
+Step 4: Return value
+  • Finally, the function returns the value of b, in this case 3
+  • result receives the value 3
+
+COMPLETE EXAMPLE:
+  result = add_one_print(2)
+  # Output: The value of a is 2 and the value of b is 3
+  print(f"Result: {result}")
+  # Output: Result: 3
+
+MULTIPLE CALLS:
+  result1 = add_one_print(5)
+  # Output: The value of a is 5 and the value of b is 6
+  # result1 = 6
+
+  result2 = add_one_print(10)
+  # Output: The value of a is 10 and the value of b is 11
+  # result2 = 11
+
+  total = result1 + result2
+  print(total)  # Output: 17
+
+WHEN TO PRINT VS RETURN
+-----------------------
+• PRINT: Use when you want to display information to the user
+• RETURN: Use when you want to use the value in further calculations
+
+BEST PRACTICE:
+  # Good: Function that returns a value
+  def calculate_total(price, tax_rate):
+      total = price * (1 + tax_rate)
+      return total
+
+  # Then print when you call it
+  total = calculate_total(100, 0.1)
+  print(f"Total: ${total}")
+
+  # Less ideal: Function that prints (harder to test and reuse)
+  def calculate_and_print_total(price, tax_rate):
+      total = price * (1 + tax_rate)
+      print(f"Total: ${total}")  # Can't use this value elsewhere
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: FUNCTIONS WITH MULTIPLE STATEMENTS
+------------------------------------------------
+
+DEFINITION
+----------
+Functions can contain multiple statements that perform various tasks before 
+returning a value.
+
+DETAILED EXPLANATION
+--------------------
+A function body can contain as many statements as needed. You can have:
+• Variable assignments
+• Calculations
+• Conditional statements (if/else)
+• Loops
+• Function calls
+• Print statements
+• And finally, a return statement
+
+EXAMPLE: COMPLEX FUNCTION WITH MULTIPLE STATEMENTS
+---------------------------------------------------
+  def process_order(item_name, quantity, price_per_item):
+      # Calculate subtotal
+      subtotal = quantity * price_per_item
+      
+      # Calculate tax (10%)
+      tax_rate = 0.10
+      tax_amount = subtotal * tax_rate
+      
+      # Calculate total
+      total = subtotal + tax_amount
+      
+      # Print order summary
+      print(f"Order Summary:")
+      print(f"  Item: {item_name}")
+      print(f"  Quantity: {quantity}")
+      print(f"  Price per item: ${price_per_item:.2f}")
+      print(f"  Subtotal: ${subtotal:.2f}")
+      print(f"  Tax: ${tax_amount:.2f}")
+      print(f"  Total: ${total:.2f}")
+      
+      # Return the total
+      return total
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def process_order(item_name, quantity, price_per_item):
+         • Function definition with three parameters
+
+Line 2:     subtotal = quantity * price_per_item
+         • First calculation: multiply quantity by price
+         • Stores result in subtotal variable
+
+Line 3:     tax_rate = 0.10
+         • Sets tax rate to 10%
+
+Line 4:     tax_amount = subtotal * tax_rate
+         • Calculates tax amount
+         • Stores in tax_amount variable
+
+Line 5:     total = subtotal + tax_amount
+         • Calculates final total
+         • Adds subtotal and tax
+
+Line 6-11: Print statements
+         • Prints order summary with all details
+         • Uses formatted strings for nice output
+
+Line 12:     return total
+         • Returns the calculated total
+         • Caller can use this value
+
+USING THE FUNCTION:
+  order_total = process_order("Laptop", 2, 599.99)
+  # Output:
+  # Order Summary:
+  #   Item: Laptop
+  #   Quantity: 2
+  #   Price per item: $599.99
+  #   Subtotal: $1199.98
+  #   Tax: $120.00
+  #   Total: $1319.98
+  
+  print(f"You owe: ${order_total}")  # Output: You owe: $1319.98
+
+[END SECTION 3.2]
+================================================================================
+
+PART 4: LOOPS IN FUNCTIONS
+================================================================================
+
+SECTION 4.1: INTRODUCTION TO LOOPS IN FUNCTIONS
+------------------------------------------------
+
+DEFINITION
+----------
+We can use loops in functions. This function prints out the values and indexes of 
+a loop or tuple.
+
+DETAILED EXPLANATION
+--------------------
+Functions can contain loops (for loops, while loops) to process multiple items, 
+iterate through sequences, or perform repetitive tasks. This is very common and 
+powerful.
+
+WHY USE LOOPS IN FUNCTIONS?
+---------------------------
+• Process multiple items
+• Iterate through lists, tuples, dictionaries
+• Perform repetitive calculations
+• Filter or transform data
+• Search through collections
+
+EXAMPLE: SIMPLE LOOP IN FUNCTION
+---------------------------------
+  def print_numbers(max_num):
+      for i in range(1, max_num + 1):
+          print(i)
+
+  print_numbers(5)
+  # Output:
+  # 1
+  # 2
+  # 3
+  # 4
+  # 5
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: USING FOR LOOPS IN FUNCTIONS
+------------------------------------------
+
+DEFINITION
+----------
+This function prints out the values and indexes of a loop or tuple.
+
+DETAILED EXAMPLE
+----------------
+  def print_list_with_indexes(stuff):
+      for i, s in enumerate(stuff):
+          print(f"Index {i}: {s}")
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def print_list_with_indexes(stuff):
+         • Function definition
+         • Parameter: stuff (expected to be a list or tuple)
+
+Line 2:     for i, s in enumerate(stuff):
+         • for - Starts a for loop
+         • enumerate(stuff) - Built-in function that returns both index and value
+         • i - Variable to store the index (0, 1, 2, ...)
+         • s - Variable to store the value at that index
+         • Loop will iterate through all items in stuff
+
+Line 3:         print(f"Index {i}: {s}")
+         • Prints the index and value
+         • f-string formats the output nicely
+
+CALLING THE FUNCTION
+--------------------
+We call the function with the list album_ratings as an input:
+
+  album_ratings = [10, 8, 9, 7, 10, 9, 8, 9]
+  print_list_with_indexes(album_ratings)
+
+EXECUTION FLOW:
+--------------
+Let's display the list on the right with its corresponding index:
+
+  Index | Value
+  ------|------
+  0     | 10
+  1     | 8
+  2     | 9
+  3     | 7
+  4     | 10
+  5     | 9
+  6     | 8
+  7     | 9
+
+Stuff is used as an input to the function enumerate. This operation will pass 
+the index to i and the value in the list to s.
+
+ITERATION 1:
+  The function will begin to iterate through the loop.
+  • i = 0, s = 10
+  • The function will print the first index and the first value in the list
+  • Output: Index 0: 10
+
+ITERATION 2:
+  We continue iterating through the loop. The values of i and s are updated.
+  • i = 1, s = 8
+  • The print statement is reached
+  • Output: Index 1: 8
+
+ITERATION 3:
+  Similarly, the next values of the list and index are printed.
+  • i = 2, s = 9
+  • Output: Index 2: 9
+
+ITERATION 4:
+  The process is repeated. The values of i and s are updated.
+  • i = 3, s = 7
+  • Output: Index 3: 7
+
+ITERATIONS 5-8:
+  We continue iterating until the final values in the list are printed out.
+  • i = 4, s = 10 → Output: Index 4: 10
+  • i = 5, s = 9  → Output: Index 5: 9
+  • i = 6, s = 8  → Output: Index 6: 8
+  • i = 7, s = 9  → Output: Index 7: 9
+
+FINAL OUTPUT:
+  Index 0: 10
+  Index 1: 8
+  Index 2: 9
+  Index 3: 7
+  Index 4: 10
+  Index 5: 9
+  Index 6: 8
+  Index 7: 9
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: USING enumerate() IN FUNCTIONS
+--------------------------------------------
+
+DEFINITION
+----------
+The enumerate() function is very useful when you need both the index and value 
+when iterating through a sequence.
+
+DETAILED EXPLANATION
+--------------------
+enumerate() is a built-in function that adds a counter to an iterable and returns 
+it as an enumerate object. It's commonly used in for loops.
+
+SYNTAX:
+  for index, value in enumerate(sequence):
+      # Use index and value
+
+HOW enumerate() WORKS:
+  my_list = ['a', 'b', 'c']
+  for i, item in enumerate(my_list):
+      print(i, item)
+
+  # Output:
+  # 0 a
+  # 1 b
+  # 2 c
+
+EXAMPLE: FUNCTION USING enumerate()
+-----------------------------------
+  def display_ratings(ratings):
+      print("Album Ratings:")
+      for index, rating in enumerate(ratings, start=1):
+          print(f"  Album {index}: {rating}/10")
+
+  album_ratings = [10, 8, 9, 7, 10]
+  display_ratings(album_ratings)
+  # Output:
+  # Album Ratings:
+  #   Album 1: 10/10
+  #   Album 2: 8/10
+  #   Album 3: 9/10
+  #   Album 4: 7/10
+  #   Album 5: 10/10
+
+EXPLANATION:
+• enumerate(ratings, start=1) starts counting from 1 instead of 0
+• index receives the counter (1, 2, 3, ...)
+• rating receives the value from the list
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: COMPLETE LOOP EXAMPLE
+------------------------------------
+
+EXAMPLE: FUNCTION THAT PROCESSES A LIST
+----------------------------------------
+  def calculate_statistics(numbers):
+      """
+      Calculate and display statistics for a list of numbers.
+      """
+      if len(numbers) == 0:
+          print("No numbers provided")
+          return None
+      
+      # Calculate statistics
+      total = sum(numbers)
+      count = len(numbers)
+      average = total / count
+      maximum = max(numbers)
+      minimum = min(numbers)
+      
+      # Print results
+      print(f"Statistics for {numbers}:")
+      print(f"  Count: {count}")
+      print(f"  Total: {total}")
+      print(f"  Average: {average:.2f}")
+      print(f"  Maximum: {maximum}")
+      print(f"  Minimum: {minimum}")
+      
+      # Return as dictionary
+      return {
+          'count': count,
+          'total': total,
+          'average': average,
+          'max': maximum,
+          'min': minimum
+      }
+
+  stats = calculate_statistics([10, 8, 9, 7, 10, 9, 8, 9])
+  # Output:
+  # Statistics for [10, 8, 9, 7, 10, 9, 8, 9]:
+  #   Count: 8
+  #   Total: 70
+  #   Average: 8.75
+  #   Maximum: 10
+  #   Minimum: 7
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: VARIADIC PARAMETERS
+================================================================================
+
+SECTION 5.1: INTRODUCTION TO VARIADIC PARAMETERS
+--------------------------------------------------
+
+DEFINITION
+----------
+Variadic parameters allow us to input a variable number of elements.
+
+DETAILED EXPLANATION
+--------------------
+Sometimes you don't know how many arguments a function will receive. Variadic 
+parameters (also called arbitrary arguments) allow a function to accept any 
+number of arguments.
+
+WHY USE VARIADIC PARAMETERS?
+----------------------------
+• When the number of arguments is unknown
+• To make functions more flexible
+• To avoid creating multiple function definitions for different numbers of 
+  arguments
+
+SYNTAX:
+  def function_name(*args):
+      # args is a tuple containing all arguments
+
+THE ASTERISK (*)
+----------------
+The asterisk (*) before the parameter name tells Python to pack all arguments 
+into a tuple.
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: USING *args (ARBITRARY ARGUMENTS)
+------------------------------------------------
+
+DEFINITION
+----------
+Consider the following function. The function has an asterisk on the parameter 
+names. When we call the function, three parameters are packed into the tuple 
+names.
+
+DETAILED EXAMPLE
+----------------
+  def artist_names(*names):
+      for name in names:
+          print(name)
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def artist_names(*names):
+         • def - Function definition keyword
+         • artist_names - Function name
+         • *names - Variadic parameter (the * is crucial!)
+                  The asterisk tells Python to pack all arguments into a tuple
+                  names will be a tuple containing all arguments passed
+
+Line 2:     for name in names:
+         • for loop iterates through the names tuple
+         • name receives each value from the tuple
+
+Line 3:         print(name)
+         • Prints each name
+         • Values are printed out accordingly
+
+CALLING WITH MULTIPLE ARGUMENTS
+--------------------------------
+When we call the function, three parameters are packed into the tuple names:
+
+  artist_names("Michael Jackson", "Elvis Presley", "The Beatles")
+
+EXECUTION:
+---------
+• Three arguments are passed: "Michael Jackson", "Elvis Presley", "The Beatles"
+• The asterisk (*) packs them into a tuple: names = ("Michael Jackson", "Elvis Presley", "The Beatles")
+• We then iterate through the loop
+• The values are printed out accordingly
+
+OUTPUT:
+  Michael Jackson
+  Elvis Presley
+  The Beatles
+
+CALLING WITH DIFFERENT NUMBER OF ARGUMENTS
+------------------------------------------
+If we call the same function with only two parameters as inputs, the variable 
+names only contain two elements. The result is only two values are printed out.
+
+  artist_names("Taylor Swift", "Adele")
+
+EXECUTION:
+---------
+• Two arguments are passed: "Taylor Swift", "Adele"
+• names = ("Taylor Swift", "Adele")  (tuple with 2 elements)
+• Loop iterates twice
+• Two values are printed
+
+OUTPUT:
+  Taylor Swift
+  Adele
+
+CALLING WITH ONE ARGUMENT:
+  artist_names("Queen")
+
+OUTPUT:
+  Queen
+
+CALLING WITH NO ARGUMENTS:
+  artist_names()
+  # No output (empty tuple, loop doesn't execute)
+
+CALLING WITH MANY ARGUMENTS:
+  artist_names("Artist1", "Artist2", "Artist3", "Artist4", "Artist5")
+
+OUTPUT:
+  Artist1
+  Artist2
+  Artist3
+  Artist4
+  Artist5
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: WORKING WITH VARIABLE NUMBERS OF ARGUMENTS
+---------------------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Variadic parameters make functions very flexible. You can pass any number of 
+arguments, and they'll all be packed into a tuple.
+
+EXAMPLE 1: SUM OF VARIABLE NUMBERS
+-----------------------------------
+  def sum_all(*numbers):
+      total = 0
+      for num in numbers:
+          total += num
+      return total
+
+  result1 = sum_all(1, 2, 3)
+  print(result1)  # Output: 6
+
+  result2 = sum_all(10, 20, 30, 40, 50)
+  print(result2)  # Output: 150
+
+  result3 = sum_all(5)
+  print(result3)  # Output: 5
+
+EXAMPLE 2: FINDING MAXIMUM
+---------------------------
+  def find_max(*numbers):
+      if len(numbers) == 0:
+          return None
+      maximum = numbers[0]
+      for num in numbers:
+          if num > maximum:
+              maximum = num
+      return maximum
+
+  max_val = find_max(10, 5, 8, 20, 3)
+  print(max_val)  # Output: 20
+
+EXAMPLE 3: COMBINING STRINGS
+------------------------------
+  def combine_strings(*words):
+      return " ".join(words)
+
+  result = combine_strings("Hello", "World", "Python")
+  print(result)  # Output: Hello World Python
+
+COMBINING REGULAR AND VARIADIC PARAMETERS
+------------------------------------------
+You can combine regular parameters with variadic parameters, but the variadic 
+parameter must come last:
+
+  def greet(greeting, *names):
+      for name in names:
+          print(f"{greeting}, {name}!")
+
+  greet("Hello", "Alice", "Bob", "Charlie")
+  # Output:
+  # Hello, Alice!
+  # Hello, Bob!
+  # Hello, Charlie!
+
+EXPLANATION:
+• greeting is a regular parameter (receives "Hello")
+• *names is variadic (receives "Alice", "Bob", "Charlie")
+• Variadic parameter must be last!
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: PRACTICAL EXAMPLES OF VARIADIC PARAMETERS
+-------------------------------------------------------
+
+EXAMPLE 1: CALCULATING AVERAGE
+-------------------------------
+  def calculate_average(*numbers):
+      if len(numbers) == 0:
+          return 0
+      total = sum(numbers)
+      return total / len(numbers)
+
+  avg1 = calculate_average(10, 20, 30)
+  print(avg1)  # Output: 20.0
+
+  avg2 = calculate_average(5, 10, 15, 20, 25)
+  print(avg2)  # Output: 15.0
+
+EXAMPLE 2: CREATING A LIST FROM ARGUMENTS
+------------------------------------------
+  def make_list(*items):
+      return list(items)
+
+  my_list = make_list(1, 2, 3, 4, 5)
+  print(my_list)  # Output: [1, 2, 3, 4, 5]
+
+EXAMPLE 3: PRINTING FORMATTED INFORMATION
+------------------------------------------
+  def print_info(title, *details):
+      print(f"\n{title}:")
+      print("-" * len(title))
+      for detail in details:
+          print(f"  • {detail}")
+
+  print_info("Shopping List", "Apples", "Bananas", "Milk", "Bread")
+  # Output:
+  # Shopping List:
+  # --------------
+  #   • Apples
+  #   • Bananas
+  #   • Milk
+  #   • Bread
+
+EXAMPLE 4: FILTERING NUMBERS
+------------------------------
+  def filter_positive(*numbers):
+      positive = []
+      for num in numbers:
+          if num > 0:
+              positive.append(num)
+      return positive
+
+  result = filter_positive(-5, 10, -3, 7, 0, 15, -2)
+  print(result)  # Output: [10, 7, 15]
+
+[END SECTION 5.4]
+================================================================================
+
+END OF PART 2
+=============
+
+Congratulations! You've completed Part 2 of the Functions in Python 
+comprehensive study guide. You've learned:
+
+✓ Function parameters (single and multiple)
+✓ Working with different data types as parameters
+✓ Return values and the None object
+✓ Functions without return statements
+✓ The pass keyword
+✓ Functions that perform multiple tasks
+✓ Using loops in functions
+✓ Variadic parameters (*args)
+✓ Working with variable numbers of arguments
+
+Continue to Part 3 to learn about:
+• Variable scope (global vs local)
+• The global keyword
+• Advanced scope concepts
+• Best practices and summary
+
+================================================================================

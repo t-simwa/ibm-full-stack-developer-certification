@@ -1,0 +1,1415 @@
+================================================================================
+OBJECTS AND CLASSES IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This part continues from Part 1 and covers creating your own custom classes in 
+Python. You'll learn how to define classes, create objects from those classes, 
+and understand the relationship between classes and objects.
+
+ESTIMATED TIME NEEDED
+---------------------
+15 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Explain what a class is and why you would create one
+• Understand the difference between a class and an object
+• Define your own custom classes in Python
+• Understand what data attributes are
+• Create objects (instances) from your classes
+• Understand what a constructor is and how __init__ works
+• Explain what the self parameter is and why it's needed
+• Access and modify data attributes of objects
+• Create multiple objects from the same class
+• Understand the Circle and Rectangle class examples
+
+OVERVIEW
+--------
+In Part 1, we learned that everything in Python is an object and that objects 
+have types. We worked with built-in types like int, str, list, and dict. 
+
+In this part, we'll learn how to create our own custom types (classes). This is 
+one of the most powerful features of object-oriented programming - the ability 
+to create new types that model real-world concepts or solve specific problems.
+
+We'll use two examples throughout:
+1. A Circle class - to represent circles with radius and color
+2. A Rectangle class - to represent rectangles with height, width, and color
+
+These examples will teach you all the fundamental concepts of creating classes 
+in Python.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: CREATING YOUR OWN CLASSES
+  SECTION 2.1: WHY CREATE YOUR OWN CLASSES?
+  SECTION 2.2: UNDERSTANDING CLASSES VS OBJECTS
+  SECTION 2.3: PLANNING YOUR CLASS - DATA ATTRIBUTES
+  SECTION 2.4: THE CIRCLE CLASS EXAMPLE
+  SECTION 2.5: THE RECTANGLE CLASS EXAMPLE
+  SECTION 2.6: CLASS DEFINITION SYNTAX
+  SECTION 2.7: UNDERSTANDING THE CONSTRUCTOR (__init__)
+  SECTION 2.8: UNDERSTANDING THE SELF PARAMETER
+  SECTION 2.9: CREATING OBJECTS FROM CLASSES
+  SECTION 2.10: ACCESSING DATA ATTRIBUTES
+  SECTION 2.11: MODIFYING DATA ATTRIBUTES
+  SECTION 2.12: CREATING MULTIPLE OBJECTS FROM ONE CLASS
+
+NOTE: Part 3 covers methods, the dir() function, and advanced concepts.
+
+================================================================================
+PART 2: CREATING YOUR OWN CLASSES
+================================================================================
+
+SECTION 2.1: WHY CREATE YOUR OWN CLASSES?
+------------------------------------------
+
+DEFINITION
+----------
+You can create your own type or class in Python. A class is a blueprint or 
+template for creating objects. When you create a class, you're defining a new 
+type that can have its own data attributes and methods.
+
+DETAILED EXPLANATION
+--------------------
+So far, we've worked with Python's built-in types (int, str, list, dict, etc.). 
+But what if you need to represent something that doesn't fit neatly into these 
+built-in types? That's when you create your own class.
+
+WHY CREATE CUSTOM CLASSES?
+--------------------------
+1. MODEL REAL-WORLD CONCEPTS
+   Classes let you represent real-world things in your code. For example:
+   • A "BankAccount" class to represent bank accounts
+   • A "Student" class to represent students
+   • A "Car" class to represent cars
+   • A "Circle" class to represent circles
+
+2. ORGANIZE YOUR CODE
+   Classes group related data and functions together, making your code more 
+   organized and easier to understand.
+
+3. REUSABILITY
+   Once you define a class, you can create many objects from it. Write the code 
+   once, use it many times.
+
+4. ENCAPSULATION
+   Classes bundle data and the functions that work with that data together. This 
+   keeps related things together.
+
+5. ABSTRACTION
+   Classes hide complexity. You can use a class without knowing all the details 
+   of how it works internally.
+
+REAL-WORLD ANALOGY
+------------------
+Think of a class like a cookie cutter:
+• The COOKIE CUTTER (class) is the template or blueprint
+• Each COOKIE (object) made with that cutter is an instance
+• All cookies have the same shape (same type), but each cookie is separate
+• You can make many cookies from one cutter (many objects from one class)
+
+Similarly:
+• A CIRCLE CLASS is the blueprint
+• Each circle object you create is an instance
+• All circles have radius and color (same attributes), but each circle can have 
+  different values
+• You can create many circle objects from one Circle class
+
+WHAT YOU'LL CREATE
+------------------
+When you create a class, you define:
+• DATA ATTRIBUTES: What information the objects will store
+• METHODS: What actions the objects can perform
+
+For example, a Circle class might have:
+• Data attributes: radius, color
+• Methods: calculate_area(), draw(), resize()
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: UNDERSTANDING CLASSES VS OBJECTS
+---------------------------------------------
+
+DEFINITION
+----------
+A class is a blueprint or template. An object is a specific instance created 
+from that class. Classes define what objects will be like; objects are the 
+actual things you work with.
+
+DETAILED EXPLANATION
+--------------------
+This is a crucial distinction to understand:
+
+CLASS = BLUEPRINT
+-----------------
+A class is like a blueprint for a house:
+• It defines what a house will have (rooms, doors, windows)
+• It doesn't create an actual house
+• You can use the blueprint to build many houses
+• All houses built from the blueprint have the same structure, but each house 
+  is different (different address, different furniture, etc.)
+
+OBJECT = INSTANCE
+-----------------
+An object is like an actual house built from the blueprint:
+• It's a real, concrete thing you can use
+• It has actual values (specific address, specific furniture)
+• You can interact with it (live in it, decorate it)
+• Many objects can be created from one class
+
+KEY DIFFERENCES
+---------------
+CLASS:
+• Defined once
+• Acts as a template
+• Doesn't store actual data
+• Defines what attributes and methods objects will have
+
+OBJECT:
+• Created many times from a class
+• Stores actual data
+• Has specific values for its attributes
+• You can call methods on it
+
+VISUAL EXAMPLE
+--------------
+Class (Circle):
+┌─────────────────────────────┐
+│      Circle Class           │  ← This is the blueprint
+│                             │
+│  Data Attributes:           │
+│    - radius                 │
+│    - color                  │
+│                             │
+│  Methods:                   │
+│    - calculate_area()       │
+│    - draw()                 │
+└─────────────────────────────┘
+
+Objects (instances):
+┌─────────────┐  ┌─────────────┐  ┌─────────────┐
+│   Circle    │  │   Circle    │  │   Circle    │
+│  Object 1   │  │  Object 2   │  │  Object 3   │
+│             │  │             │  │             │
+│ radius: 5   │  │ radius: 10  │  │ radius: 3   │
+│ color: red  │  │ color: blue │  │ color: green│
+└─────────────┘  └─────────────┘  └─────────────┘
+     ↓                ↓                ↓
+  All created from the same Circle class
+  But each has different values
+
+ANALOGY: CAR MANUFACTURING
+---------------------------
+• CLASS = Car design/blueprint
+  - Defines: 4 wheels, engine, doors, seats
+  - Doesn't create an actual car
+  
+• OBJECT = Actual car
+  - Car #1: Red, license plate ABC-123
+  - Car #2: Blue, license plate XYZ-789
+  - Car #3: Green, license plate DEF-456
+  - All are cars (same class), but each is different (different objects)
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: PLANNING YOUR CLASS - DATA ATTRIBUTES
+---------------------------------------------------
+
+DEFINITION
+----------
+Data attributes are the pieces of information that define what an object is. 
+They're like variables that belong to the object. Before creating a class, you 
+need to decide what data attributes it should have.
+
+DETAILED EXPLANATION
+--------------------
+When you're planning to create a class, the first step is to think about what 
+information (data) objects of that class need to store. These pieces of 
+information are called data attributes.
+
+THINKING ABOUT THE CIRCLE CLASS
+-------------------------------
+Let's think about what constitutes a circle. Examining a circle, all we need is 
+a radius to define a circle. The radius is the distance from the center of the 
+circle to any point on its edge.
+
+But let's also add color to make it easier to distinguish between different 
+instances of the class later. Color will help us visually identify different 
+circle objects.
+
+Therefore, our class data attributes are:
+• radius - the size of the circle
+• color - the color of the circle
+
+THINKING ABOUT THE RECTANGLE CLASS
+----------------------------------
+Similarly, examining a rectangle, in order to define a rectangle, we need the 
+height and width. These two measurements completely define the size and shape 
+of a rectangle.
+
+We will also add color to distinguish between instances later. This helps us 
+tell different rectangle objects apart.
+
+Therefore, the data attributes are:
+• color - the color of the rectangle
+• height - the vertical measurement
+• width - the horizontal measurement
+
+WHY PLAN DATA ATTRIBUTES FIRST?
+-------------------------------
+Planning data attributes first helps you:
+• Understand what your class needs to represent
+• Think about what information is essential
+• Design your class before writing code
+• Avoid missing important attributes
+• Make your class complete and useful
+
+REAL-WORLD ANALOGY
+------------------
+Think of data attributes like the fields on a form:
+• When you fill out a job application, the form has fields: name, address, 
+  phone, email, etc.
+• These fields define what information the application needs
+• Similarly, data attributes define what information your objects need
+
+For a Circle:
+• radius: How big is the circle?
+• color: What color is the circle?
+
+For a Rectangle:
+• height: How tall is the rectangle?
+• width: How wide is the rectangle?
+• color: What color is the rectangle?
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE CIRCLE CLASS EXAMPLE
+---------------------------------------
+
+DEFINITION
+----------
+The Circle class is a custom class we'll create to represent circles. Each 
+circle object will have a radius and a color.
+
+DETAILED EXPLANATION
+--------------------
+Let's use the Circle class as our first example of creating a custom class. 
+This will teach you all the fundamental concepts.
+
+WHAT WE WANT TO CREATE
+----------------------
+We want to be able to create circle objects like this:
+
+circle1 = Circle(radius=4, color="red")
+circle2 = Circle(radius=2, color="green")
+
+Each circle object should:
+• Store its radius
+• Store its color
+• Be able to perform actions (methods) like calculating area, drawing, etc.
+
+VISUAL REPRESENTATION
+---------------------
+What we're building:
+
+Circle Class (Blueprint):
+┌─────────────────────────────┐
+│      Circle Class           │
+│                             │
+│  Data Attributes:           │
+│    • radius                 │
+│    • color                  │
+│                             │
+│  Methods:                   │
+│    • (we'll add these       │
+│       in Part 3)            │
+└─────────────────────────────┘
+
+Circle Objects (Instances):
+┌─────────────┐      ┌─────────────┐
+│   Circle    │      │   Circle    │
+│  Object 1   │      │  Object 2   │
+│             │      │             │
+│ radius: 4   │      │ radius: 2   │
+│ color: red  │      │ color: green│
+└─────────────┘      └─────────────┘
+
+We can create an object that is an instance of type circle. The color data 
+attribute is red, and the data attribute radius is four.
+
+We can also create a second object that is an instance of type circle. In this 
+case, the color data attribute is green, and the data attribute radius is two.
+
+Both objects are circles (same type), but they have different values (different 
+objects).
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: THE RECTANGLE CLASS EXAMPLE
+-----------------------------------------
+
+DEFINITION
+----------
+The Rectangle class is a custom class we'll create to represent rectangles. 
+Each rectangle object will have a height, width, and color.
+
+DETAILED EXPLANATION
+--------------------
+The Rectangle class is our second example. It's similar to Circle but has 
+different data attributes.
+
+WHAT WE WANT TO CREATE
+----------------------
+We want to be able to create rectangle objects like this:
+
+rect1 = Rectangle(height=2, width=2, color="blue")
+rect2 = Rectangle(height=1, width=3, color="yellow")
+
+Each rectangle object should:
+• Store its height
+• Store its width
+• Store its color
+• Be able to perform actions (methods) like calculating area, drawing, etc.
+
+VISUAL REPRESENTATION
+---------------------
+What we're building:
+
+Rectangle Class (Blueprint):
+┌─────────────────────────────┐
+│    Rectangle Class          │
+│                             │
+│  Data Attributes:           │
+│    • color                  │
+│    • height                 │
+│    • width                  │
+│                             │
+│  Methods:                   │
+│    • (we'll add these       │
+│       in Part 3)            │
+└─────────────────────────────┘
+
+Rectangle Objects (Instances):
+┌─────────────┐      ┌─────────────┐
+│ Rectangle   │      │ Rectangle   │
+│  Object 1   │      │  Object 2   │
+│             │      │             │
+│ color: blue │      │ color:      │
+│ height: 2   │      │   yellow    │
+│ width: 2    │      │ height: 1   │
+│             │      │ width: 3    │
+└─────────────┘      └─────────────┘
+
+We can create an object that is an instance of type rectangle. The color data 
+attribute is blue, and the data attributes of height and width are both two.
+
+The second object is also an instance of type rectangle. In this case, the 
+color data attribute is yellow, and the height is one, and the width is three.
+
+We now have different objects of class circle or type circle. We also have 
+different objects of class rectangle or type rectangle.
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: CLASS DEFINITION SYNTAX
+-------------------------------------
+
+DEFINITION
+----------
+To create the class circle, you will need to include the class definition. This 
+tells Python you are creating your own class, the name of the class, and that 
+it inherits from object.
+
+DETAILED EXPLANATION
+--------------------
+Now let's learn the actual Python syntax for creating a class.
+
+BASIC CLASS DEFINITION SYNTAX
+------------------------------
+class ClassName(object):
+    """Optional documentation string"""
+    # Class body
+    # Data attributes and methods go here
+
+BREAKDOWN OF THE SYNTAX
+-----------------------
+1. class
+   - This is a Python keyword that starts a class definition
+   - It tells Python "I'm creating a new class"
+
+2. ClassName
+   - This is the name of your class
+   - Follow Python naming conventions: start with capital letter, use 
+     CamelCase for multiple words
+   - Examples: Circle, Rectangle, BankAccount, StudentRecord
+
+3. (object)
+   - This is the parent class
+   - For this course, you will always place the term object in parentheses
+   - "object" is the base class that all classes inherit from in Python
+   - This makes your class a "new-style" class (Python 3 style)
+   - In Python 3, you can actually omit "(object)" and it will work the same, 
+     but including it is explicit and clear
+
+4. :
+   - The colon indicates the start of the class body
+   - Everything indented after the colon is part of the class
+
+5. Class body
+   - This is where you define data attributes and methods
+   - Everything must be indented (typically 4 spaces)
+
+EXAMPLE: CIRCLE CLASS DEFINITION
+---------------------------------
+Code:
+class Circle(object):
+    pass
+
+Line-by-line explanation:
+• class Circle(object):
+  - "class" is the keyword
+  - "Circle" is the name we're giving to our class
+  - "(object)" means this class inherits from the object class
+  - ":" starts the class body
+  
+• pass
+  - "pass" is a placeholder that does nothing
+  - It's used when you need a statement but don't want to do anything yet
+  - This creates an empty class (we'll add content next)
+
+EXAMPLE: RECTANGLE CLASS DEFINITION
+------------------------------------
+Code:
+class Rectangle(object):
+    pass
+
+Line-by-line explanation:
+• class Rectangle(object):
+  - Same structure as Circle
+  - "Rectangle" is the name of this class
+  - For the class rectangle, we change the name of the class, but the rest is 
+    kept the same
+  
+• pass
+  - Placeholder for now
+
+CLASSES ARE OUTLINES
+--------------------
+Classes are outlines - we have to set the attributes to create objects. Right 
+now, our classes are empty. In the next sections, we'll add:
+• A constructor (__init__) to initialize objects
+• Data attributes to store information
+• Methods to perform actions
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: UNDERSTANDING THE CONSTRUCTOR (__init__)
+------------------------------------------------------
+
+DEFINITION
+----------
+The __init__ function is a constructor. It's a special function that tells 
+Python you are making a new class instance. The constructor initializes each 
+instance of the class with data attributes.
+
+DETAILED EXPLANATION
+--------------------
+When you create an object from a class, Python automatically calls a special 
+method called __init__. This method is called the constructor because it 
+"constructs" (creates and initializes) the object.
+
+WHAT IS __init__?
+-----------------
+• __init__ is a special method name in Python
+• The double underscores (__) before and after "init" indicate it's a special 
+  method
+• It's automatically called when you create a new object
+• It's used to set up (initialize) the object's data attributes
+
+SYNTAX
+------
+def __init__(self, parameter1, parameter2, ...):
+    """Initialize the object"""
+    self.attribute1 = parameter1
+    self.attribute2 = parameter2
+    # More initialization code
+
+COMPLETE CIRCLE CLASS WITH CONSTRUCTOR
+--------------------------------------
+Let us continue building the circle class in Python. We define our class. We 
+then initialize each instance of the class with data attributes, radius and 
+color using the class constructor.
+
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+
+Line-by-line explanation:
+• class Circle(object):
+  - Defines the Circle class
+  - Inherits from object
+  
+• def __init__(self, radius, color):
+  - "def" defines a function (method)
+  - "__init__" is the special constructor method name
+  - "self" is the first parameter (refers to the object being created)
+  - "radius" is a parameter that will be passed when creating a circle
+  - "color" is another parameter that will be passed when creating a circle
+  - ":" starts the method body
+  
+• self.radius = radius
+  - "self.radius" creates a data attribute called "radius" on the object
+  - "=" assigns a value to this attribute
+  - "radius" (on the right) is the parameter value passed to the constructor
+  - This sets the radius data attribute to the value passed in
+  
+• self.color = color
+  - "self.color" creates a data attribute called "color" on the object
+  - "=" assigns a value to this attribute
+  - "color" (on the right) is the parameter value passed to the constructor
+  - This sets the color data attribute to the value passed in
+
+WHAT HAPPENS WHEN YOU CREATE AN OBJECT
+---------------------------------------
+When you write: my_circle = Circle(radius=10, color="red")
+
+Python does this:
+1. Creates a new, empty Circle object
+2. Calls __init__(self, radius=10, color="red")
+3. Inside __init__:
+   - self.radius = 10 (sets the radius attribute)
+   - self.color = "red" (sets the color attribute)
+4. Returns the initialized object
+5. Assigns it to my_circle
+
+THE PARAMETERS
+--------------
+The radius and color parameters are used to initialize the radius and color 
+data attributes of the class instance. These parameters allow you to set 
+different values for each object you create.
+
+OTHER SPECIAL FUNCTIONS
+-----------------------
+There are other special functions in Python to make more complex classes. For 
+example:
+• __str__ - defines how the object is displayed as a string
+• __len__ - defines what len(object) returns
+• __add__ - defines what happens when you use + operator
+• And many more!
+
+For now, we'll focus on __init__, which is the most important one.
+
+COMPLETE RECTANGLE CLASS WITH CONSTRUCTOR
+-----------------------------------------
+Similarly, we can define the class rectangle in Python. The name of the class 
+is different. This time, the class data attributes are color, height and width.
+
+Code:
+class Rectangle(object):
+    def __init__(self, color, height, width):
+        self.color = color
+        self.height = height
+        self.width = width
+
+Line-by-line explanation:
+• class Rectangle(object):
+  - Defines the Rectangle class
+  
+• def __init__(self, color, height, width):
+  - Constructor method
+  - Takes three parameters: color, height, width
+  - "self" always comes first
+  
+• self.color = color
+  - Sets the color data attribute
+  
+• self.height = height
+  - Sets the height data attribute
+  
+• self.width = width
+  - Sets the width data attribute
+
+[END SECTION 2.7]
+================================================================================
+
+SECTION 2.8: UNDERSTANDING THE SELF PARAMETER
+----------------------------------------------
+
+DEFINITION
+----------
+The self parameter refers to the newly created instance of the class. It's how 
+you access and modify the object's data attributes from within methods.
+
+DETAILED EXPLANATION
+--------------------
+The self parameter is one of the most important concepts in Python classes, 
+and it's often confusing for beginners. Let's break it down completely.
+
+WHAT IS SELF?
+-------------
+• "self" is a reference to the current object instance
+• It's the first parameter of every method in a class
+• When you call a method, Python automatically passes the object as "self"
+• You use "self" to access the object's data attributes and other methods
+
+WHY IS IT CALLED "SELF"?
+------------------------
+"self" refers to "this object itself" - the object that the method is being 
+called on. It's like saying "this object" or "myself" in English.
+
+You could actually name it anything (like "this" or "obj"), but "self" is the 
+universal convention in Python, and you should always use it.
+
+HOW SELF WORKS
+--------------
+When you write:
+my_circle = Circle(radius=10, color="red")
+
+Python internally does:
+Circle.__init__(self=my_circle, radius=10, color="red")
+
+Notice that Python automatically passes my_circle as the self parameter!
+
+VISUAL REPRESENTATION
+---------------------
+Think of self as a box that contains all the data attributes of the object:
+
+When you create: my_circle = Circle(radius=10, color="red")
+
+┌─────────────────────────┐
+│      my_circle          │  ← This is the object
+│   (the "self" box)      │
+├─────────────────────────┤
+│  self.radius = 10       │  ← Data attribute
+│  self.color = "red"     │  ← Data attribute
+└─────────────────────────┘
+
+Inside __init__, "self" refers to this box.
+
+INSIDE THE CONSTRUCTOR
+---------------------
+Let's trace through what happens:
+
+Code:
+class Circle(object):
+    def __init__(self, radius, color):
+        self.radius = radius
+        self.color = color
+
+When you call: Circle(radius=10, color="red")
+
+Step-by-step:
+1. Python creates a new, empty Circle object
+2. Python calls: __init__(self=<new_object>, radius=10, color="red")
+3. Inside __init__:
+   • self.radius = radius
+     - self refers to the new object
+     - self.radius creates/accesses the radius attribute on that object
+     - = radius assigns the value 10 (from the parameter) to self.radius
+   
+   • self.color = color
+     - self refers to the new object
+     - self.color creates/accesses the color attribute on that object
+     - = color assigns the value "red" (from the parameter) to self.color
+
+4. The object now has radius=10 and color="red"
+5. Python returns this initialized object
+6. It gets assigned to my_circle
+
+THE PARAMETERS VS SELF
+----------------------
+The parameters radius and color can be used in the constructor's body to 
+access the values passed to the class constructor when the class is constructed.
+
+• radius (parameter) = the value passed in (e.g., 10)
+• self.radius (attribute) = the data stored in the object
+
+We can set the value of the radius and color data attributes to the values 
+passed to the constructor method.
+
+EXAMPLE WITH MULTIPLE OBJECTS
+------------------------------
+Code:
+circle1 = Circle(radius=5, color="blue")
+circle2 = Circle(radius=8, color="green")
+
+What happens:
+
+For circle1:
+• self (inside __init__) refers to circle1
+• self.radius = 5
+• self.color = "blue"
+
+For circle2:
+• self (inside __init__) refers to circle2
+• self.radius = 8
+• self.color = "green"
+
+Each object has its own "self" - its own data!
+
+KEY POINTS ABOUT SELF
+---------------------
+1. SELF IS ALWAYS THE FIRST PARAMETER
+   Every method in a class must have self as the first parameter.
+
+2. YOU DON'T PASS SELF YOURSELF
+   When calling a method, you don't pass self - Python does it automatically.
+
+3. SELF REFERS TO THE OBJECT CALLING THE METHOD
+   If you call circle1.some_method(), then self inside some_method refers to 
+   circle1.
+
+4. SELF IS HOW YOU ACCESS OBJECT DATA
+   Use self.attribute_name to get or set data attributes.
+
+5. WITHOUT SELF, YOU CAN'T ACCESS OBJECT DATA
+   Methods need self to know which object's data to work with.
+
+[END SECTION 2.8]
+================================================================================
+
+SECTION 2.9: CREATING OBJECTS FROM CLASSES
+---------------------------------------------
+
+DEFINITION
+----------
+After we have created the class, in order to create an object of class circle, 
+we introduce a variable. This will be the name of the object. We create the 
+object by using the object constructor.
+
+DETAILED EXPLANATION
+--------------------
+Creating an object from a class is also called "instantiating" the class or 
+"creating an instance" of the class. The process is straightforward once you 
+understand it.
+
+THE PROCESS
+----------
+1. Write the class name (like Circle or Rectangle)
+2. Add parentheses (like calling a function)
+3. Pass arguments for the constructor parameters
+4. Assign the result to a variable
+
+SYNTAX
+------
+variable_name = ClassName(argument1, argument2, ...)
+
+Or with keyword arguments:
+variable_name = ClassName(parameter1=value1, parameter2=value2, ...)
+
+EXAMPLE: CREATING A CIRCLE OBJECT
+----------------------------------
+Code:
+RedCircle = Circle(radius=3, color="red")
+
+Line-by-line explanation:
+• RedCircle
+  - This is a variable name
+  - It will hold a reference to the circle object we're creating
+  - This will be the name of the object (or more accurately, the variable 
+    that refers to the object)
+  
+• =
+  - Assignment operator
+  - Assigns the created object to the variable RedCircle
+  
+• Circle
+  - This is the class name
+  - Python knows to create a Circle object
+  
+• (radius=3, color="red")
+  - These are the arguments passed to the __init__ constructor
+  - radius=3 means the radius parameter gets the value 3
+  - color="red" means the color parameter gets the value "red"
+  - When we create a circle object, we call the code like a function
+  
+• The arguments passed to the circle constructor are used to initialize the 
+  data attributes of the newly created circle instance
+
+WHAT HAPPENS INTERNALLY
+-----------------------
+When you write: RedCircle = Circle(radius=3, color="red")
+
+Python does this:
+1. Creates a new, empty Circle object in memory
+2. Calls Circle.__init__(self=<new_object>, radius=3, color="red")
+3. Inside __init__:
+   - self.radius = 3
+   - self.color = "red"
+4. Returns the initialized object
+5. Assigns it to RedCircle
+
+Now RedCircle refers to a Circle object with radius=3 and color="red".
+
+EXAMPLE: CREATING MULTIPLE CIRCLE OBJECTS
+------------------------------------------
+Code:
+# First circle object
+RedCircle = Circle(radius=3, color="red")
+
+# Second circle object
+BlueCircle = Circle(radius=10, color="blue")
+
+Line-by-line explanation:
+• RedCircle = Circle(radius=3, color="red")
+  - Creates the first circle object
+  - Radius is 3, color is red
+  - Variable name is RedCircle
+  
+• BlueCircle = Circle(radius=10, color="blue")
+  - Creates a second circle object
+  - This is a completely separate object from RedCircle
+  - Radius is 10, color is blue
+  - Variable name is BlueCircle
+
+VISUAL REPRESENTATION
+---------------------
+After creating both objects:
+
+┌─────────────┐         ┌─────────────┐
+│   Circle    │         │   Circle    │
+│   Object    │         │   Object    │
+│             │         │             │
+│ radius: 3   │         │ radius: 10  │
+│ color: red  │         │ color: blue │
+└─────────────┘         └─────────────┘
+      ↑                       ↑
+   RedCircle              BlueCircle
+
+Two separate objects, both instances of Circle class.
+
+EXAMPLE: CREATING RECTANGLE OBJECTS
+------------------------------------
+Code:
+# First rectangle object
+BlueRect = Rectangle(color="blue", height=2, width=2)
+
+# Second rectangle object
+YellowRect = Rectangle(color="yellow", height=1, width=3)
+
+Line-by-line explanation:
+• BlueRect = Rectangle(color="blue", height=2, width=2)
+  - Creates a rectangle object
+  - Color is blue, height is 2, width is 2
+  - Variable name is BlueRect
+  
+• YellowRect = Rectangle(color="yellow", height=1, width=3)
+  - Creates a second rectangle object
+  - Color is yellow, height is 1, width is 3
+  - Variable name is YellowRect
+
+VISUAL REPRESENTATION
+---------------------
+┌─────────────┐         ┌─────────────┐
+│ Rectangle   │         │ Rectangle   │
+│   Object    │         │   Object    │
+│             │         │             │
+│ color: blue │         │ color:      │
+│ height: 2   │         │   yellow    │
+│ width: 2    │         │ height: 1   │
+│             │         │ width: 3    │
+└─────────────┘         └─────────────┘
+      ↑                       ↑
+   BlueRect              YellowRect
+
+KEY POINTS
+----------
+1. CREATING AN OBJECT IS LIKE CALLING A FUNCTION
+   You use the class name like a function call.
+
+2. EACH OBJECT IS INDEPENDENT
+   Creating multiple objects creates separate instances with their own data.
+
+3. THE VARIABLE NAME IS JUST A LABEL
+   The variable (like RedCircle) is just a name that refers to the object. 
+   The object itself exists independently.
+
+4. YOU CAN CREATE MANY OBJECTS FROM ONE CLASS
+   There's no limit to how many objects you can create from a class.
+
+[END SECTION 2.9]
+================================================================================
+
+SECTION 2.10: ACCESSING DATA ATTRIBUTES
+-----------------------------------------
+
+DEFINITION
+----------
+Typing the object's name followed by a dot and the data attribute name gives 
+us the data attribute value. This is how you access (read) the data stored in 
+an object.
+
+DETAILED EXPLANATION
+--------------------
+Once you've created an object, you'll want to access its data attributes to 
+see what values they have. This is done using dot notation.
+
+SYNTAX
+------
+object_name.attribute_name
+
+Where:
+• object_name is the variable that refers to the object
+• . (dot) is the access operator
+• attribute_name is the name of the data attribute you want to access
+
+THE BOX ANALOGY
+---------------
+It is helpful to think of self as a box that contains all the data attributes 
+of the object. When you access an attribute, you're looking inside the box.
+
+┌─────────────────────────┐
+│      The Object         │
+│      (The Box)          │
+├─────────────────────────┤
+│  radius: 10             │  ← Data attribute
+│  color: "red"           │  ← Data attribute
+└─────────────────────────┘
+
+When you write object_name.radius, you're saying "give me the radius value 
+from this object's box."
+
+EXAMPLE: ACCESSING CIRCLE ATTRIBUTES
+-------------------------------------
+Code:
+RedCircle = Circle(radius=3, color="red")
+
+# Access the radius attribute
+print(RedCircle.radius)
+
+# Access the color attribute
+print(RedCircle.color)
+
+Line-by-line explanation:
+• RedCircle = Circle(radius=3, color="red")
+  - Creates a circle object with radius=3 and color="red"
+  - The variable RedCircle refers to this object
+  
+• print(RedCircle.radius)
+  - "RedCircle" refers to our circle object
+  - "." accesses an attribute
+  - "radius" is the attribute name we want
+  - RedCircle.radius gets the value of the radius attribute (which is 3)
+  - print() displays this value
+  
+• print(RedCircle.color)
+  - Similarly accesses the color attribute
+  - Gets the value "red"
+  - print() displays it
+
+Output:
+3
+red
+
+In this case, the radius is 3. We can do the same for color. We can see the 
+relationship between the self parameter and the object.
+
+EXAMPLE: ACCESSING RECTANGLE ATTRIBUTES
+----------------------------------------
+Code:
+BlueRect = Rectangle(color="blue", height=2, width=2)
+
+# Access each attribute
+print("Color:", BlueRect.color)
+print("Height:", BlueRect.height)
+print("Width:", BlueRect.width)
+
+Line-by-line explanation:
+• BlueRect = Rectangle(color="blue", height=2, width=2)
+  - Creates a rectangle object
+  
+• print("Color:", BlueRect.color)
+  - Accesses the color attribute
+  - Gets "blue"
+  
+• print("Height:", BlueRect.height)
+  - Accesses the height attribute
+  - Gets 2
+  
+• print("Width:", BlueRect.width)
+  - Accesses the width attribute
+  - Gets 2
+
+Output:
+Color: blue
+Height: 2
+Width: 2
+
+COMPREHENSIVE EXAMPLE
+---------------------
+Code:
+# Create multiple circle objects
+RedCircle = Circle(radius=3, color="red")
+BlueCircle = Circle(radius=10, color="blue")
+
+# Access attributes of first circle
+print("Red Circle:")
+print("  Radius:", RedCircle.radius)
+print("  Color:", RedCircle.color)
+
+# Access attributes of second circle
+print("\nBlue Circle:")
+print("  Radius:", BlueCircle.radius)
+print("  Color:", BlueCircle.color)
+
+Line-by-line explanation:
+• Creates two circle objects with different values
+• Accesses and displays each object's attributes
+• Shows that each object has its own independent data
+
+Output:
+Red Circle:
+  Radius: 3
+  Color: red
+
+Blue Circle:
+  Radius: 10
+  Color: blue
+
+KEY POINTS
+----------
+1. DOT NOTATION IS USED TO ACCESS ATTRIBUTES
+   object.attribute gets the value
+
+2. EACH OBJECT HAS ITS OWN ATTRIBUTES
+   RedCircle.radius and BlueCircle.radius are different values
+
+3. ATTRIBUTES ARE ACCESSED THE SAME WAY THEY'RE SET
+   In __init__, we set self.radius
+   Outside, we access object.radius
+
+4. YOU CAN USE ATTRIBUTES IN EXPRESSIONS
+   area = 3.14 * circle.radius * circle.radius
+
+[END SECTION 2.10]
+================================================================================
+
+SECTION 2.11: MODIFYING DATA ATTRIBUTES
+---------------------------------------
+
+DEFINITION
+----------
+In Python, we can also set or change the data attribute directly, typing the 
+object's name followed by a dot and the data attribute name and set it equal 
+to the corresponding value.
+
+DETAILED EXPLANATION
+--------------------
+Not only can you read data attributes, but you can also modify them after the 
+object has been created. This allows you to change an object's state.
+
+SYNTAX
+------
+object_name.attribute_name = new_value
+
+Where:
+• object_name is the variable referring to the object
+• .attribute_name is the attribute you want to change
+• = assigns a new value
+• new_value is the new value you want to assign
+
+EXAMPLE: CHANGING CIRCLE COLOR
+-------------------------------
+Code:
+RedCircle = Circle(radius=3, color="red")
+print("Original color:", RedCircle.color)
+
+# Change the color
+RedCircle.color = "purple"
+print("New color:", RedCircle.color)
+
+Line-by-line explanation:
+• RedCircle = Circle(radius=3, color="red")
+  - Creates a circle with color="red"
+  
+• print("Original color:", RedCircle.color)
+  - Shows the original color (red)
+  
+• RedCircle.color = "purple"
+  - "RedCircle" refers to our circle object
+  - ".color" accesses the color attribute
+  - "=" assigns a new value
+  - "purple" is the new value
+  - This directly modifies the object's color attribute
+  
+• print("New color:", RedCircle.color)
+  - Shows the new color (purple)
+
+Output:
+Original color: red
+New color: purple
+
+We can verify that the color data attribute has changed.
+
+EXAMPLE: CHANGING CIRCLE RADIUS
+--------------------------------
+Code:
+my_circle = Circle(radius=5, color="blue")
+print("Original radius:", my_circle.radius)
+
+# Change the radius
+my_circle.radius = 8
+print("New radius:", my_circle.radius)
+
+Output:
+Original radius: 5
+New radius: 8
+
+EXAMPLE: CHANGING RECTANGLE ATTRIBUTES
+---------------------------------------
+Code:
+my_rect = Rectangle(color="green", height=3, width=4)
+print("Original:", my_rect.color, my_rect.height, my_rect.width)
+
+# Change multiple attributes
+my_rect.color = "orange"
+my_rect.height = 5
+my_rect.width = 6
+
+print("Modified:", my_rect.color, my_rect.height, my_rect.width)
+
+Output:
+Original: green 3 4
+Modified: orange 5 6
+
+VISUAL REPRESENTATION
+---------------------
+Before modification:
+┌─────────────────────────┐
+│      RedCircle          │
+├─────────────────────────┤
+│  radius: 3              │
+│  color: "red"           │
+└─────────────────────────┘
+
+After RedCircle.color = "purple":
+┌─────────────────────────┐
+│      RedCircle          │
+├─────────────────────────┤
+│  radius: 3              │
+│  color: "purple"        │  ← Changed!
+└─────────────────────────┘
+
+BEST PRACTICE
+-------------
+Usually, in order to change the data in an object, we define methods in the 
+class. Direct modification works, but using methods is generally better 
+because:
+• Methods can validate the new value
+• Methods can perform additional actions when data changes
+• Methods provide a controlled way to modify objects
+• Methods make the code more maintainable
+
+We'll learn about methods in Part 3.
+
+KEY POINTS
+----------
+1. YOU CAN MODIFY ATTRIBUTES DIRECTLY
+   object.attribute = new_value
+
+2. CHANGES AFFECT THE OBJECT IMMEDIATELY
+   The object's state changes right away
+
+3. EACH OBJECT'S ATTRIBUTES ARE INDEPENDENT
+   Changing one object doesn't affect others
+
+4. DIRECT MODIFICATION IS SIMPLE BUT METHODS ARE BETTER
+   For now, direct modification is fine, but methods are the preferred approach
+
+[END SECTION 2.11]
+================================================================================
+
+SECTION 2.12: CREATING MULTIPLE OBJECTS FROM ONE CLASS
+--------------------------------------------------------
+
+DEFINITION
+----------
+You can create many objects from a single class. Each object is independent and 
+has its own data attributes. We have a class, and an object that is a realization 
+or instantiation of that class.
+
+DETAILED EXPLANATION
+--------------------
+One of the powerful features of classes is that you can create many objects 
+from one class definition. Each object is separate and independent.
+
+EXAMPLE: MULTIPLE CIRCLE OBJECTS
+---------------------------------
+For example, we can create two objects of class circle or two objects of class 
+rectangle.
+
+Code:
+# Create first circle object
+circle1 = Circle(radius=4, color="red")
+
+# Create second circle object
+circle2 = Circle(radius=2, color="green")
+
+# Each object is independent
+print("Circle 1 - Radius:", circle1.radius, "Color:", circle1.color)
+print("Circle 2 - Radius:", circle2.radius, "Color:", circle2.color)
+
+Line-by-line explanation:
+• circle1 = Circle(radius=4, color="red")
+  - Creates the first circle object
+  - Radius is 4, color is red
+  
+• circle2 = Circle(radius=2, color="green")
+  - Creates a second circle object
+  - This is completely separate from circle1
+  - Radius is 2, color is green
+  
+• print statements
+  - Show that each object has its own values
+  - Modifying one doesn't affect the other
+
+Output:
+Circle 1 - Radius: 4 Color: red
+Circle 2 - Radius: 2 Color: green
+
+EXAMPLE: MULTIPLE RECTANGLE OBJECTS
+------------------------------------
+Code:
+# Create first rectangle object
+rect1 = Rectangle(color="blue", height=2, width=2)
+
+# Create second rectangle object
+rect2 = Rectangle(color="yellow", height=1, width=3)
+
+# Each object is independent
+print("Rectangle 1 - Color:", rect1.color, "Height:", rect1.height, "Width:", rect1.width)
+print("Rectangle 2 - Color:", rect2.color, "Height:", rect2.height, "Width:", rect2.width)
+
+Output:
+Rectangle 1 - Color: blue Height: 2 Width: 2
+Rectangle 2 - Color: yellow Height: 1 Width: 3
+
+VISUAL REPRESENTATION
+---------------------
+One class, multiple objects:
+
+Circle Class (Blueprint):
+┌─────────────────────────────┐
+│      Circle Class           │
+│                             │
+│  Data Attributes:           │
+│    • radius                 │
+│    • color                  │
+└─────────────────────────────┘
+         ↓           ↓
+    Creates    Creates
+         ↓           ↓
+┌─────────────┐  ┌─────────────┐
+│   Circle    │  │   Circle    │
+│  Object 1   │  │  Object 2   │
+│             │  │             │
+│ radius: 4   │  │ radius: 2   │
+│ color: red  │  │ color: green│
+└─────────────┘  └─────────────┘
+     ↑                ↑
+  circle1          circle2
+
+INDEPENDENCE DEMONSTRATION
+--------------------------
+Code:
+# Create two circles
+circle1 = Circle(radius=5, color="red")
+circle2 = Circle(radius=5, color="red")  # Same values, but different object!
+
+# Modify circle1
+circle1.radius = 10
+
+# Check both circles
+print("Circle 1 radius:", circle1.radius)  # Changed to 10
+print("Circle 2 radius:", circle2.radius)  # Still 5!
+
+Output:
+Circle 1 radius: 10
+Circle 2 radius: 5
+
+This proves they are separate objects!
+
+KEY CONCEPTS
+------------
+1. ONE CLASS, MANY OBJECTS
+   You define the class once, but can create unlimited objects from it.
+
+2. EACH OBJECT IS INDEPENDENT
+   Objects don't share data - each has its own copy.
+
+3. OBJECTS CAN HAVE DIFFERENT VALUES
+   Even though they're the same type, they can store different data.
+
+4. MODIFYING ONE OBJECT DOESN'T AFFECT OTHERS
+   Changes to one object are isolated to that object.
+
+5. OBJECTS ARE INSTANCES OF THE CLASS
+   Each object is an instance (realization) of the class blueprint.
+
+[END SECTION 2.12]
+================================================================================
+
+SUMMARY OF PART 2
+==================
+
+KEY CONCEPTS COVERED
+--------------------
+1. Why and how to create custom classes
+2. The difference between classes (blueprints) and objects (instances)
+3. Planning data attributes for your classes
+4. Class definition syntax: class ClassName(object):
+5. The __init__ constructor method
+6. Understanding the self parameter
+7. Creating objects from classes
+8. Accessing data attributes with dot notation
+9. Modifying data attributes directly
+10. Creating multiple independent objects from one class
+
+WHAT YOU'VE LEARNED
+-------------------
+• How to define your own classes in Python
+• How to create objects (instances) from your classes
+• How to initialize objects with data attributes
+• How to access and modify object data
+• The Circle and Rectangle class examples
+• The relationship between classes and objects
+
+PRACTICAL SKILLS
+----------------
+You can now:
+• Create custom classes for your own projects
+• Define what data your objects will store
+• Create multiple objects from one class
+• Access and modify object attributes
+• Understand how constructors work
+
+NEXT STEPS
+----------
+In Part 3, you'll learn:
+• How to define methods in your classes
+• How methods interact with object data
+• How to create methods that modify objects
+• The add_radius method example
+• Default parameter values in constructors
+• The dir() function for exploring objects
+• Advanced concepts and best practices
+
+================================================================================
+END OF PART 2
+================================================================================

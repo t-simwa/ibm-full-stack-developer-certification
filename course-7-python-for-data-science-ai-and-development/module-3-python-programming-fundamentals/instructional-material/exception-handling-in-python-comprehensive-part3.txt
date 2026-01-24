@@ -1,0 +1,1772 @@
+================================================================================
+EXCEPTION HANDLING IN PYTHON
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+Welcome to Part 3 of Exception Handling in Python. In this final part, you 
+will learn best practices for exception handling, explore common Python 
+exception types in detail, discover advanced exception handling techniques, and 
+review a comprehensive summary with key definitions and quick reference guide.
+
+PREREQUISITES
+-------------
+Before studying this part, you should understand:
+• Basic try-except syntax
+• Multiple except blocks
+• The else and finally clauses
+• How exception handling works
+
+If you haven't studied Parts 1 and 2, please do so first.
+
+ESTIMATED TIME NEEDED
+---------------------
+15 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Apply best practices for exception handling
+• Recognize and use common Python exception types appropriately
+• Understand when to raise exceptions vs. handle them
+• Use advanced exception handling techniques
+• Write production-quality exception handling code
+• Debug exception-related issues effectively
+• Reference key concepts quickly
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+PART 3: BEST PRACTICES AND ADVANCED TECHNIQUES
+  SECTION 3.1: BEST PRACTICES FOR EXCEPTION HANDLING
+  SECTION 3.2: COMMON PYTHON EXCEPTION TYPES
+  SECTION 3.3: WHEN TO RAISE EXCEPTIONS
+  SECTION 3.4: ADVANCED EXCEPTION HANDLING TECHNIQUES
+  SECTION 3.5: DEBUGGING EXCEPTIONS
+  SECTION 3.6: SUMMARY AND KEY DEFINITIONS
+  SECTION 3.7: QUICK REFERENCE GUIDE
+
+================================================================================
+PART 3: BEST PRACTICES AND ADVANCED TECHNIQUES
+================================================================================
+
+SECTION 3.1: BEST PRACTICES FOR EXCEPTION HANDLING
+---------------------------------------------------
+
+DEFINITION
+----------
+Best practices for exception handling are guidelines and patterns that help 
+you write robust, maintainable, and user-friendly exception handling code. 
+Following these practices makes your code more reliable and easier to debug.
+
+DETAILED EXPLANATION
+--------------------
+Based on the original material's emphasis on always defining specific errors 
+and avoiding catch-all exceptions, here are comprehensive best practices for 
+exception handling in Python.
+
+BEST PRACTICE 1: ALWAYS SPECIFY EXCEPTION TYPES
+------------------------------------------------
+The original material emphasizes: "it is important to always define errors 
+when creating exceptions."
+
+DO:
+  try:
+      result = int(input("Enter number: "))
+  except ValueError:
+      print("Invalid number!")
+
+DON'T:
+  try:
+      result = int(input("Enter number: "))
+  except:  # Catches everything - bad practice!
+      print("Error occurred")
+
+WHY:
+• Specific exceptions provide clear information
+• Easier to debug when you know what went wrong
+• Allows appropriate handling for each error type
+• Prevents catching unexpected errors
+
+BEST PRACTICE 2: CATCH SPECIFIC EXCEPTIONS FIRST
+-------------------------------------------------
+Order matters! More specific exceptions should come before general ones.
+
+DO:
+  try:
+      file = open("data.txt")
+      number = int(file.read())
+  except FileNotFoundError:      # Specific
+      handle_file_not_found()
+  except ValueError:              # Specific
+      handle_invalid_number()
+  except IOError:                # General (parent of FileNotFoundError)
+      handle_io_error()
+
+DON'T:
+  try:
+      file = open("data.txt")
+      number = int(file.read())
+  except IOError:                # General - catches FileNotFoundError too!
+      handle_io_error()
+  except FileNotFoundError:      # Never reached!
+      handle_file_not_found()
+
+WHY:
+• Python checks except blocks in order
+• First match wins
+• General exceptions catch specific ones
+• Specific handlers never execute if general comes first
+
+BEST PRACTICE 3: PROVIDE MEANINGFUL ERROR MESSAGES
+----------------------------------------------------
+Error messages should help users understand what went wrong and how to fix it.
+
+DO:
+  try:
+      age = int(input("Enter age: "))
+  except ValueError:
+      print("Error: Please enter a valid number for your age.")
+      print("Example: 25 (not 'twenty-five')")
+
+DON'T:
+  try:
+      age = int(input("Enter age: "))
+  except ValueError:
+      print("Error!")  # Not helpful!
+
+WHY:
+• Users need to understand the problem
+• Clear messages reduce support requests
+• Better user experience
+• Easier debugging
+
+BEST PRACTICE 4: USE ELSE FOR SUCCESS CODE
+-------------------------------------------
+The original material shows using else to indicate successful execution.
+
+DO:
+  try:
+      file = open("data.txt", 'w')
+      file.write("Hello")
+  except IOError:
+      print("Error writing file")
+  else:
+      print("File written successfully")  # Clear success indicator
+
+DON'T:
+  try:
+      file = open("data.txt", 'w')
+      file.write("Hello")
+      print("File written successfully")  # Is this success or part of try?
+  except IOError:
+      print("Error writing file")
+
+WHY:
+• else clearly indicates success path
+• Separates success code from try code
+• Makes code more readable
+• Easier to understand program flow
+
+BEST PRACTICE 5: ALWAYS USE FINALLY FOR CLEANUP
+-------------------------------------------------
+The original material emphasizes using finally to ensure cleanup happens.
+
+DO:
+  file = None
+  try:
+      file = open("data.txt")
+      process_file(file)
+  except IOError:
+      print("Error reading file")
+  finally:
+      if file:
+          file.close()  # Always closes
+
+DON'T:
+  try:
+      file = open("data.txt")
+      process_file(file)
+      file.close()  # Might not execute if exception occurs!
+  except IOError:
+      print("Error reading file")
+      # File never closed!
+
+WHY:
+• finally always executes
+• Ensures resources are released
+• Prevents resource leaks
+• Critical for file/database operations
+
+BEST PRACTICE 6: LOG EXCEPTIONS FOR DEBUGGING
+-----------------------------------------------
+Log exceptions with full details for debugging, even if you show user-friendly messages.
+
+DO:
+  import logging
+  
+  try:
+      risky_operation()
+  except ValueError as e:
+      logging.error(f"ValueError in risky_operation: {e}", exc_info=True)
+      print("Invalid input. Please try again.")
+
+DON'T:
+  try:
+      risky_operation()
+  except ValueError:
+      print("Error occurred")  # No logging - can't debug!
+
+WHY:
+• Logs provide details for debugging
+• User messages are user-friendly
+• Both serve different purposes
+• Essential for production code
+
+BEST PRACTICE 7: DON'T SWALLOW EXCEPTIONS SILENTLY
+---------------------------------------------------
+Always do something when catching exceptions - log, print, or re-raise.
+
+DO:
+  try:
+      operation()
+  except ValueError as e:
+      logger.warning(f"ValueError: {e}")  # At least log it
+      # Handle appropriately
+
+DON'T:
+  try:
+      operation()
+  except ValueError:
+      pass  # Silent failure - very bad!
+
+WHY:
+• Silent failures are hard to debug
+• Users don't know what went wrong
+• Bugs go unnoticed
+• Makes programs unreliable
+
+BEST PRACTICE 8: USE EXCEPTION VARIABLES
+-----------------------------------------
+Store exceptions in variables to access their details.
+
+DO:
+  try:
+      number = int("hello")
+  except ValueError as e:
+      print(f"Error: {e}")  # Shows: "invalid literal for int() with base 10: 'hello'"
+      print(f"Error type: {type(e).__name__}")  # Shows: "ValueError"
+
+DON'T:
+  try:
+      number = int("hello")
+  except ValueError:
+      print("Error occurred")  # No details!
+
+WHY:
+• Exception objects contain useful information
+• Error messages explain what went wrong
+• Type information helps debugging
+• Better error reporting
+
+BEST PRACTICE 9: HANDLE EXCEPTIONS AT THE RIGHT LEVEL
+-------------------------------------------------------
+Handle exceptions where you can meaningfully respond to them.
+
+DO:
+  def read_config():
+      try:
+          file = open("config.txt")
+          return file.read()
+      except FileNotFoundError:
+          return None  # Can't read config, return None
+  
+  def main():
+      config = read_config()
+      if config is None:
+          print("Using default configuration")
+          config = get_default_config()
+
+DON'T:
+  def read_config():
+      file = open("config.txt")  # Exception propagates up
+      return file.read()
+  
+  def main():
+      try:
+          config = read_config()  # Handling too far from source
+      except FileNotFoundError:
+          print("Error")  # Less context here
+
+WHY:
+• Handle where you have context
+• Can make appropriate decisions
+• Better error messages
+• Cleaner code structure
+
+BEST PRACTICE 10: DOCUMENT EXCEPTIONS YOUR CODE RAISES
+--------------------------------------------------------
+Document what exceptions your functions might raise.
+
+DO:
+  def divide(a, b):
+      """
+      Divide two numbers.
+      
+      Args:
+          a: Numerator
+          b: Denominator
+      
+      Returns:
+          Result of division
+      
+      Raises:
+          ZeroDivisionError: If b is zero
+          TypeError: If a or b are not numbers
+      """
+      return a / b
+
+DON'T:
+  def divide(a, b):
+      """Divide two numbers."""
+      return a / b  # No documentation of exceptions!
+
+WHY:
+• Users know what to expect
+• Easier to use your functions
+• Better code documentation
+• Professional practice
+
+COMPREHENSIVE EXAMPLE: FOLLOWING ALL BEST PRACTICES
+----------------------------------------------------
+  import logging
+  import sys
+  
+  # Configure logging
+  logging.basicConfig(
+      level=logging.INFO,
+      format='%(asctime)s - %(levelname)s - %(message)s'
+  )
+  
+  def process_user_data(filename):
+      """
+      Process user data from a file.
+      
+      Args:
+          filename: Path to the data file
+      
+      Returns:
+          List of processed user records
+      
+      Raises:
+          FileNotFoundError: If file doesn't exist
+          PermissionError: If file cannot be read
+          ValueError: If file contains invalid data
+      """
+      file = None
+      users = []
+      
+      try:
+          # Attempt to open file
+          file = open(filename, 'r')
+          logging.info(f"Successfully opened file: {filename}")
+          
+          # Read and process each line
+          for line_num, line in enumerate(file, start=1):
+              line = line.strip()
+              
+              # Skip empty lines
+              if not line:
+                  continue
+              
+              # Validate line format
+              if ',' not in line:
+                  raise ValueError(
+                      f"Invalid data format at line {line_num}: "
+                      f"Expected 'name,age' format"
+                  )
+              
+              # Parse line
+              name, age_str = line.split(',', 1)
+              age = int(age_str.strip())
+              
+              # Validate age
+              if age < 0 or age > 150:
+                  raise ValueError(
+                      f"Invalid age at line {line_num}: {age}"
+                  )
+              
+              users.append({'name': name.strip(), 'age': age})
+          
+          logging.info(f"Processed {len(users)} user records")
+          
+      except FileNotFoundError:
+          # Specific exception - file doesn't exist
+          error_msg = f"Error: File '{filename}' not found."
+          logging.error(error_msg)
+          print(error_msg)
+          print("Please check the filename and try again.")
+          raise  # Re-raise to let caller handle
+          
+      except PermissionError:
+          # Specific exception - permission denied
+          error_msg = f"Error: Permission denied reading '{filename}'."
+          logging.error(error_msg)
+          print(error_msg)
+          print("Please check file permissions.")
+          raise
+          
+      except ValueError as e:
+          # Specific exception - invalid data
+          error_msg = f"Error: Invalid data in file."
+          logging.error(f"{error_msg} Details: {e}")
+          print(error_msg)
+          print(f"Details: {e}")
+          raise
+          
+      except IOError as e:
+          # General I/O error
+          error_msg = f"Error: Unable to read file '{filename}'."
+          logging.error(f"{error_msg} Details: {e}")
+          print(error_msg)
+          print(f"Technical details: {e}")
+          raise
+          
+      except Exception as e:
+          # Unexpected exceptions
+          error_msg = "Error: An unexpected error occurred."
+          logging.error(
+              f"{error_msg} Type: {type(e).__name__}, Message: {e}",
+              exc_info=True
+          )
+          print(error_msg)
+          print("Please contact support with error details.")
+          raise
+          
+      else:
+          # Success path
+          success_msg = f"Successfully processed {len(users)} users from file."
+          logging.info(success_msg)
+          print(success_msg)
+          
+      finally:
+          # Always cleanup
+          if file is not None:
+              try:
+                  file.close()
+                  logging.debug("File closed successfully")
+              except Exception as close_error:
+                  logging.warning(f"Error closing file: {close_error}")
+          else:
+              logging.debug("No file to close")
+      
+      return users
+  
+  # Main execution
+  if __name__ == "__main__":
+      try:
+          users = process_user_data("users.txt")
+          print(f"\nProcessed users: {users}")
+      except (FileNotFoundError, PermissionError, ValueError, IOError):
+          # Handle expected exceptions
+          sys.exit(1)  # Exit with error code
+      except Exception:
+          # Unexpected exceptions
+          sys.exit(2)  # Exit with different error code
+
+This example demonstrates all best practices:
+✓ Specific exception types
+✓ Ordered from specific to general
+✓ Meaningful error messages
+✓ else for success
+✓ finally for cleanup
+✓ Logging exceptions
+✓ Not swallowing exceptions
+✓ Using exception variables
+✓ Handling at right level
+✓ Documenting exceptions
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: COMMON PYTHON EXCEPTION TYPES
+--------------------------------------------
+
+DEFINITION
+----------
+Python has a hierarchy of exception types, each representing different kinds 
+of errors. Understanding common exception types helps you write better 
+exception handling code and choose the right exception type when raising 
+exceptions.
+
+DETAILED EXPLANATION
+--------------------
+Python's exception hierarchy starts with BaseException, then Exception, then 
+specific exception types. Here are the most common exceptions you'll encounter.
+
+THE EXCEPTION HIERARCHY
+-----------------------
+  BaseException
+  ├── Exception
+  │   ├── ArithmeticError
+  │   │   ├── ZeroDivisionError
+  │   │   └── OverflowError
+  │   ├── AssertionError
+  │   ├── AttributeError
+  │   ├── EOFError
+  │   ├── ImportError
+  │   ├── LookupError
+  │   │   ├── IndexError
+  │   │   └── KeyError
+  │   ├── NameError
+  │   ├── OSError
+  │   │   ├── FileNotFoundError
+  │   │   ├── PermissionError
+  │   │   └── IOError (Python 2, aliased in Python 3)
+  │   ├── RuntimeError
+  │   ├── SyntaxError
+  │   ├── TypeError
+  │   └── ValueError
+  ├── KeyboardInterrupt
+  ├── SystemExit
+  └── GeneratorExit
+
+COMMON EXCEPTION TYPES IN DETAIL
+---------------------------------
+
+1. ValueError
+   When it occurs: Invalid value for operation
+   Common causes:
+   • int("hello") - Can't convert string to int
+   • float("abc") - Can't convert string to float
+   • Invalid input format
+   
+   Example:
+     try:
+         age = int(input("Enter age: "))
+     except ValueError:
+         print("Please enter a valid number")
+   
+   When to raise:
+     if age < 0:
+         raise ValueError("Age cannot be negative")
+
+2. TypeError
+   When it occurs: Operation on wrong data type
+   Common causes:
+   • "5" + 3 - Can't add string and int
+   • len(5) - Integer has no length
+   • Calling non-callable object
+   
+   Example:
+     try:
+         result = "5" + 3
+     except TypeError:
+         print("Cannot add string and integer")
+   
+   When to raise:
+     if not isinstance(value, int):
+         raise TypeError("Expected integer, got " + type(value).__name__)
+
+3. ZeroDivisionError
+   When it occurs: Division by zero
+   Common causes:
+   • 10 / 0 - Division by zero
+   • 5 // 0 - Integer division by zero
+   • Any division where denominator is zero
+   
+   Example:
+     try:
+         result = numerator / denominator
+     except ZeroDivisionError:
+         print("Cannot divide by zero")
+   
+   When to raise:
+     if denominator == 0:
+         raise ZeroDivisionError("Denominator cannot be zero")
+
+4. FileNotFoundError (Python 3)
+   When it occurs: File doesn't exist
+   Common causes:
+   • open("nonexistent.txt") - File not found
+   • Reading non-existent file
+   
+   Example:
+     try:
+         file = open("data.txt")
+     except FileNotFoundError:
+         print("File not found")
+   
+   Note: In Python 2, this was IOError
+
+5. PermissionError
+   When it occurs: Insufficient permissions
+   Common causes:
+   • Reading protected file
+   • Writing to read-only file
+   • Accessing restricted directory
+   
+   Example:
+     try:
+         file = open("/root/file.txt", 'w')
+     except PermissionError:
+         print("Permission denied")
+
+6. IOError / OSError
+   When it occurs: Input/Output operation fails
+   Common causes:
+   • Disk full
+   • Network error
+   • Device error
+   • General I/O problems
+   
+   Example:
+     try:
+         file = open("data.txt")
+     except IOError:
+         print("I/O error occurred")
+   
+   Note: In Python 3, IOError is an alias for OSError
+
+7. IndexError
+   When it occurs: Invalid list/index access
+   Common causes:
+   • my_list[10] when list has 5 items
+   • Accessing non-existent index
+   
+   Example:
+     try:
+         item = my_list[10]
+     except IndexError:
+         print("Index out of range")
+   
+   When to raise:
+     if index >= len(my_list):
+         raise IndexError("Index out of range")
+
+8. KeyError
+   When it occurs: Invalid dictionary key
+   Common causes:
+   • my_dict["nonexistent"] - Key doesn't exist
+   • Accessing missing key
+   
+   Example:
+     try:
+         value = my_dict["key"]
+     except KeyError:
+         print("Key not found")
+   
+   Better approach:
+     value = my_dict.get("key", "default")  # No exception!
+
+9. AttributeError
+   When it occurs: Object doesn't have attribute
+   Common causes:
+   • my_string.uppercase() - Method doesn't exist
+   • Accessing non-existent attribute
+   
+   Example:
+     try:
+         result = obj.nonexistent_method()
+     except AttributeError:
+         print("Method doesn't exist")
+   
+   When to raise:
+     if not hasattr(obj, 'method'):
+         raise AttributeError("Object has no 'method' attribute")
+
+10. NameError
+    When it occurs: Variable name not found
+    Common causes:
+    • Using undefined variable
+    • Typo in variable name
+    • Variable not in scope
+    
+    Example:
+      try:
+          print(undefined_variable)
+      except NameError:
+          print("Variable not defined")
+    
+    Note: Usually indicates a bug, not something to catch
+
+11. ImportError
+    When it occurs: Module import fails
+    Common causes:
+    • import nonexistent_module
+    • Module not installed
+    • Import path error
+    
+    Example:
+      try:
+          import nonexistent_module
+      except ImportError:
+          print("Module not found")
+
+12. KeyboardInterrupt
+    When it occurs: User presses Ctrl+C
+    Common causes:
+    • User cancels operation
+    • Interrupt signal received
+    
+    Example:
+      try:
+          long_operation()
+      except KeyboardInterrupt:
+          print("\nOperation cancelled by user")
+    
+    Note: Usually let this propagate (user wants to exit)
+
+CHOOSING THE RIGHT EXCEPTION TYPE
+----------------------------------
+When raising exceptions, choose the most specific type:
+
+• ValueError: Invalid value (wrong format, out of range)
+• TypeError: Wrong data type
+• AttributeError: Missing attribute/method
+• KeyError: Missing dictionary key
+• IndexError: Invalid index
+• FileNotFoundError: File doesn't exist
+• PermissionError: Permission denied
+• IOError/OSError: General I/O error
+
+EXAMPLE: CHOOSING EXCEPTION TYPES
+----------------------------------
+  def validate_user_input(age_str, name):
+      """Validate user input and raise appropriate exceptions."""
+      
+      # Check if age can be converted
+      try:
+          age = int(age_str)
+      except ValueError:
+          raise ValueError(f"Age must be a number, got '{age_str}'")
+      
+      # Check if age is in valid range
+      if age < 0:
+          raise ValueError("Age cannot be negative")
+      if age > 150:
+          raise ValueError("Age cannot exceed 150")
+      
+      # Check if name is string
+      if not isinstance(name, str):
+          raise TypeError(f"Name must be a string, got {type(name).__name__}")
+      
+      # Check if name is not empty
+      if not name.strip():
+          raise ValueError("Name cannot be empty")
+      
+      return {'name': name, 'age': age}
+
+This function raises:
+• ValueError for invalid age values
+• TypeError for wrong name type
+• Each exception is specific and informative
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: WHEN TO RAISE EXCEPTIONS
+--------------------------------------
+
+DEFINITION
+----------
+Raising exceptions means creating and throwing an exception when your code 
+encounters an error condition. Knowing when to raise exceptions vs. when to 
+handle them is crucial for writing good code.
+
+DETAILED EXPLANATION
+--------------------
+Sometimes you need to raise exceptions yourself, not just catch them. This 
+section explains when and how to raise exceptions.
+
+WHEN TO RAISE EXCEPTIONS
+-------------------------
+
+1. When Input is Invalid
+   Raise exceptions when you receive invalid input that you cannot process.
+   
+   Example:
+     def calculate_area(length, width):
+         if length <= 0:
+             raise ValueError("Length must be positive")
+         if width <= 0:
+             raise ValueError("Width must be positive")
+         return length * width
+
+2. When Preconditions Aren't Met
+   Raise exceptions when required conditions aren't satisfied.
+   
+   Example:
+     def divide(a, b):
+         if b == 0:
+             raise ZeroDivisionError("Cannot divide by zero")
+         return a / b
+
+3. When State is Invalid
+   Raise exceptions when object is in invalid state for operation.
+   
+   Example:
+     class BankAccount:
+         def __init__(self):
+             self.balance = 0
+             self.closed = False
+         
+         def withdraw(self, amount):
+             if self.closed:
+                 raise ValueError("Account is closed")
+             if amount > self.balance:
+                 raise ValueError("Insufficient funds")
+             self.balance -= amount
+
+4. When Operation Cannot Complete
+   Raise exceptions when operation cannot be completed.
+   
+   Example:
+     def find_user(user_id):
+         user = database.get_user(user_id)
+         if user is None:
+             raise ValueError(f"User {user_id} not found")
+         return user
+
+HOW TO RAISE EXCEPTIONS
+-----------------------
+
+BASIC SYNTAX:
+  raise ExceptionType("Error message")
+
+EXAMPLES:
+
+1. Raise with Message:
+     raise ValueError("Invalid input")
+
+2. Raise Existing Exception:
+     try:
+         risky_operation()
+     except SomeError as e:
+         # Do some handling
+         raise  # Re-raise the same exception
+
+3. Raise Different Exception:
+     try:
+         risky_operation()
+     except SomeError as e:
+         raise ValueError("Invalid operation") from e
+
+4. Raise with Exception Chaining:
+     try:
+         risky_operation()
+     except SomeError as e:
+         raise NewError("New error") from e
+
+CREATING CUSTOM EXCEPTIONS
+---------------------------
+You can create your own exception types:
+
+  class CustomError(Exception):
+      """Custom exception for specific errors."""
+      pass
+  
+  class ValidationError(Exception):
+      """Exception for validation errors."""
+      def __init__(self, message, field):
+          self.message = message
+          self.field = field
+          super().__init__(f"{field}: {message}")
+  
+  # Usage
+  raise ValidationError("Invalid format", "email")
+
+EXAMPLE: COMPLETE EXCEPTION RAISING PATTERN
+--------------------------------------------
+  class ShoppingCart:
+      """Shopping cart with exception handling."""
+      
+      def __init__(self):
+          self.items = []
+          self.max_items = 10
+      
+      def add_item(self, item, quantity=1):
+          """Add item to cart, raising exceptions for invalid operations."""
+          
+          # Validate item
+          if item is None:
+              raise ValueError("Item cannot be None")
+          
+          if not isinstance(item, dict):
+              raise TypeError("Item must be a dictionary")
+          
+          if 'name' not in item or 'price' not in item:
+              raise ValueError("Item must have 'name' and 'price' keys")
+          
+          # Validate quantity
+          if not isinstance(quantity, int):
+              raise TypeError("Quantity must be an integer")
+          
+          if quantity <= 0:
+              raise ValueError("Quantity must be positive")
+          
+          # Check cart capacity
+          if len(self.items) >= self.max_items:
+              raise RuntimeError(f"Cart is full (max {self.max_items} items)")
+          
+          # Add item
+          self.items.append({
+              'item': item,
+              'quantity': quantity
+          })
+          
+          return len(self.items)
+      
+      def remove_item(self, index):
+          """Remove item by index, raising exception if invalid."""
+          
+          if not isinstance(index, int):
+              raise TypeError("Index must be an integer")
+          
+          if index < 0 or index >= len(self.items):
+              raise IndexError(f"Index {index} out of range")
+          
+          return self.items.pop(index)
+      
+      def get_total(self):
+          """Calculate total price."""
+          if not self.items:
+              raise ValueError("Cart is empty")
+          
+          total = 0
+          for entry in self.items:
+              item = entry['item']
+              quantity = entry['quantity']
+              total += item['price'] * quantity
+          
+          return total
+
+  # Usage with exception handling
+  cart = ShoppingCart()
+  
+  try:
+      # Add valid item
+      cart.add_item({'name': 'Book', 'price': 10.99}, quantity=2)
+      
+      # Try to add invalid item
+      cart.add_item(None)  # Raises ValueError
+      
+  except ValueError as e:
+      print(f"Validation error: {e}")
+  except TypeError as e:
+      print(f"Type error: {e}")
+  except RuntimeError as e:
+      print(f"Runtime error: {e}")
+
+WHEN NOT TO RAISE EXCEPTIONS
+-----------------------------
+
+1. For Expected Conditions
+   Don't raise exceptions for normal, expected conditions.
+   
+   BAD:
+     def find_user(user_id):
+         user = database.get_user(user_id)
+         if user is None:
+             raise ValueError("User not found")  # Not found is expected!
+         return user
+   
+   GOOD:
+     def find_user(user_id):
+         return database.get_user(user_id)  # Returns None if not found
+     
+     # Caller handles None:
+     user = find_user(123)
+     if user is None:
+         print("User not found")
+     else:
+         process_user(user)
+
+2. For Control Flow
+   Don't use exceptions for normal control flow.
+   
+   BAD:
+     try:
+         value = my_dict["key"]
+     except KeyError:
+         value = "default"  # Using exception for control flow
+   
+   GOOD:
+     value = my_dict.get("key", "default")  # Proper way
+
+3. For Validation That Should Be Checked First
+   Validate input before operations, don't rely on exceptions.
+   
+   BAD:
+     def divide(a, b):
+         try:
+             return a / b
+         except ZeroDivisionError:
+             return None  # Should check first!
+   
+   GOOD:
+     def divide(a, b):
+         if b == 0:
+             return None  # Check first
+         return a / b
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: ADVANCED EXCEPTION HANDLING TECHNIQUES
+-----------------------------------------------------
+
+DEFINITION
+----------
+Advanced exception handling techniques include exception chaining, context 
+managers, custom exception classes, and other patterns that make exception 
+handling more powerful and maintainable.
+
+DETAILED EXPLANATION
+--------------------
+Beyond basic try-except, Python offers advanced techniques for sophisticated 
+exception handling.
+
+TECHNIQUE 1: EXCEPTION CHAINING
+--------------------------------
+Exception chaining preserves the original exception when raising a new one.
+
+BASIC CHAINING:
+  try:
+      risky_operation()
+  except ValueError as e:
+      raise RuntimeError("Operation failed") from e
+
+This creates a chain:
+  RuntimeError: Operation failed
+  The above exception was the direct cause of the following exception:
+  ValueError: [original error]
+
+EXAMPLE:
+  def process_file(filename):
+      try:
+          file = open(filename)
+          content = file.read()
+          return process_content(content)
+      except FileNotFoundError as e:
+          raise ProcessingError(f"Cannot process {filename}") from e
+
+TECHNIQUE 2: CONTEXT MANAGERS (WITH STATEMENTS)
+------------------------------------------------
+Context managers automatically handle setup and cleanup, including exceptions.
+
+BASIC USAGE:
+  with open("file.txt") as file:
+      content = file.read()
+  # File automatically closed, even if exception occurs
+
+EQUIVALENT TO:
+  file = open("file.txt")
+  try:
+      content = file.read()
+  finally:
+      file.close()
+
+CREATING CUSTOM CONTEXT MANAGERS:
+  class FileManager:
+      def __init__(self, filename, mode):
+          self.filename = filename
+          self.mode = mode
+          self.file = None
+      
+      def __enter__(self):
+          self.file = open(self.filename, self.mode)
+          return self.file
+      
+      def __exit__(self, exc_type, exc_val, exc_tb):
+          if self.file:
+              self.file.close()
+          return False  # Don't suppress exceptions
+  
+  # Usage
+  with FileManager("data.txt", 'w') as file:
+      file.write("Hello")
+  # File automatically closed
+
+TECHNIQUE 3: MULTIPLE EXCEPTION TYPES IN ONE EXCEPT
+----------------------------------------------------
+Catch multiple exception types in a single except block.
+
+SYNTAX:
+  try:
+      risky_operation()
+  except (ValueError, TypeError) as e:
+      handle_error(e)
+
+EXAMPLE:
+  try:
+      number = int(input("Enter number: "))
+      result = 10 / number
+  except (ValueError, ZeroDivisionError) as e:
+      print(f"Error: {e}")
+
+TECHNIQUE 4: EXCEPTION GROUPS (Python 3.11+)
+---------------------------------------------
+Handle multiple exceptions simultaneously.
+
+  try:
+      operation1()
+      operation2()
+  except* ValueError:
+      handle_value_errors()
+  except* TypeError:
+      handle_type_errors()
+
+TECHNIQUE 5: SUPPRESSING EXCEPTIONS
+------------------------------------
+Sometimes you want to ignore specific exceptions.
+
+  from contextlib import suppress
+  
+  with suppress(FileNotFoundError):
+      os.remove("temp.txt")  # Won't raise if file doesn't exist
+
+TECHNIQUE 6: RETRY PATTERNS
+----------------------------
+Retry operations that might fail temporarily.
+
+  import time
+  
+  def retry_operation(operation, max_retries=3, delay=1):
+      for attempt in range(max_retries):
+          try:
+              return operation()
+          except TemporaryError as e:
+              if attempt == max_retries - 1:
+                  raise
+              time.sleep(delay)
+              continue
+      raise RuntimeError("Max retries exceeded")
+
+COMPREHENSIVE EXAMPLE: ADVANCED TECHNIQUES
+--------------------------------------------
+  import logging
+  from contextlib import contextmanager
+  from typing import Optional
+  
+  # Custom exception classes
+  class ProcessingError(Exception):
+      """Base exception for processing errors."""
+      pass
+  
+  class FileProcessingError(ProcessingError):
+      """Exception for file processing errors."""
+      def __init__(self, filename, original_error):
+          self.filename = filename
+          self.original_error = original_error
+          super().__init__(f"Error processing {filename}: {original_error}")
+  
+  # Context manager for file operations
+  @contextmanager
+  def safe_file_operation(filename, mode='r'):
+      """Context manager for safe file operations."""
+      file = None
+      try:
+          file = open(filename, mode)
+          yield file
+      except FileNotFoundError as e:
+          raise FileProcessingError(filename, e) from e
+      except PermissionError as e:
+          raise FileProcessingError(filename, e) from e
+      finally:
+          if file:
+              file.close()
+  
+  # Retry decorator
+  def retry_on_failure(max_retries=3, delay=1, exceptions=(IOError,)):
+      def decorator(func):
+          def wrapper(*args, **kwargs):
+              last_exception = None
+              for attempt in range(max_retries):
+                  try:
+                      return func(*args, **kwargs)
+                  except exceptions as e:
+                      last_exception = e
+                      if attempt < max_retries - 1:
+                          logging.warning(
+                              f"Attempt {attempt + 1} failed: {e}. Retrying..."
+                          )
+                          time.sleep(delay)
+                      else:
+                          logging.error(f"All {max_retries} attempts failed")
+              raise last_exception
+          return wrapper
+      return decorator
+  
+  # Usage
+  @retry_on_failure(max_retries=3, exceptions=(IOError,))
+  def read_file_with_retry(filename):
+      with safe_file_operation(filename) as file:
+          return file.read()
+  
+  # Main execution
+  try:
+      content = read_file_with_retry("data.txt")
+      print("File read successfully")
+  except FileProcessingError as e:
+      logging.error(f"File processing failed: {e}")
+      print(f"Error: {e.filename} could not be processed")
+  except Exception as e:
+      logging.error(f"Unexpected error: {e}", exc_info=True)
+      raise
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: DEBUGGING EXCEPTIONS
+----------------------------------
+
+DEFINITION
+----------
+Debugging exceptions involves understanding error messages, using tracebacks, 
+logging, and tools to identify and fix problems in exception handling code.
+
+DETAILED EXPLANATION
+--------------------
+When exceptions occur, Python provides detailed information to help you debug. 
+Understanding how to read and use this information is crucial.
+
+UNDERSTANDING TRACEBACKS
+-------------------------
+When an exception occurs, Python prints a traceback showing where the error 
+happened.
+
+EXAMPLE TRACEBACK:
+  Traceback (most recent call last):
+    File "example.py", line 10, in <module>
+      result = divide(10, 0)
+    File "example.py", line 3, in divide
+      return a / b
+  ZeroDivisionError: division by zero
+
+READING THE TRACEBACK:
+• "Traceback (most recent call last)": Shows call stack from bottom to top
+• "File 'example.py', line 10": Location where divide() was called
+• "File 'example.py', line 3": Location where error occurred (in divide)
+• "ZeroDivisionError: division by zero": Exception type and message
+
+USING TRACEBACK MODULE
+----------------------
+The traceback module provides tools for working with tracebacks.
+
+  import traceback
+  
+  try:
+      risky_operation()
+  except Exception as e:
+      # Print full traceback
+      traceback.print_exc()
+      
+      # Get traceback as string
+      tb_string = traceback.format_exc()
+      logging.error(f"Error occurred:\n{tb_string}")
+      
+      # Get exception info
+      exc_type, exc_value, exc_tb = sys.exc_info()
+      traceback.print_exception(exc_type, exc_value, exc_tb)
+
+LOGGING EXCEPTIONS
+------------------
+Always log exceptions with full details.
+
+  import logging
+  
+  logging.basicConfig(level=logging.DEBUG)
+  
+  try:
+      operation()
+  except ValueError as e:
+      # Log with full traceback
+      logging.error("ValueError occurred", exc_info=True)
+      
+      # Or use exception() method
+      logging.exception("ValueError occurred")  # Automatically includes traceback
+
+DEBUGGING TIPS
+--------------
+
+1. Print Exception Details:
+     try:
+         operation()
+     except Exception as e:
+         print(f"Exception type: {type(e).__name__}")
+         print(f"Exception message: {e}")
+         print(f"Exception args: {e.args}")
+
+2. Use pdb Debugger:
+     import pdb
+     
+     try:
+         operation()
+     except Exception as e:
+         pdb.post_mortem()  # Enter debugger after exception
+
+3. Add Print Statements:
+     try:
+         print("Before operation")
+         operation()
+         print("After operation")
+     except Exception as e:
+         print(f"Exception: {e}")
+
+4. Check Variable Values:
+     try:
+         result = calculate(value)
+     except Exception as e:
+         print(f"Value was: {value}")
+         print(f"Type was: {type(value)}")
+         raise
+
+COMMON DEBUGGING SCENARIOS
+---------------------------
+
+SCENARIO 1: Exception Swallowed
+Problem: Exception occurs but nothing happens.
+
+Solution: Check for bare except: or except Exception: that doesn't log.
+
+SCENARIO 2: Wrong Exception Caught
+Problem: Unexpected exception type caught.
+
+Solution: Check exception hierarchy - general exceptions catch specific ones.
+
+SCENARIO 3: Exception in Finally
+Problem: Exception in finally block hides original exception.
+
+Solution: Use nested try-except in finally.
+
+SCENARIO 4: Exception Not Caught
+Problem: Exception propagates unexpectedly.
+
+Solution: Check exception types match exactly.
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: SUMMARY AND KEY DEFINITIONS
+------------------------------------------
+
+DEFINITION
+----------
+This section provides a comprehensive summary of all concepts covered, key 
+definitions, and a quick reference for exception handling in Python.
+
+COMPREHENSIVE SUMMARY
+---------------------
+Exception handling is a fundamental programming technique that allows programs 
+to detect, handle, and recover from errors gracefully. Throughout this guide, 
+you've learned:
+
+FROM PART 1:
+• What exception handling is and why it's essential
+• Why errors occur in programs
+• What happens without exception handling
+• Real-world examples of user input errors
+• The try-except statement structure
+• How try-except works step-by-step
+• Basic syntax of try-except
+• Your first complete exception handler
+
+FROM PART 2:
+• Multiple except statements for different error types
+• Why catching all exceptions is bad practice
+• The else clause for success notifications
+• The finally clause for cleanup
+• Complete try-except-else-finally structure
+• Complete file handling example
+
+FROM PART 3:
+• Best practices for exception handling
+• Common Python exception types
+• When to raise exceptions
+• Advanced exception handling techniques
+• Debugging exceptions
+
+KEY DEFINITIONS
+---------------
+
+EXCEPTION
+An error or unexpected event that occurs during program execution. Exceptions 
+are Python's way of signaling that something went wrong.
+
+EXCEPTION HANDLING
+The process of catching and responding to exceptions, allowing programs to 
+handle errors gracefully without crashing.
+
+TRY BLOCK
+A block of code that might raise an exception. Code in the try block is 
+executed, and if an exception occurs, Python looks for a matching except block.
+
+EXCEPT BLOCK
+A block of code that handles specific exceptions. When an exception occurs in 
+the try block, Python searches for a matching except block to handle it.
+
+ELSE CLAUSE
+An optional clause that executes only if the try block completes successfully 
+without raising any exceptions. Used for code that should run on success.
+
+FINALLY CLAUSE
+A clause that always executes, regardless of whether an exception occurred. 
+Typically used for cleanup operations like closing files or releasing resources.
+
+RAISE
+The act of creating and throwing an exception. You can raise exceptions 
+yourself using the raise keyword.
+
+CATCH
+The act of handling an exception in an except block. When an exception is 
+caught, it's handled and doesn't crash the program.
+
+HANDLE
+The process of dealing with an exception - catching it, responding to it, and 
+allowing the program to continue or exit gracefully.
+
+TRACEBACK
+A report showing the sequence of function calls that led to an exception. 
+Tracebacks help identify where errors occurred.
+
+EXCEPTION TYPE
+The specific class of exception (e.g., ValueError, IOError). Different 
+exception types represent different kinds of errors.
+
+UNHANDLED EXCEPTION
+An exception that occurs but is not caught by any except block. Unhandled 
+exceptions cause the program to crash.
+
+EXCEPTION HIERARCHY
+The inheritance structure of exception classes. More specific exceptions inherit 
+from more general ones (e.g., FileNotFoundError inherits from IOError).
+
+CONTEXT MANAGER
+An object that defines setup and cleanup operations, typically used with the 
+with statement. Context managers ensure cleanup happens even if exceptions occur.
+
+KEY CONCEPTS FROM ORIGINAL MATERIAL
+------------------------------------
+
+1. "Try-except statement will first attempt to execute the code in the 'try' 
+   block, but if an error occurs it will kick out and begin searching for the 
+   exception that matches the error."
+   → Python executes try block, stops on exception, searches for matching except.
+
+2. "It is important to always define errors when creating exceptions."
+   → Always specify exception types, don't use bare except.
+
+3. "The else statement will provide us a notification to the console that 'The 
+   file was written successfully.'"
+   → else executes only on success, provides positive confirmation.
+
+4. "The finally statement will tell the program to close the file no matter 
+   the end result."
+   → finally always executes, essential for cleanup.
+
+5. "Because this error had no details you ended up spending hours trying to 
+   pinpoint and fix the error."
+   → Catching all exceptions without details makes debugging extremely difficult.
+
+COMPLETE SYNTAX REFERENCE
+--------------------------
+
+BASIC TRY-EXCEPT:
+  try:
+      code_here()
+  except ExceptionType:
+      handle_error()
+
+TRY-EXCEPT WITH VARIABLE:
+  try:
+      code_here()
+  except ExceptionType as e:
+      handle_error(e)
+
+MULTIPLE EXCEPT BLOCKS:
+  try:
+      code_here()
+  except FirstException:
+      handle_first()
+  except SecondException:
+      handle_second()
+
+MULTIPLE EXCEPTIONS IN ONE:
+  try:
+      code_here()
+  except (Exception1, Exception2) as e:
+      handle_error(e)
+
+TRY-EXCEPT-ELSE:
+  try:
+      code_here()
+  except ExceptionType:
+      handle_error()
+  else:
+      success_code()
+
+TRY-EXCEPT-FINALLY:
+  try:
+      code_here()
+  except ExceptionType:
+      handle_error()
+  finally:
+      cleanup_code()
+
+COMPLETE STRUCTURE:
+  try:
+      code_here()
+  except SpecificException:
+      handle_specific()
+  except GeneralException:
+      handle_general()
+  else:
+      success_code()
+  finally:
+      cleanup_code()
+
+RAISING EXCEPTIONS:
+  raise ExceptionType("Error message")
+  raise  # Re-raise current exception
+  raise NewException from old_exception  # Exception chaining
+
+[END SECTION 3.6]
+================================================================================
+
+SECTION 3.7: QUICK REFERENCE GUIDE
+-----------------------------------
+
+DEFINITION
+----------
+A quick reference guide providing at-a-glance information about exception 
+handling syntax, common exceptions, and best practices.
+
+QUICK SYNTAX REFERENCE
+----------------------
+
+BASIC:
+  try:
+      # Code
+  except:
+      # Handler
+
+SPECIFIC EXCEPTION:
+  try:
+      # Code
+  except ValueError:
+      # Handler
+
+EXCEPTION VARIABLE:
+  try:
+      # Code
+  except ValueError as e:
+      # Use e
+
+MULTIPLE:
+  try:
+      # Code
+  except (ValueError, TypeError):
+      # Handler
+
+ELSE:
+  try:
+      # Code
+  except:
+      # Handler
+  else:
+      # Success
+
+FINALLY:
+  try:
+      # Code
+  except:
+      # Handler
+  finally:
+      # Cleanup
+
+COMPLETE:
+  try:
+      # Code
+  except SpecificError:
+      # Handler
+  except GeneralError:
+      # Handler
+  else:
+      # Success
+  finally:
+      # Cleanup
+
+COMMON EXCEPTION TYPES QUICK REFERENCE
+---------------------------------------
+
+ValueError          Invalid value for operation
+TypeError           Wrong data type
+ZeroDivisionError   Division by zero
+FileNotFoundError   File doesn't exist
+PermissionError     Permission denied
+IOError/OSError     General I/O error
+IndexError          Invalid list index
+KeyError            Invalid dictionary key
+AttributeError      Missing attribute/method
+NameError           Undefined variable
+ImportError         Module import failed
+KeyboardInterrupt   User pressed Ctrl+C
+
+BEST PRACTICES CHECKLIST
+------------------------
+
+✓ Always specify exception types (no bare except)
+✓ Order exceptions from specific to general
+✓ Provide meaningful error messages
+✓ Use else for success code
+✓ Use finally for cleanup
+✓ Log exceptions with details
+✓ Don't swallow exceptions silently
+✓ Use exception variables to access details
+✓ Handle exceptions at appropriate level
+✓ Document exceptions your code raises
+✓ Initialize variables used in finally
+✓ Check if resources exist before cleanup
+
+COMMON PATTERNS
+---------------
+
+FILE OPERATIONS:
+  file = None
+  try:
+      file = open("data.txt")
+      # Use file
+  except IOError:
+      # Handle error
+  finally:
+      if file:
+          file.close()
+
+USER INPUT:
+  try:
+      value = int(input("Enter number: "))
+  except ValueError:
+      print("Invalid number")
+
+DIVISION:
+  try:
+      result = a / b
+  except ZeroDivisionError:
+      print("Cannot divide by zero")
+
+DICTIONARY ACCESS:
+  try:
+      value = my_dict["key"]
+  except KeyError:
+      value = "default"
+
+BETTER DICTIONARY ACCESS:
+  value = my_dict.get("key", "default")  # No exception needed
+
+LIST ACCESS:
+  try:
+      item = my_list[index]
+  except IndexError:
+      item = None
+
+VALIDATION:
+  if not valid_input:
+      raise ValueError("Invalid input")
+
+RE-RAISING:
+  try:
+      operation()
+  except SomeError:
+      # Do something
+      raise  # Re-raise
+
+EXCEPTION CHAINING:
+  try:
+      operation()
+  except OriginalError as e:
+      raise NewError("Message") from e
+
+CONTEXT MANAGER:
+  with open("file.txt") as file:
+      # Use file
+  # Automatically closed
+
+DEBUGGING:
+  import traceback
+  try:
+      operation()
+  except Exception as e:
+      traceback.print_exc()
+      logging.exception("Error")
+
+COMMON MISTAKES TO AVOID
+------------------------
+
+✗ Using bare except: (catch all)
+✗ Catching general exceptions before specific ones
+✗ Swallowing exceptions with pass
+✗ Not closing files/resources
+✗ Using exceptions for control flow
+✗ Not logging exceptions
+✗ Not providing error messages
+✗ Not checking if resources exist in finally
+✗ Catching exceptions too far from source
+✗ Not documenting exceptions
+
+FINAL REMINDERS
+---------------
+
+1. Exception handling prevents crashes and improves user experience
+2. Always be specific about which exceptions you catch
+3. Provide clear, helpful error messages
+4. Use else for success code, finally for cleanup
+5. Log exceptions for debugging, show friendly messages to users
+6. Handle exceptions where you can meaningfully respond
+7. Don't use exceptions for normal control flow
+8. Test your exception handling code
+9. Document what exceptions your code raises
+10. Follow best practices for maintainable code
+
+Remember: The goal of exception handling is to make your programs robust, 
+user-friendly, and maintainable. Good exception handling separates good 
+programs from great ones!
+
+[END SECTION 3.7]
+================================================================================
+
+END OF PART 3 AND COMPLETE GUIDE
+==================================
+
+Congratulations! You have completed the comprehensive Exception Handling in 
+Python study guide. You now understand:
+
+✓ What exception handling is and why it's essential
+✓ How try-except statements work
+✓ Multiple exception handling with multiple except blocks
+✓ The else clause for success notifications
+✓ The finally clause for guaranteed cleanup
+✓ Best practices for exception handling
+✓ Common Python exception types
+✓ When and how to raise exceptions
+✓ Advanced exception handling techniques
+✓ How to debug exceptions effectively
+
+You are now equipped to write robust, production-quality Python code with 
+proper exception handling. Remember to:
+
+• Always specify exception types
+• Provide meaningful error messages
+• Use else and finally appropriately
+• Log exceptions for debugging
+• Follow best practices
+• Test your exception handling
+
+Keep practicing and applying these concepts in your Python projects!
+
+================================================================================
+END OF COMPREHENSIVE STUDY GUIDE
+================================================================================

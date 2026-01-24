@@ -1,0 +1,1413 @@
+================================================================================
+FUNCTIONS IN PYTHON
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME
+-------
+Welcome to Part 3 of Functions in Python. This final part covers variable scope, 
+which is one of the most important concepts in programming. You'll learn about 
+global and local variables, how Python resolves variable names, and how to use 
+the global keyword. Understanding scope is crucial for writing correct and 
+maintainable code.
+
+ESTIMATED TIME NEEDED
+---------------------
+10 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what variable scope means
+• Differentiate between global and local scope
+• Understand how Python resolves variable names
+• Know when variables are accessible and when they're not
+• Use the global keyword to modify global variables
+• Understand the lifetime of variables
+• Avoid common scope-related errors
+• Apply best practices for variable scope
+
+OVERVIEW
+--------
+Variable scope determines where in your program a variable is accessible. 
+Understanding scope is essential because it affects:
+• Where you can use variables
+• How long variables exist
+• How functions interact with variables outside their definition
+• Whether variables can be modified
+
+In this part, you'll learn everything about scope in Python functions.
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+PART 1: UNDERSTANDING VARIABLE SCOPE
+  SECTION 1.1: WHAT IS VARIABLE SCOPE?
+  SECTION 1.2: GLOBAL SCOPE
+  SECTION 1.3: LOCAL SCOPE
+  SECTION 1.4: SCOPE HIERARCHY AND NAME RESOLUTION
+
+PART 2: GLOBAL VARIABLES
+  SECTION 2.1: DEFINING GLOBAL VARIABLES
+  SECTION 2.2: ACCESSING GLOBAL VARIABLES IN FUNCTIONS
+  SECTION 2.3: READING GLOBAL VARIABLES (WITHOUT MODIFYING)
+
+PART 3: LOCAL VARIABLES
+  SECTION 3.1: DEFINING LOCAL VARIABLES
+  SECTION 3.2: LOCAL VARIABLES VS GLOBAL VARIABLES WITH SAME NAME
+  SECTION 3.3: VARIABLE LIFETIME
+
+PART 4: THE global KEYWORD
+  SECTION 4.1: INTRODUCTION TO THE global KEYWORD
+  SECTION 4.2: MODIFYING GLOBAL VARIABLES
+  SECTION 4.3: WHEN TO USE global KEYWORD
+  SECTION 4.4: BEST PRACTICES WITH global
+
+PART 5: ADVANCED SCOPE CONCEPTS
+  SECTION 5.1: NESTED FUNCTIONS AND SCOPE
+  SECTION 5.2: NONLOCAL KEYWORD
+  SECTION 5.3: COMMON SCOPE ERRORS AND SOLUTIONS
+
+PART 6: SUMMARY AND BEST PRACTICES
+  SECTION 6.1: SCOPE RULES SUMMARY
+  SECTION 6.2: BEST PRACTICES
+  SECTION 6.3: COMPLETE REFERENCE GUIDE
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: UNDERSTANDING VARIABLE SCOPE
+================================================================================
+
+SECTION 1.1: WHAT IS VARIABLE SCOPE?
+--------------------------------------
+
+DEFINITION
+----------
+The scope of a variable is the part of the program where that variable is 
+accessible.
+
+DETAILED EXPLANATION
+--------------------
+Variable scope determines:
+• WHERE a variable can be accessed (which parts of your code can use it)
+• WHEN a variable exists (its lifetime)
+• HOW Python finds variables when you reference them
+
+Think of scope like rooms in a house:
+• Variables in the "global room" can be accessed from anywhere
+• Variables in a "function room" can only be accessed inside that function
+• You can't access a variable from outside its "room" (scope)
+
+TYPES OF SCOPE IN PYTHON
+------------------------
+1. GLOBAL SCOPE:
+   • Variables defined outside any function
+   • Accessible from anywhere in the program
+   • Exist for the entire program execution
+
+2. LOCAL SCOPE:
+   • Variables defined inside a function
+   • Only accessible within that function
+   • Exist only while the function is executing
+
+3. ENCLOSED SCOPE (Advanced):
+   • Variables in outer (enclosing) functions
+   • Used in nested functions
+
+4. BUILT-IN SCOPE:
+   • Python's built-in names (like print, len, etc.)
+   • Always accessible
+
+WHY SCOPE MATTERS
+-----------------
+1. PREVENTS NAMING CONFLICTS:
+   • You can use the same variable name in different functions
+   • Each function has its own "namespace"
+
+2. MEMORY MANAGEMENT:
+   • Local variables are destroyed when function ends
+   • Saves memory
+
+3. CODE ORGANIZATION:
+   • Functions are self-contained
+   • Variables don't accidentally interfere with each other
+
+4. DEBUGGING:
+   • Easier to find where variables are defined
+   • Reduces side effects
+
+REAL-WORLD ANALOGY
+------------------
+Think of scope like different floors in a building:
+• GLOBAL SCOPE = Lobby (everyone can access)
+  - Variables defined here are like public information boards
+  - Anyone (any function) can read them
+  
+• LOCAL SCOPE = Private office (only that office's staff can access)
+  - Variables defined here are like private files
+  - Only that function can access them
+  - When the office closes (function ends), the files are removed
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: GLOBAL SCOPE
+--------------------------
+
+DEFINITION
+----------
+Variables are defined outside of any function are said to be within the global 
+scope, meaning they can be accessed anywhere after they are defined.
+
+DETAILED EXPLANATION
+--------------------
+Global scope is the outermost scope in Python. Variables defined at the module 
+level (outside any function or class) are in the global scope.
+
+CHARACTERISTICS OF GLOBAL VARIABLES:
+• Defined outside any function
+• Accessible from anywhere in the program
+• Exist for the entire program execution
+• Can be accessed (read) from inside functions
+• Cannot be modified from inside functions without the global keyword
+
+EXAMPLE: GLOBAL VARIABLE
+-------------------------
+Here we have a function that adds the string "dc" to the parameter x. When we 
+reach the part where the value of x is set to "ac", this is within the global 
+scope, meaning x is accessible anywhere after it is defined.
+
+  x = "ac"  # Global variable
+
+  def add_dc(x):
+      result = x + "dc"
+      return result
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: x = "ac"
+         • x - Variable name
+         • = - Assignment operator
+         • "ac" - String value assigned to x
+         • This is OUTSIDE any function
+         • This is within the global scope
+         • x is accessible anywhere after this line
+         • A variable defined in the global scope is called a global variable
+
+Line 2: def add_dc(x):
+         • Function definition
+         • Parameter x (this is a LOCAL parameter, different from global x)
+
+Line 3:     result = x + "dc"
+         • Uses the parameter x (local), not the global x
+         • Creates local variable result
+
+Line 4:     return result
+         • Returns the result
+
+USING THE FUNCTION:
+  z = add_dc(x)  # Passes global x ("ac") to function
+  print(z)  # Output: acdc
+
+  # Global x is still "ac" (unchanged)
+  print(x)  # Output: ac
+
+VISUAL REPRESENTATION
+---------------------
+GLOBAL SCOPE:
+  x = "ac"  ← Global variable (accessible everywhere)
+  
+  [Function add_dc]
+    Parameter x (local) ← Different from global x
+    result = x + "dc"  ← Uses local x
+    return result
+
+ACCESSING GLOBAL VARIABLES
+---------------------------
+A variable defined in the global scope is called a global variable. When we call 
+the function, we enter a new scope or the scope of add_dc. We pass as an argument 
+the add_dc function, in this case "ac". Within the scope of the function, the 
+value of x is set to "acdc". The function returns the value and is assigned to z. 
+Within the global scope, the value z is set to "acdc". After the value is 
+returned, the scope of the function is deleted.
+
+STEP-BY-STEP EXECUTION:
+-----------------------
+Step 1: Global variable defined
+  x = "ac"  # Global scope
+
+Step 2: Function called
+  z = add_dc(x)
+  • We call the function
+  • We enter a new scope (the scope of add_dc)
+  • We pass "ac" as an argument
+
+Step 3: Inside function
+  • Parameter x receives "ac"
+  • result = "ac" + "dc" = "acdc"
+  • Within the scope of the function, the value of x (parameter) is used
+  • Function returns "acdc"
+
+Step 4: Back to global scope
+  • The function returns the value and is assigned to z
+  • Within the global scope, the value z is set to "acdc"
+  • After the value is returned, the scope of the function is deleted
+  • All local variables in the function are destroyed
+
+Step 5: Global variable unchanged
+  • Global x is still "ac" (unchanged)
+  • The function's local x (parameter) was separate from global x
+
+COMPLETE EXAMPLE:
+  x = "ac"  # Global variable
+
+  def add_dc(x):
+      result = x + "dc"
+      return result
+
+  z = add_dc(x)  # Passes "ac" to function
+  print(z)        # Output: acdc
+  print(x)        # Output: ac (global x unchanged)
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: LOCAL SCOPE
+-------------------------
+
+DEFINITION
+----------
+Local variables only exist within the scope of a function.
+
+DETAILED EXPLANATION
+--------------------
+When you define a variable inside a function, it's in the local scope. Local 
+variables:
+• Only exist while the function is executing
+• Cannot be accessed from outside the function
+• Are destroyed when the function ends
+• Are separate from variables with the same name in other scopes
+
+EXAMPLE: LOCAL VARIABLE
+-----------------------
+Consider the function thriller. The local variable date is set to 1982:
+
+  def thriller():
+      date = 1982  # Local variable
+      return date
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def thriller():
+         • Function definition
+         • No parameters
+
+Line 2:     date = 1982
+         • date - Variable name
+         • = - Assignment operator
+         • 1982 - Integer value
+         • This is INSIDE the function
+         • This is a LOCAL variable
+         • The local variable date is set to 1982
+         • date only exists inside this function
+
+Line 3:     return date
+         • Returns the local variable date
+
+CALLING THE FUNCTION
+--------------------
+When we call the function, we create a new scope. Within that scope of the 
+function, the value of the date is set to 1982. The value of date does not exist 
+within the global scope.
+
+  result = thriller()
+  print(result)  # Output: 1982
+
+  # Try to access date from global scope:
+  print(date)  # ERROR! NameError: name 'date' is not defined
+
+EXPLANATION:
+• When we call the function, we create a new scope
+• Within that scope of the function, the value of the date is set to 1982
+• The value of date does not exist within the global scope
+• After the function ends, the local date variable is destroyed
+• Trying to access date from global scope causes an error
+
+VISUAL REPRESENTATION
+---------------------
+GLOBAL SCOPE:
+  [No variable named 'date' here]
+  
+  [Function thriller]
+    date = 1982  ← Local variable (only exists here)
+    return date
+
+  # After function ends, local date is destroyed
+  # Global scope still has no 'date' variable
+
+LIFETIME OF LOCAL VARIABLES
+---------------------------
+Local variables are created when the function is called and destroyed when the 
+function returns:
+
+  def example():
+      local_var = "I exist only during function execution"
+      return local_var
+
+  result = example()
+  # Function executed, local_var was created and destroyed
+  # local_var no longer exists
+
+  print(local_var)  # ERROR! local_var doesn't exist anymore
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: SCOPE HIERARCHY AND NAME RESOLUTION
+--------------------------------------------------
+
+DEFINITION
+----------
+Python follows a specific order when looking up variable names. It checks local 
+scope first, then global scope, then built-in scope.
+
+DETAILED EXPLANATION
+--------------------
+When Python encounters a variable name, it searches for it in this order:
+1. LOCAL SCOPE (current function)
+2. ENCLOSED SCOPE (outer functions, if nested)
+3. GLOBAL SCOPE (module level)
+4. BUILT-IN SCOPE (Python's built-in names)
+
+This is called the LEGB rule (Local, Enclosing, Global, Built-in).
+
+EXAMPLE: NAME RESOLUTION
+-------------------------
+  global_var = "I'm global"
+
+  def my_function():
+      local_var = "I'm local"
+      print(local_var)   # Finds in local scope
+      print(global_var)  # Finds in global scope
+      print(len)        # Finds in built-in scope
+
+  my_function()
+  # Output:
+  # I'm local
+  # I'm global
+  # <built-in function len>
+
+EXPLANATION:
+• local_var: Found in local scope (inside function)
+• global_var: Not in local scope, checks global scope, finds it
+• len: Not in local or global, checks built-in scope, finds it
+
+[END SECTION 1.4]
+================================================================================
+
+PART 2: GLOBAL VARIABLES
+================================================================================
+
+SECTION 2.1: DEFINING GLOBAL VARIABLES
+---------------------------------------
+
+DEFINITION
+----------
+A variable defined in the global scope is called a global variable.
+
+DETAILED EXPLANATION
+--------------------
+Global variables are defined at the module level (outside any function or class). 
+They're accessible from anywhere in your program.
+
+HOW TO DEFINE GLOBAL VARIABLES
+-------------------------------
+Simply define them outside any function:
+
+  # Global variables
+  name = "Alice"
+  age = 25
+  scores = [85, 90, 78]
+
+  def some_function():
+      # Can access name, age, scores here
+      pass
+
+EXAMPLE:
+  x = "ac"  # Global variable
+
+  def add_dc(x):
+      result = x + "dc"
+      return result
+
+  z = add_dc(x)
+  print(z)  # Output: acdc
+
+CHARACTERISTICS
+---------------
+• Defined outside functions
+• Accessible from anywhere
+• Exist for entire program execution
+• Can be read from functions (without global keyword)
+• Cannot be modified from functions (without global keyword)
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: ACCESSING GLOBAL VARIABLES IN FUNCTIONS
+------------------------------------------------------
+
+DEFINITION
+----------
+Functions can read (access) global variables without any special keyword. They 
+just need to reference the variable name.
+
+DETAILED EXPLANATION
+--------------------
+When a function references a variable name, Python first checks the local scope. 
+If not found, it checks the global scope. This allows functions to read global 
+variables.
+
+EXAMPLE: READING GLOBAL VARIABLES
+----------------------------------
+  rating = 9  # Global variable
+
+  def ac_dc():
+      # Function can read global rating
+      print(rating)  # Accesses global rating
+
+  ac_dc()  # Output: 9
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: rating = 9
+         • Global variable defined
+         • Accessible anywhere
+
+Line 2: def ac_dc():
+         • Function definition
+
+Line 3:     print(rating)
+         • Python looks for 'rating' in local scope (not found)
+         • Python checks global scope (finds it!)
+         • Uses global rating value (9)
+         • Prints 9
+
+EXAMPLE: USING GLOBAL VARIABLE IN CALCULATION
+----------------------------------------------
+If a variable is not defined within a function, Python will check the global 
+scope. Consider the function ac_dc. The function has the variable rating with no 
+value assigned. If we define the variable rating in the global scope, then call 
+the function, Python will see there is no value for the variable rating. As a 
+result, Python will leave the scope and check if the variable ratings exists in 
+the global scope. It will use the value of ratings in the global scope within 
+the scope of ac_dc.
+
+  rating = 9  # Global variable
+
+  def ac_dc():
+      # rating is not defined locally
+      # Python checks global scope
+      z = rating + 1  # Uses global rating
+      print(z)        # Prints 10
+
+  ac_dc()  # Output: 10
+
+  # Global rating unchanged
+  print(rating)  # Output: 9
+
+EXPLANATION:
+• rating is not defined in the function (local scope)
+• Python checks global scope
+• Finds global rating = 9
+• Uses it in calculation: z = 9 + 1 = 10
+• In the function, we'll print out a 10
+• The value of z in the global scope will be 10 as we added 1
+• Wait, that's not quite right - z is local to the function!
+
+CORRECTED EXPLANATION:
+  rating = 9  # Global variable
+
+  def ac_dc():
+      z = rating + 1  # Uses global rating (9)
+      print(z)        # Prints 10
+      # z is a LOCAL variable (created in function)
+      # z does NOT exist in global scope
+
+  ac_dc()  # Output: 10
+
+  print(rating)  # Output: 9 (unchanged)
+  # print(z)     # ERROR! z doesn't exist in global scope
+
+IMPORTANT POINT
+---------------
+The value of rating will be unchanged within the global scope. Reading a global 
+variable does not modify it. To modify it, you need the global keyword (see 
+Part 4).
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: READING GLOBAL VARIABLES (WITHOUT MODIFYING)
+------------------------------------------------------------
+
+DEFINITION
+----------
+Functions can read global variables without any special syntax. They just 
+reference the variable name, and Python finds it in the global scope.
+
+DETAILED EXPLANATION
+--------------------
+This is the default behavior - functions can read global variables. No special 
+keyword needed for reading.
+
+EXAMPLE:
+  global_counter = 0  # Global variable
+
+  def display_counter():
+      print(f"Counter is: {global_counter}")  # Reads global variable
+
+  display_counter()  # Output: Counter is: 0
+
+  # Modify global variable (outside function)
+  global_counter = 5
+  display_counter()  # Output: Counter is: 5
+
+EXPLANATION:
+• Function can read global_counter
+• When global_counter changes, function sees the new value
+• Function is reading, not modifying
+
+[END SECTION 2.3]
+================================================================================
+
+PART 3: LOCAL VARIABLES
+================================================================================
+
+SECTION 3.1: DEFINING LOCAL VARIABLES
+---------------------------------------
+
+DEFINITION
+----------
+Local variables are defined inside functions and only exist within that 
+function's scope.
+
+DETAILED EXPLANATION
+--------------------
+Any variable assigned inside a function is local to that function (unless you use 
+the global keyword).
+
+EXAMPLE:
+  def my_function():
+      local_var = "I'm local"
+      return local_var
+
+  result = my_function()
+  print(result)  # Output: I'm local
+  # print(local_var)  # ERROR! local_var doesn't exist here
+
+CHARACTERISTICS
+---------------
+• Created when function is called
+• Only accessible inside the function
+• Destroyed when function returns
+• Separate from variables with same name in other scopes
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: LOCAL VARIABLES VS GLOBAL VARIABLES WITH SAME NAME
+-----------------------------------------------------------------
+
+DEFINITION
+----------
+Variables inside the global scope can have the same name as variables in the 
+local scope with no conflict.
+
+DETAILED EXPLANATION
+--------------------
+This is one of the most important concepts! You can have a variable named 'date' 
+in global scope and another variable named 'date' in a function's local scope. 
+They are completely separate and don't interfere with each other.
+
+EXAMPLE: SAME NAME, DIFFERENT SCOPES
+-------------------------------------
+Consider the function thriller. The local variable date is set to 1982. The 
+global variable date is set to 2017:
+
+  date = 2017  # Global variable
+
+  def thriller():
+      date = 1982  # Local variable (different from global!)
+      return date
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: date = 2017
+         • Global variable date
+         • Set to 2017
+         • Accessible from global scope
+
+Line 2: def thriller():
+         • Function definition
+
+Line 3:     date = 1982
+         • LOCAL variable date (separate from global date!)
+         • Set to 1982
+         • Only exists inside this function
+         • Does NOT affect global date
+
+Line 4:     return date
+         • Returns LOCAL date (1982)
+
+EXECUTION:
+---------
+When we call the function, we create a new scope. Within that scope, the value 
+of the date is set to 1982.
+
+  result = thriller()
+  print(result)  # Output: 1982
+
+  # Global date unchanged
+  print(date)  # Output: 2017
+
+EXPLANATION:
+• If we call the function, it returns the value of date in the local scope. In 
+  this case, 1982.
+• When we print in the global scope, we use the global variable value. The global 
+  value of the variable is 2017. Therefore, the value is set to 2017.
+
+VISUAL REPRESENTATION
+---------------------
+GLOBAL SCOPE:
+  date = 2017  ← Global variable
+  
+  [Function thriller]
+    date = 1982  ← Local variable (separate!)
+    return date  ← Returns 1982 (local)
+
+  # After function returns:
+  # Local date (1982) is destroyed
+  # Global date (2017) still exists
+
+KEY POINT
+---------
+The local variable shadows (hides) the global variable within the function. 
+Inside the function, when you reference 'date', you get the local one (1982), not 
+the global one (2017).
+
+EXAMPLE: DEMONSTRATING SEPARATION
+----------------------------------
+  name = "Global Name"  # Global
+
+  def my_function():
+      name = "Local Name"  # Local (different variable!)
+      print(f"Inside function: {name}")  # Uses local
+      return name
+
+  result = my_function()
+  # Output: Inside function: Local Name
+
+  print(f"Outside function: {name}")  # Uses global
+  # Output: Outside function: Global Name
+
+  print(f"Function returned: {result}")
+  # Output: Function returned: Local Name
+
+EXPLANATION:
+• Two separate variables with the same name
+• Local 'name' exists only inside function
+• Global 'name' exists outside function
+• They don't interfere with each other
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: VARIABLE LIFETIME
+-------------------------------
+
+DEFINITION
+----------
+The lifetime of a variable is the period during which it exists in memory.
+
+DETAILED EXPLANATION
+--------------------
+• GLOBAL VARIABLES: Exist for the entire program execution
+• LOCAL VARIABLES: Exist only while the function is executing
+
+EXAMPLE: LIFETIME DEMONSTRATION
+--------------------------------
+  def demonstrate_lifetime():
+      local_var = "I'm created when function starts"
+      print(local_var)
+      return "Function ending"
+      # local_var is destroyed here
+
+  # Global variable exists before function call
+  global_var = "I exist throughout the program"
+  print(global_var)  # Output: I exist throughout the program
+
+  result = demonstrate_lifetime()
+  # Output: I'm created when function starts
+  # local_var is now destroyed
+
+  print(global_var)  # Output: I exist throughout the program (still exists!)
+
+  # print(local_var)  # ERROR! local_var doesn't exist anymore
+
+[END SECTION 3.3]
+================================================================================
+
+PART 4: THE global KEYWORD
+================================================================================
+
+SECTION 4.1: INTRODUCTION TO THE global KEYWORD
+------------------------------------------------
+
+DEFINITION
+----------
+If we define the variable claimed_sales with the keyword global, the variable 
+will be a global variable.
+
+DETAILED EXPLANATION
+--------------------
+The global keyword tells Python that you want to modify a global variable from 
+within a function. Without it, Python assumes you're creating a local variable.
+
+SYNTAX:
+  def function_name():
+      global variable_name
+      variable_name = new_value
+
+WHEN TO USE global KEYWORD
+--------------------------
+• When you want to MODIFY a global variable from inside a function
+• When you want to CREATE a global variable from inside a function
+• NOT needed for just READING global variables
+
+EXAMPLE: MODIFYING GLOBAL VARIABLE
+-----------------------------------
+Consider the function Pink_Floyd. If we define the variable claimed_sales with 
+the keyword global, the variable will be a global variable:
+
+  def Pink_Floyd():
+      global claimed_sales
+      claimed_sales = "45 million"
+
+LINE-BY-LINE EXPLANATION:
+--------------------------
+Line 1: def Pink_Floyd():
+         • Function definition
+
+Line 2:     global claimed_sales
+         • global - Python keyword
+         • claimed_sales - Variable name
+         • This tells Python: "I want to use/modify the GLOBAL variable 
+           claimed_sales"
+         • Without this, Python would create a LOCAL variable instead
+
+Line 3:     claimed_sales = "45 million"
+         • Assigns value to claimed_sales
+         • Because of 'global' keyword, this modifies the GLOBAL variable
+         • If 'global' wasn't used, this would create a LOCAL variable
+
+CALLING THE FUNCTION
+--------------------
+We call the function Pink_Floyd. The variable claimed_sales is set to the 
+string "45 million" in the global scope:
+
+  Pink_Floyd()
+  print(claimed_sales)  # Output: 45 million
+
+EXPLANATION:
+• Function is called
+• global keyword tells Python to use global claimed_sales
+• Variable is set to "45 million" in GLOBAL scope
+• When we print the variable, we get a value of "45 million"
+
+COMPLETE EXAMPLE:
+  def Pink_Floyd():
+      global claimed_sales
+      claimed_sales = "45 million"
+      print(f"Inside function: {claimed_sales}")
+
+  # Before function call, claimed_sales doesn't exist
+  # Pink_Floyd()  # Would create global variable
+
+  Pink_Floyd()
+  # Output: Inside function: 45 million
+
+  print(f"Outside function: {claimed_sales}")
+  # Output: Outside function: 45 million
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: MODIFYING GLOBAL VARIABLES
+----------------------------------------
+
+DEFINITION
+----------
+The global keyword allows you to modify global variables from within functions.
+
+DETAILED EXPLANATION
+--------------------
+Without the global keyword, assigning to a variable inside a function creates a 
+local variable. With the global keyword, you modify the global variable.
+
+EXAMPLE 1: WITHOUT global KEYWORD (CREATES LOCAL VARIABLE)
+----------------------------------------------------------
+  counter = 0  # Global variable
+
+  def increment():
+      counter = counter + 1  # ERROR! Tries to create local, but reads before assigning
+      return counter
+
+  # increment()  # UnboundLocalError!
+
+EXPLANATION:
+• Python sees 'counter = ...' and assumes counter is local
+• But then tries to read counter (counter + 1) before it's assigned
+• Error: UnboundLocalError
+
+EXAMPLE 2: WITH global KEYWORD (MODIFIES GLOBAL VARIABLE)
+----------------------------------------------------------
+  counter = 0  # Global variable
+
+  def increment():
+      global counter  # Tell Python we want to modify global counter
+      counter = counter + 1  # Now this modifies the global variable
+      return counter
+
+  print(counter)  # Output: 0
+  increment()
+  print(counter)  # Output: 1
+  increment()
+  print(counter)  # Output: 2
+
+EXPLANATION:
+• global counter tells Python to use the global variable
+• counter = counter + 1 modifies the global variable
+• Changes persist after function ends
+
+EXAMPLE 3: CREATING GLOBAL VARIABLE FROM FUNCTION
+--------------------------------------------------
+  def create_global():
+      global new_global_var
+      new_global_var = "I'm created in a function!"
+
+  create_global()
+  print(new_global_var)  # Output: I'm created in a function!
+
+EXPLANATION:
+• Function creates a global variable
+• Variable exists in global scope after function call
+• Can be accessed from anywhere
+
+COMPARISON: WITH vs WITHOUT global
+-----------------------------------
+WITHOUT global:
+  x = 10  # Global
+
+  def modify():
+      x = 20  # Creates LOCAL variable (doesn't modify global)
+      print(f"Inside: {x}")  # 20
+
+  modify()
+  print(f"Outside: {x}")  # 10 (unchanged!)
+
+WITH global:
+  x = 10  # Global
+
+  def modify():
+      global x
+      x = 20  # Modifies GLOBAL variable
+      print(f"Inside: {x}")  # 20
+
+  modify()
+  print(f"Outside: {x}")  # 20 (changed!)
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: WHEN TO USE global KEYWORD
+----------------------------------------
+
+DEFINITION
+----------
+Use the global keyword when you need to modify a global variable from within a 
+function.
+
+WHEN TO USE:
+------------
+1. MODIFYING GLOBAL VARIABLES:
+   • When you need to change a global variable's value
+   • Example: Counters, accumulators, configuration settings
+
+2. CREATING GLOBAL VARIABLES FROM FUNCTIONS:
+   • When you want to create a global variable inside a function
+   • Less common, usually not recommended
+
+WHEN NOT TO USE:
+----------------
+1. READING GLOBAL VARIABLES:
+   • You can read globals without the global keyword
+   • Only use global when you need to MODIFY
+
+2. LOCAL VARIABLES:
+   • Don't use global for variables that should be local
+   • Prefer passing parameters and returning values
+
+BEST PRACTICE EXAMPLE:
+  # Good: Pass parameter and return value
+  def increment_counter(counter):
+      return counter + 1
+
+  my_counter = 0
+  my_counter = increment_counter(my_counter)
+
+  # Less ideal: Using global
+  counter = 0
+  def increment_counter():
+      global counter
+      counter += 1
+
+  increment_counter()
+
+EXAMPLE: WHEN global IS APPROPRIATE
+-----------------------------------
+  # Configuration that needs to be modified
+  max_connections = 10
+
+  def update_max_connections(new_max):
+      global max_connections
+      if new_max > 0:
+          max_connections = new_max
+          print(f"Max connections updated to {max_connections}")
+
+  update_max_connections(20)
+  print(max_connections)  # Output: 20
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: BEST PRACTICES WITH global
+-----------------------------------------
+
+DEFINITION
+----------
+While the global keyword is useful, it should be used sparingly and carefully.
+
+BEST PRACTICES
+--------------
+1. AVOID WHEN POSSIBLE:
+   • Prefer passing parameters and returning values
+   • Makes functions more predictable and testable
+
+2. DOCUMENT WHEN USED:
+   • Clearly document why global is needed
+   • Make it obvious that function modifies global state
+
+3. USE SPARINGLY:
+   • Too many global variables make code hard to understand
+   • Makes debugging difficult
+
+4. CONSIDER ALTERNATIVES:
+   • Use classes and instance variables
+   • Use function parameters and return values
+   • Use closures (advanced)
+
+EXAMPLE: GOOD PRACTICE (NO global)
+-----------------------------------
+  def calculate_total(price, tax_rate):
+      total = price * (1 + tax_rate)
+      return total
+
+  price = 100
+  total = calculate_total(price, 0.1)
+  print(total)  # Output: 110.0
+
+EXAMPLE: LESS IDEAL (WITH global)
+----------------------------------
+  price = 100
+  total = 0
+
+  def calculate_total(tax_rate):
+      global price, total
+      total = price * (1 + tax_rate)
+
+  calculate_total(0.1)
+  print(total)  # Output: 110.0
+
+The first approach is better because:
+• Function is self-contained
+• No side effects
+• Easier to test
+• More reusable
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: ADVANCED SCOPE CONCEPTS
+================================================================================
+
+SECTION 5.1: NESTED FUNCTIONS AND SCOPE
+----------------------------------------
+
+DEFINITION
+----------
+Functions can be defined inside other functions. This creates nested scopes.
+
+DETAILED EXPLANATION
+--------------------
+When a function is defined inside another function, the inner function can access 
+variables from the outer function's scope. This is called closure.
+
+EXAMPLE: NESTED FUNCTIONS
+--------------------------
+  def outer_function():
+      outer_var = "I'm in outer function"
+      
+      def inner_function():
+          print(outer_var)  # Can access outer_var
+          inner_var = "I'm in inner function"
+          return inner_var
+      
+      return inner_function()
+
+  result = outer_function()
+  # Output: I'm in outer function
+
+EXPLANATION:
+• inner_function can access outer_var (from enclosing scope)
+• inner_var is local to inner_function
+• outer_var is in the enclosing scope (not global, not local to inner)
+
+SCOPE ORDER IN NESTED FUNCTIONS:
+1. Local (inner function)
+2. Enclosing (outer function)
+3. Global
+4. Built-in
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: NONLOCAL KEYWORD
+-------------------------------
+
+DEFINITION
+----------
+The nonlocal keyword allows you to modify variables in the enclosing (non-global) 
+scope.
+
+DETAILED EXPLANATION
+--------------------
+Similar to global, but for variables in enclosing functions (not global scope).
+
+EXAMPLE:
+  def outer():
+      count = 0
+      
+      def inner():
+          nonlocal count  # Modify count from enclosing scope
+          count += 1
+          return count
+      
+      return inner()
+
+  result = outer()
+  print(result)  # Output: 1
+
+This is an advanced topic. For now, focus on understanding global vs local scope.
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: COMMON SCOPE ERRORS AND SOLUTIONS
+------------------------------------------------
+
+ERROR 1: UnboundLocalError
+---------------------------
+PROBLEM:
+  x = 10
+  def func():
+      print(x)  # Tries to read x
+      x = 20    # But Python sees this assignment and assumes x is local
+      # ERROR: UnboundLocalError (trying to read before assignment)
+
+SOLUTION:
+  x = 10
+  def func():
+      global x  # Tell Python x is global
+      print(x)  # Now it works
+      x = 20
+
+ERROR 2: NameError (Variable Not Found)
+----------------------------------------
+PROBLEM:
+  def func():
+      local_var = "Hello"
+      return local_var
+
+  print(local_var)  # ERROR: NameError (local_var doesn't exist in global scope)
+
+SOLUTION:
+  def func():
+      local_var = "Hello"
+      return local_var
+
+  result = func()  # Get the value through return
+  print(result)    # Use the returned value
+
+ERROR 3: Modifying Global Without global Keyword
+-------------------------------------------------
+PROBLEM:
+  counter = 0
+  def increment():
+      counter += 1  # ERROR: Creates local variable, but tries to read first
+      return counter
+
+SOLUTION:
+  counter = 0
+  def increment():
+      global counter
+      counter += 1
+      return counter
+
+[END SECTION 5.3]
+================================================================================
+
+PART 6: SUMMARY AND BEST PRACTICES
+================================================================================
+
+SECTION 6.1: SCOPE RULES SUMMARY
+----------------------------------
+
+QUICK REFERENCE
+----------------
+1. GLOBAL SCOPE:
+   • Variables defined outside functions
+   • Accessible from anywhere
+   • Use 'global' keyword to modify from functions
+
+2. LOCAL SCOPE:
+   • Variables defined inside functions
+   • Only accessible within that function
+   • Destroyed when function ends
+
+3. NAME RESOLUTION (LEGB):
+   • Local → Enclosing → Global → Built-in
+
+4. READING GLOBAL VARIABLES:
+   • No special keyword needed
+   • Just reference the variable name
+
+5. MODIFYING GLOBAL VARIABLES:
+   • Use 'global' keyword
+   • Required before assignment
+
+KEY POINTS
+----------
+• Local variables shadow (hide) global variables with the same name
+• Functions can read globals without 'global' keyword
+• Functions need 'global' keyword to modify globals
+• Local variables are destroyed when function ends
+• Global variables exist for entire program execution
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: BEST PRACTICES
+-----------------------------
+
+1. PREFER LOCAL VARIABLES:
+   • Use local variables when possible
+   • Makes functions self-contained
+   • Easier to test and debug
+
+2. MINIMIZE GLOBAL VARIABLES:
+   • Use globals sparingly
+   • Prefer passing parameters and returning values
+
+3. USE DESCRIPTIVE NAMES:
+   • Avoid naming conflicts
+   • Makes code more readable
+
+4. DOCUMENT GLOBAL USAGE:
+   • If you must use global, document why
+   • Make it clear the function modifies global state
+
+5. AVOID MODIFYING GLOBALS WHEN POSSIBLE:
+   • Return values instead
+   • Pass parameters instead
+   • Makes code more predictable
+
+EXAMPLE: GOOD PRACTICE
+-----------------------
+  def calculate_tax(price, tax_rate):
+      """Calculate tax on a price."""
+      tax = price * tax_rate
+      return tax
+
+  price = 100
+  tax = calculate_tax(price, 0.1)
+  total = price + tax
+
+EXAMPLE: LESS IDEAL
+-------------------
+  price = 100
+  tax = 0
+
+  def calculate_tax(tax_rate):
+      global price, tax
+      tax = price * tax_rate
+
+  calculate_tax(0.1)
+  total = price + tax
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: COMPLETE REFERENCE GUIDE
+---------------------------------------
+
+SCOPE CHEAT SHEET
+-----------------
+
+DEFINING VARIABLES:
+  # Global variable
+  global_var = "I'm global"
+  
+  def function():
+      # Local variable
+      local_var = "I'm local"
+      
+      # Modify global variable
+      global global_var
+      global_var = "Modified"
+
+READING VARIABLES:
+  global_var = "Hello"
+  
+  def function():
+      # Can read global without keyword
+      print(global_var)  # Works!
+      
+      # Local variable
+      local_var = "World"
+      print(local_var)   # Works!
+
+MODIFYING VARIABLES:
+  counter = 0
+  
+  def increment():
+      global counter  # Required!
+      counter += 1    # Now modifies global
+
+SAME NAME, DIFFERENT SCOPES:
+  name = "Global"
+  
+  def function():
+      name = "Local"  # Different variable!
+      return name
+  
+  result = function()  # Returns "Local"
+  print(name)          # Prints "Global"
+
+COMPLETE EXAMPLES
+-----------------
+EXAMPLE 1: READING GLOBAL
+  x = "ac"
+  def add_dc(x):
+      result = x + "dc"
+      return result
+  z = add_dc(x)  # z = "acdc", x still "ac"
+
+EXAMPLE 2: LOCAL VARIABLE
+  def thriller():
+      date = 1982
+      return date
+  result = thriller()  # Returns 1982
+
+EXAMPLE 3: SAME NAME, DIFFERENT SCOPES
+  date = 2017
+  def thriller():
+      date = 1982
+      return date
+  result = thriller()  # Returns 1982
+  print(date)          # Prints 2017
+
+EXAMPLE 4: USING global KEYWORD
+  def Pink_Floyd():
+      global claimed_sales
+      claimed_sales = "45 million"
+  Pink_Floyd()
+  print(claimed_sales)  # Prints "45 million"
+
+[END SECTION 6.3]
+================================================================================
+
+END OF PART 3 AND COMPLETE GUIDE
+=================================
+
+Congratulations! You've completed all three parts of the Functions in Python 
+comprehensive study guide. You've learned:
+
+PART 1:
+✓ What functions are and why they're important
+✓ How functions work conceptually
+✓ Python's built-in functions (len, sum, sorted)
+✓ The difference between functions and methods
+✓ How to create your own functions
+✓ Function syntax and structure
+✓ How function calls work
+✓ Function documentation (docstrings)
+
+PART 2:
+✓ Function parameters (single and multiple)
+✓ Working with different data types as parameters
+✓ Return values and the None object
+✓ Functions without return statements
+✓ The pass keyword
+✓ Functions that perform multiple tasks
+✓ Using loops in functions
+✓ Variadic parameters (*args)
+✓ Working with variable numbers of arguments
+
+PART 3:
+✓ Variable scope (global vs local)
+✓ How Python resolves variable names
+✓ Accessing global variables in functions
+✓ Local variables and their lifetime
+✓ The global keyword
+✓ When to use and avoid global variables
+✓ Best practices for scope management
+
+NEXT STEPS
+----------
+• Practice writing functions with different scopes
+• Experiment with global and local variables
+• Try creating functions with variadic parameters
+• Practice using loops in functions
+• Review the examples and try modifying them
+• Check out the lab for more examples
+
+Remember: There is a lot more you can do with functions. Check out the lab for 
+more examples.
+
+Happy coding!
+
+================================================================================
