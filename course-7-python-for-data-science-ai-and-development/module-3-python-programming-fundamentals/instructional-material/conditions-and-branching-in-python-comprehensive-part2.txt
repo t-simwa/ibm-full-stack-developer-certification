@@ -1,0 +1,2088 @@
+================================================================================
+CONDITIONS AND BRANCHING IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+Welcome to Part 2 of Conditions and Branching in Python. This part focuses 
+on conditional statements that allow your programs to make decisions and 
+execute different code based on different conditions.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what branching means in programming
+• Use if statements to execute code conditionally
+• Use else statements to handle alternative cases
+• Use elif statements to check multiple conditions
+• Understand indentation and code blocks in Python
+• Write complex conditional logic with nested statements
+• Apply conditional statements to real-world problems
+
+OVERVIEW
+--------
+Branching allows us to run different statements for different inputs. It's 
+the foundation of decision-making in programming. Without branching, programs 
+would execute the same code every time, regardless of the data or situation.
+
+Python provides three main conditional statements:
+1. if - executes code when a condition is True
+2. else - executes code when the if condition is False
+3. elif - checks additional conditions when previous conditions are False
+
+These statements work together to create flexible, responsive programs that 
+can adapt to different situations and data.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+This part covers conditional statements:
+
+PART 2: CONDITIONAL STATEMENTS (BRANCHING)
+  SECTION 2.1: WHAT IS BRANCHING?
+  SECTION 2.2: THE IF STATEMENT
+  SECTION 2.3: UNDERSTANDING INDENTATION AND CODE BLOCKS
+  SECTION 2.4: THE ELSE STATEMENT
+  SECTION 2.5: THE ELIF STATEMENT
+  SECTION 2.6: NESTED CONDITIONAL STATEMENTS
+  SECTION 2.7: REAL-WORLD EXAMPLES AND APPLICATIONS
+  SECTION 2.8: COMMON PATTERNS AND BEST PRACTICES
+
+NOTE: Part 1 covered comparison operations and Boolean values.
+      Part 3 covers logic operators (not, or, and) and advanced patterns.
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 2.3:") to quickly jump to any section.
+
+================================================================================
+PART 2: CONDITIONAL STATEMENTS (BRANCHING)
+================================================================================
+
+SECTION 2.1: WHAT IS BRANCHING?
+--------------------------------
+
+DEFINITION
+----------
+Branching allows us to run different statements for different inputs. It 
+enables programs to make decisions and execute different code paths based on 
+conditions.
+
+DETAILED EXPLANATION
+--------------------
+In programming, branching is like a fork in the road. When your program 
+reaches a decision point, it evaluates a condition and chooses which path 
+to take. This allows programs to:
+• Respond differently to different inputs
+• Handle various scenarios appropriately
+• Make decisions based on data
+• Control program flow dynamically
+
+Without branching, programs would be linear and inflexible - they would 
+always execute the same code in the same order, regardless of the situation.
+
+REAL-WORLD ANALOGY
+------------------
+Think of branching like a security checkpoint:
+• If you have a valid ID (condition is True), you can enter (execute code A)
+• If you don't have a valid ID (condition is False), you cannot enter 
+  (execute code B or skip)
+
+Or like a traffic light:
+• If the light is green (condition is True), you can go (execute code A)
+• If the light is red (condition is False), you must stop (execute code B)
+
+KEY CONCEPTS
+------------
+1. CONDITION: A Boolean expression that evaluates to True or False
+2. BRANCH: A path of code that executes based on a condition
+3. EXECUTION FLOW: The order in which code runs
+4. DECISION POINT: Where the program evaluates a condition
+
+WHY IS BRANCHING IMPORTANT?
+---------------------------
+Branching is essential because:
+1. Programs need to respond to different situations
+2. User input varies and needs different handling
+3. Data validation requires conditional logic
+4. Business rules often depend on conditions
+5. Error handling requires conditional responses
+
+EXAMPLE: SIMPLE BRANCHING CONCEPT
+----------------------------------
+  # Without branching (always executes the same code)
+  print("Hello")
+  print("World")
+  # This always prints "Hello" then "World", no matter what
+  
+  # With branching (executes different code based on condition)
+  user_name = "Alice"
+  if user_name == "Alice":
+      print("Hello, Alice!")
+  else:
+      print("Hello, stranger!")
+  # This prints different messages based on the user_name value
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Lines 1-3: Without branching example
+        • These lines always execute in the same way
+        • No decision-making, no variation
+
+Lines 4-5: (blank lines for readability)
+
+Lines 6-10: With branching example
+        • Line 6: user_name = "Alice"
+          - Stores "Alice" in variable user_name
+        • Line 7: if user_name == "Alice":
+          - Checks if user_name equals "Alice"
+          - Since it does, the condition is True
+        • Line 8:     print("Hello, Alice!")
+          - This code executes because the condition is True
+          - Indented code belongs to the if block
+        • Line 9: else:
+          - Alternative path if the condition was False
+          - Not executed in this case
+        • Line 10:     print("Hello, stranger!")
+          - This code would execute if the condition was False
+          - Not executed in this example
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: THE IF STATEMENT
+------------------------------
+
+DEFINITION
+----------
+The if statement executes a block of code only when a condition is True. 
+If the condition is False, the code block is skipped, and execution continues 
+with the code after the if statement.
+
+DETAILED EXPLANATION
+--------------------
+The if statement is the most fundamental conditional statement in Python. 
+It allows you to execute code conditionally - only when a specific condition 
+is met. Think of it as a locked room: if the statement is True, you can 
+enter the room and execute the predefined task. If the statement is False, 
+your program skips the task and moves on.
+
+SYNTAX
+------
+  if condition:
+      # Code to execute if condition is True
+      statement1
+      statement2
+      # More statements...
+
+KEY COMPONENTS
+--------------
+1. if - The keyword that starts the conditional statement
+2. condition - A Boolean expression (evaluates to True or False)
+3. : (colon) - Required punctuation that indicates the start of the code block
+4. Indented code block - The code that executes when condition is True
+5. Statements after if - Code that runs regardless of the condition
+
+REAL-WORLD ANALOGY: THE CONCERT EXAMPLE
+----------------------------------------
+Consider a blue rectangle representing an AC/DC concert. If an individual is 
+18 or older, they can enter the AC/DC concert. If they are under the age of 
+18, they cannot enter the concert.
+
+Scenario 1: Individual is 17 years old
+• They proceed to the concert
+• Their age is 17
+• Condition (age >= 18) is False
+• They are not granted access to the concert
+• They must move on
+
+Scenario 2: Individual is 19 years old
+• They proceed to the concert
+• Their age is 19
+• Condition (age >= 18) is True
+• They can enter the concert
+• Then they can move on
+
+EXAMPLE 1: BASIC IF STATEMENT
+------------------------------
+  # Set the age
+  age = 17
+  
+  # Check if age is 18 or older
+  if age >= 18:
+      print("You will enter.")
+  
+  # This code runs regardless of the condition
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Set the age
+        • Comment explaining what we're doing
+
+Line 2: age = 17
+        • Creates variable 'age' and assigns 17 to it
+        • This represents the individual's age
+
+Line 3: (blank line for readability)
+
+Line 4: # Check if age is 18 or older
+        • Comment explaining the condition
+
+Line 5: if age >= 18:
+        • if - Keyword that starts the conditional statement
+        • age >= 18 - Condition being evaluated
+          - Checks if age (17) is greater than or equal to 18
+          - 17 >= 18 evaluates to False
+        • : - Colon indicates the start of the code block
+        • Since the condition is False, the indented code is skipped
+
+Line 6:     print("You will enter.")
+        • Four spaces of indentation (this is the code block)
+        • This code belongs to the if statement
+        • It only executes if age >= 18 is True
+        • Since the condition is False, this line is SKIPPED
+        • Nothing is printed from this line
+
+Line 7: (blank line)
+
+Line 8: # This code runs regardless of the condition
+        • Comment explaining that this code always runs
+
+Line 9: print("Move on.")
+        • This line is NOT indented, so it's outside the if block
+        • It executes regardless of whether the condition was True or False
+        • Output: Move on.
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python assigns 17 to the variable age
+2. Python evaluates the condition: age >= 18
+   • Looks at age (which is 17)
+   • Compares: Is 17 >= 18? → No, so the result is False
+3. Since the condition is False, Python skips the indented code block
+   • The print("You will enter.") line is NOT executed
+4. Python continues to the next line (print("Move on."))
+5. Python executes print("Move on.") and displays: Move on.
+
+EXAMPLE 2: IF STATEMENT WITH TRUE CONDITION
+--------------------------------------------
+  # Set the age to 19
+  age = 19
+  
+  # Check if age is 18 or older
+  if age >= 18:
+      print("You will enter.")
+  
+  # This code runs regardless of the condition
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Set the age to 19
+        • Comment
+
+Line 2: age = 19
+        • Creates variable 'age' and assigns 19 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if age is 18 or older
+        • Comment
+
+Line 5: if age >= 18:
+        • if - Conditional statement keyword
+        • age >= 18 - Condition: Is 19 >= 18?
+        • 19 >= 18 evaluates to True
+        • : - Colon starts the code block
+        • Since the condition is True, the indented code WILL execute
+
+Line 6:     print("You will enter.")
+        • Four spaces of indentation (part of the if block)
+        • Since the condition is True, this line EXECUTES
+        • Output: You will enter.
+
+Line 7: (blank line)
+
+Line 8: # This code runs regardless of the condition
+        • Comment
+
+Line 9: print("Move on.")
+        • Not indented, so it's outside the if block
+        • Always executes
+        • Output: Move on.
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python assigns 19 to the variable age
+2. Python evaluates the condition: age >= 18
+   • Looks at age (which is 19)
+   • Compares: Is 19 >= 18? → Yes, so the result is True
+3. Since the condition is True, Python executes the indented code block
+   • The print("You will enter.") line IS executed
+   • Output: You will enter.
+4. Python continues to the next line (print("Move on."))
+5. Python executes print("Move on.") and displays: Move on.
+
+FINAL OUTPUT:
+-------------
+You will enter.
+Move on.
+
+EXAMPLE 3: IF STATEMENT WITH MULTIPLE STATEMENTS
+-----------------------------------------------
+  # Temperature check example
+  temperature = 85
+  
+  if temperature > 80:
+      print("It's hot outside!")
+      print("Remember to stay hydrated.")
+      print("Consider wearing light clothing.")
+  
+  print("Have a great day!")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Temperature check example
+        • Comment
+
+Line 2: temperature = 85
+        • Stores 85 in variable temperature
+
+Line 3: (blank line)
+
+Line 4: if temperature > 80:
+        • Checks if temperature (85) is greater than 80
+        • 85 > 80 evaluates to True
+        • Since True, the indented block will execute
+
+Line 5:     print("It's hot outside!")
+        • Indented, so part of the if block
+        • Executes because condition is True
+        • Output: It's hot outside!
+
+Line 6:     print("Remember to stay hydrated.")
+        • Also indented, part of the if block
+        • Executes because condition is True
+        • Output: Remember to stay hydrated.
+
+Line 7:     print("Consider wearing light clothing.")
+        • Also indented, part of the if block
+        • Executes because condition is True
+        • Output: Consider wearing light clothing.
+
+Line 8: (blank line)
+
+Line 9: print("Have a great day!")
+        • Not indented, so outside the if block
+        • Always executes regardless of condition
+        • Output: Have a great day!
+
+FINAL OUTPUT:
+-------------
+It's hot outside!
+Remember to stay hydrated.
+Consider wearing light clothing.
+Have a great day!
+
+IMPORTANT NOTES ABOUT IF STATEMENTS
+------------------------------------
+1. The condition must evaluate to a Boolean value (True or False)
+2. The colon (:) after the condition is REQUIRED
+3. The code block must be indented (typically 4 spaces)
+4. All statements in the block must have the same indentation
+5. Code after the if block (not indented) always executes
+
+COMMON MISTAKES TO AVOID
+------------------------
+1. Forgetting the colon (:)
+   Wrong: if age >= 18
+   Right: if age >= 18:
+
+2. Incorrect indentation
+   Wrong: if age >= 18:
+   print("You will enter.")  # Not indented!
+   Right: if age >= 18:
+       print("You will enter.")  # Properly indented
+
+3. Using = instead of == in conditions
+   Wrong: if age = 18:  # This assigns, doesn't compare!
+   Right: if age == 18:  # This compares
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: UNDERSTANDING INDENTATION AND CODE BLOCKS
+--------------------------------------------------------
+
+DEFINITION
+----------
+Indentation in Python is used to define code blocks. Unlike many programming 
+languages that use braces {} or keywords, Python uses indentation to group 
+statements together.
+
+DETAILED EXPLANATION
+--------------------
+In Python, indentation is not just for readability - it's part of the syntax. 
+The amount of indentation determines which statements belong to which code 
+block. This is crucial for conditional statements, loops, and functions.
+
+HOW INDENTATION WORKS
+---------------------
+• Python uses whitespace (spaces or tabs) at the beginning of lines
+• All statements at the same indentation level belong to the same block
+• Indented code belongs to the statement above it
+• The standard is 4 spaces per indentation level
+• Mixing spaces and tabs can cause errors
+
+REAL-WORLD ANALOGY
+------------------
+Think of indentation like an outline or hierarchy:
+• Level 0 (no indent): Main topics
+• Level 1 (4 spaces): Subtopics under main topics
+• Level 2 (8 spaces): Sub-subtopics under subtopics
+
+In code:
+• Level 0: Main program flow
+• Level 1: Code blocks (if, else, functions)
+• Level 2: Nested code blocks
+
+EXAMPLE 1: CORRECT INDENTATION
+--------------------------------
+  age = 19
+  
+  if age >= 18:
+      print("You can vote!")
+      print("You can drive!")
+      print("You are an adult!")
+  
+  print("This always runs.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: age = 19
+        • No indentation - main program level
+        • This line always executes
+
+Line 2: (blank line)
+
+Line 3: if age >= 18:
+        • No indentation - main program level
+        • Starts the if statement
+
+Line 4:     print("You can vote!")
+        • 4 spaces indentation - belongs to the if block
+        • Only executes if condition is True
+
+Line 5:     print("You can drive!")
+        • 4 spaces indentation - same level as line 4
+        • Also belongs to the if block
+        • Only executes if condition is True
+
+Line 6:     print("You are an adult!")
+        • 4 spaces indentation - same level as lines 4-5
+        • Also belongs to the if block
+        • Only executes if condition is True
+
+Line 7: (blank line)
+
+Line 8: print("This always runs.")
+        • No indentation - back to main program level
+        • Always executes regardless of condition
+
+VISUAL REPRESENTATION:
+---------------------
+age = 19                    ← Level 0 (no indent)
+
+if age >= 18:               ← Level 0 (no indent)
+    print("...")            ← Level 1 (4 spaces) - belongs to if
+    print("...")            ← Level 1 (4 spaces) - belongs to if
+    print("...")            ← Level 1 (4 spaces) - belongs to if
+
+print("...")                ← Level 0 (no indent) - always runs
+
+EXAMPLE 2: INCORRECT INDENTATION (ERROR)
+-----------------------------------------
+  age = 19
+  
+  if age >= 18:
+  print("You can vote!")  # ERROR: This line is not indented!
+  
+  print("This always runs.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: age = 19
+        • Valid code
+
+Line 2: (blank line)
+
+Line 3: if age >= 18:
+        • Valid - starts if statement
+
+Line 4: print("You can vote!")
+        • ERROR: This line has no indentation
+        • Python expects indented code after the colon
+        • This will cause an IndentationError
+
+ERROR MESSAGE:
+--------------
+IndentationError: expected an indented block after 'if' statement on line 3
+
+CORRECTED VERSION:
+------------------
+  age = 19
+  
+  if age >= 18:
+      print("You can vote!")  # Now properly indented
+  
+  print("This always runs.")
+
+EXAMPLE 3: NESTED INDENTATION
+------------------------------
+  age = 20
+  has_license = True
+  
+  if age >= 18:
+      print("You are an adult.")
+      if has_license:
+          print("You can drive!")
+          print("Drive safely!")
+      print("This is still in the outer if block.")
+  
+  print("This is outside all if blocks.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: age = 20
+        • Level 0 - main program
+
+Line 2: has_license = True
+        • Level 0 - main program
+
+Line 3: (blank line)
+
+Line 4: if age >= 18:
+        • Level 0 - starts outer if statement
+
+Line 5:     print("You are an adult.")
+        • Level 1 (4 spaces) - belongs to outer if block
+        • Executes if age >= 18 is True
+
+Line 6:     if has_license:
+        • Level 1 (4 spaces) - still in outer if block
+        • Starts nested (inner) if statement
+
+Line 7:         print("You can drive!")
+        • Level 2 (8 spaces) - belongs to inner if block
+        • Executes if BOTH conditions are True:
+          - age >= 18 is True AND
+          - has_license is True
+
+Line 8:         print("Drive safely!")
+        • Level 2 (8 spaces) - also belongs to inner if block
+        • Same condition as line 7
+
+Line 9:     print("This is still in the outer if block.")
+        • Level 1 (4 spaces) - back to outer if block level
+        • Executes if age >= 18 is True (regardless of has_license)
+
+Line 10: (blank line)
+
+Line 11: print("This is outside all if blocks.")
+         • Level 0 (no indent) - main program level
+         • Always executes
+
+VISUAL REPRESENTATION:
+---------------------
+age = 20                    ← Level 0
+has_license = True          ← Level 0
+
+if age >= 18:               ← Level 0
+    print("...")           ← Level 1 (outer if block)
+    if has_license:         ← Level 1 (outer if block)
+        print("...")       ← Level 2 (inner if block)
+        print("...")       ← Level 2 (inner if block)
+    print("...")           ← Level 1 (outer if block)
+
+print("...")               ← Level 0 (always runs)
+
+EXECUTION FLOW:
+--------------
+1. age = 20, has_license = True
+2. Check: age >= 18? → Yes (20 >= 18 is True)
+3. Execute outer if block:
+   • Print "You are an adult."
+   • Check: has_license? → Yes (True)
+   • Execute inner if block:
+     - Print "You can drive!"
+     - Print "Drive safely!"
+   • Print "This is still in the outer if block."
+4. Print "This is outside all if blocks."
+
+OUTPUT:
+-------
+You are an adult.
+You can drive!
+Drive safely!
+This is still in the outer if block.
+This is outside all if blocks.
+
+BEST PRACTICES FOR INDENTATION
+-------------------------------
+1. Use 4 spaces per indentation level (Python standard)
+2. Be consistent - don't mix spaces and tabs
+3. Most editors can convert tabs to spaces automatically
+4. Use your editor's "show whitespace" feature to see indentation
+5. When in doubt, count the spaces at the beginning of the line
+
+COMMON INDENTATION ERRORS
+-------------------------
+1. Inconsistent indentation (mixing 2, 4, 8 spaces)
+2. Forgetting to indent code after a colon
+3. Indenting code that shouldn't be indented
+4. Mixing tabs and spaces (use spaces only!)
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: THE ELSE STATEMENT
+---------------------------------
+
+DEFINITION
+----------
+The else statement runs a different block of code if the if condition is 
+False. It provides an alternative path when the condition is not met.
+
+DETAILED EXPLANATION
+--------------------
+The else statement is always paired with an if statement. It executes its 
+code block when the if condition evaluates to False. Think of it as the 
+"otherwise" or "if not" option - if the if condition isn't true, then do 
+this instead.
+
+SYNTAX
+------
+  if condition:
+      # Code to execute if condition is True
+      statement1
+  else:
+      # Code to execute if condition is False
+      statement2
+
+KEY COMPONENTS
+--------------
+1. else - The keyword that starts the alternative block
+2. : (colon) - Required punctuation
+3. Indented code block - Code that executes when if condition is False
+4. Must be paired with an if statement (cannot stand alone)
+
+REAL-WORLD ANALOGY: THE CONCERT EXAMPLE EXTENDED
+------------------------------------------------
+Let's use the ACDC concert analogy again, but now with an alternative option:
+
+If the user is 17, they cannot go to the ACDC concert (represented by the 
+blue rectangle). But they can go to the Meatloaf concert (represented by 
+the purple square).
+
+If the individual is 19, the condition is True. They can enter the ACDC 
+concert. Then they can move on as before.
+
+EXAMPLE 1: BASIC IF-ELSE STATEMENT
+------------------------------------
+  # Set the age
+  age = 17
+  
+  # Check if age is 18 or older
+  if age >= 18:
+      print("You will enter.")
+  else:
+      print("Go see Meatloaf.")
+  
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Set the age
+        • Comment
+
+Line 2: age = 17
+        • Stores 17 in variable age
+
+Line 3: (blank line)
+
+Line 4: # Check if age is 18 or older
+        • Comment
+
+Line 5: if age >= 18:
+        • Checks if age (17) is >= 18
+        • 17 >= 18 evaluates to False
+        • Since False, the if block is skipped
+
+Line 6:     print("You will enter.")
+        • Indented - belongs to if block
+        • NOT executed because condition is False
+
+Line 7: else:
+        • else keyword - alternative path
+        • : - Colon starts the else block
+        • Since if condition was False, this block WILL execute
+
+Line 8:     print("Go see Meatloaf.")
+        • Indented - belongs to else block
+        • EXECUTES because if condition was False
+        • Output: Go see Meatloaf.
+
+Line 9: (blank line)
+
+Line 10: print("Move on.")
+         • Not indented - outside both if and else blocks
+         • Always executes
+         • Output: Move on.
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python assigns 17 to age
+2. Python evaluates: age >= 18
+   • 17 >= 18 → False
+3. Since condition is False:
+   • Skip the if block (print("You will enter.") is NOT executed)
+   • Execute the else block (print("Go see Meatloaf.") IS executed)
+4. Continue to next line: print("Move on.")
+5. Execute and display: Move on.
+
+FINAL OUTPUT:
+-------------
+Go see Meatloaf.
+Move on.
+
+EXAMPLE 2: IF-ELSE WITH TRUE CONDITION
+---------------------------------------
+  # Set the age to 19
+  age = 19
+  
+  # Check if age is 18 or older
+  if age >= 18:
+      print("You will enter.")
+  else:
+      print("Go see Meatloaf.")
+  
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Set the age to 19
+        • Comment
+
+Line 2: age = 19
+        • Stores 19 in variable age
+
+Line 3: (blank line)
+
+Line 4: # Check if age is 18 or older
+        • Comment
+
+Line 5: if age >= 18:
+        • Checks if age (19) is >= 18
+        • 19 >= 18 evaluates to True
+        • Since True, the if block WILL execute
+
+Line 6:     print("You will enter.")
+        • Indented - belongs to if block
+        • EXECUTES because condition is True
+        • Output: You will enter.
+
+Line 7: else:
+        • else keyword - alternative path
+        • Since if condition was True, this block is SKIPPED
+
+Line 8:     print("Go see Meatloaf.")
+        • Indented - belongs to else block
+        • NOT executed because if condition was True
+
+Line 9: (blank line)
+
+Line 10: print("Move on.")
+         • Not indented - always executes
+         • Output: Move on.
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python assigns 19 to age
+2. Python evaluates: age >= 18
+   • 19 >= 18 → True
+3. Since condition is True:
+   • Execute the if block (print("You will enter.") IS executed)
+   • Skip the else block (print("Go see Meatloaf.") is NOT executed)
+4. Continue to next line: print("Move on.")
+5. Execute and display: Move on.
+
+FINAL OUTPUT:
+-------------
+You will enter.
+Move on.
+
+EXAMPLE 3: IF-ELSE WITH MULTIPLE STATEMENTS
+---------------------------------------------
+  # Password validation example
+  password = "mypassword123"
+  min_length = 8
+  
+  if len(password) >= min_length:
+      print("Password is valid.")
+      print("Password meets length requirements.")
+      print("You can proceed.")
+  else:
+      print("Password is too short.")
+      print("Password must be at least", min_length, "characters.")
+      print("Please try again.")
+  
+  print("Thank you for using our service.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Password validation example
+        • Comment
+
+Line 2: password = "mypassword123"
+        • Stores password string in variable password
+        • Length is 15 characters
+
+Line 3: min_length = 8
+        • Stores minimum required length (8) in min_length
+
+Line 4: (blank line)
+
+Line 5: if len(password) >= min_length:
+        • len(password) - Gets the length of the password string
+        • len("mypassword123") returns 15
+        • Compares: Is 15 >= 8?
+        • Yes, so condition is True
+        • if block will execute
+
+Line 6:     print("Password is valid.")
+        • Part of if block
+        • Executes because condition is True
+        • Output: Password is valid.
+
+Line 7:     print("Password meets length requirements.")
+        • Part of if block
+        • Executes because condition is True
+        • Output: Password meets length requirements.
+
+Line 8:     print("You can proceed.")
+        • Part of if block
+        • Executes because condition is True
+        • Output: You can proceed.
+
+Line 9: else:
+        • Alternative path
+        • Not executed because if condition was True
+
+Line 10:     print("Password is too short.")
+         • Part of else block
+         • Not executed
+
+Line 11:     print("Password must be at least", min_length, "characters.")
+         • Part of else block
+         • Not executed
+
+Line 12:     print("Please try again.")
+         • Part of else block
+         • Not executed
+
+Line 13: (blank line)
+
+Line 14: print("Thank you for using our service.")
+         • Outside both blocks
+         • Always executes
+         • Output: Thank you for using our service.
+
+FINAL OUTPUT:
+-------------
+Password is valid.
+Password meets length requirements.
+You can proceed.
+Thank you for using our service.
+
+EXAMPLE 4: IF-ELSE WITH FALSE CONDITION
+-----------------------------------------
+  # Same example but with short password
+  password = "abc"
+  min_length = 8
+  
+  if len(password) >= min_length:
+      print("Password is valid.")
+      print("Password meets length requirements.")
+      print("You can proceed.")
+  else:
+      print("Password is too short.")
+      print("Password must be at least", min_length, "characters.")
+      print("Please try again.")
+  
+  print("Thank you for using our service.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Same example but with short password
+        • Comment
+
+Line 2: password = "abc"
+        • Stores "abc" in password
+        • Length is 3 characters
+
+Line 3: min_length = 8
+        • Stores 8 in min_length
+
+Line 4: (blank line)
+
+Line 5: if len(password) >= min_length:
+        • len("abc") returns 3
+        • Compares: Is 3 >= 8?
+        • No, so condition is False
+        • if block will be skipped
+
+Line 6-8: (if block statements)
+        • Not executed because condition is False
+
+Line 9: else:
+        • Alternative path
+        • WILL execute because if condition was False
+
+Line 10-12: (else block statements)
+         • All execute because condition was False
+         • Output:
+           Password is too short.
+           Password must be at least 8 characters.
+           Please try again.
+
+Line 13: (blank line)
+
+Line 14: print("Thank you for using our service.")
+         • Always executes
+         • Output: Thank you for using our service.
+
+FINAL OUTPUT:
+-------------
+Password is too short.
+Password must be at least 8 characters.
+Please try again.
+Thank you for using our service.
+
+KEY POINTS ABOUT ELSE STATEMENTS
+--------------------------------
+1. else must be paired with an if statement (cannot stand alone)
+2. else doesn't have its own condition - it executes when if is False
+3. Only one else block per if statement
+4. else is optional - you can have if without else
+5. The else block executes when the if condition is False
+
+COMMON PATTERNS
+---------------
+Pattern 1: Binary choice
+  if condition:
+      do_this()
+  else:
+      do_that()
+
+Pattern 2: Validation with feedback
+  if is_valid:
+      print("Success!")
+  else:
+      print("Error message")
+
+Pattern 3: Default value assignment
+  if user_input:
+      value = user_input
+  else:
+      value = "default"
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: THE ELIF STATEMENT
+--------------------------------
+
+DEFINITION
+----------
+The elif statement (short for "else if") allows us to check additional 
+conditions when the preceding if condition is False. If the elif condition 
+is True, its code block executes. You can have multiple elif statements 
+between an if and an else.
+
+DETAILED EXPLANATION
+--------------------
+The elif statement provides a way to check multiple conditions in sequence. 
+It's like saying "if the first condition isn't true, check this second 
+condition. If that's not true either, check this third condition," and so on.
+
+SYNTAX
+------
+  if condition1:
+      # Code if condition1 is True
+      statement1
+  elif condition2:
+      # Code if condition1 is False but condition2 is True
+      statement2
+  elif condition3:
+      # Code if condition1 and condition2 are False but condition3 is True
+      statement3
+  else:
+      # Code if all conditions are False
+      statement4
+
+KEY COMPONENTS
+--------------
+1. elif - Keyword meaning "else if"
+2. condition - A Boolean expression to evaluate
+3. : (colon) - Required punctuation
+4. Indented code block - Code that executes if this condition is True
+5. Must come after an if statement
+6. Can have multiple elif statements
+7. Optional else at the end
+
+HOW ELIF WORKS
+--------------
+Python evaluates conditions in order:
+1. Check if condition1 is True
+   • If True → execute if block, skip all elif and else
+2. If condition1 is False, check condition2
+   • If True → execute elif block, skip remaining elif and else
+3. If condition2 is False, check condition3
+   • If True → execute elif block, skip remaining elif and else
+4. Continue until a condition is True or all are False
+5. If all conditions are False and there's an else → execute else block
+
+IMPORTANT: Only ONE block executes - the first condition that is True.
+
+REAL-WORLD ANALOGY: THE CONCERT EXAMPLE WITH MULTIPLE OPTIONS
+--------------------------------------------------------------
+Consider the concert example with three options:
+
+If the individual is 18, they will go to the Pink Floyd concert instead of 
+attending the ACDC or Meatloaf concerts.
+
+The person of 18 years of age enters the area. As they are not over 18 years 
+of age, they cannot see ACDC. But as they are 18 years, they attend Pink 
+Floyd. After seeing Pink Floyd, they move on.
+
+EXAMPLE 1: BASIC IF-ELIF-ELSE STATEMENT
+----------------------------------------
+  # Set the age
+  age = 18
+  
+  # Check age and assign concert
+  if age > 18:
+      print("You can enter.")
+  elif age == 18:
+      print("Go see Pink Floyd.")
+  else:
+      print("Go see Meatloaf.")
+  
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Set the age
+        • Comment
+
+Line 2: age = 18
+        • Stores 18 in variable age
+
+Line 3: (blank line)
+
+Line 4: # Check age and assign concert
+        • Comment
+
+Line 5: if age > 18:
+        • Checks if age (18) is greater than 18
+        • 18 > 18 evaluates to False
+        • Since False, skip to next condition
+
+Line 6:     print("You can enter.")
+        • Part of if block
+        • NOT executed (condition was False)
+
+Line 7: elif age == 18:
+        • elif - "else if" - checks another condition
+        • Checks if age (18) equals 18
+        • 18 == 18 evaluates to True
+        • Since True, this block WILL execute
+
+Line 8:     print("Go see Pink Floyd.")
+        • Part of elif block
+        • EXECUTES because condition is True
+        • Output: Go see Pink Floyd.
+
+Line 9: else:
+        • Alternative if all conditions are False
+        • NOT executed because elif condition was True
+
+Line 10:     print("Go see Meatloaf.")
+         • Part of else block
+         • NOT executed
+
+Line 11: (blank line)
+
+Line 12: print("Move on.")
+         • Outside all blocks
+         • Always executes
+         • Output: Move on.
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python assigns 18 to age
+2. Check first condition: age > 18
+   • 18 > 18 → False
+   • Skip if block
+3. Check second condition: age == 18
+   • 18 == 18 → True
+   • Execute elif block: print("Go see Pink Floyd.")
+4. Skip else block (because elif was True)
+5. Continue: print("Move on.")
+
+FINAL OUTPUT:
+-------------
+Go see Pink Floyd.
+Move on.
+
+EXAMPLE 2: MULTIPLE ELIF STATEMENTS
+----------------------------------
+  # Grade assignment example
+  score = 85
+  
+  if score >= 90:
+      grade = "A"
+      print("Excellent! You got an A.")
+  elif score >= 80:
+      grade = "B"
+      print("Good job! You got a B.")
+  elif score >= 70:
+      grade = "C"
+      print("Not bad. You got a C.")
+  elif score >= 60:
+      grade = "D"
+      print("You passed with a D.")
+  else:
+      grade = "F"
+      print("You failed with an F.")
+  
+  print(f"Your final grade is {grade}.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Grade assignment example
+        • Comment
+
+Line 2: score = 85
+        • Stores 85 in variable score
+
+Line 3: (blank line)
+
+Line 4: if score >= 90:
+        • Checks if 85 >= 90
+        • False, so skip to next condition
+
+Line 5:     grade = "A"
+        • Not executed
+
+Line 6:     print("Excellent! You got an A.")
+        • Not executed
+
+Line 7: elif score >= 80:
+        • Checks if 85 >= 80
+        • True! Execute this block
+
+Line 8:     grade = "B"
+        • Executes: assigns "B" to grade
+
+Line 9:     print("Good job! You got a B.")
+        • Executes: Output: Good job! You got a B.
+
+Line 10: elif score >= 70:
+         • Not checked (previous elif was True)
+
+Line 11-12: (Not executed)
+
+Line 13: elif score >= 60:
+         • Not checked (previous elif was True)
+
+Line 14-15: (Not executed)
+
+Line 16: else:
+         • Not executed (elif was True)
+
+Line 17-18: (Not executed)
+
+Line 19: (blank line)
+
+Line 20: print(f"Your final grade is {grade}.")
+         • f-string: f"..." allows variable insertion with {}
+         • {grade} is replaced with "B"
+         • Output: Your final grade is B.
+
+FINAL OUTPUT:
+-------------
+Good job! You got a B.
+Your final grade is B.
+
+IMPORTANT NOTE ABOUT ELIF ORDER
+-------------------------------
+The order of elif statements matters! Consider this example:
+
+  score = 85
+  
+  # WRONG ORDER - This won't work correctly!
+  if score >= 60:
+      print("D or better")
+  elif score >= 70:
+      print("C or better")  # This will NEVER execute!
+  elif score >= 80:
+      print("B or better")  # This will NEVER execute!
+  elif score >= 90:
+      print("A")  # This will NEVER execute!
+
+Why? Because if score is 85:
+• First check: 85 >= 60 → True → executes and stops
+• Never checks the other conditions!
+
+CORRECT ORDER:
+--------------
+  score = 85
+  
+  # CORRECT ORDER - Check from highest to lowest
+  if score >= 90:
+      print("A")
+  elif score >= 80:
+      print("B")  # 85 >= 80 is True, executes this
+  elif score >= 70:
+      print("C")
+  elif score >= 60:
+      print("D")
+  else:
+      print("F")
+
+EXAMPLE 3: ELIF WITH DIFFERENT SCENARIOS
+-----------------------------------------
+  # Age-based concert assignment
+  age = 17
+  
+  if age > 18:
+      print("You can enter.")
+  elif age == 18:
+      print("Go see Pink Floyd.")
+  else:
+      print("Go see Meatloaf.")
+  
+  print("Move on.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Age-based concert assignment
+        • Comment
+
+Line 2: age = 17
+        • Stores 17 in age
+
+Line 3: (blank line)
+
+Line 4: if age > 18:
+        • Checks if 17 > 18
+        • False, skip to next
+
+Line 5:     print("You can enter.")
+        • Not executed
+
+Line 6: elif age == 18:
+        • Checks if 17 == 18
+        • False, skip to next
+
+Line 7:     print("Go see Pink Floyd.")
+        • Not executed
+
+Line 8: else:
+        • All conditions were False
+        • Execute else block
+
+Line 9:     print("Go see Meatloaf.")
+        • Executes: Output: Go see Meatloaf.
+
+Line 10: (blank line)
+
+Line 11: print("Move on.")
+         • Always executes
+         • Output: Move on.
+
+FINAL OUTPUT:
+-------------
+Go see Meatloaf.
+Move on.
+
+EXAMPLE 4: COMPLEX ELIF CHAIN
+------------------------------
+  # Temperature-based activity recommendation
+  temperature = 75
+  
+  if temperature > 90:
+      activity = "swimming"
+      print("It's very hot! Go swimming.")
+  elif temperature > 75:
+      activity = "hiking"
+      print("Perfect weather for hiking!")
+  elif temperature > 60:
+      activity = "walking"
+      print("Nice day for a walk.")
+  elif temperature > 32:
+      activity = "jogging"
+      print("Cool but pleasant for jogging.")
+  else:
+      activity = "staying indoors"
+      print("Too cold! Stay indoors.")
+  
+  print(f"Recommended activity: {activity}")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Temperature-based activity recommendation
+        • Comment
+
+Line 2: temperature = 75
+        • Stores 75 in temperature
+
+Line 3: (blank line)
+
+Line 4: if temperature > 90:
+        • Checks if 75 > 90
+        • False, skip
+
+Line 5-6: (Not executed)
+
+Line 7: elif temperature > 75:
+        • Checks if 75 > 75
+        • False (75 is not greater than 75), skip
+
+Line 8-9: (Not executed)
+
+Line 10: elif temperature > 60:
+         • Checks if 75 > 60
+         • True! Execute this block
+
+Line 11:     activity = "walking"
+         • Executes: assigns "walking" to activity
+
+Line 12:     print("Nice day for a walk.")
+         • Executes: Output: Nice day for a walk.
+
+Line 13: elif temperature > 32:
+         • Not checked (previous elif was True)
+
+Line 14-15: (Not executed)
+
+Line 16: else:
+         • Not executed (elif was True)
+
+Line 17-18: (Not executed)
+
+Line 19: (blank line)
+
+Line 20: print(f"Recommended activity: {activity}")
+         • f-string with variable
+         • Output: Recommended activity: walking
+
+FINAL OUTPUT:
+-------------
+Nice day for a walk.
+Recommended activity: walking
+
+KEY POINTS ABOUT ELIF STATEMENTS
+----------------------------------
+1. elif must come after an if statement
+2. You can have multiple elif statements
+3. Only the first True condition's block executes
+4. Order matters - check conditions from most specific to least specific
+5. elif is optional - you can have if without elif
+6. else is optional - you can have if-elif without else
+
+COMMON PATTERNS
+---------------
+Pattern 1: Range checking
+  if value > high:
+      # Handle high case
+  elif value > medium:
+      # Handle medium case
+  elif value > low:
+      # Handle low case
+  else:
+      # Handle default case
+
+Pattern 2: Multiple exact matches
+  if value == option1:
+      # Handle option1
+  elif value == option2:
+      # Handle option2
+  elif value == option3:
+      # Handle option3
+  else:
+      # Handle unknown option
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: NESTED CONDITIONAL STATEMENTS
+-------------------------------------------
+
+DEFINITION
+----------
+Nested conditional statements are conditional statements (if, elif, else) 
+placed inside other conditional statements. This allows for complex decision 
+trees with multiple levels of conditions.
+
+DETAILED EXPLANATION
+--------------------
+Sometimes you need to check conditions within conditions. For example, 
+"if the user is logged in, then check if they have admin privileges." This 
+requires nesting - placing one conditional statement inside another.
+
+SYNTAX
+------
+  if condition1:
+      # Outer if block
+      if condition2:
+          # Inner if block
+          statement1
+      else:
+          # Inner else block
+          statement2
+  else:
+      # Outer else block
+      statement3
+
+KEY POINTS
+----------
+• Each level requires its own indentation
+• Inner conditions are only checked if outer conditions are True
+• Can nest multiple levels deep
+• Be careful with indentation - it's easy to make mistakes
+• Consider readability - too much nesting can be hard to follow
+
+EXAMPLE 1: BASIC NESTED IF STATEMENTS
+---------------------------------------
+  # Login and permission check
+  is_logged_in = True
+  is_admin = True
+  
+  if is_logged_in:
+      print("User is logged in.")
+      if is_admin:
+          print("User has admin privileges.")
+          print("Access granted to admin panel.")
+      else:
+          print("User does not have admin privileges.")
+          print("Access denied to admin panel.")
+  else:
+      print("User is not logged in.")
+      print("Please log in first.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Login and permission check
+        • Comment
+
+Line 2: is_logged_in = True
+        • Stores True in is_logged_in
+
+Line 3: is_admin = True
+        • Stores True in is_admin
+
+Line 4: (blank line)
+
+Line 5: if is_logged_in:
+        • Outer if statement
+        • Checks if is_logged_in is True
+        • True, so outer block executes
+
+Line 6:     print("User is logged in.")
+        • Level 1 indentation (outer if block)
+        • Executes: Output: User is logged in.
+
+Line 7:     if is_admin:
+        • Level 1 indentation (still in outer if block)
+        • Inner if statement
+        • Checks if is_admin is True
+        • True, so inner block executes
+
+Line 8:         print("User has admin privileges.")
+        • Level 2 indentation (inner if block)
+        • Executes: Output: User has admin privileges.
+
+Line 9:         print("Access granted to admin panel.")
+        • Level 2 indentation (inner if block)
+        • Executes: Output: Access granted to admin panel.
+
+Line 10:     else:
+         • Level 1 indentation (back to outer if level)
+         • Inner else block
+         • Not executed (inner if was True)
+
+Line 11-12: (Not executed)
+
+Line 13: else:
+         • Level 0 (outer else)
+         • Not executed (outer if was True)
+
+Line 14-15: (Not executed)
+
+FINAL OUTPUT:
+-------------
+User is logged in.
+User has admin privileges.
+Access granted to admin panel.
+
+EXAMPLE 2: NESTED IF-ELIF-ELSE
+-------------------------------
+  # Age and membership status check
+  age = 25
+  has_membership = True
+  
+  if age >= 18:
+      print("Age requirement met.")
+      if has_membership:
+          print("Membership verified.")
+          print("Full access granted.")
+      elif age >= 21:
+          print("No membership, but age 21+.")
+          print("Limited access granted.")
+      else:
+          print("No membership and under 21.")
+          print("Access denied.")
+  else:
+      print("Age requirement not met.")
+      print("Access denied.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Age and membership status check
+        • Comment
+
+Line 2: age = 25
+        • Stores 25 in age
+
+Line 3: has_membership = True
+        • Stores True in has_membership
+
+Line 4: (blank line)
+
+Line 5: if age >= 18:
+        • Outer if: Checks if 25 >= 18
+        • True, execute outer block
+
+Line 6:     print("Age requirement met.")
+        • Level 1: Output: Age requirement met.
+
+Line 7:     if has_membership:
+        • Level 1: Inner if
+        • Checks if has_membership is True
+        • True, execute inner if block
+
+Line 8:         print("Membership verified.")
+        • Level 2: Output: Membership verified.
+
+Line 9:         print("Full access granted.")
+        • Level 2: Output: Full access granted.
+
+Line 10:     elif age >= 21:
+         • Level 1: Inner elif
+         • Not checked (inner if was True)
+
+Line 11-12: (Not executed)
+
+Line 13:     else:
+         • Level 1: Inner else
+         • Not executed (inner if was True)
+
+Line 14-15: (Not executed)
+
+Line 16: else:
+         • Level 0: Outer else
+         • Not executed (outer if was True)
+
+Line 17-18: (Not executed)
+
+FINAL OUTPUT:
+-------------
+Age requirement met.
+Membership verified.
+Full access granted.
+
+EXAMPLE 3: MULTIPLE LEVELS OF NESTING
+---------------------------------------
+  # Complex access control example
+  is_authenticated = True
+  is_premium = True
+  account_balance = 150
+  
+  if is_authenticated:
+      print("Authentication successful.")
+      if is_premium:
+          print("Premium account detected.")
+          if account_balance > 100:
+              print("Sufficient balance.")
+              print("Full premium features unlocked.")
+          else:
+              print("Insufficient balance.")
+              print("Premium features limited.")
+      else:
+          print("Standard account.")
+          print("Standard features available.")
+  else:
+      print("Authentication failed.")
+      print("Please log in.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Complex access control example
+        • Comment
+
+Line 2: is_authenticated = True
+        • Level 0 variable
+
+Line 3: is_premium = True
+        • Level 0 variable
+
+Line 4: account_balance = 150
+        • Level 0 variable
+
+Line 5: (blank line)
+
+Line 6: if is_authenticated:
+        • Level 0: Outer if
+        • True, execute outer block
+
+Line 7:     print("Authentication successful.")
+        • Level 1: Output: Authentication successful.
+
+Line 8:     if is_premium:
+        • Level 1: Middle if
+        • True, execute middle block
+
+Line 9:         print("Premium account detected.")
+        • Level 2: Output: Premium account detected.
+
+Line 10:         if account_balance > 100:
+         • Level 2: Inner if
+         • Checks if 150 > 100
+         • True, execute inner block
+
+Line 11:             print("Sufficient balance.")
+         • Level 3: Output: Sufficient balance.
+
+Line 12:             print("Full premium features unlocked.")
+         • Level 3: Output: Full premium features unlocked.
+
+Line 13:         else:
+         • Level 2: Inner else
+         • Not executed (inner if was True)
+
+Line 14-15: (Not executed)
+
+Line 16:     else:
+         • Level 1: Middle else
+         • Not executed (middle if was True)
+
+Line 17-18: (Not executed)
+
+Line 19: else:
+         • Level 0: Outer else
+         • Not executed (outer if was True)
+
+Line 20-21: (Not executed)
+
+FINAL OUTPUT:
+-------------
+Authentication successful.
+Premium account detected.
+Sufficient balance.
+Full premium features unlocked.
+
+BEST PRACTICES FOR NESTING
+--------------------------
+1. Limit nesting depth (3-4 levels max for readability)
+2. Consider using elif instead of nested if when possible
+3. Use descriptive variable names for conditions
+4. Add comments for complex nested logic
+5. Consider refactoring deeply nested code into functions
+
+WHEN TO USE NESTING VS ELIF
+---------------------------
+Use nesting when:
+• Conditions are dependent (one must be true before checking the other)
+• Example: Check if logged in, THEN check permissions
+
+Use elif when:
+• Conditions are independent alternatives
+• Example: Check if age is 18, 19, 20, etc. (mutually exclusive)
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: REAL-WORLD EXAMPLES AND APPLICATIONS
+--------------------------------------------------
+
+EXAMPLE 1: USER AUTHENTICATION SYSTEM
+---------------------------------------
+  # Simple login system
+  username = "admin"
+  password = "secret123"
+  entered_username = "admin"
+  entered_password = "secret123"
+  
+  if entered_username == username:
+      if entered_password == password:
+          print("Login successful!")
+          print("Welcome,", entered_username)
+      else:
+          print("Incorrect password.")
+          print("Please try again.")
+  else:
+      print("Username not found.")
+      print("Please check your username.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Simple login system
+        • Comment describing the example
+
+Line 2: username = "admin"
+        • Stores the correct username
+
+Line 3: password = "secret123"
+        • Stores the correct password
+
+Line 4: entered_username = "admin"
+        • User's entered username
+
+Line 5: entered_password = "secret123"
+        • User's entered password
+
+Line 6: (blank line)
+
+Line 7: if entered_username == username:
+        • Checks if entered username matches stored username
+        • "admin" == "admin" → True
+        • Execute outer block
+
+Line 8:     if entered_password == password:
+        • Nested check: password verification
+        • "secret123" == "secret123" → True
+        • Execute inner block
+
+Line 9:         print("Login successful!")
+        • Output: Login successful!
+
+Line 10:         print("Welcome,", entered_username)
+         • Output: Welcome, admin
+
+Line 11:     else:
+         • Inner else (not executed)
+
+Line 12-13: (Not executed)
+
+Line 14: else:
+         • Outer else (not executed)
+
+Line 15-16: (Not executed)
+
+EXAMPLE 2: SHOPPING CART DISCOUNT SYSTEM
+-----------------------------------------
+  # Calculate discount based on purchase amount
+  purchase_amount = 250
+  has_coupon = True
+  
+  if purchase_amount >= 200:
+      print("Eligible for discount!")
+      if has_coupon:
+          discount = purchase_amount * 0.20  # 20% discount
+          print("Coupon applied: 20% discount")
+      else:
+          discount = purchase_amount * 0.10  # 10% discount
+          print("Standard discount: 10%")
+      final_amount = purchase_amount - discount
+      print(f"Original amount: ${purchase_amount}")
+      print(f"Discount: ${discount}")
+      print(f"Final amount: ${final_amount}")
+  else:
+      print("No discount available.")
+      print(f"Total: ${purchase_amount}")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Calculate discount based on purchase amount
+        • Comment
+
+Line 2: purchase_amount = 250
+        • Stores purchase amount
+
+Line 3: has_coupon = True
+        • Indicates if customer has a coupon
+
+Line 4: (blank line)
+
+Line 5: if purchase_amount >= 200:
+        • Checks if purchase is $200 or more
+        • 250 >= 200 → True
+
+Line 6:     print("Eligible for discount!")
+        • Output: Eligible for discount!
+
+Line 7:     if has_coupon:
+        • Nested check for coupon
+        • True, execute coupon block
+
+Line 8:         discount = purchase_amount * 0.20
+        • Calculates 20% discount
+        • 250 * 0.20 = 50
+
+Line 9:         print("Coupon applied: 20% discount")
+        • Output: Coupon applied: 20% discount
+
+Line 10:     else:
+         • Not executed
+
+Line 11-12: (Not executed)
+
+Line 13:     final_amount = purchase_amount - discount
+         • Calculates final amount
+         • 250 - 50 = 200
+
+Line 14:     print(f"Original amount: ${purchase_amount}")
+         • Output: Original amount: $250
+
+Line 15:     print(f"Discount: ${discount}")
+         • Output: Discount: $50
+
+Line 16:     print(f"Final amount: ${final_amount}")
+         • Output: Final amount: $200
+
+Line 17: else:
+         • Not executed
+
+Line 18-19: (Not executed)
+
+EXAMPLE 3: GRADE CALCULATOR WITH PLUS/MINUS
+--------------------------------------------
+  # Calculate letter grade with plus/minus
+  score = 87
+  
+  if score >= 90:
+      if score >= 97:
+          grade = "A+"
+      elif score >= 93:
+          grade = "A"
+      else:
+          grade = "A-"
+  elif score >= 80:
+      if score >= 87:
+          grade = "B+"
+      elif score >= 83:
+          grade = "B"
+      else:
+          grade = "B-"
+  elif score >= 70:
+      if score >= 77:
+          grade = "C+"
+      elif score >= 73:
+          grade = "C"
+      else:
+          grade = "C-"
+  else:
+      grade = "F"
+  
+  print(f"Score: {score}")
+  print(f"Grade: {grade}")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Calculate letter grade with plus/minus
+        • Comment
+
+Line 2: score = 87
+        • Stores score
+
+Line 3: (blank line)
+
+Line 4: if score >= 90:
+        • Checks if score is 90 or higher
+        • 87 >= 90 → False, skip to elif
+
+Line 5-9: (Not executed)
+
+Line 10: elif score >= 80:
+         • Checks if score is 80 or higher
+         • 87 >= 80 → True, execute this block
+
+Line 11:     if score >= 87:
+         • Nested check for B+
+         • 87 >= 87 → True
+
+Line 12:         grade = "B+"
+         • Assigns "B+" to grade
+
+Line 13:     elif score >= 83:
+         • Not checked (nested if was True)
+
+Line 14-15: (Not executed)
+
+Line 16:     else:
+         • Not executed
+
+Line 17: (Not executed)
+
+Line 18: elif score >= 70:
+         • Not checked (previous elif was True)
+
+Line 19-24: (Not executed)
+
+Line 25: else:
+         • Not executed
+
+Line 26: (Not executed)
+
+Line 27: (blank line)
+
+Line 28: print(f"Score: {score}")
+         • Output: Score: 87
+
+Line 29: print(f"Grade: {grade}")
+         • Output: Grade: B+
+
+[END SECTION 2.7]
+================================================================================
+
+SECTION 2.8: COMMON PATTERNS AND BEST PRACTICES
+------------------------------------------------
+
+PATTERN 1: GUARD CLAUSES (EARLY RETURNS)
+------------------------------------------
+Instead of deeply nested if-else, use early returns:
+
+  # Instead of this (nested):
+  def process_user(user):
+      if user:
+          if user.is_active:
+              if user.has_permission:
+                  # Do something
+                  return result
+              else:
+                  return "No permission"
+          else:
+              return "User inactive"
+      else:
+          return "No user"
+  
+  # Do this (guard clauses):
+  def process_user(user):
+      if not user:
+          return "No user"
+      if not user.is_active:
+          return "User inactive"
+      if not user.has_permission:
+          return "No permission"
+      # Do something
+      return result
+
+PATTERN 2: DICTIONARY MAPPING (ALTERNATIVE TO ELIF CHAINS)
+-----------------------------------------------------------
+For many elif statements checking exact values:
+
+  # Instead of long elif chain:
+  if day == "Monday":
+      activity = "Work"
+  elif day == "Tuesday":
+      activity = "Work"
+  elif day == "Wednesday":
+      activity = "Work"
+  # ... many more elifs
+  
+  # Use dictionary:
+  activities = {
+      "Monday": "Work",
+      "Tuesday": "Work",
+      "Wednesday": "Work",
+      "Saturday": "Relax",
+      "Sunday": "Relax"
+  }
+  activity = activities.get(day, "Unknown")
+
+PATTERN 3: CHAINED COMPARISONS
+------------------------------
+Python allows chaining comparisons:
+
+  # Instead of:
+  if age >= 18 and age <= 65:
+      print("Working age")
+  
+  # You can write:
+  if 18 <= age <= 65:
+      print("Working age")
+
+BEST PRACTICES
+--------------
+1. Keep conditions simple and readable
+2. Use descriptive variable names for conditions
+3. Avoid deep nesting (3-4 levels max)
+4. Use elif for mutually exclusive conditions
+5. Always include comments for complex logic
+6. Test all branches of your conditional statements
+7. Consider using functions to simplify complex conditionals
+
+COMMON MISTAKES TO AVOID
+-------------------------
+1. Using = instead of == in conditions
+2. Forgetting the colon (:) after if/elif/else
+3. Incorrect indentation
+4. Not handling all possible cases
+5. Overly complex nested conditions
+6. Comparing different data types incorrectly
+
+[END SECTION 2.8]
+================================================================================
+
+END OF PART 2
+=============
+
+Congratulations! You've completed Part 2 of the Conditions and Branching 
+study guide. You now understand:
+
+✓ What branching means in programming
+✓ How to use if statements for conditional execution
+✓ How to use else statements for alternative paths
+✓ How to use elif statements for multiple conditions
+✓ How indentation and code blocks work in Python
+✓ How to write nested conditional statements
+✓ Real-world applications and best practices
+
+Next Steps:
+-----------
+Continue to Part 3 to learn about:
+• Logic operators (not, or, and)
+• Combining conditions with logic operators
+• Truth tables and Boolean logic
+• Advanced conditional patterns
+• Complex real-world examples
+
+================================================================================

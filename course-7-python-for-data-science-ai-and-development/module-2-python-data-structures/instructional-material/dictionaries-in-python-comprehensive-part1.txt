@@ -1,0 +1,941 @@
+================================================================================
+COMPREHENSIVE STUDY GUIDE: DICTIONARIES IN PYTHON
+Part 1: Introduction, Creating Dictionaries, and Basic Operations
+================================================================================
+
+INTRODUCTION TO DICTIONARIES
+================================================================================
+
+Dictionaries are one of the most powerful and versatile data structures in Python. 
+They are a type of collection that allows you to store and organize data in a 
+unique way. Understanding dictionaries is crucial for Python programming because 
+they provide an efficient way to map relationships between data items.
+
+What Makes Dictionaries Special?
+Dictionaries differ from other collection types (like lists and tuples) in a 
+fundamental way:
+- Lists and tuples use integer indexes (0, 1, 2, 3...) to access elements
+- Dictionaries use "keys" to access "values"
+- Keys can be almost any immutable type (strings, numbers, tuples)
+- This makes dictionaries perfect for representing relationships and mappings
+
+Real-World Analogy:
+Think of a dictionary like a real-world dictionary or phone book:
+- The "key" is like the word you're looking up (or the person's name)
+- The "value" is like the definition (or the phone number)
+- You use the key to quickly find the associated value
+
+Why Are Dictionaries Important?
+1. Fast Lookups: Dictionaries provide very fast access to values using keys
+2. Data Relationships: Perfect for representing relationships between data
+3. Flexible Keys: Keys don't have to be sequential integers like list indexes
+4. Readable Code: Using meaningful keys makes code more readable and maintainable
+5. Common Use Cases: Used extensively in web development, data processing, and 
+   configuration management
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+PART 1: INTRODUCTION, CREATING DICTIONARIES, AND BASIC OPERATIONS
+  SECTION 1: UNDERSTANDING THE STRUCTURE OF DICTIONARIES
+    • Dictionaries vs Lists - A Comparison
+    • The Key-Value Pair Concept
+  
+  SECTION 2: CREATING DICTIONARIES
+    • Basic Syntax for Creating Dictionaries
+    • Creating an Empty Dictionary
+  
+  SECTION 3: UNDERSTANDING DICTIONARY KEYS
+    • Key Requirements - Immutability and Uniqueness
+  
+  SECTION 4: UNDERSTANDING DICTIONARY VALUES
+    • Value Requirements - Flexibility
+  
+  SECTION 5: ACCESSING VALUES IN DICTIONARIES
+    • Using Square Brackets to Access Values
+    • What Happens if the Key Doesn't Exist?
+  
+  SECTION 6: ADDING AND MODIFYING ENTRIES IN DICTIONARIES
+    • Adding New Key-Value Pairs
+    • Modifying Existing Entries
+  
+  SECTION 7: DELETING ENTRIES FROM DICTIONARIES
+    • Removing Key-Value Pairs
+    • What Happens if You Try to Delete a Non-Existent Key?
+
+NOTE: Part 2 of this guide covers:
+  • Checking if keys exist in dictionaries (the "in" operator)
+  • Dictionary methods (keys(), values(), items())
+  • Iterating over dictionaries
+  • The get() method for safe value access
+
+NOTE: Part 3 of this guide covers:
+  • More dictionary methods (update(), pop(), popitem(), clear())
+  • Dictionary comprehensions
+  • Nested dictionaries
+  • Copying dictionaries (shallow vs deep)
+  • Dictionary views and their behavior
+  • Best practices and common patterns
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1:") to quickly jump to any section.
+
+================================================================================
+SECTION 1: UNDERSTANDING THE STRUCTURE OF DICTIONARIES
+================================================================================
+
+DICTIONARIES VS LISTS - A COMPARISON
+================================================================================
+
+To understand dictionaries, it's helpful to compare them with lists, which you 
+may already be familiar with.
+
+Lists Structure:
+----------------
+A list uses integer indexes to access elements:
+
+Example List:
+ratings = [1, 2, 3, 4, 5]
+
+Index Table for List:
+Index Position:  0    1    2    3    4
+Element Value:   1    2    3    4    5
+
+To access an element in a list:
+- You use an integer index: ratings[0] returns 1
+- The index is like an "address" that tells Python which element to retrieve
+- Indexes must be integers and are sequential (0, 1, 2, 3...)
+
+Dictionaries Structure:
+-----------------------
+A dictionary uses keys to access values:
+
+Example Dictionary:
+album_releases = {"Back in Black": 1980, "The Dark Side of the Moon": 1973}
+
+Key-Value Table for Dictionary:
+Key:                        "Back in Black"    "The Dark Side of the Moon"
+Value:                      1980               1973
+
+To access a value in a dictionary:
+- You use a key: album_releases["Back in Black"] returns 1980
+- The key is like an "address" but doesn't have to be an integer
+- Keys can be strings, numbers, or other immutable types
+
+Key Differences:
+1. Lists use integer indexes; dictionaries use keys (which can be various types)
+2. Lists are ordered sequences; dictionaries are key-value mappings
+3. List indexes are sequential; dictionary keys can be any meaningful identifier
+4. Lists are accessed by position; dictionaries are accessed by meaning
+
+THE KEY-VALUE PAIR CONCEPT
+================================================================================
+
+The fundamental building block of a dictionary is the "key-value pair." This is 
+a relationship where:
+- A "key" acts as an identifier or label
+- A "value" is the data associated with that key
+- Together, they form a "pair" that represents a relationship
+
+Visual Representation:
+Key-Value Pair Structure:
+┌─────────────────┬──────────┐
+│      KEY        │  VALUE   │
+├─────────────────┼──────────┤
+│ "Back in Black" │   1980   │
+└─────────────────┴──────────┘
+
+Think of it like this:
+- The KEY is what you use to "look up" information
+- The VALUE is the information you get back
+- Together, they represent one piece of data in the dictionary
+
+Example: Multiple Key-Value Pairs
+----------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+This dictionary contains three key-value pairs:
+1. Key: "Back in Black" → Value: 1980
+2. Key: "The Dark Side of the Moon" → Value: 1973
+3. Key: "The Bodyguard" → Value: 1992
+
+Each pair represents a relationship: an album title (key) is associated with 
+its release year (value).
+
+================================================================================
+SECTION 2: CREATING DICTIONARIES
+================================================================================
+
+BASIC SYNTAX FOR CREATING DICTIONARIES
+================================================================================
+
+To create a dictionary in Python, you use curly brackets {}. The syntax follows 
+this pattern:
+
+dictionary_name = {key1: value1, key2: value2, key3: value3}
+
+Breaking Down the Syntax:
+- dictionary_name = The variable name that will store the dictionary
+- { } = Curly brackets that define the dictionary
+- key1: value1 = A key-value pair
+- : = Colon separates the key from the value
+- , = Comma separates one key-value pair from another
+
+Example 1: Creating a Simple Dictionary
+---------------------------------------
+album_releases = {"Back in Black": 1980}
+
+Line-by-line explanation:
+- "album_releases" = This is the variable name we're assigning the dictionary to
+- "=" = The assignment operator that assigns the dictionary to the variable
+- "{" = Opening curly bracket that starts the dictionary definition
+- "\"Back in Black\"" = The key (a string containing the album title)
+- ":" = Colon that separates the key from the value
+- "1980" = The value (an integer representing the release year)
+- "}" = Closing curly bracket that ends the dictionary definition
+
+What happens in memory?
+When Python executes this line, it:
+1. Creates a dictionary object in memory
+2. Stores the key-value pair: "Back in Black" → 1980
+3. Assigns the variable name "album_releases" to reference this dictionary object
+4. The dictionary is now ready to use
+
+Example 2: Dictionary with Multiple Key-Value Pairs
+----------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+Line-by-line explanation:
+- Line 1: "album_releases" = variable name, "=" = assignment operator, "{" = 
+  opening bracket
+- Line 2: "\"Back in Black\"" = first key (string), ":" = separator, "1980" = 
+  first value (integer), "," = pair separator
+- Line 3: "\"The Dark Side of the Moon\"" = second key, ":" = separator, 
+  "1973" = second value, "," = pair separator
+- Line 4: "\"The Bodyguard\"" = third key, ":" = separator, "1992" = third 
+  value
+- Line 5: "}" = closing bracket
+
+Visual Representation:
+Key-Value Pairs Table:
+┌──────────────────────────────┬──────┐
+│            KEY               │ VALUE│
+├──────────────────────────────┼──────┤
+│ "Back in Black"              │ 1980 │
+│ "The Dark Side of the Moon"  │ 1973 │
+│ "The Bodyguard"              │ 1992 │
+└──────────────────────────────┴──────┘
+
+This dictionary contains three key-value pairs, each representing an album title 
+and its release year.
+
+Example 3: Dictionary with Different Value Types
+-------------------------------------------------
+student_info = {
+    "name": "John Doe",
+    "age": 20,
+    "grades": [85, 90, 88],
+    "is_enrolled": True
+}
+
+Line-by-line explanation:
+- "student_info" = variable name for the dictionary
+- "name": "John Doe" = key-value pair where key is "name" (string) and value 
+  is "John Doe" (string)
+- "age": 20 = key-value pair where key is "age" (string) and value is 20 
+  (integer)
+- "grades": [85, 90, 88] = key-value pair where key is "grades" (string) and 
+  value is a list [85, 90, 88]
+- "is_enrolled": True = key-value pair where key is "is_enrolled" (string) 
+  and value is True (boolean)
+
+Important Note: The values in a dictionary can be of different types! In this 
+example, we have:
+- String value: "John Doe"
+- Integer value: 20
+- List value: [85, 90, 88]
+- Boolean value: True
+
+This flexibility makes dictionaries very powerful for storing complex data 
+structures.
+
+CREATING AN EMPTY DICTIONARY
+================================================================================
+
+Sometimes you want to create a dictionary first and add key-value pairs later. 
+You can create an empty dictionary in two ways:
+
+Method 1: Using Curly Brackets
+-------------------------------
+empty_dict = {}
+
+Line-by-line explanation:
+- "empty_dict" = variable name
+- "=" = assignment operator
+- "{}" = empty curly brackets (no key-value pairs inside)
+
+This creates a dictionary with no key-value pairs. It's still a valid dictionary, 
+just empty.
+
+Method 2: Using the dict() Constructor
+---------------------------------------
+empty_dict = dict()
+
+Line-by-line explanation:
+- "empty_dict" = variable name
+- "=" = assignment operator
+- "dict()" = built-in Python function that creates an empty dictionary
+- "()" = parentheses with no arguments (meaning "create empty dictionary")
+
+Both methods create the same result: an empty dictionary ready to have key-value 
+pairs added to it.
+
+Example: Creating and Populating an Empty Dictionary
+----------------------------------------------------
+# Create empty dictionary
+student = {}
+
+# Add key-value pairs later
+student["name"] = "Jane Smith"
+student["age"] = 22
+student["major"] = "Computer Science"
+
+Line-by-line explanation:
+- Line 1: Creates empty dictionary and assigns to variable "student"
+- Line 3: Adds key-value pair "name": "Jane Smith" to the dictionary
+  - "student" = dictionary variable name
+  - "[\"name\"]" = key in square brackets
+  - "=" = assignment operator
+  - "\"Jane Smith\"" = value being assigned
+- Line 4: Adds key-value pair "age": 22
+- Line 5: Adds key-value pair "major": "Computer Science"
+
+After these operations, student = {"name": "Jane Smith", "age": 22, 
+"major": "Computer Science"}
+
+================================================================================
+SECTION 3: UNDERSTANDING DICTIONARY KEYS
+================================================================================
+
+KEY REQUIREMENTS - IMMUTABILITY AND UNIQUENESS
+================================================================================
+
+Dictionary keys have two critical requirements that you must understand:
+
+Requirement 1: Keys Must Be Immutable
+--------------------------------------
+"Immutable" means "cannot be changed after creation." Keys must be immutable 
+because Python uses them internally to quickly locate values. If keys could 
+change, Python wouldn't be able to reliably find the associated values.
+
+What Types Can Be Keys?
+- Strings: "name", "age", "Back in Black" ✓
+- Numbers: 1, 2.5, 100 ✓
+- Tuples: (1, 2, 3) ✓ (because tuples are immutable)
+- Booleans: True, False ✓
+
+What Types CANNOT Be Keys?
+- Lists: [1, 2, 3] ✗ (lists are mutable)
+- Dictionaries: {"key": "value"} ✗ (dictionaries are mutable)
+- Sets: {1, 2, 3} ✗ (sets are mutable)
+
+Example: Valid Keys
+--------------------
+valid_dict = {
+    "string_key": "value1",        # String key ✓
+    42: "value2",                  # Integer key ✓
+    3.14: "value3",                # Float key ✓
+    (1, 2, 3): "value4",           # Tuple key ✓
+    True: "value5"                 # Boolean key ✓
+}
+
+Line-by-line explanation:
+- "string_key": "value1" = string key is valid (strings are immutable)
+- "42": "value2" = integer key is valid (numbers are immutable)
+- "3.14": "value3" = float key is valid (numbers are immutable)
+- "(1, 2, 3): \"value4\"" = tuple key is valid (tuples are immutable)
+- "True: \"value5\"" = boolean key is valid (booleans are immutable)
+
+Example: Invalid Keys (Will Cause Errors)
+------------------------------------------
+# This will cause a TypeError!
+invalid_dict = {
+    [1, 2, 3]: "value"  # List cannot be a key! ✗
+}
+
+If you try to run this code, Python will raise a TypeError saying:
+"TypeError: unhashable type: 'list'"
+
+The term "unhashable" means the object cannot be used as a dictionary key because 
+it's mutable (can be changed).
+
+Requirement 2: Keys Must Be Unique
+-----------------------------------
+Within a single dictionary, each key can only appear once. If you try to use the 
+same key twice, the second value will overwrite the first value.
+
+Example: Duplicate Keys
+------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "Back in Black": 1981  # This overwrites the first entry!
+}
+
+What happens?
+- The first key-value pair "Back in Black": 1980 is created
+- The second key-value pair "Back in Black": 1981 overwrites the first
+- The final dictionary only contains: {"Back in Black": 1981}
+
+The first value (1980) is lost because dictionary keys must be unique. Python 
+keeps only the last value assigned to a duplicate key.
+
+Visual Representation:
+Before overwriting:
+┌─────────────────┬──────┐
+│      KEY        │ VALUE│
+├─────────────────┼──────┤
+│ "Back in Black" │ 1980 │  ← First entry
+│ "Back in Black" │ 1981 │  ← Second entry (overwrites first)
+└─────────────────┴──────┘
+
+After Python processes:
+┌─────────────────┬──────┐
+│      KEY        │ VALUE│
+├─────────────────┼──────┤
+│ "Back in Black" │ 1981 │  ← Only this remains
+└─────────────────┴──────┘
+
+Why Must Keys Be Unique?
+Python uses keys to quickly locate values. If the same key appeared multiple 
+times, Python wouldn't know which value to return when you access that key. 
+Therefore, keys must be unique to ensure unambiguous value retrieval.
+
+================================================================================
+SECTION 4: UNDERSTANDING DICTIONARY VALUES
+================================================================================
+
+VALUE REQUIREMENTS - FLEXIBILITY
+================================================================================
+
+Unlike keys, dictionary values have no strict requirements. They are very flexible 
+and can be:
+
+1. Immutable Types: Strings, numbers, tuples, booleans
+2. Mutable Types: Lists, dictionaries, sets
+3. Duplicates: Multiple keys can have the same value
+4. Any Type: Values can be of any Python data type
+
+This flexibility makes dictionaries powerful for storing complex data structures.
+
+Example: Values Can Be Immutable Types
+---------------------------------------
+immutable_values = {
+    "name": "Alice",           # String value
+    "age": 25,                 # Integer value
+    "height": 5.6,             # Float value
+    "coordinates": (10, 20),   # Tuple value
+    "is_active": True          # Boolean value
+}
+
+Line-by-line explanation:
+- "name": "Alice" = value is a string (immutable)
+- "age": 25 = value is an integer (immutable)
+- "height": 5.6 = value is a float (immutable)
+- "coordinates": (10, 20) = value is a tuple (immutable)
+- "is_active": True = value is a boolean (immutable)
+
+Example: Values Can Be Mutable Types
+-------------------------------------
+mutable_values = {
+    "scores": [85, 90, 88],                    # List value (mutable)
+    "metadata": {"version": 1.0, "author": "John"},  # Dictionary value (mutable)
+    "tags": {"python", "programming"}         # Set value (mutable)
+}
+
+Line-by-line explanation:
+- "scores": [85, 90, 88] = value is a list (mutable - can be changed)
+- "metadata": {...} = value is a dictionary (mutable - can be changed)
+- "tags": {...} = value is a set (mutable - can be changed)
+
+Important: While the dictionary itself can contain mutable values, the KEYS 
+must still be immutable. The values can be anything!
+
+Example: Values Can Be Duplicates
+-----------------------------------
+duplicate_values = {
+    "album1": 1980,
+    "album2": 1980,  # Same value as album1 - this is allowed!
+    "album3": 1980   # Same value again - still allowed!
+}
+
+Line-by-line explanation:
+- "album1": 1980 = first key-value pair
+- "album2": 1980 = second key-value pair with same value (1980) - this is OK!
+- "album3": 1980 = third key-value pair with same value (1980) - still OK!
+
+Visual Representation:
+┌─────────┬──────┐
+│   KEY   │ VALUE│
+├─────────┼──────┤
+│ "album1"│ 1980 │
+│ "album2"│ 1980 │  ← Same value - allowed!
+│ "album3"│ 1980 │  ← Same value - allowed!
+└─────────┴──────┘
+
+Key Point: While keys must be unique, values can be duplicated. Multiple keys 
+can point to the same value.
+
+Example: Values Can Be Mixed Types
+-----------------------------------
+mixed_values = {
+    "name": "Bob",              # String
+    "age": 30,                  # Integer
+    "grades": [90, 85, 95],     # List
+    "info": {"city": "NYC"},    # Dictionary
+    "active": True               # Boolean
+}
+
+This dictionary demonstrates that values can be completely different types within 
+the same dictionary. This flexibility allows you to store complex, heterogeneous 
+data structures.
+
+================================================================================
+SECTION 5: ACCESSING VALUES IN DICTIONARIES
+================================================================================
+
+USING SQUARE BRACKETS TO ACCESS VALUES
+================================================================================
+
+To retrieve a value from a dictionary, you use square brackets [] with the key. 
+This is similar to accessing list elements, but instead of using an integer index, 
+you use the key.
+
+Basic Syntax:
+dictionary_name[key]
+
+Breaking Down the Syntax:
+- dictionary_name = The variable name of the dictionary
+- [ ] = Square brackets (same as used for list indexing)
+- key = The key whose value you want to retrieve
+
+Example 1: Accessing a Value with a String Key
+-----------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+release_year = album_releases["Back in Black"]
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary "album_releases" with three key-value pairs
+- Line 7: Accesses a value from the dictionary
+  - "album_releases" = the dictionary variable name
+  - "[\"Back in Black\"]" = square brackets containing the key
+  - The key "Back in Black" is used to look up its associated value
+  - Python finds the key "Back in Black" in the dictionary
+  - Python returns the value associated with that key: 1980
+  - "release_year" = variable that stores the retrieved value
+  - "=" = assignment operator
+
+Result: release_year now contains the value 1980
+
+What Happens Behind the Scenes?
+1. Python receives the key "Back in Black"
+2. Python searches the dictionary for this key
+3. Python finds the key-value pair: "Back in Black": 1980
+4. Python returns the value: 1980
+5. The value is assigned to the variable release_year
+
+Example 2: Accessing Multiple Values
+-------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+year1 = album_releases["Back in Black"]
+year2 = album_releases["The Dark Side of the Moon"]
+year3 = album_releases["The Bodyguard"]
+
+Line-by-line explanation:
+- Line 1-5: Creates dictionary with three key-value pairs
+- Line 7: Accesses value for key "Back in Black"
+  - Looks up "Back in Black" → returns 1980
+  - year1 = 1980
+- Line 8: Accesses value for key "The Dark Side of the Moon"
+  - Looks up "The Dark Side of the Moon" → returns 1973
+  - year2 = 1973
+- Line 9: Accesses value for key "The Bodyguard"
+  - Looks up "The Bodyguard" → returns 1992
+  - year3 = 1992
+
+Result:
+- year1 = 1980
+- year2 = 1973
+- year3 = 1992
+
+Example 3: Accessing Values with Different Key Types
+----------------------------------------------------
+mixed_dict = {
+    "name": "Alice",
+    42: "The Answer",
+    (1, 2): "Tuple Key"
+}
+
+value1 = mixed_dict["name"]
+value2 = mixed_dict[42]
+value3 = mixed_dict[(1, 2)]
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with different key types
+- Line 7: Accesses value using string key "name"
+  - mixed_dict["name"] → returns "Alice"
+  - value1 = "Alice"
+- Line 8: Accesses value using integer key 42
+  - mixed_dict[42] → returns "The Answer"
+  - value2 = "The Answer"
+- Line 9: Accesses value using tuple key (1, 2)
+  - mixed_dict[(1, 2)] → returns "Tuple Key"
+  - value3 = "Tuple Key"
+
+Key Point: Regardless of the key type (string, integer, tuple), you use the 
+same square bracket syntax to access values.
+
+WHAT HAPPENS IF THE KEY DOESN'T EXIST?
+================================================================================
+
+If you try to access a key that doesn't exist in the dictionary, Python will 
+raise a KeyError. This is an error that tells you the key you're looking for 
+is not in the dictionary.
+
+Example: KeyError When Key Doesn't Exist
+-----------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+# This will cause a KeyError!
+year = album_releases["Thriller"]  # "Thriller" is not in the dictionary!
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary with two key-value pairs
+- Line 6: Attempts to access key "Thriller"
+  - Python searches for "Thriller" in the dictionary
+  - Python doesn't find it
+  - Python raises KeyError: 'Thriller'
+
+Error Message:
+KeyError: 'Thriller'
+
+This error means: "The key 'Thriller' does not exist in this dictionary."
+
+Why This Happens:
+Python cannot return a value for a key that doesn't exist because there is no 
+value associated with that key. Python raises an error to alert you that you're 
+trying to access a non-existent key.
+
+How to Avoid KeyError:
+There are several ways to safely access dictionary values without getting a 
+KeyError. We'll cover these methods in later sections, including:
+- Using the .get() method
+- Using the "in" operator to check if key exists first
+- Using try-except blocks
+
+================================================================================
+SECTION 6: ADDING AND MODIFYING ENTRIES IN DICTIONARIES
+================================================================================
+
+ADDING NEW KEY-VALUE PAIRS
+================================================================================
+
+Dictionaries are mutable, which means you can add new key-value pairs after the 
+dictionary has been created. To add a new entry, you use the same square bracket 
+syntax used for accessing values, but you assign a value to it.
+
+Syntax for Adding:
+dictionary_name[new_key] = new_value
+
+Breaking Down the Syntax:
+- dictionary_name = The dictionary variable name
+- [new_key] = Square brackets with the new key you want to add
+- = = Assignment operator
+- new_value = The value you want to associate with the new key
+
+Example 1: Adding a Single New Entry
+-------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+album_releases["Graduation"] = 2007
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with three existing key-value pairs
+- Line 7: Adds a new key-value pair to the dictionary
+  - "album_releases" = the dictionary variable name
+  - "[\"Graduation\"]" = square brackets with the new key "Graduation"
+  - "=" = assignment operator
+  - "2007" = the value to associate with the key "Graduation"
+  - Python adds the new key-value pair: "Graduation": 2007
+
+Result: The dictionary now contains:
+{
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992,
+    "Graduation": 2007  ← New entry added
+}
+
+Visual Representation:
+Before adding:
+┌──────────────────────────────┬──────┐
+│            KEY               │ VALUE│
+├──────────────────────────────┼──────┤
+│ "Back in Black"              │ 1980 │
+│ "The Dark Side of the Moon"  │ 1973 │
+│ "The Bodyguard"              │ 1992 │
+└──────────────────────────────┴──────┘
+
+After adding:
+┌──────────────────────────────┬──────┐
+│            KEY               │ VALUE│
+├──────────────────────────────┼──────┤
+│ "Back in Black"              │ 1980 │
+│ "The Dark Side of the Moon"  │ 1973 │
+│ "The Bodyguard"              │ 1992 │
+│ "Graduation"                 │ 2007 │  ← New entry
+└──────────────────────────────┴──────┘
+
+What Happens in Memory?
+1. Python receives the assignment: album_releases["Graduation"] = 2007
+2. Python checks if "Graduation" key exists in the dictionary
+3. Since it doesn't exist, Python creates a new key-value pair
+4. Python adds "Graduation": 2007 to the dictionary
+5. The dictionary now contains four key-value pairs
+
+Example 2: Adding Multiple New Entries
+----------------------------------------
+album_releases = {
+    "Back in Black": 1980
+}
+
+album_releases["The Dark Side of the Moon"] = 1973
+album_releases["The Bodyguard"] = 1992
+album_releases["Graduation"] = 2007
+
+Line-by-line explanation:
+- Line 1-3: Creates dictionary with one initial key-value pair
+- Line 5: Adds second key-value pair "The Dark Side of the Moon": 1973
+- Line 6: Adds third key-value pair "The Bodyguard": 1992
+- Line 7: Adds fourth key-value pair "Graduation": 2007
+
+Result: The dictionary now contains all four entries.
+
+MODIFYING EXISTING ENTRIES
+================================================================================
+
+If you assign a value to a key that already exists in the dictionary, Python 
+will update (modify) the existing value rather than creating a duplicate key. 
+This is because dictionary keys must be unique.
+
+Syntax for Modifying:
+dictionary_name[existing_key] = new_value
+
+Example: Modifying an Existing Value
+--------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+album_releases["Back in Black"] = 1981
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary with two key-value pairs
+- Line 6: Modifies the value for existing key "Back in Black"
+  - "album_releases" = dictionary variable name
+  - "[\"Back in Black\"]" = existing key in square brackets
+  - "=" = assignment operator
+  - "1981" = new value to replace the old value
+  - Python finds the existing key "Back in Black"
+  - Python replaces the old value (1980) with the new value (1981)
+
+Result: The dictionary now contains:
+{
+    "Back in Black": 1981,  ← Value changed from 1980 to 1981
+    "The Dark Side of the Moon": 1973
+}
+
+Visual Representation:
+Before modification:
+┌─────────────────┬──────┐
+│      KEY        │ VALUE│
+├─────────────────┼──────┤
+│ "Back in Black" │ 1980 │
+└─────────────────┴──────┘
+
+After modification:
+┌─────────────────┬──────┐
+│      KEY        │ VALUE│
+├─────────────────┼──────┤
+│ "Back in Black" │ 1981 │  ← Value updated
+└─────────────────┴──────┘
+
+What Happens in Memory?
+1. Python receives: album_releases["Back in Black"] = 1981
+2. Python searches for key "Back in Black" in the dictionary
+3. Python finds the existing key-value pair: "Back in Black": 1980
+4. Python replaces the value 1980 with 1981
+5. The dictionary now contains "Back in Black": 1981
+
+Key Point: The same syntax (dictionary[key] = value) is used for both adding 
+new entries and modifying existing entries. Python automatically determines 
+whether to add or modify based on whether the key already exists.
+
+================================================================================
+SECTION 7: DELETING ENTRIES FROM DICTIONARIES
+================================================================================
+
+REMOVING KEY-VALUE PAIRS
+================================================================================
+
+You can remove entries from a dictionary using the `del` statement. This 
+permanently removes the key-value pair from the dictionary.
+
+Syntax for Deleting:
+del dictionary_name[key]
+
+Breaking Down the Syntax:
+- del = Python keyword that deletes an object
+- dictionary_name = The dictionary variable name
+- [key] = Square brackets with the key of the entry you want to delete
+
+Example: Deleting an Entry
+---------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992,
+    "Thriller": 1982
+}
+
+del album_releases["Thriller"]
+
+Line-by-line explanation:
+- Lines 1-6: Creates dictionary with four key-value pairs
+- Line 8: Deletes the key-value pair with key "Thriller"
+  - "del" = Python keyword for deletion
+  - "album_releases" = dictionary variable name
+  - "[\"Thriller\"]" = key of the entry to delete
+  - Python searches for key "Thriller" in the dictionary
+  - Python finds the key-value pair "Thriller": 1982
+  - Python removes this pair from the dictionary
+
+Result: The dictionary now contains:
+{
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+    # "Thriller": 1982 has been removed
+}
+
+Visual Representation:
+Before deletion:
+┌──────────────────────────────┬──────┐
+│            KEY               │ VALUE│
+├──────────────────────────────┼──────┤
+│ "Back in Black"              │ 1980 │
+│ "The Dark Side of the Moon"  │ 1973 │
+│ "The Bodyguard"              │ 1992 │
+│ "Thriller"                   │ 1982 │
+└──────────────────────────────┴──────┘
+
+After deletion:
+┌──────────────────────────────┬──────┐
+│            KEY               │ VALUE│
+├──────────────────────────────┼──────┤
+│ "Back in Black"              │ 1980 │
+│ "The Dark Side of the Moon"  │ 1973 │
+│ "The Bodyguard"              │ 1992 │
+│                              │      │  ← "Thriller" entry removed
+└──────────────────────────────┴──────┘
+
+What Happens in Memory?
+1. Python receives: del album_releases["Thriller"]
+2. Python searches for key "Thriller" in the dictionary
+3. Python finds the key-value pair
+4. Python removes the pair from the dictionary's internal structure
+5. The memory used by that pair is freed (garbage collected)
+6. The dictionary now contains three entries instead of four
+
+WHAT HAPPENS IF YOU TRY TO DELETE A NON-EXISTENT KEY?
+================================================================================
+
+If you try to delete a key that doesn't exist in the dictionary, Python will 
+raise a KeyError, just like when you try to access a non-existent key.
+
+Example: KeyError When Deleting Non-Existent Key
+-------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+# This will cause a KeyError!
+del album_releases["Thriller"]  # "Thriller" is not in the dictionary!
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary with two key-value pairs
+- Line 6: Attempts to delete key "Thriller"
+  - Python searches for "Thriller" in the dictionary
+  - Python doesn't find it
+  - Python raises KeyError: 'Thriller'
+
+Error Message:
+KeyError: 'Thriller'
+
+This error means: "The key 'Thriller' does not exist in this dictionary, so 
+there's nothing to delete."
+
+How to Avoid KeyError When Deleting:
+You can check if a key exists before deleting it, or use methods that handle 
+non-existent keys gracefully. We'll cover these in later sections.
+
+================================================================================
+END OF PART 1
+================================================================================
+
+This concludes Part 1 of the comprehensive dictionary study guide. In Part 2, 
+we will cover:
+- Checking if keys exist in dictionaries (the "in" operator)
+- Dictionary methods (keys(), values(), items())
+- Iterating over dictionaries
+- Dictionary comprehensions
+- Nested dictionaries
+- And much more!
+
+Continue to Part 2 for more advanced dictionary operations and techniques.

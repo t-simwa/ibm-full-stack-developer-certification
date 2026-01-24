@@ -1,0 +1,2038 @@
+================================================================================
+CONDITIONS AND BRANCHING IN PYTHON
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Conditions and Branching in Python. This comprehensive guide will 
+teach you everything you need to know about making decisions in your Python 
+programs, from understanding comparison operations and Boolean values, to 
+mastering conditional statements and logic operators.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what comparison operations are and how they work
+• Explain Boolean values (True and False) and their purpose
+• Use all comparison operators (==, !=, >, <, >=, <=)
+• Compare different data types (integers, floats, strings)
+• Understand how comparison operations produce Boolean results
+• Recognize when and why to use comparison operations
+• Apply comparison operations in real-world scenarios
+
+OVERVIEW
+--------
+In programming, you often need to make decisions based on certain conditions. 
+For example, "If the user is 18 or older, allow them to access the website" 
+or "If the temperature is above 100 degrees, turn on the air conditioning."
+
+Python provides comparison operations that allow you to compare values and 
+produce Boolean results (True or False). These Boolean results are then used 
+in conditional statements (if, else, elif) to control the flow of your program.
+
+Comparison operations are fundamental to programming because they allow your 
+programs to:
+• Make decisions based on data
+• Validate user input
+• Control program flow
+• Filter and process data conditionally
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers comparison operations and Boolean values:
+
+PART 1: COMPARISON OPERATIONS AND BOOLEAN VALUES
+  SECTION 1.1: WHAT ARE COMPARISON OPERATIONS?
+  SECTION 1.2: UNDERSTANDING BOOLEAN VALUES
+  SECTION 1.3: THE EQUALITY OPERATOR (==)
+  SECTION 1.4: THE INEQUALITY OPERATOR (!=)
+  SECTION 1.5: THE GREATER THAN OPERATOR (>)
+  SECTION 1.6: THE LESS THAN OPERATOR (<)
+  SECTION 1.7: THE GREATER THAN OR EQUAL TO OPERATOR (>=)
+  SECTION 1.8: THE LESS THAN OR EQUAL TO OPERATOR (<=)
+  SECTION 1.9: COMPARING DIFFERENT DATA TYPES
+  SECTION 1.10: SUMMARY OF COMPARISON OPERATORS
+
+NOTE: Part 2 covers branching with if, else, and elif statements.
+      Part 3 covers logic operators (not, or, and) and advanced patterns.
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: COMPARISON OPERATIONS AND BOOLEAN VALUES
+================================================================================
+
+SECTION 1.1: WHAT ARE COMPARISON OPERATIONS?
+---------------------------------------------
+
+DEFINITION
+----------
+Comparison operations compare some value or operand. Then, based on some 
+condition, they produce a Boolean value (True or False).
+
+DETAILED EXPLANATION
+--------------------
+Comparison operations are operations that compare two values and determine 
+the relationship between them. They answer questions like:
+• Are these two values equal?
+• Is this value greater than that value?
+• Is this value less than that value?
+
+When you perform a comparison operation, Python evaluates the comparison and 
+returns a Boolean value:
+• True - if the comparison is correct
+• False - if the comparison is incorrect
+
+KEY CHARACTERISTICS
+-------------------
+• Comparison operations always produce Boolean results (True or False)
+• They compare two operands (values or variables)
+• The operands can be of the same or compatible types
+• Comparison operations are used in conditional statements
+• They form the foundation of decision-making in programs
+
+REAL-WORLD ANALOGY
+------------------
+Think of comparison operations like a scale or balance:
+• You place two items on the scale (two values to compare)
+• The scale tells you which is heavier, lighter, or if they're equal
+• The result is definitive: one is heavier, lighter, or they're equal
+
+In programming:
+• You place two values in a comparison operation
+• Python tells you if the comparison is True or False
+• The result determines what your program does next
+
+WHY ARE COMPARISON OPERATIONS IMPORTANT?
+----------------------------------------
+Comparison operations are essential because:
+1. They allow programs to make decisions
+2. They enable conditional logic (if this, then that)
+3. They validate data and user input
+4. They control program flow
+5. They filter and process data based on conditions
+
+EXAMPLE: BASIC COMPARISON
+--------------------------
+  # Assign a value to variable a
+  a = 6
+  
+  # Compare a with 7
+  result = a == 7
+  print(result)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable a
+        • This is a comment explaining what the next line does
+        • Comments help document your code
+        • Comments are ignored by Python when running the code
+
+Line 2: a = 6
+        • a - This is a variable name (a container that holds a value)
+        • = - This is the assignment operator (assigns a value to a variable)
+        • 6 - This is an integer value (a whole number)
+        • This line stores the number 6 in a variable named 'a'
+        • Think of it like putting the number 6 in a box labeled 'a'
+
+Line 3: (blank line)
+        • Empty lines improve code readability
+        • They separate logical sections of code
+        • Python ignores blank lines
+
+Line 4: # Compare a with 7
+        • Another comment explaining the purpose of the next line
+
+Line 5: result = a == 7
+        • result - A new variable to store the comparison result
+        • = - Assignment operator (assigns the result to 'result')
+        • a - The variable we created earlier (contains 6)
+        • == - The equality operator (checks if two values are equal)
+        • 7 - The number we're comparing against
+        • This line asks: "Is the value in 'a' equal to 7?"
+        • Since a contains 6, and 6 is not equal to 7, the answer is False
+        • The False value is stored in the 'result' variable
+
+Line 6: print(result)  # Output: False
+        • print() - A built-in Python function that displays output
+        • result - The variable containing the comparison result (False)
+        • This line displays the value stored in 'result'
+        • The output will be: False
+        • The comment shows what will be displayed
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+1. Python creates a variable 'a' and stores the value 6 in it
+2. Python evaluates the comparison: a == 7
+   • It looks at what's in 'a' (which is 6)
+   • It compares 6 with 7
+   • It asks: "Is 6 equal to 7?" → No, so the answer is False
+3. Python stores False in the variable 'result'
+4. Python displays False on the screen
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: UNDERSTANDING BOOLEAN VALUES
+------------------------------------------
+
+DEFINITION
+----------
+Boolean values are the two possible results of comparison operations: True 
+and False. They represent the truth value of a condition.
+
+DETAILED EXPLANATION
+--------------------
+Boolean values are named after George Boole, a mathematician who developed 
+Boolean algebra. In Python, there are exactly two Boolean values:
+• True - represents a true condition or affirmative answer
+• False - represents a false condition or negative answer
+
+These are not strings (text), but special values in Python that represent 
+truth or falsity. They are used throughout programming to make decisions.
+
+KEY CHARACTERISTICS OF BOOLEAN VALUES
+--------------------------------------
+• There are only two possible values: True and False
+• They are case-sensitive (must be capitalized: True, not true)
+• They are used in conditional statements (if, else, elif)
+• They control program flow and decision-making
+• They are the result of comparison operations
+• They can be stored in variables
+• They can be used in logic operations (and, or, not)
+
+REAL-WORLD ANALOGY
+------------------
+Think of Boolean values like a light switch:
+• True = Light is ON (condition is true)
+• False = Light is OFF (condition is false)
+
+Or like answering yes/no questions:
+• "Is it raining?" → True (yes) or False (no)
+• "Are you 18 or older?" → True (yes) or False (no)
+• "Is 5 greater than 3?" → True (yes)
+
+HOW BOOLEAN VALUES WORK IN PYTHON
+----------------------------------
+When Python evaluates a comparison, it returns a Boolean value:
+
+  # Example 1: Comparison that is True
+  result1 = 5 > 3
+  print(result1)  # Output: True
+  print(type(result1))  # Output: <class 'bool'>
+
+  # Example 2: Comparison that is False
+  result2 = 5 < 3
+  print(result2)  # Output: False
+  print(type(result2))  # Output: <class 'bool'>
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Example 1:
+----------
+Line 1: # Example 1: Comparison that is True
+        • Comment describing the example
+
+Line 2: result1 = 5 > 3
+        • result1 - Variable name to store the result
+        • = - Assignment operator
+        • 5 > 3 - Comparison operation: "Is 5 greater than 3?"
+        • Since 5 is indeed greater than 3, this evaluates to True
+        • True is stored in result1
+
+Line 3: print(result1)  # Output: True
+        • Displays the value stored in result1
+        • Output: True
+
+Line 4: print(type(result1))  # Output: <class 'bool'>
+        • type() - Built-in function that returns the data type of a value
+        • result1 - The variable we're checking the type of
+        • <class 'bool'> - Shows that result1 is a Boolean type
+        • 'bool' is short for Boolean
+
+Example 2:
+----------
+Line 1: # Example 2: Comparison that is False
+        • Comment describing the second example
+
+Line 2: result2 = 5 < 3
+        • result2 - Variable name to store the result
+        • = - Assignment operator
+        • 5 < 3 - Comparison operation: "Is 5 less than 3?"
+        • Since 5 is NOT less than 3, this evaluates to False
+        • False is stored in result2
+
+Line 3: print(result2)  # Output: False
+        • Displays the value stored in result2
+        • Output: False
+
+Line 4: print(type(result2))  # Output: <class 'bool'>
+        • Shows that result2 is also a Boolean type
+        • Confirms that comparison operations always return Boolean values
+
+STORING BOOLEAN VALUES DIRECTLY
+--------------------------------
+You can also assign Boolean values directly to variables:
+
+  is_raining = True
+  is_sunny = False
+  user_is_adult = True
+  account_is_active = False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: is_raining = True
+        • is_raining - Variable name (descriptive name using snake_case)
+        • = - Assignment operator
+        • True - Boolean value representing "yes, it is raining"
+        • This stores True in the variable is_raining
+
+Line 2: is_sunny = False
+        • is_sunny - Variable name
+        • False - Boolean value representing "no, it is not sunny"
+        • This stores False in the variable is_sunny
+
+Line 3: user_is_adult = True
+        • user_is_adult - Descriptive variable name
+        • True - Represents that the user is an adult
+        • Good practice: use descriptive names that explain what the Boolean represents
+
+Line 4: account_is_active = False
+        • account_is_active - Variable name
+        • False - Represents that the account is not active
+        • These Boolean variables can be used later in conditional statements
+
+USING BOOLEAN VALUES IN CONDITIONS
+-----------------------------------
+Boolean values are primarily used in conditional statements:
+
+  age = 20
+  is_adult = age >= 18
+  
+  if is_adult:
+      print("You can vote!")
+  else:
+      print("You cannot vote yet.")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: age = 20
+        • Stores the age value (20) in variable 'age'
+
+Line 2: is_adult = age >= 18
+        • age >= 18 - Comparison: "Is age greater than or equal to 18?"
+        • Since 20 >= 18 is True, is_adult becomes True
+        • This stores True in is_adult
+
+Line 3: (blank line for readability)
+
+Line 4: if is_adult:
+        • if - Conditional statement keyword
+        • is_adult - The Boolean variable we're checking
+        • : - Colon indicates the start of the if block
+        • If is_adult is True, the code inside will execute
+
+Line 5:     print("You can vote!")
+        • Four spaces of indentation (required in Python)
+        • This code only runs if is_adult is True
+        • Displays "You can vote!"
+
+Line 6: else:
+        • else - Alternative path if the condition is False
+        • : - Colon indicates the start of the else block
+
+Line 7:     print("You cannot vote yet.")
+        • Four spaces of indentation
+        • This code only runs if is_adult is False
+        • Displays "You cannot vote yet."
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: THE EQUALITY OPERATOR (==)
+----------------------------------------
+
+DEFINITION
+----------
+The equality operator (==) is used to determine if two values are equal. 
+It returns True if the values are equal, and False if they are not equal.
+
+DETAILED EXPLANATION
+--------------------
+The equality operator uses two equal signs (==) to compare two values. It's 
+important to note that this is different from the assignment operator (=), 
+which assigns a value to a variable.
+
+SYNTAX
+------
+  value1 == value2
+
+This compares value1 with value2 and returns:
+• True if value1 equals value2
+• False if value1 does not equal value2
+
+KEY POINTS
+----------
+• Uses two equal signs (==), not one (=)
+• One equal sign (=) is for assignment, two (==) is for comparison
+• Compares the actual values, not the variable names
+• Works with numbers, strings, and other data types
+• Case-sensitive when comparing strings
+
+REAL-WORLD ANALOGY
+------------------
+Think of the equality operator like a balance scale:
+• You place two items on the scale
+• If they weigh the same, the scale balances (True)
+• If they weigh differently, the scale tips (False)
+
+EXAMPLE 1: COMPARING NUMBERS
+------------------------------
+  # Assign a value to variable a
+  a = 6
+  
+  # Compare a with 7 using equality operator
+  result1 = a == 7
+  print("Is a equal to 7?", result1)  # Output: Is a equal to 7? False
+  
+  # Compare a with 6 using equality operator
+  result2 = a == 6
+  print("Is a equal to 6?", result2)  # Output: Is a equal to 6? True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable a
+        • Comment explaining the purpose
+
+Line 2: a = 6
+        • Creates variable 'a' and assigns the integer 6 to it
+        • The single = is the assignment operator
+
+Line 3: (blank line for readability)
+
+Line 4: # Compare a with 7 using equality operator
+        • Comment explaining the comparison
+
+Line 5: result1 = a == 7
+        • result1 - Variable to store the comparison result
+        • = - Assignment operator (assigns the result to result1)
+        • a - Variable containing 6
+        • == - Equality operator (compares two values)
+        • 7 - The value we're comparing against
+        • Python evaluates: "Is the value in 'a' (which is 6) equal to 7?"
+        • Answer: No, 6 is not equal to 7, so the result is False
+        • False is stored in result1
+
+Line 6: print("Is a equal to 7?", result1)
+        • print() - Function to display output
+        • "Is a equal to 7?" - String literal (text to display)
+        • , - Separates multiple items to print
+        • result1 - The variable containing False
+        • Output: Is a equal to 7? False
+
+Line 7: (blank line)
+
+Line 8: # Compare a with 6 using equality operator
+        • Comment for the second comparison
+
+Line 9: result2 = a == 6
+        • result2 - Variable to store the second comparison result
+        • a == 6 - Comparison: "Is the value in 'a' (which is 6) equal to 6?"
+        • Answer: Yes, 6 equals 6, so the result is True
+        • True is stored in result2
+
+Line 10: print("Is a equal to 6?", result2)
+         • Displays the question and the result
+         • Output: Is a equal to 6? True
+
+WHAT HAPPENS STEP-BY-STEP:
+--------------------------
+For result1 = a == 7:
+1. Python looks at variable 'a' and finds it contains 6
+2. Python compares 6 with 7 using ==
+3. Python asks: "Is 6 equal to 7?" → No
+4. Python returns False
+5. False is stored in result1
+
+For result2 = a == 6:
+1. Python looks at variable 'a' and finds it contains 6
+2. Python compares 6 with 6 using ==
+3. Python asks: "Is 6 equal to 6?" → Yes
+4. Python returns True
+5. True is stored in result2
+
+EXAMPLE 2: COMPARING FLOATS
+----------------------------
+  # Assign a float value
+  price = 19.99
+  
+  # Compare with different values
+  result1 = price == 20.00
+  print("Is price equal to 20.00?", result1)  # Output: False
+  
+  result2 = price == 19.99
+  print("Is price equal to 19.99?", result2)  # Output: True
+  
+  # Be careful with floating-point precision
+  result3 = 0.1 + 0.2 == 0.3
+  print("Is 0.1 + 0.2 equal to 0.3?", result3)  # Output: False (surprising!)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a float value
+        • Comment explaining we're working with decimal numbers
+
+Line 2: price = 19.99
+        • price - Variable name
+        • 19.99 - Float (decimal number)
+        • Stores 19.99 in price
+
+Line 3: (blank line)
+
+Line 4: # Compare with different values
+        • Comment
+
+Line 5: result1 = price == 20.00
+        • Compares 19.99 with 20.00
+        • Since 19.99 ≠ 20.00, result is False
+
+Line 6: print("Is price equal to 20.00?", result1)
+        • Output: Is price equal to 20.00? False
+
+Line 7: (blank line)
+
+Line 8: result2 = price == 19.99
+        • Compares 19.99 with 19.99
+        • Since they're equal, result is True
+
+Line 9: print("Is price equal to 19.99?", result2)
+        • Output: Is price equal to 19.99? True
+
+Line 10: (blank line)
+
+Line 11: # Be careful with floating-point precision
+         • Important comment about a common pitfall
+
+Line 12: result3 = 0.1 + 0.2 == 0.3
+         • 0.1 + 0.2 - Calculates 0.1 + 0.2 first
+         • The result is approximately 0.30000000000000004 (due to floating-point representation)
+         • == 0.3 - Compares this with 0.3
+         • They're not exactly equal, so result is False
+         • This is a common issue with floating-point arithmetic
+
+Line 13: print("Is 0.1 + 0.2 equal to 0.3?", result3)
+         • Output: Is 0.1 + 0.2 equal to 0.3? False
+
+IMPORTANT NOTE ABOUT FLOATING-POINT COMPARISONS
+-----------------------------------------------
+When comparing floats, be aware that floating-point arithmetic can have 
+precision issues. Instead of using ==, consider using a small tolerance:
+
+  # Better way to compare floats
+  tolerance = 0.0001
+  result = abs(0.1 + 0.2 - 0.3) < tolerance
+  print(result)  # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Better way to compare floats
+        • Comment explaining a better approach
+
+Line 2: tolerance = 0.0001
+        • tolerance - A small acceptable difference
+        • 0.0001 - The maximum difference we'll accept as "equal"
+
+Line 3: result = abs(0.1 + 0.2 - 0.3) < tolerance
+        • abs() - Absolute value function (removes negative sign)
+        • 0.1 + 0.2 - Calculates 0.30000000000000004
+        • - 0.3 - Subtracts 0.3, giving a very small difference
+        • abs() - Makes sure the difference is positive
+        • < tolerance - Checks if the difference is less than our tolerance
+        • If the difference is tiny, we consider them equal
+        • Result: True (the difference is very small)
+
+Line 4: print(result)
+        • Output: True
+
+EXAMPLE 3: COMPARING STRINGS
+-----------------------------
+  # Comparing strings
+  band1 = "AC/DC"
+  band2 = "Michael Jackson"
+  band3 = "AC/DC"
+  
+  # Compare different strings
+  result1 = band1 == band2
+  print("Is band1 equal to band2?", result1)  # Output: False
+  
+  # Compare same strings
+  result2 = band1 == band3
+  print("Is band1 equal to band3?", result2)  # Output: True
+  
+  # String comparison is case-sensitive
+  result3 = "Python" == "python"
+  print("Is 'Python' equal to 'python'?", result3)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Comparing strings
+        • Comment explaining we're comparing text
+
+Line 2: band1 = "AC/DC"
+        • band1 - Variable name
+        • "AC/DC" - String literal (text in quotes)
+        • Stores the text "AC/DC" in band1
+
+Line 3: band2 = "Michael Jackson"
+        • Stores "Michael Jackson" in band2
+
+Line 4: band3 = "AC/DC"
+        • Stores "AC/DC" in band3 (same as band1)
+
+Line 5: (blank line)
+
+Line 6: # Compare different strings
+        • Comment
+
+Line 7: result1 = band1 == band2
+        • Compares "AC/DC" with "Michael Jackson"
+        • They are different strings, so result is False
+
+Line 8: print("Is band1 equal to band2?", result1)
+        • Output: Is band1 equal to band2? False
+
+Line 9: (blank line)
+
+Line 10: # Compare same strings
+         • Comment
+
+Line 11: result2 = band1 == band3
+         • Compares "AC/DC" with "AC/DC"
+         • They are identical strings, so result is True
+
+Line 12: print("Is band1 equal to band3?", result2)
+         • Output: Is band1 equal to band3? True
+
+Line 13: (blank line)
+
+Line 14: # String comparison is case-sensitive
+         • Important comment about case sensitivity
+
+Line 15: result3 = "Python" == "python"
+         • Compares "Python" (capital P) with "python" (lowercase p)
+         • String comparison is case-sensitive, so they're different
+         • Result: False
+
+Line 16: print("Is 'Python' equal to 'python'?", result3)
+         • Output: Is 'Python' equal to 'python'? False
+
+COMMON MISTAKES TO AVOID
+-------------------------
+1. Using = instead of ==
+   Wrong:  if a = 5:  # This assigns 5 to a, doesn't compare!
+   Right:  if a == 5:  # This compares a with 5
+
+2. Comparing different data types
+   result = "5" == 5  # False (string "5" vs integer 5)
+   result = 5 == 5.0  # True (Python converts int to float for comparison)
+
+3. Forgetting case sensitivity with strings
+   result = "Hello" == "hello"  # False (different cases)
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: THE INEQUALITY OPERATOR (!=)
+------------------------------------------
+
+DEFINITION
+----------
+The inequality operator (!=) checks if two values are NOT equal. It returns 
+True if the values are different, and False if they are the same.
+
+DETAILED EXPLANATION
+--------------------
+The inequality operator uses an exclamation mark followed by an equal sign 
+(!=) to determine if two values are different. It's the opposite of the 
+equality operator (==).
+
+SYNTAX
+------
+  value1 != value2
+
+This compares value1 with value2 and returns:
+• True if value1 does NOT equal value2 (they are different)
+• False if value1 equals value2 (they are the same)
+
+KEY POINTS
+----------
+• Uses exclamation mark and equal sign (!=)
+• Returns True when values are different
+• Returns False when values are the same
+• Opposite of the equality operator (==)
+• Works with numbers, strings, and other data types
+• Case-sensitive when comparing strings
+
+REAL-WORLD ANALOGY
+------------------
+Think of the inequality operator like checking if two items are different:
+• "Are these two apples different?" → True if they're different, False if identical
+• "Is this password different from the old one?" → True if changed, False if same
+
+EXAMPLE 1: COMPARING NUMBERS WITH INEQUALITY
+---------------------------------------------
+  # Assign a value
+  i = 2
+  
+  # Check if i is not equal to 6
+  result = i != 6
+  print("Is i not equal to 6?", result)  # Output: True
+  
+  # Check if i is not equal to 2
+  result2 = i != 2
+  print("Is i not equal to 2?", result2)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value
+        • Comment
+
+Line 2: i = 2
+        • Creates variable 'i' and assigns 2 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if i is not equal to 6
+        • Comment explaining the comparison
+
+Line 5: result = i != 6
+        • result - Variable to store the result
+        • i - Variable containing 2
+        • != - Inequality operator (checks if NOT equal)
+        • 6 - Value we're comparing against
+        • Python evaluates: "Is the value in 'i' (which is 2) NOT equal to 6?"
+        • Answer: Yes, 2 is not equal to 6, so result is True
+        • True is stored in result
+
+Line 6: print("Is i not equal to 6?", result)
+        • Displays the question and result
+        • Output: Is i not equal to 6? True
+
+Line 7: (blank line)
+
+Line 8: # Check if i is not equal to 2
+        • Comment
+
+Line 9: result2 = i != 2
+        • Compares 2 with 2 using !=
+        • "Is 2 NOT equal to 2?" → No, they are equal
+        • So the result is False (they are NOT different)
+
+Line 10: print("Is i not equal to 2?", result2)
+         • Output: Is i not equal to 2? False
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check i != 6, we can visualize this on a number line:
+
+  Numbers where i != 6 is True:  ... 0, 1, 2, 3, 4, 5, 7, 8, 9, 10 ...
+  Number where i != 6 is False:  6
+
+If i = 2:
+• 2 is in the "True" region (2 is not equal to 6)
+• Result: True
+
+If i = 6:
+• 6 is in the "False" region (6 equals 6)
+• Result: False
+
+EXAMPLE 2: COMPARING STRINGS WITH INEQUALITY
+---------------------------------------------
+  # Comparing strings
+  band1 = "AC/DC"
+  band2 = "Michael Jackson"
+  
+  # Check if strings are different
+  result1 = band1 != band2
+  print("Are the bands different?", result1)  # Output: True
+  
+  # Check if same strings are different
+  band3 = "AC/DC"
+  result2 = band1 != band3
+  print("Are band1 and band3 different?", result2)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Comparing strings
+        • Comment
+
+Line 2: band1 = "AC/DC"
+        • Stores "AC/DC" in band1
+
+Line 3: band2 = "Michael Jackson"
+        • Stores "Michael Jackson" in band2
+
+Line 4: (blank line)
+
+Line 5: # Check if strings are different
+        • Comment
+
+Line 6: result1 = band1 != band2
+        • Compares "AC/DC" with "Michael Jackson"
+        • "Are these strings NOT equal?" → Yes, they're different
+        • Result: True
+
+Line 7: print("Are the bands different?", result1)
+        • Output: Are the bands different? True
+
+Line 8: (blank line)
+
+Line 9: # Check if same strings are different
+        • Comment
+
+Line 10: band3 = "AC/DC"
+         • Stores "AC/DC" in band3 (same as band1)
+
+Line 11: result2 = band1 != band3
+         • Compares "AC/DC" with "AC/DC"
+         • "Are these strings NOT equal?" → No, they're the same
+         • Result: False
+
+Line 12: print("Are band1 and band3 different?", result2)
+         • Output: Are band1 and band3 different? False
+
+RELATIONSHIP BETWEEN == AND !=
+------------------------------
+The inequality operator (!=) is the opposite of the equality operator (==):
+
+  value1 == value2  # True if equal, False if not equal
+  value1 != value2  # True if not equal, False if equal
+
+They always give opposite results:
+
+  a = 5
+  b = 5
+  c = 10
+  
+  print(a == b)  # True (they are equal)
+  print(a != b)  # False (they are NOT different)
+  
+  print(a == c)  # False (they are not equal)
+  print(a != c)  # True (they ARE different)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: a = 5
+        • Stores 5 in variable a
+
+Line 2: b = 5
+        • Stores 5 in variable b (same value as a)
+
+Line 3: c = 10
+        • Stores 10 in variable c (different value)
+
+Line 4: (blank line)
+
+Line 5: print(a == b)
+        • Compares 5 with 5
+        • They are equal, so result is True
+        • Output: True
+
+Line 6: print(a != b)
+        • Checks if 5 is NOT equal to 5
+        • They are equal, so they're NOT different
+        • Result: False
+        • Output: False
+
+Line 7: (blank line)
+
+Line 8: print(a == c)
+        • Compares 5 with 10
+        • They are not equal, so result is False
+        • Output: False
+
+Line 9: print(a != c)
+        • Checks if 5 is NOT equal to 10
+        • They are different, so result is True
+        • Output: True
+
+[END SECTION 1.4]
+================================================================================
+
+SECTION 1.5: THE GREATER THAN OPERATOR (>)
+-------------------------------------------
+
+DEFINITION
+----------
+The greater than operator (>) checks if the left operand is greater than the 
+right operand. It returns True if the left value is larger, and False otherwise.
+
+DETAILED EXPLANATION
+--------------------
+The greater than operator compares two values and determines if the first 
+value is larger than the second value. It's commonly used to compare numbers 
+and establish ordering relationships.
+
+SYNTAX
+------
+  value1 > value2
+
+This compares value1 with value2 and returns:
+• True if value1 is greater than value2
+• False if value1 is less than or equal to value2
+
+KEY POINTS
+----------
+• Uses a single greater than sign (>)
+• Compares the left operand with the right operand
+• Returns True only when left value is strictly greater
+• Returns False if values are equal or left is smaller
+• Works with numbers (integers and floats)
+• Can be used with strings (lexicographic comparison)
+
+REAL-WORLD ANALOGY
+------------------
+Think of the greater than operator like comparing ages:
+• "Is person A older than person B?" → True if A's age > B's age
+• "Is $100 more than $50?" → True (100 > 50)
+• "Is 3 o'clock later than 2 o'clock?" → True (3 > 2)
+
+EXAMPLE 1: BASIC GREATER THAN COMPARISON
+----------------------------------------
+  # Assign a value to variable i
+  i = 6
+  
+  # Check if i is greater than 5
+  result = i > 5
+  print("Is i greater than 5?", result)  # Output: True
+  
+  # Check if i is greater than 10
+  result2 = i > 10
+  print("Is i greater than 10?", result2)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable i
+        • Comment
+
+Line 2: i = 6
+        • Creates variable 'i' and assigns 6 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if i is greater than 5
+        • Comment
+
+Line 5: result = i > 5
+        • result - Variable to store the comparison result
+        • i - Variable containing 6
+        • > - Greater than operator
+        • 5 - Value we're comparing against
+        • Python evaluates: "Is the value in 'i' (which is 6) greater than 5?"
+        • Answer: Yes, 6 is greater than 5, so result is True
+        • True is stored in result
+
+Line 6: print("Is i greater than 5?", result)
+        • Displays the question and result
+        • Output: Is i greater than 5? True
+
+Line 7: (blank line)
+
+Line 8: # Check if i is greater than 10
+        • Comment
+
+Line 9: result2 = i > 10
+        • Compares 6 with 10 using >
+        • "Is 6 greater than 10?" → No, 6 is less than 10
+        • Result: False
+
+Line 10: print("Is i greater than 10?", result2)
+         • Output: Is i greater than 10? False
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check i > 5, we can visualize this on a number line:
+
+  Numbers where i > 5 is False:  ... -2, -1, 0, 1, 2, 3, 4, 5
+  Numbers where i > 5 is True:  6, 7, 8, 9, 10, 11, 12 ...
+
+If i = 6:
+• 6 is in the "True" region (6 is greater than 5)
+• Result: True
+
+If i = 3:
+• 3 is in the "False" region (3 is not greater than 5)
+• Result: False
+
+If i = 5:
+• 5 is exactly on the boundary
+• Since > means strictly greater (not equal), 5 is NOT greater than 5
+• Result: False
+
+EXAMPLE 2: COMPARING FLOATS
+----------------------------
+  # Comparing decimal numbers
+  price1 = 19.99
+  price2 = 15.50
+  
+  # Check if price1 is greater than price2
+  result = price1 > price2
+  print("Is price1 greater than price2?", result)  # Output: True
+  
+  # Compare with equal values
+  price3 = 19.99
+  result2 = price1 > price3
+  print("Is price1 greater than price3?", result2)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Comparing decimal numbers
+        • Comment
+
+Line 2: price1 = 19.99
+        • Stores 19.99 in price1
+
+Line 3: price2 = 15.50
+        • Stores 15.50 in price2
+
+Line 4: (blank line)
+
+Line 5: # Check if price1 is greater than price2
+        • Comment
+
+Line 6: result = price1 > price2
+        • Compares 19.99 with 15.50
+        • "Is 19.99 greater than 15.50?" → Yes
+        • Result: True
+
+Line 7: print("Is price1 greater than price2?", result)
+        • Output: Is price1 greater than price1? True
+
+Line 8: (blank line)
+
+Line 9: # Compare with equal values
+        • Comment
+
+Line 10: price3 = 19.99
+         • Stores 19.99 in price3 (same as price1)
+
+Line 11: result2 = price1 > price3
+         • Compares 19.99 with 19.99
+         • "Is 19.99 greater than 19.99?" → No, they're equal
+         • Result: False
+
+Line 12: print("Is price1 greater than price3?", result2)
+         • Output: Is price1 greater than price3? False
+
+EXAMPLE 3: COMPARING STRINGS (LEXICOGRAPHIC ORDER)
+---------------------------------------------------
+Strings can be compared using >, which compares them alphabetically 
+(lexicographically):
+
+  name1 = "Alice"
+  name2 = "Bob"
+  
+  result = name1 > name2
+  print("Is 'Alice' greater than 'Bob'?", result)  # Output: False
+  
+  # Explanation: 'A' comes before 'B' alphabetically
+  result2 = "Zebra" > "Apple"
+  print("Is 'Zebra' greater than 'Apple'?", result2)  # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: name1 = "Alice"
+        • Stores "Alice" in name1
+
+Line 2: name2 = "Bob"
+        • Stores "Bob" in name2
+
+Line 3: (blank line)
+
+Line 4: result = name1 > name2
+        • Compares "Alice" with "Bob" alphabetically
+        • Python compares character by character
+        • First character: 'A' vs 'B'
+        • 'A' comes before 'B' in the alphabet
+        • So "Alice" is NOT greater than "Bob"
+        • Result: False
+
+Line 5: print("Is 'Alice' greater than 'Bob'?", result)
+        • Output: Is 'Alice' greater than 'Bob'? False
+
+Line 6: (blank line)
+
+Line 7: # Explanation: 'A' comes before 'B' alphabetically
+        • Comment explaining the comparison logic
+
+Line 8: result2 = "Zebra" > "Apple"
+        • Compares "Zebra" with "Apple"
+        • First character: 'Z' vs 'A'
+        • 'Z' comes after 'A' in the alphabet
+        • So "Zebra" IS greater than "Apple"
+        • Result: True
+
+Line 9: print("Is 'Zebra' greater than 'Apple'?", result2)
+        • Output: Is 'Zebra' greater than 'Apple'? True
+
+IMPORTANT NOTES ABOUT STRING COMPARISON
+---------------------------------------
+• String comparison is case-sensitive: 'A' < 'a' (uppercase comes before lowercase in ASCII)
+• Comparison is done character by character from left to right
+• If first characters are equal, it compares the next characters
+• Shorter strings come before longer strings if they match up to that point
+
+[END SECTION 1.5]
+================================================================================
+
+SECTION 1.6: THE LESS THAN OPERATOR (<)
+-----------------------------------------
+
+DEFINITION
+----------
+The less than operator (<) checks if the left operand is less than the right 
+operand. It returns True if the left value is smaller, and False otherwise.
+
+DETAILED EXPLANATION
+--------------------
+The less than operator compares two values and determines if the first value 
+is smaller than the second value. It's the opposite of the greater than 
+operator (>).
+
+SYNTAX
+------
+  value1 < value2
+
+This compares value1 with value2 and returns:
+• True if value1 is less than value2
+• False if value1 is greater than or equal to value2
+
+KEY POINTS
+----------
+• Uses a single less than sign (<)
+• Compares the left operand with the right operand
+• Returns True only when left value is strictly smaller
+• Returns False if values are equal or left is larger
+• Works with numbers (integers and floats)
+• Can be used with strings (lexicographic comparison)
+
+REAL-WORLD ANALOGY
+------------------
+Think of the less than operator like comparing prices:
+• "Is $10 less than $20?" → True (10 < 20)
+• "Is person A younger than person B?" → True if A's age < B's age
+• "Is 2 o'clock earlier than 3 o'clock?" → True (2 < 3)
+
+EXAMPLE 1: BASIC LESS THAN COMPARISON
+--------------------------------------
+  # Assign a value to variable i
+  i = 2
+  
+  # Check if i is less than 6
+  result = i < 6
+  print("Is i less than 6?", result)  # Output: True
+  
+  # Check if i is less than 1
+  result2 = i < 1
+  print("Is i less than 1?", result2)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable i
+        • Comment
+
+Line 2: i = 2
+        • Creates variable 'i' and assigns 2 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if i is less than 6
+        • Comment
+
+Line 5: result = i < 6
+        • result - Variable to store the comparison result
+        • i - Variable containing 2
+        • < - Less than operator
+        • 6 - Value we're comparing against
+        • Python evaluates: "Is the value in 'i' (which is 2) less than 6?"
+        • Answer: Yes, 2 is less than 6, so result is True
+        • True is stored in result
+
+Line 6: print("Is i less than 6?", result)
+        • Displays the question and result
+        • Output: Is i less than 6? True
+
+Line 7: (blank line)
+
+Line 8: # Check if i is less than 1
+        • Comment
+
+Line 9: result2 = i < 1
+        • Compares 2 with 1 using <
+        • "Is 2 less than 1?" → No, 2 is greater than 1
+        • Result: False
+
+Line 10: print("Is i less than 1?", result2)
+         • Output: Is i less than 1? False
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check i < 6, we can visualize this on a number line:
+
+  Numbers where i < 6 is True:  ... -2, -1, 0, 1, 2, 3, 4, 5
+  Numbers where i < 6 is False:  6, 7, 8, 9, 10, 11, 12 ...
+
+If i = 2:
+• 2 is in the "True" region (2 is less than 6)
+• Result: True
+
+If i = 8:
+• 8 is in the "False" region (8 is not less than 6)
+• Result: False
+
+If i = 6:
+• 6 is exactly on the boundary
+• Since < means strictly less (not equal), 6 is NOT less than 6
+• Result: False
+
+RELATIONSHIP BETWEEN > AND <
+----------------------------
+The less than operator (<) is the opposite of the greater than operator (>):
+
+  a = 5
+  b = 10
+  
+  print(a < b)   # True (5 is less than 10)
+  print(a > b)   # False (5 is not greater than 10)
+  print(b > a)   # True (10 is greater than 5)
+  print(b < a)   # False (10 is not less than 5)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: a = 5
+        • Stores 5 in variable a
+
+Line 2: b = 10
+        • Stores 10 in variable b
+
+Line 3: (blank line)
+
+Line 4: print(a < b)
+        • Compares 5 with 10 using <
+        • "Is 5 less than 10?" → Yes
+        • Output: True
+
+Line 5: print(a > b)
+        • Compares 5 with 10 using >
+        • "Is 5 greater than 10?" → No
+        • Output: False
+
+Line 6: print(b > a)
+        • Compares 10 with 5 using >
+        • "Is 10 greater than 5?" → Yes
+        • Output: True
+
+Line 7: print(b < a)
+        • Compares 10 with 5 using <
+        • "Is 10 less than 5?" → No
+        • Output: False
+
+[END SECTION 1.6]
+================================================================================
+
+SECTION 1.7: THE GREATER THAN OR EQUAL TO OPERATOR (>=)
+---------------------------------------------------------
+
+DEFINITION
+----------
+The greater than or equal to operator (>=) checks if the left operand is 
+greater than OR equal to the right operand. It returns True if the left 
+value is larger or equal, and False if the left value is smaller.
+
+DETAILED EXPLANATION
+--------------------
+The greater than or equal to operator is a combination of two conditions:
+1. Greater than (>)
+2. Equal to (==)
+
+It returns True if EITHER condition is true (the value is greater OR equal).
+
+SYNTAX
+------
+  value1 >= value2
+
+This compares value1 with value2 and returns:
+• True if value1 is greater than value2 OR value1 equals value2
+• False if value1 is less than value2
+
+KEY POINTS
+----------
+• Uses >= (greater than sign followed by equal sign)
+• Returns True if left value is greater OR equal
+• Returns False only if left value is strictly less
+• Includes the boundary case (equality)
+• Works with numbers (integers and floats)
+• Can be used with strings (lexicographic comparison)
+
+REAL-WORLD ANALOGY
+------------------
+Think of >= like age requirements:
+• "Are you 18 or older?" → True if age >= 18
+• "Do you have $10 or more?" → True if money >= 10
+• Includes both "greater than" and "equal to" cases
+
+EXAMPLE 1: BASIC GREATER THAN OR EQUAL TO COMPARISON
+-----------------------------------------------------
+  # Assign a value to variable i
+  i = 5
+  
+  # Check if i is greater than or equal to 5
+  result1 = i >= 5
+  print("Is i greater than or equal to 5?", result1)  # Output: True
+  
+  # Check with a value greater than 5
+  i = 6
+  result2 = i >= 5
+  print("Is i (6) greater than or equal to 5?", result2)  # Output: True
+  
+  # Check with a value less than 5
+  i = 2
+  result3 = i >= 5
+  print("Is i (2) greater than or equal to 5?", result3)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable i
+        • Comment
+
+Line 2: i = 5
+        • Creates variable 'i' and assigns 5 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if i is greater than or equal to 5
+        • Comment
+
+Line 5: result1 = i >= 5
+        • result1 - Variable to store the result
+        • i - Variable containing 5
+        • >= - Greater than or equal to operator
+        • 5 - Value we're comparing against
+        • Python evaluates: "Is the value in 'i' (which is 5) greater than 
+          OR equal to 5?"
+        • Since 5 equals 5, the "equal to" part is true
+        • Result: True
+
+Line 6: print("Is i greater than or equal to 5?", result1)
+        • Output: Is i greater than or equal to 5? True
+
+Line 7: (blank line)
+
+Line 8: # Check with a value greater than 5
+        • Comment
+
+Line 9: i = 6
+        • Reassigns i to 6 (overwrites the previous value)
+
+Line 10: result2 = i >= 5
+         • Compares 6 with 5 using >=
+         • "Is 6 greater than OR equal to 5?" → Yes, 6 is greater than 5
+         • Result: True
+
+Line 11: print("Is i (6) greater than or equal to 5?", result2)
+         • Output: Is i (6) greater than or equal to 5? True
+
+Line 12: (blank line)
+
+Line 13: # Check with a value less than 5
+         • Comment
+
+Line 14: i = 2
+         • Reassigns i to 2
+
+Line 15: result3 = i >= 5
+         • Compares 2 with 5 using >=
+         • "Is 2 greater than OR equal to 5?" → No, 2 is less than 5
+         • Result: False
+
+Line 16: print("Is i (2) greater than or equal to 5?", result3)
+         • Output: Is i (2) greater than or equal to 5? False
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check i >= 5, we can visualize this on a number line:
+
+  Numbers where i >= 5 is False:  ... -2, -1, 0, 1, 2, 3, 4
+  Numbers where i >= 5 is True:  5, 6, 7, 8, 9, 10, 11, 12 ...
+
+Notice that 5 is included in the "True" region (because of the "equal to" part).
+
+If i = 5:
+• 5 is in the "True" region (5 equals 5, so >= is true)
+• Result: True
+
+If i = 6:
+• 6 is in the "True" region (6 is greater than 5)
+• Result: True
+
+If i = 2:
+• 2 is in the "False" region (2 is less than 5)
+• Result: False
+
+DIFFERENCE BETWEEN > AND >=
+---------------------------
+The key difference is whether equality is included:
+
+  value = 5
+  
+  print(value > 5)   # False (5 is NOT greater than 5)
+  print(value >= 5)  # True (5 IS equal to 5, so >= is true)
+  
+  value = 6
+  print(value > 5)   # True (6 is greater than 5)
+  print(value >= 5)  # True (6 is greater than 5)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: value = 5
+        • Stores 5 in value
+
+Line 2: (blank line)
+
+Line 3: print(value > 5)
+        • Compares 5 with 5 using >
+        • "Is 5 greater than 5?" → No (strictly greater, not equal)
+        • Output: False
+
+Line 4: print(value >= 5)
+        • Compares 5 with 5 using >=
+        • "Is 5 greater than OR equal to 5?" → Yes (equal part is true)
+        • Output: True
+
+Line 5: (blank line)
+
+Line 6: value = 6
+        • Reassigns value to 6
+
+Line 7: print(value > 5)
+        • Compares 6 with 5 using >
+        • "Is 6 greater than 5?" → Yes
+        • Output: True
+
+Line 8: print(value >= 5)
+        • Compares 6 with 5 using >=
+        • "Is 6 greater than OR equal to 5?" → Yes (greater part is true)
+        • Output: True
+
+EXAMPLE 2: REAL-WORLD APPLICATION - AGE VERIFICATION
+----------------------------------------------------
+  # Age verification example
+  age = 18
+  
+  # Check if person is 18 or older (can enter concert)
+  can_enter = age >= 18
+  print("Can enter concert?", can_enter)  # Output: True
+  
+  age = 17
+  can_enter = age >= 18
+  print("Can enter concert?", can_enter)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Age verification example
+        • Comment describing the use case
+
+Line 2: age = 18
+        • Stores age 18 in variable age
+
+Line 3: (blank line)
+
+Line 4: # Check if person is 18 or older (can enter concert)
+        • Comment explaining the business logic
+
+Line 5: can_enter = age >= 18
+        • Compares age (18) with 18 using >=
+        • "Is 18 greater than OR equal to 18?" → Yes
+        • Result: True
+        • Stores True in can_enter
+
+Line 6: print("Can enter concert?", can_enter)
+        • Output: Can enter concert? True
+
+Line 7: (blank line)
+
+Line 8: age = 17
+        • Reassigns age to 17
+
+Line 9: can_enter = age >= 18
+        • Compares age (17) with 18 using >=
+        • "Is 17 greater than OR equal to 18?" → No
+        • Result: False
+        • Stores False in can_enter
+
+Line 10: print("Can enter concert?", can_enter)
+         • Output: Can enter concert? False
+
+[END SECTION 1.7]
+================================================================================
+
+SECTION 1.8: THE LESS THAN OR EQUAL TO OPERATOR (<=)
+------------------------------------------------------
+
+DEFINITION
+----------
+The less than or equal to operator (<=) checks if the left operand is less 
+than OR equal to the right operand. It returns True if the left value is 
+smaller or equal, and False if the left value is larger.
+
+DETAILED EXPLANATION
+--------------------
+The less than or equal to operator is a combination of two conditions:
+1. Less than (<)
+2. Equal to (==)
+
+It returns True if EITHER condition is true (the value is less OR equal).
+
+SYNTAX
+------
+  value1 <= value2
+
+This compares value1 with value2 and returns:
+• True if value1 is less than value2 OR value1 equals value2
+• False if value1 is greater than value2
+
+KEY POINTS
+----------
+• Uses <= (less than sign followed by equal sign)
+• Returns True if left value is less OR equal
+• Returns False only if left value is strictly greater
+• Includes the boundary case (equality)
+• Works with numbers (integers and floats)
+• Can be used with strings (lexicographic comparison)
+
+REAL-WORLD ANALOGY
+------------------
+Think of <= like maximum limits:
+• "Is your age 65 or less?" → True if age <= 65
+• "Do you have $100 or less?" → True if money <= 100
+• Includes both "less than" and "equal to" cases
+
+EXAMPLE 1: BASIC LESS THAN OR EQUAL TO COMPARISON
+---------------------------------------------------
+  # Assign a value to variable i
+  i = 5
+  
+  # Check if i is less than or equal to 5
+  result1 = i <= 5
+  print("Is i less than or equal to 5?", result1)  # Output: True
+  
+  # Check with a value less than 5
+  i = 2
+  result2 = i <= 5
+  print("Is i (2) less than or equal to 5?", result2)  # Output: True
+  
+  # Check with a value greater than 5
+  i = 6
+  result3 = i <= 5
+  print("Is i (6) less than or equal to 5?", result3)  # Output: False
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Assign a value to variable i
+        • Comment
+
+Line 2: i = 5
+        • Creates variable 'i' and assigns 5 to it
+
+Line 3: (blank line)
+
+Line 4: # Check if i is less than or equal to 5
+        • Comment
+
+Line 5: result1 = i <= 5
+        • result1 - Variable to store the result
+        • i - Variable containing 5
+        • <= - Less than or equal to operator
+        • 5 - Value we're comparing against
+        • Python evaluates: "Is the value in 'i' (which is 5) less than 
+          OR equal to 5?"
+        • Since 5 equals 5, the "equal to" part is true
+        • Result: True
+
+Line 6: print("Is i less than or equal to 5?", result1)
+        • Output: Is i less than or equal to 5? True
+
+Line 7: (blank line)
+
+Line 8: # Check with a value less than 5
+        • Comment
+
+Line 9: i = 2
+        • Reassigns i to 2
+
+Line 10: result2 = i <= 5
+         • Compares 2 with 5 using <=
+         • "Is 2 less than OR equal to 5?" → Yes, 2 is less than 5
+         • Result: True
+
+Line 11: print("Is i (2) less than or equal to 5?", result2)
+         • Output: Is i (2) less than or equal to 5? True
+
+Line 12: (blank line)
+
+Line 13: # Check with a value greater than 5
+         • Comment
+
+Line 14: i = 6
+         • Reassigns i to 6
+
+Line 15: result3 = i <= 5
+         • Compares 6 with 5 using <=
+         • "Is 6 less than OR equal to 5?" → No, 6 is greater than 5
+         • Result: False
+
+Line 16: print("Is i (6) less than or equal to 5?", result3)
+         • Output: Is i (6) less than or equal to 5? False
+
+VISUAL REPRESENTATION WITH NUMBER LINE
+--------------------------------------
+When we check i <= 5, we can visualize this on a number line:
+
+  Numbers where i <= 5 is True:  ... -2, -1, 0, 1, 2, 3, 4, 5
+  Numbers where i <= 5 is False:  6, 7, 8, 9, 10, 11, 12 ...
+
+Notice that 5 is included in the "True" region (because of the "equal to" part).
+
+If i = 5:
+• 5 is in the "True" region (5 equals 5, so <= is true)
+• Result: True
+
+If i = 2:
+• 2 is in the "True" region (2 is less than 5)
+• Result: True
+
+If i = 6:
+• 6 is in the "False" region (6 is greater than 5)
+• Result: False
+
+DIFFERENCE BETWEEN < AND <=
+---------------------------
+The key difference is whether equality is included:
+
+  value = 5
+  
+  print(value < 5)   # False (5 is NOT less than 5)
+  print(value <= 5)  # True (5 IS equal to 5, so <= is true)
+  
+  value = 4
+  print(value < 5)   # True (4 is less than 5)
+  print(value <= 5)  # True (4 is less than 5)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: value = 5
+        • Stores 5 in value
+
+Line 2: (blank line)
+
+Line 3: print(value < 5)
+        • Compares 5 with 5 using <
+        • "Is 5 less than 5?" → No (strictly less, not equal)
+        • Output: False
+
+Line 4: print(value <= 5)
+        • Compares 5 with 5 using <=
+        • "Is 5 less than OR equal to 5?" → Yes (equal part is true)
+        • Output: True
+
+Line 5: (blank line)
+
+Line 6: value = 4
+        • Reassigns value to 4
+
+Line 7: print(value < 5)
+        • Compares 4 with 5 using <
+        • "Is 4 less than 5?" → Yes
+        • Output: True
+
+Line 8: print(value <= 5)
+        • Compares 4 with 5 using <=
+        • "Is 4 less than OR equal to 5?" → Yes (less part is true)
+        • Output: True
+
+RELATIONSHIP BETWEEN >= AND <=
+------------------------------
+These operators are related but serve different purposes:
+
+  value = 5
+  
+  print(value >= 5)  # True (5 is greater than or equal to 5)
+  print(value <= 5)  # True (5 is less than or equal to 5)
+  
+  # If both are true, the values must be equal
+  if value >= 5 and value <= 5:
+      print("Value is exactly 5")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: value = 5
+        • Stores 5 in value
+
+Line 2: (blank line)
+
+Line 3: print(value >= 5)
+        • Checks if 5 >= 5 → True
+
+Line 4: print(value <= 5)
+        • Checks if 5 <= 5 → True
+
+Line 5: (blank line)
+
+Line 6: # If both are true, the values must be equal
+        • Comment explaining the logic
+
+Line 7: if value >= 5 and value <= 5:
+        • Checks if value is both >= 5 AND <= 5
+        • This can only be true if value equals exactly 5
+        • Both conditions are True, so the code inside executes
+
+Line 8:     print("Value is exactly 5")
+         • Output: Value is exactly 5
+
+[END SECTION 1.8]
+================================================================================
+
+SECTION 1.9: COMPARING DIFFERENT DATA TYPES
+--------------------------------------------
+
+DEFINITION
+----------
+Python allows comparison operations between different data types, but the 
+results depend on the types being compared. Some comparisons are valid, 
+while others may raise errors or produce unexpected results.
+
+DETAILED EXPLANATION
+--------------------
+Python's comparison operators work differently depending on the data types 
+involved. Understanding these differences is crucial for writing correct code.
+
+COMPARING NUMBERS (INTEGERS AND FLOATS)
+---------------------------------------
+Python can compare integers and floats directly:
+
+  # Comparing int with int
+  result1 = 5 == 5
+  print(result1)  # Output: True
+  
+  # Comparing int with float
+  result2 = 5 == 5.0
+  print(result2)  # Output: True (Python converts int to float)
+  
+  # Comparing float with float
+  result3 = 5.0 == 5.0
+  print(result3)  # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Comparing int with int
+        • Comment
+
+Line 2: result1 = 5 == 5
+        • Compares two integers
+        • 5 equals 5, so result is True
+
+Line 3: print(result1)
+        • Output: True
+
+Line 4: (blank line)
+
+Line 5: # Comparing int with float
+        • Comment
+
+Line 6: result2 = 5 == 5.0
+        • Compares integer 5 with float 5.0
+        • Python automatically converts the int to float for comparison
+        • 5.0 equals 5.0, so result is True
+
+Line 7: print(result2)
+        • Output: True
+
+Line 8: (blank line)
+
+Line 9: # Comparing float with float
+        • Comment
+
+Line 10: result3 = 5.0 == 5.0
+         • Compares two floats
+         • 5.0 equals 5.0, so result is True
+
+Line 11: print(result3)
+         • Output: True
+
+COMPARING STRINGS
+-----------------
+Strings are compared character by character (lexicographically):
+
+  # String comparison
+  result1 = "apple" < "banana"
+  print(result1)  # Output: True ('a' comes before 'b')
+  
+  result2 = "Apple" < "apple"
+  print(result2)  # Output: True (uppercase comes before lowercase in ASCII)
+  
+  result3 = "10" < "2"
+  print(result3)  # Output: True (string comparison, not numeric!)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # String comparison
+        • Comment
+
+Line 2: result1 = "apple" < "banana"
+        • Compares strings lexicographically
+        • First character: 'a' vs 'b'
+        • 'a' comes before 'b', so "apple" < "banana" is True
+
+Line 3: print(result1)
+        • Output: True
+
+Line 4: (blank line)
+
+Line 5: result2 = "Apple" < "apple"
+        • Compares "Apple" (capital A) with "apple" (lowercase a)
+        • In ASCII/Unicode, uppercase letters come before lowercase
+        • 'A' (ASCII 65) < 'a' (ASCII 97), so result is True
+
+Line 6: print(result2)
+        • Output: True
+
+Line 7: (blank line)
+
+Line 8: result3 = "10" < "2"
+        • IMPORTANT: These are strings, not numbers!
+        • String comparison: compares character by character
+        • First character: '1' vs '2'
+        • '1' (ASCII 49) < '2' (ASCII 50), so result is True
+        • This is NOT the same as comparing numbers 10 and 2!
+
+Line 9: print(result3)
+        • Output: True
+
+COMPARING STRINGS WITH NUMBERS
+------------------------------
+Comparing strings with numbers will raise a TypeError:
+
+  # This will cause an error
+  # result = "5" > 3  # TypeError: '>' not supported between 'str' and 'int'
+  
+  # To compare, convert to same type first
+  result = int("5") > 3
+  print(result)  # Output: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # This will cause an error
+        • Comment warning about the error
+
+Line 2: # result = "5" > 3  # TypeError: '>' not supported between 'str' and 'int'
+        • This line is commented out to prevent the error
+        • If uncommented, Python would raise a TypeError
+        • Python cannot directly compare strings with numbers
+
+Line 3: (blank line)
+
+Line 4: # To compare, convert to same type first
+        • Comment explaining the solution
+
+Line 5: result = int("5") > 3
+        • int("5") - Converts the string "5" to integer 5
+        • Now we're comparing int 5 with int 3
+        • 5 > 3, so result is True
+
+Line 6: print(result)
+        • Output: True
+
+COMPARING BOOLEAN VALUES
+------------------------
+Boolean values can be compared, and they have numeric equivalents:
+• True is equivalent to 1
+• False is equivalent to 0
+
+  # Boolean comparison
+  result1 = True == 1
+  print(result1)  # Output: True
+  
+  result2 = False == 0
+  print(result2)  # Output: True
+  
+  result3 = True > False
+  print(result3)  # Output: True (1 > 0)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: # Boolean comparison
+        • Comment
+
+Line 2: result1 = True == 1
+        • Compares Boolean True with integer 1
+        • In Python, True is equivalent to 1
+        • Result: True
+
+Line 3: print(result1)
+        • Output: True
+
+Line 4: (blank line)
+
+Line 5: result2 = False == 0
+        • Compares Boolean False with integer 0
+        • In Python, False is equivalent to 0
+        • Result: True
+
+Line 6: print(result2)
+        • Output: True
+
+Line 7: (blank line)
+
+Line 8: result3 = True > False
+        • Compares True (1) with False (0)
+        • 1 > 0, so result is True
+
+Line 9: print(result3)
+        • Output: True
+
+BEST PRACTICES
+--------------
+1. Always compare values of compatible types
+2. Convert types explicitly when needed: int("5") > 3
+3. Be careful with string vs numeric comparisons
+4. Use type() function to check types before comparing
+5. For numeric strings, convert to numbers before comparing
+
+[END SECTION 1.9]
+================================================================================
+
+SECTION 1.10: SUMMARY OF COMPARISON OPERATORS
+----------------------------------------------
+
+QUICK REFERENCE TABLE
+---------------------
+Operator    Name                        Returns True When
+--------    ----                        -----------------
+==          Equality                    Left equals right
+!=          Inequality                  Left does not equal right
+>           Greater than                Left is greater than right
+<           Less than                   Left is less than right
+>=          Greater than or equal to    Left is greater than or equal to right
+<=          Less than or equal to        Left is less than or equal to right
+
+EXAMPLES WITH DIFFERENT VALUES
+------------------------------
+  a = 5
+  b = 10
+  
+  print(a == b)   # False (5 is not equal to 10)
+  print(a != b)   # True (5 is not equal to 10)
+  print(a > b)    # False (5 is not greater than 10)
+  print(a < b)    # True (5 is less than 10)
+  print(a >= b)   # False (5 is not greater than or equal to 10)
+  print(a <= b)   # True (5 is less than or equal to 10)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: a = 5
+        • Stores 5 in variable a
+
+Line 2: b = 10
+        • Stores 10 in variable b
+
+Line 3: (blank line)
+
+Line 4: print(a == b)
+        • Compares 5 with 10 using ==
+        • 5 ≠ 10, so result is False
+        • Output: False
+
+Line 5: print(a != b)
+        • Compares 5 with 10 using !=
+        • 5 ≠ 10, so result is True
+        • Output: True
+
+Line 6: print(a > b)
+        • Compares 5 with 10 using >
+        • 5 is not greater than 10, so result is False
+        • Output: False
+
+Line 7: print(a < b)
+        • Compares 5 with 10 using <
+        • 5 is less than 10, so result is True
+        • Output: True
+
+Line 8: print(a >= b)
+        • Compares 5 with 10 using >=
+        • 5 is not greater than or equal to 10, so result is False
+        • Output: False
+
+Line 9: print(a <= b)
+        • Compares 5 with 10 using <=
+        • 5 is less than or equal to 10, so result is True
+        • Output: True
+
+COMMON PATTERNS AND USE CASES
+------------------------------
+1. Equality check: if user_input == "yes":
+2. Range checking: if 0 <= score <= 100:
+3. Age verification: if age >= 18:
+4. String validation: if password != "":
+5. Boundary conditions: if value > 0 and value < 10:
+
+KEY TAKEAWAYS
+-------------
+• All comparison operators return Boolean values (True or False)
+• Comparison operators are used in conditional statements
+• Be careful with data types when comparing
+• String comparison is lexicographic (alphabetical)
+• Numeric comparison works with integers and floats
+• Always use == for equality, not = (which is assignment)
+
+[END SECTION 1.10]
+================================================================================
+
+END OF PART 1
+=============
+
+Congratulations! You've completed Part 1 of the Conditions and Branching 
+study guide. You now understand:
+
+✓ What comparison operations are and how they work
+✓ Boolean values (True and False)
+✓ All six comparison operators (==, !=, >, <, >=, <=)
+✓ How to compare different data types
+✓ Common patterns and use cases
+
+Next Steps:
+-----------
+Continue to Part 2 to learn about:
+• if statements and conditional execution
+• else statements for alternative paths
+• elif statements for multiple conditions
+• Real-world examples and applications
+
+================================================================================

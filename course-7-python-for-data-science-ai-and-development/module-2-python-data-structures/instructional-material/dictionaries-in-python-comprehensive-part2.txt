@@ -1,0 +1,875 @@
+================================================================================
+COMPREHENSIVE STUDY GUIDE: DICTIONARIES IN PYTHON
+Part 2: Checking Keys, Dictionary Methods, and Iteration
+================================================================================
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: CHECKING KEYS, DICTIONARY METHODS, AND ITERATION
+  SECTION 8: CHECKING IF KEYS EXIST IN DICTIONARIES
+    • The "in" Operator
+    • The "not in" Operator
+  
+  SECTION 9: DICTIONARY METHODS - GETTING KEYS AND VALUES
+    • The keys() Method
+    • The values() Method
+    • The items() Method
+  
+  SECTION 10: ITERATING OVER DICTIONARIES
+    • Different Ways to Iterate
+    • Practical Example: Processing Dictionary Data
+  
+  SECTION 11: THE get() METHOD - SAFE VALUE ACCESS
+    • Problem with Direct Access
+    • The get() Method Solution
+    • Comparison: Square Brackets vs get()
+
+NOTE: Part 1 of this guide covers:
+  • Introduction to dictionaries
+  • Understanding dictionary structure
+  • Creating dictionaries
+  • Understanding keys and values
+  • Accessing, adding, modifying, and deleting entries
+
+NOTE: Part 3 of this guide covers:
+  • More dictionary methods (update(), pop(), popitem(), clear())
+  • Dictionary comprehensions
+  • Nested dictionaries
+  • Copying dictionaries (shallow vs deep)
+  • Dictionary views and their behavior
+  • Best practices and common patterns
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 8:") to quickly jump to any section.
+
+================================================================================
+SECTION 8: CHECKING IF KEYS EXIST IN DICTIONARIES
+================================================================================
+
+THE "IN" OPERATOR
+================================================================================
+
+The "in" operator is a powerful tool for checking whether a key exists in a 
+dictionary before trying to access it. This helps you avoid KeyError exceptions 
+and write safer code.
+
+Syntax:
+key in dictionary_name
+
+Breaking Down the Syntax:
+- key = The key you want to check for
+- in = Python keyword that checks membership
+- dictionary_name = The dictionary variable name
+
+How It Works:
+- Returns True if the key exists in the dictionary
+- Returns False if the key does not exist in the dictionary
+
+Important Note: The "in" operator checks KEYS, not values. It only looks for 
+keys in the dictionary.
+
+Example 1: Checking if a Key Exists (Returns True)
+----------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+result = "Back in Black" in album_releases
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with three key-value pairs
+- Line 7: Checks if key "Back in Black" exists in the dictionary
+  - "\"Back in Black\"" = the key we're checking for
+  - "in" = membership operator
+  - "album_releases" = dictionary to search in
+  - Python searches for the key "Back in Black" in the dictionary
+  - Python finds it (it exists!)
+  - Python returns True
+  - "result" = variable storing the result
+  - "=" = assignment operator
+
+Result: result = True
+
+What Happens Behind the Scenes?
+1. Python receives: "Back in Black" in album_releases
+2. Python searches the dictionary's keys for "Back in Black"
+3. Python finds the key in the dictionary
+4. Python returns True
+
+Example 2: Checking if a Key Doesn't Exist (Returns False)
+-----------------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+result = "Thriller" in album_releases
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary with two key-value pairs
+- Line 6: Checks if key "Thriller" exists in the dictionary
+  - Python searches for "Thriller" in the dictionary
+  - Python doesn't find it (it doesn't exist!)
+  - Python returns False
+  - result = False
+
+Result: result = False
+
+What Happens Behind the Scenes?
+1. Python receives: "Thriller" in album_releases
+2. Python searches the dictionary's keys for "Thriller"
+3. Python doesn't find the key
+4. Python returns False
+
+Example 3: Using "in" to Avoid KeyError
+----------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+# Safe way to access a value
+if "Thriller" in album_releases:
+    year = album_releases["Thriller"]
+    print(f"Release year: {year}")
+else:
+    print("Album not found in dictionary")
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary with two key-value pairs
+- Line 6: Checks if "Thriller" exists before accessing it
+  - "if" = conditional statement
+  - "\"Thriller\" in album_releases" = condition that checks if key exists
+  - If True: executes lines 7-8 (but in this case, it's False)
+  - If False: executes line 9 (this happens here)
+- Line 7: Would access the value if key existed (doesn't execute here)
+- Line 8: Would print the year (doesn't execute here)
+- Line 9: Prints "Album not found in dictionary" because key doesn't exist
+
+Result: Prints "Album not found in dictionary"
+
+This pattern prevents KeyError by checking if the key exists before trying to 
+access it.
+
+Example 4: Using "in" with Different Key Types
+-----------------------------------------------
+mixed_dict = {
+    "name": "Alice",
+    42: "The Answer",
+    (1, 2): "Tuple Key"
+}
+
+# Check string key
+result1 = "name" in mixed_dict  # True
+
+# Check integer key
+result2 = 42 in mixed_dict  # True
+
+# Check tuple key
+result3 = (1, 2) in mixed_dict  # True
+
+# Check non-existent key
+result4 = "age" in mixed_dict  # False
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with different key types
+- Line 7: Checks if string key "name" exists → True
+- Line 10: Checks if integer key 42 exists → True
+- Line 13: Checks if tuple key (1, 2) exists → True
+- Line 16: Checks if string key "age" exists → False (doesn't exist)
+
+THE "NOT IN" OPERATOR
+================================================================================
+
+The "not in" operator is the opposite of "in". It returns True if the key does 
+NOT exist in the dictionary, and False if it does exist.
+
+Syntax:
+key not in dictionary_name
+
+Example: Using "not in"
+------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+result1 = "Thriller" not in album_releases  # True (doesn't exist)
+result2 = "Back in Black" not in album_releases  # False (exists)
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Checks if "Thriller" is NOT in dictionary
+  - Key doesn't exist → "not in" returns True
+  - result1 = True
+- Line 7: Checks if "Back in Black" is NOT in dictionary
+  - Key exists → "not in" returns False
+  - result2 = False
+
+This is useful when you want to check if a key is missing before adding it.
+
+================================================================================
+SECTION 9: DICTIONARY METHODS - GETTING KEYS AND VALUES
+================================================================================
+
+THE keys() METHOD
+================================================================================
+
+The keys() method returns a view object that displays all the keys in the 
+dictionary. This is useful when you want to see what keys are available or 
+iterate over the keys.
+
+Syntax:
+dictionary_name.keys()
+
+Breaking Down the Syntax:
+- dictionary_name = The dictionary variable name
+- . = Dot operator (accesses methods of the dictionary object)
+- keys() = Method name with parentheses (no arguments needed)
+
+What It Returns:
+The keys() method returns a "dict_keys" view object. This is a special object 
+that shows all the keys. You can convert it to a list if needed.
+
+Example 1: Getting All Keys
+-----------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+all_keys = album_releases.keys()
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with three key-value pairs
+- Line 7: Gets all keys from the dictionary
+  - "album_releases" = dictionary variable name
+  - "." = dot operator
+  - "keys()" = method call (no arguments)
+  - Python returns a dict_keys view object containing all keys
+  - "all_keys" = variable storing the result
+  - "=" = assignment operator
+
+Result: all_keys = dict_keys(['Back in Black', 'The Dark Side of the Moon', 
+'The Bodyguard'])
+
+What Is a View Object?
+A view object is a dynamic view of the dictionary's keys. This means:
+- It reflects changes to the dictionary (if you add/remove keys, the view updates)
+- It's memory-efficient (doesn't create a copy of the keys)
+- It can be converted to a list if you need a static copy
+
+Example 2: Converting keys() to a List
+----------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+keys_list = list(album_releases.keys())
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Gets keys and converts to list
+  - "list()" = built-in function that converts to a list
+  - "album_releases.keys()" = gets the keys view object
+  - list() converts the view to an actual list
+  - "keys_list" = variable storing the list
+  - "=" = assignment operator
+
+Result: keys_list = ['Back in Black', 'The Dark Side of the Moon']
+
+Now keys_list is a regular Python list that you can use like any other list.
+
+Example 3: Iterating Over Keys
+--------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for key in album_releases.keys():
+    print(key)
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over all keys
+  - "for" = loop keyword
+  - "key" = variable that holds each key during iteration
+  - "in" = membership operator
+  - "album_releases.keys()" = gets all keys
+  - ":" = starts the loop body
+- Line 8: Prints each key
+  - "print(key)" = prints the current key value
+
+Result: Prints:
+Back in Black
+The Dark Side of the Moon
+The Bodyguard
+
+Each key is printed on a separate line.
+
+THE values() METHOD
+================================================================================
+
+The values() method returns a view object that displays all the values in the 
+dictionary. This is useful when you want to see what values are stored or 
+iterate over the values.
+
+Syntax:
+dictionary_name.values()
+
+Breaking Down the Syntax:
+- dictionary_name = The dictionary variable name
+- . = Dot operator
+- values() = Method name with parentheses (no arguments needed)
+
+What It Returns:
+The values() method returns a "dict_values" view object containing all the 
+values from the dictionary.
+
+Example 1: Getting All Values
+-------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+all_values = album_releases.values()
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary with three key-value pairs
+- Line 7: Gets all values from the dictionary
+  - "album_releases" = dictionary variable name
+  - "." = dot operator
+  - "values()" = method call
+  - Python returns a dict_values view object containing all values
+  - "all_values" = variable storing the result
+
+Result: all_values = dict_values([1980, 1973, 1992])
+
+The view object contains all the values: 1980, 1973, and 1992.
+
+Example 2: Converting values() to a List
+------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+values_list = list(album_releases.values())
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Gets values and converts to list
+  - "list()" = converts view object to a list
+  - "album_releases.values()" = gets the values view
+  - Converts to a regular list
+  - "values_list" = variable storing the list
+
+Result: values_list = [1980, 1973]
+
+Now values_list is a regular Python list containing the values.
+
+Example 3: Iterating Over Values
+----------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for value in album_releases.values():
+    print(value)
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over all values
+  - "for" = loop keyword
+  - "value" = variable holding each value during iteration
+  - "in" = membership operator
+  - "album_releases.values()" = gets all values
+  - ":" = starts loop body
+- Line 8: Prints each value
+
+Result: Prints:
+1980
+1973
+1992
+
+Each value is printed on a separate line.
+
+Important Note: Remember that values can be duplicates! If multiple keys have 
+the same value, that value will appear multiple times in the values() view.
+
+Example: Duplicate Values in values()
+---------------------------------------
+scores = {
+    "Alice": 95,
+    "Bob": 95,
+    "Charlie": 90
+}
+
+all_scores = list(scores.values())
+
+Result: all_scores = [95, 95, 90]
+
+Notice that 95 appears twice because both "Alice" and "Bob" have the value 95.
+
+THE items() METHOD
+================================================================================
+
+The items() method returns a view object that displays all the key-value pairs 
+as tuples. This is extremely useful when you want to iterate over both keys and 
+values together.
+
+Syntax:
+dictionary_name.items()
+
+Breaking Down the Syntax:
+- dictionary_name = The dictionary variable name
+- . = Dot operator
+- items() = Method name with parentheses (no arguments needed)
+
+What It Returns:
+The items() method returns a "dict_items" view object. Each element in this 
+view is a tuple containing (key, value).
+
+Example 1: Getting All Items
+------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+all_items = album_releases.items()
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Gets all key-value pairs
+  - "album_releases" = dictionary variable name
+  - "." = dot operator
+  - "items()" = method call
+  - Python returns a dict_items view object
+  - Each element is a tuple: (key, value)
+  - "all_items" = variable storing the result
+
+Result: all_items = dict_items([('Back in Black', 1980), ('The Dark Side of 
+the Moon', 1973)])
+
+The view contains tuples:
+- ('Back in Black', 1980) = first key-value pair as a tuple
+- ('The Dark Side of the Moon', 1973) = second key-value pair as a tuple
+
+Example 2: Converting items() to a List
+-----------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+items_list = list(album_releases.items())
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Gets items and converts to list
+  - "list()" = converts view to a list
+  - "album_releases.items()" = gets the items view
+  - Converts to a list of tuples
+  - "items_list" = variable storing the list
+
+Result: items_list = [('Back in Black', 1980), ('The Dark Side of the Moon', 
+1973)]
+
+Now items_list is a regular Python list where each element is a tuple containing 
+a key-value pair.
+
+Example 3: Iterating Over Items (Most Common Pattern)
+-------------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for key, value in album_releases.items():
+    print(f"{key} was released in {value}")
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over all key-value pairs
+  - "for" = loop keyword
+  - "key, value" = two variables that unpack each tuple
+    - When items() returns ('Back in Black', 1980)
+    - "key" gets 'Back in Black' (first element of tuple)
+    - "value" gets 1980 (second element of tuple)
+  - "in" = membership operator
+  - "album_releases.items()" = gets all key-value pairs
+  - ":" = starts loop body
+- Line 8: Prints formatted string
+  - "f\"{key} was released in {value}\"" = f-string (formatted string)
+  - {key} = inserts the key value
+  - {value} = inserts the value
+  - "print()" = prints the formatted string
+
+Result: Prints:
+Back in Black was released in 1980
+The Dark Side of the Moon was released in 1973
+The Bodyguard was released in 1992
+
+This is the most common way to iterate over dictionaries because you get both 
+the key and value in each iteration.
+
+Understanding Tuple Unpacking:
+When you write "for key, value in album_releases.items()", Python automatically 
+unpacks each tuple:
+- ('Back in Black', 1980) → key = 'Back in Black', value = 1980
+- ('The Dark Side of the Moon', 1973) → key = 'The Dark Side of the Moon', 
+  value = 1973
+
+This is called "tuple unpacking" and is a powerful Python feature.
+
+================================================================================
+SECTION 10: ITERATING OVER DICTIONARIES
+================================================================================
+
+DIFFERENT WAYS TO ITERATE
+================================================================================
+
+There are several ways to iterate over dictionaries in Python. Each method has 
+its use cases and advantages.
+
+Method 1: Iterating Over Keys (Default Behavior)
+--------------------------------------------------
+When you iterate over a dictionary directly (without calling a method), Python 
+automatically iterates over the keys.
+
+Example: Direct Dictionary Iteration
+--------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for key in album_releases:
+    print(key)
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over dictionary
+  - "for" = loop keyword
+  - "key" = variable holding each key
+  - "in" = membership operator
+  - "album_releases" = dictionary (no method called - defaults to keys)
+  - Python automatically iterates over keys
+  - ":" = starts loop body
+- Line 8: Prints each key
+
+Result: Prints:
+Back in Black
+The Dark Side of the Moon
+The Bodyguard
+
+This is equivalent to: for key in album_releases.keys()
+
+Method 2: Iterating Over Keys Explicitly
+------------------------------------------
+You can explicitly use .keys() to make it clear you're iterating over keys.
+
+Example: Explicit Key Iteration
+---------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+for key in album_releases.keys():
+    print(key)
+    print(album_releases[key])  # Access value using key
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Iterates over keys explicitly
+  - "album_releases.keys()" = explicitly gets keys
+- Line 7: Prints the key
+- Line 8: Accesses value using the key
+  - "album_releases[key]" = uses key to get value
+  - Prints the value
+
+Result: Prints:
+Back in Black
+1980
+The Dark Side of the Moon
+1973
+
+Method 3: Iterating Over Values Only
+-------------------------------------
+Sometimes you only care about the values, not the keys.
+
+Example: Value-Only Iteration
+-------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for year in album_releases.values():
+    print(year)
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over values only
+  - "year" = variable name (descriptive of what the value represents)
+  - "album_releases.values()" = gets all values
+- Line 8: Prints each year
+
+Result: Prints:
+1980
+1973
+1992
+
+Method 4: Iterating Over Key-Value Pairs (Most Useful)
+--------------------------------------------------------
+This is usually the most useful method because you get both keys and values.
+
+Example: Key-Value Pair Iteration
+-----------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992
+}
+
+for album, year in album_releases.items():
+    print(f"The album '{album}' was released in {year}")
+
+Line-by-line explanation:
+- Lines 1-5: Creates dictionary
+- Line 7: Iterates over key-value pairs
+  - "album, year" = tuple unpacking
+    - "album" = gets the key (album title)
+    - "year" = gets the value (release year)
+  - "album_releases.items()" = gets all key-value pairs
+- Line 8: Prints formatted message using both key and value
+
+Result: Prints:
+The album 'Back in Black' was released in 1980
+The album 'The Dark Side of the Moon' was released in 1973
+The album 'The Bodyguard' was released in 1992
+
+This method is preferred when you need both the key and value in your loop.
+
+PRACTICAL EXAMPLE: PROCESSING DICTIONARY DATA
+================================================================================
+
+Example: Finding Albums Released After a Certain Year
+-------------------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973,
+    "The Bodyguard": 1992,
+    "Graduation": 2007
+}
+
+# Find albums released after 1990
+recent_albums = []
+for album, year in album_releases.items():
+    if year > 1990:
+        recent_albums.append(album)
+
+print(recent_albums)
+
+Line-by-line explanation:
+- Lines 1-6: Creates dictionary with four albums
+- Line 8: Creates empty list to store results
+  - "recent_albums = []" = empty list
+- Line 9: Iterates over all key-value pairs
+  - "album" = gets album title (key)
+  - "year" = gets release year (value)
+- Line 10: Checks if year is greater than 1990
+  - "if year > 1990:" = condition
+  - If True: executes line 11
+- Line 11: Adds album to the list
+  - "recent_albums.append(album)" = adds album title to list
+- Line 13: Prints the list of recent albums
+
+Result: Prints: ['The Bodyguard', 'Graduation']
+
+Only albums released after 1990 are included.
+
+================================================================================
+SECTION 11: THE get() METHOD - SAFE VALUE ACCESS
+================================================================================
+
+PROBLEM WITH DIRECT ACCESS
+================================================================================
+
+As we learned earlier, accessing a non-existent key with square brackets causes 
+a KeyError:
+
+album_releases = {"Back in Black": 1980}
+year = album_releases["Thriller"]  # KeyError!
+
+This can crash your program if the key doesn't exist.
+
+THE get() METHOD SOLUTION
+================================================================================
+
+The get() method provides a safe way to access dictionary values. It returns 
+the value if the key exists, or a default value (or None) if the key doesn't 
+exist.
+
+Syntax:
+dictionary_name.get(key, default_value)
+
+Breaking Down the Syntax:
+- dictionary_name = The dictionary variable name
+- . = Dot operator
+- get() = Method name
+- key = The key to look up
+- default_value = Optional. The value to return if key doesn't exist. If not 
+  provided, returns None.
+
+Example 1: Using get() with Existing Key
+-------------------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+year = album_releases.get("Back in Black")
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Gets value using get() method
+  - "album_releases" = dictionary name
+  - "." = dot operator
+  - "get(\"Back in Black\")" = method call with key as argument
+  - Python searches for key "Back in Black"
+  - Python finds it and returns its value: 1980
+  - "year" = variable storing the result
+
+Result: year = 1980
+
+This works the same as album_releases["Back in Black"], but get() is safer.
+
+Example 2: Using get() with Non-Existent Key (No Default)
+-----------------------------------------------------------
+album_releases = {
+    "Back in Black": 1980
+}
+
+year = album_releases.get("Thriller")
+
+Line-by-line explanation:
+- Lines 1-3: Creates dictionary
+- Line 5: Gets value for non-existent key
+  - Python searches for "Thriller"
+  - Python doesn't find it
+  - Since no default value provided, Python returns None
+  - year = None
+
+Result: year = None
+
+No KeyError! The method safely returns None instead of crashing.
+
+Example 3: Using get() with Default Value
+-------------------------------------------
+album_releases = {
+    "Back in Black": 1980
+}
+
+year = album_releases.get("Thriller", "Unknown")
+
+Line-by-line explanation:
+- Lines 1-3: Creates dictionary
+- Line 5: Gets value with default
+  - "get(\"Thriller\", \"Unknown\")" = method call with key and default value
+  - Python searches for "Thriller"
+  - Python doesn't find it
+  - Python returns the default value: "Unknown"
+  - year = "Unknown"
+
+Result: year = "Unknown"
+
+This is very useful when you want a specific default value instead of None.
+
+Example 4: Practical Use Case
+-------------------------------
+album_releases = {
+    "Back in Black": 1980,
+    "The Dark Side of the Moon": 1973
+}
+
+# Safe way to get release year
+album_name = "Thriller"
+year = album_releases.get(album_name, "Not found")
+
+print(f"{album_name} was released in {year}")
+
+Line-by-line explanation:
+- Lines 1-4: Creates dictionary
+- Line 6: Variable storing album name to look up
+- Line 7: Safely gets year with default value
+  - If key exists: returns the actual year
+  - If key doesn't exist: returns "Not found"
+- Line 9: Prints formatted message
+
+Result: Prints: "Thriller was released in Not found"
+
+This prevents crashes and provides meaningful output even when the key doesn't 
+exist.
+
+COMPARISON: Square Brackets vs get()
+================================================================================
+
+Method 1: Square Brackets (Direct Access)
+------------------------------------------
+year = album_releases["Thriller"]
+- Returns value if key exists ✓
+- Raises KeyError if key doesn't exist ✗
+- Use when: You're certain the key exists
+
+Method 2: get() Method (Safe Access)
+-------------------------------------
+year = album_releases.get("Thriller", "Unknown")
+- Returns value if key exists ✓
+- Returns default (or None) if key doesn't exist ✓
+- Use when: Key might not exist, or you want a default value
+
+Best Practice: Use get() when you're not certain the key exists, especially 
+when dealing with user input or data from external sources.
+
+================================================================================
+END OF PART 2
+================================================================================
+
+This concludes Part 2 of the comprehensive dictionary study guide. In Part 3, 
+we will cover:
+- More dictionary methods (update(), pop(), popitem(), clear())
+- Dictionary comprehensions
+- Nested dictionaries
+- Copying dictionaries
+- Dictionary views and their behavior
+- Best practices and common patterns
+- Advanced dictionary techniques
+
+Continue to Part 3 for the most advanced dictionary operations and techniques!

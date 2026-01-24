@@ -1,0 +1,1885 @@
+================================================================================
+COMPREHENSIVE STUDY GUIDE: SETS IN PYTHON
+Part 2: Mathematical Set Operations and Advanced Methods
+================================================================================
+
+INTRODUCTION TO PART 2
+================================================================================
+
+In Part 1, we learned the fundamentals of sets: what they are, how to create them, 
+and basic operations like adding and removing elements. In Part 2, we'll explore 
+the powerful mathematical operations that make sets so useful. These operations 
+allow you to combine, compare, and manipulate sets in ways that are perfect for 
+solving many programming problems.
+
+What You'll Learn in Part 2:
+• Mathematical set operations (intersection, union, difference, symmetric difference)
+• Set comparison methods (issubset, issuperset, isdisjoint)
+• More set methods (update, pop, clear, copy)
+• Set comprehensions
+• Advanced set operations
+
+These operations are based on mathematical set theory, which makes them both 
+powerful and intuitive once you understand them.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: MATHEMATICAL SET OPERATIONS AND ADVANCED METHODS
+  SECTION 1: UNDERSTANDING VENN DIAGRAMS
+    • What Are Venn Diagrams?
+    • How Venn Diagrams Help Understand Set Operations
+  
+  SECTION 2: INTERSECTION OF SETS
+    • What Is Intersection?
+    • Using the & Operator
+    • The intersection() Method
+    • Practical Examples
+  
+  SECTION 3: UNION OF SETS
+    • What Is Union?
+    • Using the | Operator
+    • The union() Method
+    • Practical Examples
+  
+  SECTION 4: SET DIFFERENCE
+    • What Is Set Difference?
+    • Using the - Operator
+    • The difference() Method
+    • Practical Examples
+  
+  SECTION 5: SYMMETRIC DIFFERENCE
+    • What Is Symmetric Difference?
+    • Using the ^ Operator
+    • The symmetric_difference() Method
+    • Practical Examples
+  
+  SECTION 6: SET COMPARISON METHODS
+    • issubset() Method
+    • issuperset() Method
+    • isdisjoint() Method
+  
+  SECTION 7: MORE SET METHODS
+    • update() Method
+    • pop() Method
+    • clear() Method
+    • copy() Method
+  
+  SECTION 8: SET COMPREHENSIONS
+    • Creating Sets with Comprehensions
+    • Examples and Use Cases
+
+NOTE: Part 3 of this guide covers:
+  • Frozen sets (immutable sets)
+  • Set operations with multiple sets
+  • Practical examples and use cases
+  • Performance considerations
+  • Best practices and common patterns
+  • Common mistakes and how to avoid them
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1:") to quickly jump to any section.
+
+================================================================================
+SECTION 1: UNDERSTANDING VENN DIAGRAMS
+================================================================================
+
+WHAT ARE VENN DIAGRAMS?
+================================================================================
+
+A Venn diagram is a tool that uses shapes (usually circles) to represent sets. 
+Venn diagrams are extremely helpful for visualizing set operations and 
+understanding how sets relate to each other.
+
+HOW VENN DIAGRAMS WORK:
+─────────────────────────────────────────────────────────────────────────────
+• Each set is represented by a circle (or other shape)
+• Elements in a set are placed inside the circle
+• When two sets overlap, the overlapping area represents elements that are 
+  in both sets
+• Areas that don't overlap represent elements that are in only one set
+
+VISUAL EXAMPLE:
+─────────────────────────────────────────────────────────────────────────────
+Consider two sets:
+  Set A = {1, 2, 3, 4}
+  Set B = {3, 4, 5, 6}
+
+Venn Diagram Representation:
+  
+        Set A              Set B
+    ┌─────────┐        ┌─────────┐
+    │   1     │        │    5    │
+    │   2     │   ┌────┼────┐    │
+    │         │   │ 3  │ 4  │    │
+    │         │   └────┼────┘    │
+    │         │        │    6    │
+    └─────────┘        └─────────┘
+    
+The overlapping area contains: {3, 4} (elements in both sets)
+Set A only contains: {1, 2} (elements only in Set A)
+Set B only contains: {5, 6} (elements only in Set B)
+
+WHY ARE VENN DIAGRAMS USEFUL?
+─────────────────────────────────────────────────────────────────────────────
+Venn diagrams help us understand:
+1. Which elements are shared between sets (intersection)
+2. Which elements are in either set (union)
+3. Which elements are in one set but not the other (difference)
+4. How sets relate to each other (subset, superset, disjoint)
+
+As we go through the set operations, we'll use Venn diagrams to visualize 
+what each operation does.
+
+[END SECTION 1]
+================================================================================
+
+SECTION 2: INTERSECTION OF SETS
+================================================================================
+
+WHAT IS INTERSECTION?
+================================================================================
+
+The intersection of two sets is a new set containing elements which are in BOTH 
+of those sets. In other words, intersection finds the common elements between 
+two sets.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+The intersection of Set A and Set B contains all elements that are:
+• In Set A AND
+• In Set B
+
+If an element is in only one of the sets (or neither), it is NOT in the 
+intersection.
+
+VENN DIAGRAM REPRESENTATION:
+─────────────────────────────────────────────────────────────────────────────
+The intersection is represented by the overlapping area of two circles in a 
+Venn diagram. As the overlap is comprised of both circles, we define the 
+intersection in terms of AND - an element must be in the red circle AND in the 
+blue circle.
+
+VISUAL EXAMPLE:
+  
+        Set A              Set B
+    ┌─────────┐        ┌─────────┐
+    │   1     │        │    5    │
+    │   2     │   ┌────┼────┐    │
+    │         │   │ 3  │ 4  │ ← Intersection (overlap)
+    │         │   └────┼────┘    │
+    │         │        │    6    │
+    └─────────┘        └─────────┘
+    
+Intersection = {3, 4} (elements in both sets)
+
+USING THE & OPERATOR
+================================================================================
+
+In Python, we use an ampersand (&) to find the intersection of two sets. You 
+simply place the ampersand between the two sets.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A & set_B
+
+The & operator:
+• Returns a new set containing elements in both set_A and set_B
+• Does not modify the original sets
+• Creates a new set as the result
+
+CODE EXAMPLE 1: Finding Intersection with & Operator
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide"}
+AlbumSet2 = {"ACDC", "BackInBlack", "Thriller"}
+
+print("AlbumSet1:", AlbumSet1)
+# Output: AlbumSet1: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+
+print("AlbumSet2:", AlbumSet2)
+# Output: AlbumSet2: {'ACDC', 'BackInBlack', 'Thriller'}
+
+# Find intersection using & operator
+AlbumSet3 = AlbumSet1 & AlbumSet2
+print("Intersection (AlbumSet1 & AlbumSet2):", AlbumSet3)
+# Output: Intersection (AlbumSet1 & AlbumSet2): {'ACDC', 'BackInBlack'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide"}
+  • Creates the first set named AlbumSet1
+  • Contains three album names: "ACDC", "BackInBlack", "TheDarkSide"
+  • We can represent this set with a red circle in a Venn diagram
+
+Line 2: AlbumSet2 = {"ACDC", "BackInBlack", "Thriller"}
+  • Creates the second set named AlbumSet2
+  • Contains three album names: "ACDC", "BackInBlack", "Thriller"
+  • We can represent this set with a blue circle in a Venn diagram
+
+Line 3: print("AlbumSet1:", AlbumSet1)
+  • Prints the first set
+  • Shows all elements in AlbumSet1
+
+Line 4: # Output: AlbumSet1: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+  • Comment showing the expected output
+
+Line 5: print("AlbumSet2:", AlbumSet2)
+  • Prints the second set
+  • Shows all elements in AlbumSet2
+
+Line 6: # Output: AlbumSet2: {'ACDC', 'BackInBlack', 'Thriller'}
+  • Comment showing the expected output
+
+Line 7: # Find intersection using & operator
+  • Comment explaining what we're about to do
+
+Line 8: AlbumSet3 = AlbumSet1 & AlbumSet2
+  • Uses the & operator to find the intersection
+  • The syntax is: set1 & set2
+  • AlbumSet1 & AlbumSet2 finds elements that are in BOTH sets
+  • "ACDC" is in both sets → included in intersection
+  • "BackInBlack" is in both sets → included in intersection
+  • "TheDarkSide" is only in AlbumSet1 → NOT in intersection
+  • "Thriller" is only in AlbumSet2 → NOT in intersection
+  • The result is stored in AlbumSet3
+
+Line 9: print("Intersection (AlbumSet1 & AlbumSet2):", AlbumSet3)
+  • Prints the intersection result
+  • Output: {'ACDC', 'BackInBlack'}
+  • Shows that both "ACDC" and "BackInBlack" are in both sets
+  • This is the overlap area in the Venn diagram
+
+VISUALIZING THE INTERSECTION:
+─────────────────────────────────────────────────────────────────────────────
+If we overlay the values of the sets over the circles, placing the common 
+elements in the overlapping area, we see the correspondence:
+
+        AlbumSet1          AlbumSet2
+    ┌─────────────┐    ┌─────────────┐
+    │ TheDarkSide │    │   Thriller  │
+    │             │ ┌──┼──┐          │
+    │             │ │ACDC│BackInBlack│ ← Intersection
+    │             │ └──┼──┘          │
+    └─────────────┘    └─────────────┘
+    
+After applying the intersection operation, all the items that are not in both 
+sets disappear. Only the overlapping elements remain.
+
+CODE EXAMPLE 2: Intersection with No Common Elements
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets with no common elements
+set_A = {1, 2, 3}
+set_B = {4, 5, 6}
+
+# Find intersection
+intersection = set_A & set_B
+print("Intersection:", intersection)
+# Output: Intersection: set()
+# An empty set - no elements are in both sets
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3}
+  • Creates a set with elements 1, 2, 3
+
+Line 2: set_B = {4, 5, 6}
+  • Creates a set with elements 4, 5, 6
+  • Notice: No elements are shared between set_A and set_B
+
+Line 3: # Find intersection
+  • Comment explaining the operation
+
+Line 4: intersection = set_A & set_B
+  • Finds the intersection of the two sets
+  • Since there are no common elements, the result is an empty set
+
+Line 5: print("Intersection:", intersection)
+  • Prints the result
+  • Output: set()
+  • An empty set means no elements are in both sets
+  • This represents sets that don't overlap in a Venn diagram
+
+USING THE intersection() METHOD
+================================================================================
+
+Python also provides an intersection() method that does the same thing as the 
+& operator. The method is useful when you want to find the intersection with 
+multiple sets or when you prefer method syntax.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A.intersection(set_B)
+result_set = set_A.intersection(set_B, set_C, ...)  # Multiple sets
+
+The intersection() method:
+• Returns a new set containing elements in all specified sets
+• Can take multiple sets as arguments
+• Does not modify the original set
+
+CODE EXAMPLE 3: Using intersection() Method
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+set_A = {"ACDC", "BackInBlack", "TheDarkSide"}
+set_B = {"ACDC", "BackInBlack", "Thriller"}
+
+# Find intersection using method
+result = set_A.intersection(set_B)
+print("Intersection:", result)
+# Output: Intersection: {'ACDC', 'BackInBlack'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack", "TheDarkSide"}
+  • Creates the first set
+
+Line 2: set_B = {"ACDC", "BackInBlack", "Thriller"}
+  • Creates the second set
+
+Line 3: # Find intersection using method
+  • Comment explaining the operation
+
+Line 4: result = set_A.intersection(set_B)
+  • Uses the intersection() method
+  • The syntax is: set_name.intersection(other_set)
+  • set_A is the set we're calling the method on
+  • .intersection() is the method
+  • set_B is passed as an argument
+  • Returns a new set with common elements
+  • Works exactly like the & operator
+
+Line 5: print("Intersection:", result)
+  • Prints the result
+  • Output: {'ACDC', 'BackInBlack'}
+  • Same result as using the & operator
+
+CODE EXAMPLE 4: Intersection with Multiple Sets
+─────────────────────────────────────────────────────────────────────────────
+# Define three sets
+set_A = {1, 2, 3, 4, 5}
+set_B = {3, 4, 5, 6, 7}
+set_C = {4, 5, 6, 7, 8}
+
+# Find intersection of all three sets
+result = set_A.intersection(set_B, set_C)
+print("Intersection of all three:", result)
+# Output: Intersection of all three: {4, 5}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4, 5}
+  • Creates the first set
+
+Line 2: set_B = {3, 4, 5, 6, 7}
+  • Creates the second set
+
+Line 3: set_C = {4, 5, 6, 7, 8}
+  • Creates the third set
+
+Line 4: # Find intersection of all three sets
+  • Comment explaining the operation
+
+Line 5: result = set_A.intersection(set_B, set_C)
+  • Uses intersection() with multiple sets
+  • Finds elements that are in set_A AND set_B AND set_C
+  • Element 4: in all three sets → included
+  • Element 5: in all three sets → included
+  • Other elements: not in all three → excluded
+
+Line 6: print("Intersection of all three:", result)
+  • Prints the result
+  • Output: {4, 5}
+  • Only elements present in all three sets
+
+PRACTICAL EXAMPLE: Finding Common Interests
+─────────────────────────────────────────────────────────────────────────────
+CODE EXAMPLE 5: Finding Common Movie Preferences
+─────────────────────────────────────────────────────────────────────────────
+# Two friends' favorite movies
+friend1_movies = {"The Matrix", "Inception", "Interstellar", "The Dark Knight"}
+friend2_movies = {"Inception", "The Dark Knight", "Blade Runner", "The Matrix"}
+
+# Find movies they both like
+common_movies = friend1_movies & friend2_movies
+print("Movies both friends like:", common_movies)
+# Output: Movies both friends like: {'The Matrix', 'Inception', 'The Dark Knight'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: friend1_movies = {"The Matrix", "Inception", "Interstellar", "The Dark Knight"}
+  • Creates a set of the first friend's favorite movies
+  • Sets are perfect for this because we want unique movie titles
+
+Line 2: friend2_movies = {"Inception", "The Dark Knight", "Blade Runner", "The Matrix"}
+  • Creates a set of the second friend's favorite movies
+
+Line 3: # Find movies they both like
+  • Comment explaining the goal
+
+Line 4: common_movies = friend1_movies & friend2_movies
+  • Uses intersection to find common movies
+  • Finds movies that are in BOTH sets
+  • "The Matrix": in both → included
+  • "Inception": in both → included
+  • "The Dark Knight": in both → included
+  • "Interstellar": only in friend1_movies → excluded
+  • "Blade Runner": only in friend2_movies → excluded
+
+Line 5: print("Movies both friends like:", common_movies)
+  • Prints the common movies
+  • Shows movies they can watch together
+
+[END SECTION 2]
+================================================================================
+
+SECTION 3: UNION OF SETS
+================================================================================
+
+WHAT IS UNION?
+================================================================================
+
+The union of two sets is a new set containing ALL elements from BOTH sets. In 
+other words, union combines all unique elements from both sets into one set.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+The union of Set A and Set B contains all elements that are:
+• In Set A OR
+• In Set B OR
+• In both
+
+If an element appears in either set (or both), it is in the union. Duplicates 
+are automatically removed (since sets only contain unique elements).
+
+VENN DIAGRAM REPRESENTATION:
+─────────────────────────────────────────────────────────────────────────────
+The union is represented by the entire area covered by both circles in a Venn 
+diagram. This includes:
+• Elements only in Set A
+• Elements only in Set B
+• Elements in both sets (the overlap)
+
+VISUAL EXAMPLE:
+  
+        Set A              Set B
+    ┌─────────┐        ┌─────────┐
+    │   1     │        │    5    │
+    │   2     │   ┌────┼────┐    │
+    │         │   │ 3  │ 4  │    │
+    │         │   └────┼────┘    │
+    │         │        │    6    │
+    └─────────┘        └─────────┘
+    
+Union = {1, 2, 3, 4, 5, 6} (all elements from both sets)
+
+USING THE | OPERATOR
+================================================================================
+
+In Python, we use a pipe/vertical bar (|) to find the union of two sets. You 
+simply place the pipe between the two sets.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A | set_B
+
+The | operator:
+• Returns a new set containing all elements from both sets
+• Automatically removes duplicates (since sets only contain unique elements)
+• Does not modify the original sets
+• Creates a new set as the result
+
+CODE EXAMPLE 6: Finding Union with | Operator
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide"}
+AlbumSet2 = {"ACDC", "BackInBlack", "Thriller"}
+
+print("AlbumSet1:", AlbumSet1)
+# Output: AlbumSet1: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+
+print("AlbumSet2:", AlbumSet2)
+# Output: AlbumSet2: {'ACDC', 'BackInBlack', 'Thriller'}
+
+# Find union using | operator
+union_result = AlbumSet1 | AlbumSet2
+print("Union (AlbumSet1 | AlbumSet2):", union_result)
+# Output: Union (AlbumSet1 | AlbumSet2): {'ACDC', 'BackInBlack', 'TheDarkSide', 'Thriller'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide"}
+  • Creates the first set
+  • Contains three album names
+
+Line 2: AlbumSet2 = {"ACDC", "BackInBlack", "Thriller"}
+  • Creates the second set
+  • Contains three album names
+  • Notice: "ACDC" and "BackInBlack" appear in both sets
+
+Line 3: print("AlbumSet1:", AlbumSet1)
+  • Prints the first set
+
+Line 4: print("AlbumSet2:", AlbumSet2)
+  • Prints the second set
+
+Line 5: # Find union using | operator
+  • Comment explaining the operation
+
+Line 6: union_result = AlbumSet1 | AlbumSet2
+  • Uses the | operator to find the union
+  • The syntax is: set1 | set2
+  • Combines all elements from both sets
+  • "ACDC": in both sets → included once (duplicates removed)
+  • "BackInBlack": in both sets → included once (duplicates removed)
+  • "TheDarkSide": only in AlbumSet1 → included
+  • "Thriller": only in AlbumSet2 → included
+  • The result contains all unique elements from both sets
+
+Line 7: print("Union (AlbumSet1 | AlbumSet2):", union_result)
+  • Prints the union result
+  • Output: {'ACDC', 'BackInBlack', 'TheDarkSide', 'Thriller'}
+  • Contains all four unique album names
+  • Duplicates ("ACDC" and "BackInBlack") appear only once
+  • This new set is represented in green in the Venn diagram (covering both circles)
+
+VISUALIZING THE UNION:
+─────────────────────────────────────────────────────────────────────────────
+The union covers the entire area of both circles:
+
+        AlbumSet1          AlbumSet2
+    ┌─────────────┐    ┌─────────────┐
+    │ TheDarkSide │    │   Thriller  │
+    │             │ ┌──┼──┐          │
+    │             │ │ACDC│BackInBlack│ ← Common elements
+    │             │ └──┼──┘          │
+    └─────────────┘    └─────────────┘
+    
+Union = All elements from both sets = {ACDC, BackInBlack, TheDarkSide, Thriller}
+
+CODE EXAMPLE 7: Union with Completely Different Sets
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets with no common elements
+set_A = {1, 2, 3}
+set_B = {4, 5, 6}
+
+# Find union
+union_result = set_A | set_B
+print("Union:", union_result)
+# Output: Union: {1, 2, 3, 4, 5, 6}
+# Contains all elements from both sets
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3}
+  • Creates a set with elements 1, 2, 3
+
+Line 2: set_B = {4, 5, 6}
+  • Creates a set with elements 4, 5, 6
+  • No elements are shared between the sets
+
+Line 3: # Find union
+  • Comment explaining the operation
+
+Line 4: union_result = set_A | set_B
+  • Finds the union of the two sets
+  • Combines all elements: {1, 2, 3} + {4, 5, 6}
+  • Since there are no duplicates, all elements are included
+
+Line 5: print("Union:", union_result)
+  • Prints the result
+  • Output: {1, 2, 3, 4, 5, 6}
+  • Contains all six elements from both sets
+
+USING THE union() METHOD
+================================================================================
+
+Python also provides a union() method that does the same thing as the | operator.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A.union(set_B)
+result_set = set_A.union(set_B, set_C, ...)  # Multiple sets
+
+The union() method:
+• Returns a new set containing all elements from all specified sets
+• Can take multiple sets as arguments
+• Does not modify the original set
+
+CODE EXAMPLE 8: Using union() Method
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+set_A = {"ACDC", "BackInBlack", "TheDarkSide"}
+set_B = {"ACDC", "BackInBlack", "Thriller"}
+
+# Find union using method
+result = set_A.union(set_B)
+print("Union:", result)
+# Output: Union: {'ACDC', 'BackInBlack', 'TheDarkSide', 'Thriller'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack", "TheDarkSide"}
+  • Creates the first set
+
+Line 2: set_B = {"ACDC", "BackInBlack", "Thriller"}
+  • Creates the second set
+
+Line 3: # Find union using method
+  • Comment explaining the operation
+
+Line 4: result = set_A.union(set_B)
+  • Uses the union() method
+  • The syntax is: set_name.union(other_set)
+  • Returns a new set with all unique elements from both sets
+  • Works exactly like the | operator
+
+Line 5: print("Union:", result)
+  • Prints the result
+  • Same output as using the | operator
+
+PRACTICAL EXAMPLE: Combining Lists of Items
+─────────────────────────────────────────────────────────────────────────────
+CODE EXAMPLE 9: Combining Shopping Lists
+─────────────────────────────────────────────────────────────────────────────
+# Two people's shopping lists
+person1_items = {"milk", "bread", "eggs", "butter"}
+person2_items = {"bread", "cheese", "eggs", "apples"}
+
+# Combine both lists (get all unique items)
+combined_list = person1_items | person2_items
+print("Combined shopping list:", combined_list)
+# Output: Combined shopping list: {'milk', 'bread', 'eggs', 'butter', 'cheese', 'apples'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: person1_items = {"milk", "bread", "eggs", "butter"}
+  • Creates a set of items for person 1
+  • Sets are perfect because we want unique items
+
+Line 2: person2_items = {"bread", "cheese", "eggs", "apples"}
+  • Creates a set of items for person 2
+
+Line 3: # Combine both lists (get all unique items)
+  • Comment explaining the goal
+
+Line 4: combined_list = person1_items | person2_items
+  • Uses union to combine both lists
+  • Gets all unique items from both sets
+  • "bread" and "eggs" appear in both → included once each
+  • All other items are included
+
+Line 5: print("Combined shopping list:", combined_list)
+  • Prints the combined list
+  • Shows all items needed (no duplicates)
+
+[END SECTION 3]
+================================================================================
+
+SECTION 4: SET DIFFERENCE
+================================================================================
+
+WHAT IS SET DIFFERENCE?
+================================================================================
+
+The difference of two sets is a new set containing elements that are in the 
+first set but NOT in the second set. In other words, difference finds elements 
+that are unique to the first set.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+The difference of Set A - Set B contains all elements that are:
+• In Set A AND
+• NOT in Set B
+
+If an element is in Set A but not in Set B, it's in the difference. If an 
+element is in Set B (or both), it's NOT in the difference.
+
+VENN DIAGRAM REPRESENTATION:
+─────────────────────────────────────────────────────────────────────────────
+The difference is represented by the part of Set A that doesn't overlap with 
+Set B. It's the "unique to Set A" area.
+
+VISUAL EXAMPLE:
+  
+        Set A              Set B
+    ┌─────────┐        ┌─────────┐
+    │   1     │ ← Difference (A - B)
+    │   2     │   ┌────┼────┐    │
+    │         │   │ 3  │ 4  │    │
+    │         │   └────┼────┘    │
+    │         │        │    5    │
+    └─────────┘        └─────────┘
+    
+Difference (A - B) = {1, 2} (elements only in Set A)
+
+USING THE - OPERATOR
+================================================================================
+
+In Python, we use a minus sign (-) to find the difference of two sets. The 
+order matters: A - B is different from B - A.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A - set_B  # Elements in A but not in B
+result_set = set_B - set_A  # Elements in B but not in A
+
+The - operator:
+• Returns a new set containing elements in the first set but not in the second
+• Order matters: A - B ≠ B - A (unless the sets are identical)
+• Does not modify the original sets
+
+CODE EXAMPLE 10: Finding Difference with - Operator
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+set_A = {1, 2, 3, 4, 5}
+set_B = {4, 5, 6, 7}
+
+print("Set A:", set_A)
+# Output: Set A: {1, 2, 3, 4, 5}
+
+print("Set B:", set_B)
+# Output: Set B: {4, 5, 6, 7}
+
+# Find difference: A - B (elements in A but not in B)
+difference_AB = set_A - set_B
+print("Difference (A - B):", difference_AB)
+# Output: Difference (A - B): {1, 2, 3}
+
+# Find difference: B - A (elements in B but not in A)
+difference_BA = set_B - set_A
+print("Difference (B - A):", difference_BA)
+# Output: Difference (B - A): {6, 7}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4, 5}
+  • Creates the first set
+
+Line 2: set_B = {4, 5, 6, 7}
+  • Creates the second set
+  • Elements 4 and 5 are in both sets
+
+Line 3: print("Set A:", set_A)
+  • Prints the first set
+
+Line 4: print("Set B:", set_B)
+  • Prints the second set
+
+Line 5: # Find difference: A - B (elements in A but not in B)
+  • Comment explaining the first difference operation
+
+Line 6: difference_AB = set_A - set_B
+  • Uses the - operator to find A - B
+  • Finds elements in set_A that are NOT in set_B
+  • Element 1: in A, not in B → included
+  • Element 2: in A, not in B → included
+  • Element 3: in A, not in B → included
+  • Element 4: in A AND in B → excluded (not unique to A)
+  • Element 5: in A AND in B → excluded (not unique to A)
+  • Result: {1, 2, 3}
+
+Line 7: print("Difference (A - B):", difference_AB)
+  • Prints the result
+  • Shows elements unique to Set A
+
+Line 8: # Find difference: B - A (elements in B but not in A)
+  • Comment explaining the second difference operation
+
+Line 9: difference_BA = set_B - set_A
+  • Uses the - operator to find B - A
+  • Finds elements in set_B that are NOT in set_A
+  • Element 4: in B AND in A → excluded (not unique to B)
+  • Element 5: in B AND in A → excluded (not unique to B)
+  • Element 6: in B, not in A → included
+  • Element 7: in B, not in A → included
+  • Result: {6, 7}
+
+Line 10: print("Difference (B - A):", difference_BA)
+  • Prints the result
+  • Shows elements unique to Set B
+  • Notice: This is different from A - B!
+
+USING THE difference() METHOD
+================================================================================
+
+Python also provides a difference() method that does the same thing as the - 
+operator.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A.difference(set_B)
+result_set = set_A.difference(set_B, set_C, ...)  # Multiple sets
+
+The difference() method:
+• Returns a new set containing elements in the original set but not in the 
+  specified sets
+• Can take multiple sets as arguments
+• Does not modify the original set
+
+CODE EXAMPLE 11: Using difference() Method
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+set_A = {1, 2, 3, 4, 5}
+set_B = {4, 5, 6, 7}
+
+# Find difference using method
+result = set_A.difference(set_B)
+print("Difference:", result)
+# Output: Difference: {1, 2, 3}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4, 5}
+  • Creates the first set
+
+Line 2: set_B = {4, 5, 6, 7}
+  • Creates the second set
+
+Line 3: # Find difference using method
+  • Comment explaining the operation
+
+Line 4: result = set_A.difference(set_B)
+  • Uses the difference() method
+  • The syntax is: set_name.difference(other_set)
+  • Returns elements in set_A that are not in set_B
+  • Works exactly like the - operator
+
+Line 5: print("Difference:", result)
+  • Prints the result
+  • Same output as using the - operator
+
+PRACTICAL EXAMPLE: Finding Unique Items
+─────────────────────────────────────────────────────────────────────────────
+CODE EXAMPLE 12: Finding Items Only One Person Has
+─────────────────────────────────────────────────────────────────────────────
+# Two friends' movie collections
+friend1_movies = {"The Matrix", "Inception", "Interstellar", "The Dark Knight"}
+friend2_movies = {"Inception", "The Dark Knight", "Blade Runner", "The Matrix"}
+
+# Find movies only friend1 has
+only_friend1 = friend1_movies - friend2_movies
+print("Movies only friend1 has:", only_friend1)
+# Output: Movies only friend1 has: {'Interstellar'}
+
+# Find movies only friend2 has
+only_friend2 = friend2_movies - friend1_movies
+print("Movies only friend2 has:", only_friend2)
+# Output: Movies only friend2 has: {'Blade Runner'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: friend1_movies = {"The Matrix", "Inception", "Interstellar", "The Dark Knight"}
+  • Creates a set of friend1's movies
+
+Line 2: friend2_movies = {"Inception", "The Dark Knight", "Blade Runner", "The Matrix"}
+  • Creates a set of friend2's movies
+
+Line 3: # Find movies only friend1 has
+  • Comment explaining the goal
+
+Line 4: only_friend1 = friend1_movies - friend2_movies
+  • Finds movies in friend1_movies that are NOT in friend2_movies
+  • "Interstellar" is only in friend1_movies → included
+  • Other movies are in both sets → excluded
+
+Line 5: print("Movies only friend1 has:", only_friend1)
+  • Prints the result
+  • Shows unique movies friend1 has
+
+Line 6: # Find movies only friend2 has
+  • Comment explaining the second operation
+
+Line 7: only_friend2 = friend2_movies - friend1_movies
+  • Finds movies in friend2_movies that are NOT in friend1_movies
+  • "Blade Runner" is only in friend2_movies → included
+
+Line 8: print("Movies only friend2 has:", only_friend2)
+  • Prints the result
+  • Shows unique movies friend2 has
+
+[END SECTION 4]
+================================================================================
+
+SECTION 5: SYMMETRIC DIFFERENCE
+================================================================================
+
+WHAT IS SYMMETRIC DIFFERENCE?
+================================================================================
+
+The symmetric difference of two sets is a new set containing elements that are 
+in EITHER set but NOT in BOTH sets. In other words, it's the union of the two 
+differences: (A - B) ∪ (B - A).
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+The symmetric difference of Set A and Set B contains all elements that are:
+• In Set A but NOT in Set B, OR
+• In Set B but NOT in Set A
+
+If an element is in both sets, it is NOT in the symmetric difference. If an 
+element is in only one set, it IS in the symmetric difference.
+
+VENN DIAGRAM REPRESENTATION:
+─────────────────────────────────────────────────────────────────────────────
+The symmetric difference is represented by the parts of both circles that don't 
+overlap. It excludes the intersection (overlap area).
+
+VISUAL EXAMPLE:
+  
+        Set A              Set B
+    ┌─────────┐        ┌─────────┐
+    │   1     │ ← Symmetric Difference
+    │   2     │   ┌────┼────┐    │
+    │         │   │ 3  │ 4  │ ← NOT included (in both)
+    │         │   └────┼────┘    │
+    │         │        │    5    │ ← Symmetric Difference
+    └─────────┘        └─────────┘
+    
+Symmetric Difference = {1, 2, 5} (elements in only one set)
+
+USING THE ^ OPERATOR
+================================================================================
+
+In Python, we use a caret (^) to find the symmetric difference of two sets. 
+Unlike regular difference, symmetric difference is commutative: A ^ B = B ^ A.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A ^ set_B
+
+The ^ operator:
+• Returns a new set containing elements in either set but not in both
+• Order doesn't matter: A ^ B = B ^ A
+• Does not modify the original sets
+
+CODE EXAMPLE 13: Finding Symmetric Difference with ^ Operator
+─────────────────────────────────────────────────────────────────────────────
+# Define two sets
+set_A = {1, 2, 3, 4, 5}
+set_B = {4, 5, 6, 7}
+
+print("Set A:", set_A)
+# Output: Set A: {1, 2, 3, 4, 5}
+
+print("Set B:", set_B)
+# Output: Set B: {4, 5, 6, 7}
+
+# Find symmetric difference
+symmetric_diff = set_A ^ set_B
+print("Symmetric Difference (A ^ B):", symmetric_diff)
+# Output: Symmetric Difference (A ^ B): {1, 2, 3, 6, 7}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4, 5}
+  • Creates the first set
+
+Line 2: set_B = {4, 5, 6, 7}
+  • Creates the second set
+  • Elements 4 and 5 are in both sets
+
+Line 3: print("Set A:", set_A)
+  • Prints the first set
+
+Line 4: print("Set B:", set_B)
+  • Prints the second set
+
+Line 5: # Find symmetric difference
+  • Comment explaining the operation
+
+Line 6: symmetric_diff = set_A ^ set_B
+  • Uses the ^ operator to find symmetric difference
+  • Finds elements in either set but NOT in both
+  • Element 1: in A only → included
+  • Element 2: in A only → included
+  • Element 3: in A only → included
+  • Element 4: in BOTH → excluded (not unique to either)
+  • Element 5: in BOTH → excluded (not unique to either)
+  • Element 6: in B only → included
+  • Element 7: in B only → included
+  • Result: {1, 2, 3, 6, 7}
+
+Line 7: print("Symmetric Difference (A ^ B):", symmetric_diff)
+  • Prints the result
+  • Shows elements that are unique to each set (not shared)
+
+EQUIVALENT OPERATIONS:
+─────────────────────────────────────────────────────────────────────────────
+Symmetric difference is equivalent to:
+  (A - B) | (B - A)  # Union of the two differences
+  (A | B) - (A & B)  # Union minus intersection
+
+CODE EXAMPLE 14: Symmetric Difference is Commutative
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2, 3}
+set_B = {3, 4, 5}
+
+# Both operations give the same result
+result1 = set_A ^ set_B
+result2 = set_B ^ set_A
+
+print("A ^ B:", result1)
+# Output: A ^ B: {1, 2, 4, 5}
+
+print("B ^ A:", result2)
+# Output: B ^ A: {1, 2, 4, 5}
+
+print("Are they equal?", result1 == result2)
+# Output: Are they equal? True
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3}
+  • Creates the first set
+
+Line 2: set_B = {3, 4, 5}
+  • Creates the second set
+  • Element 3 is in both sets
+
+Line 3: # Both operations give the same result
+  • Comment explaining that order doesn't matter
+
+Line 4: result1 = set_A ^ set_B
+  • Finds symmetric difference: A ^ B
+  • Elements in A but not B: {1, 2}
+  • Elements in B but not A: {4, 5}
+  • Result: {1, 2, 4, 5}
+
+Line 5: result2 = set_B ^ set_A
+  • Finds symmetric difference: B ^ A
+  • Same operation, just reversed order
+  • Should give the same result
+
+Line 6: print("A ^ B:", result1)
+  • Prints the first result
+
+Line 7: print("B ^ A:", result2)
+  • Prints the second result
+  • Shows both are the same
+
+Line 8: print("Are they equal?", result1 == result2)
+  • Confirms they're equal
+  • Output: True
+  • Proves symmetric difference is commutative
+
+USING THE symmetric_difference() METHOD
+================================================================================
+
+Python also provides a symmetric_difference() method.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result_set = set_A.symmetric_difference(set_B)
+
+The symmetric_difference() method:
+• Returns a new set containing elements in either set but not in both
+• Works exactly like the ^ operator
+• Does not modify the original set
+
+CODE EXAMPLE 15: Using symmetric_difference() Method
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2, 3, 4}
+set_B = {3, 4, 5, 6}
+
+result = set_A.symmetric_difference(set_B)
+print("Symmetric Difference:", result)
+# Output: Symmetric Difference: {1, 2, 5, 6}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4}
+  • Creates the first set
+
+Line 2: set_B = {3, 4, 5, 6}
+  • Creates the second set
+  • Elements 3 and 4 are in both sets
+
+Line 3: result = set_A.symmetric_difference(set_B)
+  • Uses the symmetric_difference() method
+  • Finds elements in either set but not in both
+  • Elements 1, 2: in A only → included
+  • Elements 5, 6: in B only → included
+  • Elements 3, 4: in both → excluded
+
+Line 4: print("Symmetric Difference:", result)
+  • Prints the result
+  • Output: {1, 2, 5, 6}
+
+PRACTICAL EXAMPLE: Finding Differences
+─────────────────────────────────────────────────────────────────────────────
+CODE EXAMPLE 16: Finding Movies That Are Different Between Friends
+─────────────────────────────────────────────────────────────────────────────
+# Two friends' movie collections
+friend1_movies = {"The Matrix", "Inception", "Interstellar"}
+friend2_movies = {"Inception", "Blade Runner", "The Matrix"}
+
+# Find movies that are different (not shared)
+different_movies = friend1_movies ^ friend2_movies
+print("Movies that are different:", different_movies)
+# Output: Movies that are different: {'Interstellar', 'Blade Runner'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: friend1_movies = {"The Matrix", "Inception", "Interstellar"}
+  • Creates a set of friend1's movies
+
+Line 2: friend2_movies = {"Inception", "Blade Runner", "The Matrix"}
+  • Creates a set of friend2's movies
+  • "The Matrix" and "Inception" are in both sets
+
+Line 3: # Find movies that are different (not shared)
+  • Comment explaining the goal
+
+Line 4: different_movies = friend1_movies ^ friend2_movies
+  • Finds symmetric difference
+  • Movies in only one set (not shared)
+  • "Interstellar": only in friend1_movies → included
+  • "Blade Runner": only in friend2_movies → included
+  • "The Matrix" and "Inception": in both → excluded
+
+Line 5: print("Movies that are different:", different_movies)
+  • Prints the result
+  • Shows movies that are unique to each friend
+
+[END SECTION 5]
+================================================================================
+
+SECTION 6: SET COMPARISON METHODS
+================================================================================
+
+ISSUBSET METHOD
+================================================================================
+
+We can check if a set is a subset of another set using the issubset() method. 
+A set A is a subset of set B if all elements of A are also in B.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+Set A is a subset of Set B if:
+• Every element in A is also in B
+• A ⊆ B (mathematical notation)
+
+If all elements of AlbumSet3 are in AlbumSet1, then AlbumSet3 is a subset of 
+AlbumSet1. In a Venn diagram, the circle representing AlbumSet1 would 
+encapsulate (contain) the circle representing AlbumSet3.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result = set_A.issubset(set_B)
+result = set_A <= set_B  # Alternative syntax
+
+The issubset() method:
+• Returns True if all elements of set_A are in set_B
+• Returns False otherwise
+• Does not modify the sets
+
+CODE EXAMPLE 17: Using issubset() Method
+─────────────────────────────────────────────────────────────────────────────
+# Define sets
+AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide", "Thriller"}
+AlbumSet3 = {"ACDC", "BackInBlack"}
+
+print("AlbumSet1:", AlbumSet1)
+# Output: AlbumSet1: {'ACDC', 'BackInBlack', 'TheDarkSide', 'Thriller'}
+
+print("AlbumSet3:", AlbumSet3)
+# Output: AlbumSet3: {'ACDC', 'BackInBlack'}
+
+# Check if AlbumSet3 is a subset of AlbumSet1
+is_subset = AlbumSet3.issubset(AlbumSet1)
+print("Is AlbumSet3 a subset of AlbumSet1?", is_subset)
+# Output: Is AlbumSet3 a subset of AlbumSet1? True
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: AlbumSet1 = {"ACDC", "BackInBlack", "TheDarkSide", "Thriller"}
+  • Creates the larger set
+  • Contains four album names
+  • This is the "parent" set
+
+Line 2: AlbumSet3 = {"ACDC", "BackInBlack"}
+  • Creates a smaller set
+  • Contains two album names
+  • Both elements are also in AlbumSet1
+
+Line 3: print("AlbumSet1:", AlbumSet1)
+  • Prints the larger set
+
+Line 4: print("AlbumSet3:", AlbumSet3)
+  • Prints the smaller set
+
+Line 5: # Check if AlbumSet3 is a subset of AlbumSet1
+  • Comment explaining the operation
+
+Line 6: is_subset = AlbumSet3.issubset(AlbumSet1)
+  • Uses the issubset() method
+  • The syntax is: smaller_set.issubset(larger_set)
+  • Checks if all elements of AlbumSet3 are in AlbumSet1
+  • "ACDC" is in AlbumSet1 → ✓
+  • "BackInBlack" is in AlbumSet1 → ✓
+  • All elements of AlbumSet3 are in AlbumSet1
+  • Result: True
+
+Line 7: print("Is AlbumSet3 a subset of AlbumSet1?", is_subset)
+  • Prints the result
+  • Output: True
+  • Confirms that AlbumSet3 is a subset of AlbumSet1
+
+VISUAL REPRESENTATION:
+─────────────────────────────────────────────────────────────────────────────
+In a Venn diagram, if AlbumSet3 is a subset of AlbumSet1:
+
+        AlbumSet1 (larger)
+    ┌─────────────────────┐
+    │  TheDarkSide        │
+    │  Thriller           │
+    │  ┌──────────────┐   │
+    │  │ ACDC         │   │ ← AlbumSet3 (smaller, inside)
+    │  │ BackInBlack  │   │
+    │  └──────────────┘   │
+    └─────────────────────┘
+    
+The smaller circle (AlbumSet3) is completely inside the larger circle 
+(AlbumSet1).
+
+CODE EXAMPLE 18: When a Set is NOT a Subset
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2, 3}
+set_B = {2, 3, 4, 5}
+
+# Check if set_A is a subset of set_B
+result = set_A.issubset(set_B)
+print("Is set_A a subset of set_B?", result)
+# Output: Is set_A a subset of set_B? False
+# Because element 1 is in set_A but not in set_B
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3}
+  • Creates the first set
+
+Line 2: set_B = {2, 3, 4, 5}
+  • Creates the second set
+  • Notice: Element 1 is in set_A but not in set_B
+
+Line 3: # Check if set_A is a subset of set_B
+  • Comment explaining the operation
+
+Line 4: result = set_A.issubset(set_B)
+  • Checks if set_A is a subset of set_B
+  • Element 1: in set_A but NOT in set_B → subset condition fails
+  • Element 2: in both → ✓
+  • Element 3: in both → ✓
+  • Since not all elements of set_A are in set_B, result is False
+
+Line 5: print("Is set_A a subset of set_B?", result)
+  • Prints the result
+  • Output: False
+  • set_A is NOT a subset because it contains an element (1) not in set_B
+
+USING THE <= OPERATOR
+─────────────────────────────────────────────────────────────────────────────
+You can also use the <= operator as a shorthand for issubset():
+
+CODE EXAMPLE 19: Using <= Operator
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2}
+set_B = {1, 2, 3, 4}
+
+# Both methods are equivalent
+result1 = set_A.issubset(set_B)
+result2 = set_A <= set_B
+
+print("Using issubset():", result1)
+# Output: Using issubset(): True
+
+print("Using <= operator:", result2)
+# Output: Using <= operator: True
+
+print("Are they equal?", result1 == result2)
+# Output: Are they equal? True
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2}
+  • Creates a smaller set
+
+Line 2: set_B = {1, 2, 3, 4}
+  • Creates a larger set that contains all elements of set_A
+
+Line 3: # Both methods are equivalent
+  • Comment explaining both methods work the same
+
+Line 4: result1 = set_A.issubset(set_B)
+  • Uses the issubset() method
+  • Checks if set_A is a subset of set_B
+  • Result: True
+
+Line 5: result2 = set_A <= set_B
+  • Uses the <= operator
+  • This is shorthand for issubset()
+  • Same operation, different syntax
+  • Result: True
+
+Line 6: print("Using issubset():", result1)
+  • Prints the first result
+
+Line 7: print("Using <= operator:", result2)
+  • Prints the second result
+
+Line 8: print("Are they equal?", result1 == result2)
+  • Confirms both methods give the same result
+  • Output: True
+
+ISSUPERSET METHOD
+================================================================================
+
+The issuperset() method is the opposite of issubset(). It checks if a set 
+contains all elements of another set.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+Set A is a superset of Set B if:
+• All elements of B are in A
+• A ⊇ B (mathematical notation)
+• This is the same as saying B is a subset of A
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result = set_A.issuperset(set_B)
+result = set_A >= set_B  # Alternative syntax
+
+The issuperset() method:
+• Returns True if all elements of set_B are in set_A
+• Returns False otherwise
+• Does not modify the sets
+
+CODE EXAMPLE 20: Using issuperset() Method
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2, 3, 4, 5}
+set_B = {2, 3, 4}
+
+# Check if set_A is a superset of set_B
+result = set_A.issuperset(set_B)
+print("Is set_A a superset of set_B?", result)
+# Output: Is set_A a superset of set_B? True
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3, 4, 5}
+  • Creates the larger set
+
+Line 2: set_B = {2, 3, 4}
+  • Creates the smaller set
+  • All elements of set_B are in set_A
+
+Line 3: # Check if set_A is a superset of set_B
+  • Comment explaining the operation
+
+Line 4: result = set_A.issuperset(set_B)
+  • Uses the issuperset() method
+  • Checks if set_A contains all elements of set_B
+  • Element 2: in set_A → ✓
+  • Element 3: in set_A → ✓
+  • Element 4: in set_A → ✓
+  • All elements of set_B are in set_A
+  • Result: True
+
+Line 5: print("Is set_A a superset of set_B?", result)
+  • Prints the result
+  • Output: True
+  • set_A is a superset of set_B
+
+RELATIONSHIP BETWEEN ISSUBSET AND ISSUPERSET:
+─────────────────────────────────────────────────────────────────────────────
+If A is a subset of B, then B is a superset of A:
+  A.issubset(B) == B.issuperset(A)  # Always True
+
+CODE EXAMPLE 21: Relationship Between issubset and issuperset
+─────────────────────────────────────────────────────────────────────────────
+set_A = {1, 2}
+set_B = {1, 2, 3, 4}
+
+# These are equivalent
+result1 = set_A.issubset(set_B)
+result2 = set_B.issuperset(set_A)
+
+print("A is subset of B:", result1)
+# Output: A is subset of B: True
+
+print("B is superset of A:", result2)
+# Output: B is superset of A: True
+
+print("They are equivalent:", result1 == result2)
+# Output: They are equivalent: True
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2}
+  • Creates the smaller set
+
+Line 2: set_B = {1, 2, 3, 4}
+  • Creates the larger set
+
+Line 3: # These are equivalent
+  • Comment explaining the relationship
+
+Line 4: result1 = set_A.issubset(set_B)
+  • Checks if set_A is a subset of set_B
+  • Result: True
+
+Line 5: result2 = set_B.issuperset(set_A)
+  • Checks if set_B is a superset of set_A
+  • This is the same relationship, just stated differently
+  • Result: True
+
+Line 6: print("A is subset of B:", result1)
+  • Prints the first result
+
+Line 7: print("B is superset of A:", result2)
+  • Prints the second result
+
+Line 8: print("They are equivalent:", result1 == result2)
+  • Confirms they're equivalent
+  • Output: True
+
+ISDISJOINT METHOD
+================================================================================
+
+The isdisjoint() method checks if two sets have no elements in common. Sets are 
+disjoint if their intersection is empty.
+
+DEFINITION:
+─────────────────────────────────────────────────────────────────────────────
+Two sets are disjoint if:
+• They have no elements in common
+• Their intersection is empty: A ∩ B = ∅
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+result = set_A.isdisjoint(set_B)
+
+The isdisjoint() method:
+• Returns True if the sets have no common elements
+• Returns False if they have at least one common element
+• Does not modify the sets
+
+CODE EXAMPLE 22: Using isdisjoint() Method
+─────────────────────────────────────────────────────────────────────────────
+# Two sets with no common elements
+set_A = {1, 2, 3}
+set_B = {4, 5, 6}
+
+result = set_A.isdisjoint(set_B)
+print("Are set_A and set_B disjoint?", result)
+# Output: Are set_A and set_B disjoint? True
+
+# Two sets with common elements
+set_C = {1, 2, 3}
+set_D = {3, 4, 5}
+
+result2 = set_C.isdisjoint(set_D)
+print("Are set_C and set_D disjoint?", result2)
+# Output: Are set_C and set_D disjoint? False
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: # Two sets with no common elements
+  • Comment explaining the first example
+
+Line 2: set_A = {1, 2, 3}
+  • Creates the first set
+
+Line 3: set_B = {4, 5, 6}
+  • Creates the second set
+  • No elements are shared between the sets
+
+Line 4: result = set_A.isdisjoint(set_B)
+  • Uses the isdisjoint() method
+  • Checks if the sets have no common elements
+  • Since there are no shared elements, result is True
+
+Line 5: print("Are set_A and set_B disjoint?", result)
+  • Prints the result
+  • Output: True
+  • Confirms the sets are disjoint
+
+Line 6: # Two sets with common elements
+  • Comment explaining the second example
+
+Line 7: set_C = {1, 2, 3}
+  • Creates the first set
+
+Line 8: set_D = {3, 4, 5}
+  • Creates the second set
+  • Element 3 is in both sets
+
+Line 9: result2 = set_C.isdisjoint(set_D)
+  • Checks if set_C and set_D are disjoint
+  • Since they share element 3, they are NOT disjoint
+  • Result: False
+
+Line 10: print("Are set_C and set_D disjoint?", result2)
+  • Prints the result
+  • Output: False
+  • Confirms the sets are not disjoint (they share element 3)
+
+[END SECTION 6]
+================================================================================
+
+SECTION 7: MORE SET METHODS
+================================================================================
+
+UPDATE METHOD
+================================================================================
+
+The update() method adds all elements from another set (or other iterable) to 
+the current set. It modifies the set in place.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+set_A.update(set_B)
+set_A.update(iterable)  # Can also take lists, tuples, etc.
+
+The update() method:
+• Adds all elements from the argument to the set
+• Modifies the set in place (doesn't return a new set)
+• Automatically removes duplicates
+• Can take sets, lists, tuples, or other iterables
+
+CODE EXAMPLE 23: Using update() Method
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {1, 2, 3}
+print("Original set_A:", set_A)
+# Output: Original set_A: {1, 2, 3}
+
+# Update with another set
+set_B = {3, 4, 5}
+set_A.update(set_B)
+print("After update:", set_A)
+# Output: After update: {1, 2, 3, 4, 5}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {1, 2, 3}
+  • Creates the original set
+
+Line 2: print("Original set_A:", set_A)
+  • Prints the set before update
+
+Line 3: # Update with another set
+  • Comment explaining the operation
+
+Line 4: set_B = {3, 4, 5}
+  • Creates another set to add
+
+Line 5: set_A.update(set_B)
+  • Uses the update() method
+  • Adds all elements from set_B to set_A
+  • Element 3: already in set_A → no duplicate added
+  • Element 4: new → added
+  • Element 5: new → added
+  • Modifies set_A in place (changes the original set)
+
+Line 6: print("After update:", set_A)
+  • Prints the set after update
+  • Shows all unique elements from both sets
+
+EQUIVALENT TO UNION (BUT MODIFIES IN PLACE):
+─────────────────────────────────────────────────────────────────────────────
+update() is like union, but it modifies the set instead of creating a new one:
+
+  set_A.update(set_B)     # Modifies set_A
+  set_A = set_A | set_B    # Creates new set and assigns it
+
+POP METHOD
+================================================================================
+
+The pop() method removes and returns an arbitrary element from the set. Since 
+sets are unordered, you cannot predict which element will be removed.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+element = set_name.pop()
+
+The pop() method:
+• Removes and returns an arbitrary element
+• Raises KeyError if the set is empty
+• Modifies the set in place
+
+CODE EXAMPLE 24: Using pop() Method
+─────────────────────────────────────────────────────────────────────────────
+# Create a set
+my_set = {1, 2, 3, 4, 5}
+print("Original set:", my_set)
+# Output: Original set: {1, 2, 3, 4, 5}
+
+# Pop an element
+popped = my_set.pop()
+print("Popped element:", popped)
+# Output: Popped element: 1  (or any other element - arbitrary!)
+
+print("Set after pop:", my_set)
+# Output: Set after pop: {2, 3, 4, 5}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_set = {1, 2, 3, 4, 5}
+  • Creates a set with five elements
+
+Line 2: print("Original set:", my_set)
+  • Prints the original set
+
+Line 3: # Pop an element
+  • Comment explaining the operation
+
+Line 4: popped = my_set.pop()
+  • Uses the pop() method
+  • Removes an arbitrary element from the set
+  • Returns the removed element
+  • Which element is removed is not predictable (sets are unordered)
+  • The removed element is stored in popped
+
+Line 5: print("Popped element:", popped)
+  • Prints the removed element
+  • Could be any element from the set
+
+Line 6: print("Set after pop:", my_set)
+  • Prints the set after popping
+  • Shows the set with one less element
+
+CLEAR METHOD
+================================================================================
+
+The clear() method removes all elements from a set, making it empty.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+set_name.clear()
+
+The clear() method:
+• Removes all elements from the set
+• Makes the set empty
+• Modifies the set in place
+• Returns None
+
+CODE EXAMPLE 25: Using clear() Method
+─────────────────────────────────────────────────────────────────────────────
+# Create a set
+my_set = {1, 2, 3, 4, 5}
+print("Before clear:", my_set)
+# Output: Before clear: {1, 2, 3, 4, 5}
+
+# Clear the set
+my_set.clear()
+print("After clear:", my_set)
+# Output: After clear: set()
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_set = {1, 2, 3, 4, 5}
+  • Creates a set with elements
+
+Line 2: print("Before clear:", my_set)
+  • Prints the set before clearing
+
+Line 3: # Clear the set
+  • Comment explaining the operation
+
+Line 4: my_set.clear()
+  • Uses the clear() method
+  • Removes all elements from the set
+  • The set becomes empty
+  • Modifies the set in place
+
+Line 5: print("After clear:", my_set)
+  • Prints the set after clearing
+  • Output: set()
+  • Shows the set is now empty
+
+COPY METHOD
+================================================================================
+
+The copy() method creates a shallow copy of the set. The new set contains the 
+same elements but is a separate object.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+new_set = set_name.copy()
+
+The copy() method:
+• Creates a new set with the same elements
+• Returns a shallow copy (elements are the same objects, but the set is new)
+• Does not modify the original set
+
+CODE EXAMPLE 26: Using copy() Method
+─────────────────────────────────────────────────────────────────────────────
+# Create a set
+original_set = {1, 2, 3, 4, 5}
+print("Original:", original_set)
+# Output: Original: {1, 2, 3, 4, 5}
+
+# Create a copy
+copied_set = original_set.copy()
+print("Copy:", copied_set)
+# Output: Copy: {1, 2, 3, 4, 5}
+
+# Modify the original
+original_set.add(6)
+print("Original after modification:", original_set)
+# Output: Original after modification: {1, 2, 3, 4, 5, 6}
+
+print("Copy (unchanged):", copied_set)
+# Output: Copy (unchanged): {1, 2, 3, 4, 5}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: original_set = {1, 2, 3, 4, 5}
+  • Creates the original set
+
+Line 2: print("Original:", original_set)
+  • Prints the original set
+
+Line 3: # Create a copy
+  • Comment explaining the operation
+
+Line 4: copied_set = original_set.copy()
+  • Uses the copy() method
+  • Creates a new set with the same elements
+  • The new set is independent of the original
+
+Line 5: print("Copy:", copied_set)
+  • Prints the copied set
+  • Shows it has the same elements
+
+Line 6: # Modify the original
+  • Comment explaining we'll modify the original
+
+Line 7: original_set.add(6)
+  • Adds an element to the original set
+  • This modifies the original set
+
+Line 8: print("Original after modification:", original_set)
+  • Prints the original set
+  • Shows it now has 6 elements
+
+Line 9: print("Copy (unchanged):", copied_set)
+  • Prints the copied set
+  • Shows it's unchanged (still has 5 elements)
+  • This proves the copy is independent
+
+[END SECTION 7]
+================================================================================
+
+SECTION 8: SET COMPREHENSIONS
+================================================================================
+
+WHAT ARE SET COMPREHENSIONS?
+================================================================================
+
+Set comprehensions are a concise way to create sets based on existing iterables. 
+They follow a similar syntax to list comprehensions but create sets instead.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+my_set = {expression for item in iterable}
+my_set = {expression for item in iterable if condition}
+
+Set comprehensions:
+• Create sets in a single line
+• Can include conditions (if clauses)
+• Automatically handle uniqueness (duplicates are removed)
+
+CODE EXAMPLE 27: Basic Set Comprehension
+─────────────────────────────────────────────────────────────────────────────
+# Create a set of squares
+squares = {x**2 for x in range(1, 6)}
+print("Squares:", squares)
+# Output: Squares: {1, 4, 9, 16, 25}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: squares = {x**2 for x in range(1, 6)}
+  • Uses a set comprehension
+  • The syntax is: {expression for item in iterable}
+  • x**2 is the expression (square of x)
+  • for x in range(1, 6) iterates over 1, 2, 3, 4, 5
+  • Creates a set containing: 1², 2², 3², 4², 5²
+  • Result: {1, 4, 9, 16, 25}
+
+Line 2: print("Squares:", squares)
+  • Prints the resulting set
+
+CODE EXAMPLE 28: Set Comprehension with Condition
+─────────────────────────────────────────────────────────────────────────────
+# Create a set of even squares
+even_squares = {x**2 for x in range(1, 11) if x % 2 == 0}
+print("Even squares:", even_squares)
+# Output: Even squares: {64, 4, 100, 36, 16}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: even_squares = {x**2 for x in range(1, 11) if x % 2 == 0}
+  • Uses a set comprehension with a condition
+  • The syntax is: {expression for item in iterable if condition}
+  • x**2 is the expression
+  • for x in range(1, 11) iterates over 1 to 10
+  • if x % 2 == 0 filters for even numbers only
+  • Only even numbers (2, 4, 6, 8, 10) are squared
+  • Result: {4, 16, 36, 64, 100}
+
+Line 2: print("Even squares:", even_squares)
+  • Prints the resulting set
+
+CODE EXAMPLE 29: Set Comprehension from String
+─────────────────────────────────────────────────────────────────────────────
+# Create a set of unique characters (uppercase)
+text = "Hello World"
+unique_chars = {char.upper() for char in text if char.isalpha()}
+print("Unique uppercase letters:", unique_chars)
+# Output: Unique uppercase letters: {'D', 'E', 'H', 'L', 'O', 'R', 'W'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: text = "Hello World"
+  • Creates a string
+
+Line 2: unique_chars = {char.upper() for char in text if char.isalpha()}
+  • Uses a set comprehension
+  • char.upper() converts each character to uppercase
+  • for char in text iterates over each character
+  • if char.isalpha() filters for alphabetic characters only (excludes spaces)
+  • Automatically removes duplicates (sets only contain unique elements)
+  • Result: unique uppercase letters from the string
+
+Line 3: print("Unique uppercase letters:", unique_chars)
+  • Prints the resulting set
+  • Shows unique letters (duplicates like 'l' appear only once)
+
+[END SECTION 8]
+[END PART 2]
+================================================================================
+
+END OF PART 2
+================================================================================
+
+This is Part 2 of the comprehensive guide to Sets in Python. Part 3 will cover:
+  • Frozen sets (immutable sets)
+  • Set operations with multiple sets
+  • Practical examples and use cases
+  • Performance considerations
+  • Best practices and common patterns
+  • Common mistakes and how to avoid them
+
+================================================================================

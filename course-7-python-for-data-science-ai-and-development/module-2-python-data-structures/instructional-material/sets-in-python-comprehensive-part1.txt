@@ -1,0 +1,1443 @@
+================================================================================
+COMPREHENSIVE STUDY GUIDE: SETS IN PYTHON
+Part 1: Introduction, Creating Sets, and Basic Operations
+================================================================================
+
+INTRODUCTION TO SETS
+================================================================================
+
+Sets are a fundamental and powerful data structure in Python that provide a unique 
+way to store and manipulate collections of data. Understanding sets is crucial for 
+Python programming because they offer efficient operations for working with unique 
+collections and performing mathematical set operations.
+
+What Are Sets?
+Sets are a type of collection in Python. This means that, like lists and tuples, 
+you can store different Python types (numbers, strings, tuples, etc.) in a set. 
+However, sets have several unique characteristics that make them different from 
+other collection types.
+
+Key Characteristics of Sets:
+1. UNORDERED: Sets do not record element position. This means elements don't have 
+   a specific order, and you cannot access elements by index like you can with 
+   lists or tuples.
+
+2. UNIQUE ELEMENTS: Sets only contain unique elements. This means there is only 
+   one of a particular element in a set. If you try to add a duplicate element, 
+   it will be automatically ignored.
+
+3. MUTABLE: Sets can be modified after creation (you can add and remove elements), 
+   but the elements themselves must be immutable (hashable).
+
+4. FAST MEMBERSHIP TESTING: Sets provide very fast operations to check if an 
+   element exists in the set, much faster than lists or tuples.
+
+Real-World Analogy:
+Think of a set like a mathematical set or a collection of unique items:
+- A set of unique student IDs in a class
+- A set of unique tags on a blog post
+- A set of unique ingredients in a recipe
+- A set of unique colors in a palette
+
+Why Are Sets Important?
+1. Removing Duplicates: Sets automatically eliminate duplicates, making them 
+   perfect for deduplication tasks.
+
+2. Fast Lookups: Checking if an element exists in a set is extremely fast, 
+   regardless of the set size.
+
+3. Mathematical Operations: Sets support mathematical set operations like 
+   union, intersection, and difference, which are useful for many programming 
+   problems.
+
+4. Efficient Data Processing: Sets are optimized for membership testing and 
+   set operations, making them ideal for certain algorithms.
+
+5. Common Use Cases: Used extensively in data processing, algorithm design, 
+   and when you need to track unique items.
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+PART 1: INTRODUCTION, CREATING SETS, AND BASIC OPERATIONS
+  SECTION 1: UNDERSTANDING WHAT SETS ARE
+    • Sets as Collections
+    • Sets vs Lists vs Tuples - A Comparison
+    • Key Characteristics: Unordered, Unique, Mutable
+  
+  SECTION 2: CREATING SETS
+    • Creating Sets with Curly Brackets
+    • Creating Empty Sets
+    • Converting Lists to Sets (Typecasting)
+    • Converting Other Collections to Sets
+  
+  SECTION 3: UNDERSTANDING SET PROPERTIES
+    • Unordered Nature of Sets
+    • Unique Elements Requirement
+    • Hashable Elements Requirement
+  
+  SECTION 4: BASIC SET OPERATIONS - ADDING ELEMENTS
+    • The add() Method
+    • Adding Duplicate Elements
+    • Adding Multiple Elements
+  
+  SECTION 5: BASIC SET OPERATIONS - REMOVING ELEMENTS
+    • The remove() Method
+    • What Happens When Removing Non-Existent Elements
+    • The discard() Method (Alternative to remove)
+  
+  SECTION 6: CHECKING MEMBERSHIP IN SETS
+    • Using the "in" Operator
+    • Using the "not in" Operator
+    • Membership Testing Performance
+
+NOTE: Part 2 of this guide covers:
+  • Mathematical set operations (intersection, union, difference, symmetric difference)
+  • Set comparison methods (issubset, issuperset, isdisjoint)
+  • More set methods (update, pop, clear, copy)
+  • Set comprehensions
+  • Advanced set operations
+
+NOTE: Part 3 of this guide covers:
+  • Frozen sets (immutable sets)
+  • Set operations with multiple sets
+  • Practical examples and use cases
+  • Performance considerations
+  • Best practices and common patterns
+  • Common mistakes and how to avoid them
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1:") to quickly jump to any section.
+
+================================================================================
+SECTION 1: UNDERSTANDING WHAT SETS ARE
+================================================================================
+
+SETS AS COLLECTIONS
+================================================================================
+
+Sets are a type of collection in Python. This means that, like lists and tuples, 
+you can store different Python types in a set. However, sets have unique 
+characteristics that distinguish them from other collection types.
+
+What Does "Collection" Mean?
+A collection is a data structure that can hold multiple items. Python has 
+several built-in collection types:
+• Lists: Ordered, mutable, allows duplicates
+• Tuples: Ordered, immutable, allows duplicates
+• Sets: Unordered, mutable, no duplicates
+• Dictionaries: Unordered, mutable, key-value pairs
+
+All of these are collections because they can hold multiple items, but they 
+differ in their properties and use cases.
+
+DETAILED EXPLANATION
+================================================================================
+
+SETS VS LISTS VS TUPLES - A COMPARISON
+================================================================================
+
+To fully understand sets, it's helpful to compare them with lists and tuples, 
+which you may already be familiar with.
+
+COMPARISON TABLE:
+================================================================================
+
+CHARACTERISTIC          LISTS              TUPLES            SETS
+─────────────────────────────────────────────────────────────────────────────
+Order                   Ordered            Ordered           Unordered
+                        (has index)         (has index)       (no index)
+                        
+Mutability              Mutable            Immutable         Mutable
+                        (can change)        (cannot change)   (can change)
+                        
+Duplicates              Allows             Allows            No duplicates
+                        duplicates         duplicates        (unique only)
+                        
+Syntax                  [ ]                ( )               { }
+                        
+Access Method           Index [0]          Index [0]         No index access
+                        my_list[0]         my_tuple[0]       (use membership)
+                        
+Use Case                Sequential data    Fixed data        Unique items
+                        that may have      that won't        and fast lookups
+                        duplicates         change
+
+REAL-WORLD EXAMPLES:
+================================================================================
+
+LISTS - When Order Matters and Duplicates Are Allowed:
+  Example: Shopping list
+  ["milk", "bread", "eggs", "milk", "butter"]
+  • Order matters (you might shop in this order)
+  • Duplicates are allowed (you might need 2 milks)
+  • You can access items by position (first item, second item, etc.)
+
+TUPLES - When Data Shouldn't Change:
+  Example: Coordinates
+  (40.7128, -74.0060)  # New York City coordinates
+  • Order matters (latitude comes before longitude)
+  • Immutable (coordinates don't change)
+  • Duplicates are allowed (though rare in this case)
+
+SETS - When You Need Unique Items and Fast Lookups:
+  Example: Unique tags on a blog post
+  {"python", "programming", "tutorial", "python"}  # "python" appears once
+  • Order doesn't matter (tags are just a collection)
+  • Duplicates are automatically removed
+  • Fast to check if a tag exists
+
+KEY CHARACTERISTIC 1: UNORDERED
+================================================================================
+
+Sets do not record element position. This means sets do not have an index like 
+lists and tuples do.
+
+WHAT DOES "UNORDERED" MEAN?
+When we say sets are unordered, we mean:
+• Elements don't have a specific position or index
+• You cannot access elements using [0], [1], [2] like you can with lists
+• The order of elements may appear different each time you print the set
+• Python doesn't guarantee any particular order for set elements
+
+WHY ARE SETS UNORDERED?
+Sets are implemented using hash tables, which provide fast lookups but don't 
+maintain order. This design choice prioritizes speed and efficiency over 
+ordering.
+
+EXAMPLE: ORDER DIFFERENCE
+================================================================================
+
+Let's see the difference between ordered and unordered collections:
+
+CODE EXAMPLE 1: Lists (Ordered)
+─────────────────────────────────────────────────────────────────────────────
+# Creating a list
+my_list = ["apple", "banana", "cherry"]
+print(my_list[0])  # Output: "apple" - we can access by index
+print(my_list)     # Output: ['apple', 'banana', 'cherry'] - order preserved
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_list = ["apple", "banana", "cherry"]
+  • Creates a list with three string elements
+  • The list maintains the order: apple is first, banana is second, cherry is third
+  • Each element has an index: 0, 1, 2
+
+Line 2: print(my_list[0])
+  • Accesses the element at index 0 (the first element)
+  • Outputs: "apple"
+  • This works because lists are ordered and have indices
+
+Line 3: print(my_list)
+  • Prints the entire list
+  • Outputs: ['apple', 'banana', 'cherry']
+  • The order is preserved exactly as we created it
+
+CODE EXAMPLE 2: Sets (Unordered)
+─────────────────────────────────────────────────────────────────────────────
+# Creating a set
+my_set = {"apple", "banana", "cherry"}
+# print(my_set[0])  # This would cause an error!
+print(my_set)      # Output might be: {'banana', 'cherry', 'apple'} or any order
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_set = {"apple", "banana", "cherry"}
+  • Creates a set with three string elements
+  • Uses curly brackets {} to define the set
+  • The set does NOT maintain a specific order
+
+Line 2: # print(my_set[0])  # This would cause an error!
+  • This line is commented out because it would cause a TypeError
+  • Sets don't support indexing because they're unordered
+  • You cannot access set elements by position
+
+Line 3: print(my_set)
+  • Prints the entire set
+  • Output might be: {'banana', 'cherry', 'apple'} or {'cherry', 'apple', 'banana'}
+  • The order may be different each time you run the code (in older Python versions)
+  • In Python 3.7+, sets maintain insertion order, but you still shouldn't rely on it
+
+IMPORTANT NOTE ABOUT ORDER IN PYTHON 3.7+:
+─────────────────────────────────────────────────────────────────────────────
+Starting from Python 3.7, dictionaries (and sets in Python 3.7+) maintain 
+insertion order as an implementation detail. However, you should still treat 
+sets as unordered because:
+1. The order is not guaranteed by the language specification
+2. Relying on order makes code less portable
+3. The primary purpose of sets is fast membership testing, not ordering
+
+KEY CHARACTERISTIC 2: UNIQUE ELEMENTS
+================================================================================
+
+Sets only have unique elements. This means there is only one of a particular 
+element in a set.
+
+WHAT DOES "UNIQUE ELEMENTS" MEAN?
+When we say sets have unique elements, we mean:
+• Each element can appear only once in a set
+• If you try to add a duplicate element, it will be automatically ignored
+• Sets are perfect for removing duplicates from other collections
+• No two identical elements can exist in the same set
+
+WHY ARE ELEMENTS UNIQUE?
+Sets use hashing to store elements, and each hash value must be unique. This 
+design ensures that:
+1. Membership testing is extremely fast (O(1) average time complexity)
+2. Duplicates are automatically prevented
+3. The set maintains its mathematical definition (a collection of distinct objects)
+
+EXAMPLE: DUPLICATE HANDLING
+================================================================================
+
+CODE EXAMPLE 3: Sets Automatically Remove Duplicates
+─────────────────────────────────────────────────────────────────────────────
+# Creating a set with duplicate elements
+my_set = {"apple", "banana", "apple", "cherry", "banana", "apple"}
+print(my_set)  # Output: {'apple', 'banana', 'cherry'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_set = {"apple", "banana", "apple", "cherry", "banana", "apple"}
+  • We're trying to create a set with duplicate elements
+  • "apple" appears three times
+  • "banana" appears two times
+  • "cherry" appears once
+
+Line 2: print(my_set)
+  • Prints the set
+  • Output: {'apple', 'banana', 'cherry'}
+  • Notice that duplicates are automatically removed
+  • Each unique element appears only once
+  • The set contains only the three unique values: "apple", "banana", "cherry"
+
+COMPARISON WITH LISTS:
+─────────────────────────────────────────────────────────────────────────────
+# Lists allow duplicates
+my_list = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+print(my_list)  # Output: ['apple', 'banana', 'apple', 'cherry', 'banana', 'apple']
+                # All duplicates are preserved
+
+# Sets remove duplicates automatically
+my_set = {"apple", "banana", "apple", "cherry", "banana", "apple"}
+print(my_set)   # Output: {'apple', 'banana', 'cherry'}
+                # Duplicates are automatically removed
+
+REAL-WORLD USE CASE: REMOVING DUPLICATES
+─────────────────────────────────────────────────────────────────────────────
+One of the most common uses of sets is to remove duplicates from a list:
+
+CODE EXAMPLE 4: Removing Duplicates from a List
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a list that has duplicates
+student_ids = [101, 102, 101, 103, 102, 104, 101, 105]
+print("Original list:", student_ids)
+# Output: Original list: [101, 102, 101, 103, 102, 104, 101, 105]
+
+# Convert to set to remove duplicates
+unique_ids = set(student_ids)
+print("Unique IDs:", unique_ids)
+# Output: Unique IDs: {101, 102, 103, 104, 105}
+
+# Convert back to list if needed
+unique_list = list(unique_ids)
+print("Unique list:", unique_list)
+# Output: Unique list: [101, 102, 103, 104, 105]
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: student_ids = [101, 102, 101, 103, 102, 104, 101, 105]
+  • Creates a list with duplicate student IDs
+  • The ID 101 appears three times
+  • The ID 102 appears two times
+  • Other IDs appear once
+
+Line 2: print("Original list:", student_ids)
+  • Prints the original list with all duplicates
+  • Shows that duplicates are preserved in lists
+
+Line 3: # Convert to set to remove duplicates
+  • This is a comment explaining what we're about to do
+
+Line 4: unique_ids = set(student_ids)
+  • Converts the list to a set using the set() function
+  • This is called "typecasting" - converting one type to another
+  • The set() function takes the list as input and returns a set
+  • Duplicates are automatically removed during conversion
+
+Line 5: print("Unique IDs:", unique_ids)
+  • Prints the set of unique IDs
+  • Shows that duplicates have been removed
+  • Each ID appears only once
+
+Line 6: # Convert back to list if needed
+  • Comment explaining optional step
+
+Line 7: unique_list = list(unique_ids)
+  • Converts the set back to a list using the list() function
+  • This creates a new list with unique elements only
+  • Note: The order may be different from the original list
+
+Line 8: print("Unique list:", unique_list)
+  • Prints the final list with unique elements
+  • All duplicates have been removed
+
+[END SECTION 1]
+================================================================================
+
+SECTION 2: CREATING SETS
+================================================================================
+
+CREATING SETS WITH CURLY BRACKETS
+================================================================================
+
+To define a set, you use curly brackets {}. You place the elements of the set 
+within the curly brackets.
+
+BASIC SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+my_set = {element1, element2, element3, ...}
+
+The syntax is:
+• Start with an opening curly bracket {
+• List the elements separated by commas
+• End with a closing curly bracket }
+
+CODE EXAMPLE 5: Creating a Set with Curly Brackets
+─────────────────────────────────────────────────────────────────────────────
+# Creating a set of strings
+album_set = {"ACDC", "BackInBlack", "TheDarkSide"}
+print(album_set)
+# Output: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: album_set = {"ACDC", "BackInBlack", "TheDarkSide"}
+  • Creates a set named album_set
+  • Uses curly brackets {} to define the set
+  • Contains three string elements: "ACDC", "BackInBlack", "TheDarkSide"
+  • Elements are separated by commas
+  • Notice there are no duplicate items in this example
+
+Line 2: print(album_set)
+  • Prints the set
+  • Output: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+  • The set contains all three unique album names
+
+CODE EXAMPLE 6: Creating a Set with Duplicates (They're Removed)
+─────────────────────────────────────────────────────────────────────────────
+# Creating a set with duplicate items
+album_set = {"ACDC", "BackInBlack", "ACDC", "TheDarkSide", "BackInBlack"}
+print(album_set)
+# Output: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: album_set = {"ACDC", "BackInBlack", "ACDC", "TheDarkSide", "BackInBlack"}
+  • We're trying to create a set with duplicate elements
+  • "ACDC" appears twice
+  • "BackInBlack" appears twice
+  • "TheDarkSide" appears once
+
+Line 2: print(album_set)
+  • Prints the set
+  • Output: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+  • Notice that duplicate items are automatically removed
+  • The set only contains unique elements
+  • This demonstrates the "unique elements" property of sets
+
+CODE EXAMPLE 7: Creating Sets with Different Data Types
+─────────────────────────────────────────────────────────────────────────────
+# Set with integers
+numbers = {1, 2, 3, 4, 5}
+print("Numbers:", numbers)
+# Output: Numbers: {1, 2, 3, 4, 5}
+
+# Set with mixed types
+mixed = {1, "hello", 3.14, True}
+print("Mixed:", mixed)
+# Output: Mixed: {1, 'hello', 3.14, True}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: numbers = {1, 2, 3, 4, 5}
+  • Creates a set containing integers
+  • Sets can contain numbers (integers, floats)
+  • All elements are of the same type (integers) in this case
+
+Line 2: print("Numbers:", numbers)
+  • Prints the set of numbers
+  • Shows that sets can contain numeric values
+
+Line 3: # Set with mixed types
+  • Comment explaining the next example
+
+Line 4: mixed = {1, "hello", 3.14, True}
+  • Creates a set with mixed data types
+  • Contains: an integer (1), a string ("hello"), a float (3.14), and a boolean (True)
+  • Sets can contain different Python types, just like lists and tuples
+
+Line 5: print("Mixed:", mixed)
+  • Prints the mixed-type set
+  • Shows that sets are flexible with data types
+
+CREATING EMPTY SETS
+================================================================================
+
+IMPORTANT: You cannot create an empty set using empty curly brackets {}!
+
+If you write:
+  my_set = {}
+  
+Python will create an empty DICTIONARY, not an empty set!
+
+To create an empty set, you must use the set() function with no arguments.
+
+CODE EXAMPLE 8: Creating Empty Sets (Correct Way)
+─────────────────────────────────────────────────────────────────────────────
+# WRONG way - this creates a dictionary, not a set!
+wrong_empty = {}
+print(type(wrong_empty))  # Output: <class 'dict'>
+
+# CORRECT way - use set() function
+correct_empty = set()
+print(type(correct_empty))  # Output: <class 'set'>
+print(correct_empty)        # Output: set()
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: # WRONG way - this creates a dictionary, not a set!
+  • Comment warning about the incorrect method
+
+Line 2: wrong_empty = {}
+  • Attempts to create an empty set using curly brackets
+  • However, Python interprets {} as an empty dictionary, not an empty set
+  • This is a common mistake!
+
+Line 3: print(type(wrong_empty))
+  • Uses the type() function to check what type wrong_empty is
+  • Output: <class 'dict'>
+  • Confirms that {} creates a dictionary, not a set
+
+Line 4: # CORRECT way - use set() function
+  • Comment explaining the correct method
+
+Line 5: correct_empty = set()
+  • Creates an empty set using the set() function
+  • The set() function with no arguments creates an empty set
+  • This is the correct way to create an empty set
+
+Line 6: print(type(correct_empty))
+  • Checks the type of correct_empty
+  • Output: <class 'set'>
+  • Confirms that set() creates a set
+
+Line 7: print(correct_empty)
+  • Prints the empty set
+  • Output: set()
+  • Shows the representation of an empty set
+
+WHY IS {} A DICTIONARY?
+─────────────────────────────────────────────────────────────────────────────
+In Python, curly brackets {} were first used for dictionaries. When sets were 
+added to Python, they also used curly brackets, but to maintain backward 
+compatibility, empty {} still creates a dictionary. This is why you must use 
+set() to create an empty set.
+
+CONVERTING LISTS TO SETS (TYPECASTING)
+================================================================================
+
+You can convert a list to a set by using the function set(). This is called 
+typecasting. You simply use the list as the input to the function set(). The 
+result will be a list converted to a set.
+
+WHAT IS TYPECASTING?
+Typecasting (also called type conversion) is the process of converting a value 
+from one data type to another. In this case, we're converting a list to a set.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+my_set = set(my_list)
+
+The set() function:
+• Takes a list (or other iterable) as input
+• Returns a new set containing the unique elements from the list
+• Automatically removes duplicates
+• Does not modify the original list
+
+CODE EXAMPLE 9: Converting a List to a Set
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a list
+my_list = ["ACDC", "BackInBlack", "ACDC", "TheDarkSide", "BackInBlack"]
+print("Original list:", my_list)
+# Output: Original list: ['ACDC', 'BackInBlack', 'ACDC', 'TheDarkSide', 'BackInBlack']
+
+# Convert list to set
+my_set = set(my_list)
+print("Converted set:", my_set)
+# Output: Converted set: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: my_list = ["ACDC", "BackInBlack", "ACDC", "TheDarkSide", "BackInBlack"]
+  • Creates a list with duplicate elements
+  • "ACDC" appears twice
+  • "BackInBlack" appears twice
+  • "TheDarkSide" appears once
+  • Lists preserve duplicates and order
+
+Line 2: print("Original list:", my_list)
+  • Prints the original list
+  • Shows all elements including duplicates
+  • Output: ['ACDC', 'BackInBlack', 'ACDC', 'TheDarkSide', 'BackInBlack']
+
+Line 3: # Convert list to set
+  • Comment explaining what we're about to do
+
+Line 4: my_set = set(my_list)
+  • Uses the set() function to convert the list to a set
+  • This is typecasting - converting from list type to set type
+  • The set() function takes my_list as input
+  • It creates a new set containing elements from the list
+  • Duplicates are automatically removed during conversion
+  • The original list (my_list) is not modified
+
+Line 5: print("Converted set:", my_set)
+  • Prints the converted set
+  • Shows that duplicates have been removed
+  • Output: {'ACDC', 'BackInBlack', 'TheDarkSide'}
+  • Only unique elements remain
+
+CODE EXAMPLE 10: Converting Other Collections to Sets
+─────────────────────────────────────────────────────────────────────────────
+# Converting a tuple to a set
+my_tuple = (1, 2, 3, 2, 1, 4)
+my_set_from_tuple = set(my_tuple)
+print("Set from tuple:", my_set_from_tuple)
+# Output: Set from tuple: {1, 2, 3, 4}
+
+# Converting a string to a set (gets unique characters)
+my_string = "hello"
+my_set_from_string = set(my_string)
+print("Set from string:", my_set_from_string)
+# Output: Set from string: {'h', 'e', 'l', 'o'}
+# Notice 'l' appears only once even though it appears twice in "hello"
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: # Converting a tuple to a set
+  • Comment explaining the first example
+
+Line 2: my_tuple = (1, 2, 3, 2, 1, 4)
+  • Creates a tuple with duplicate elements
+  • The numbers 1 and 2 appear twice
+
+Line 3: my_set_from_tuple = set(my_tuple)
+  • Converts the tuple to a set using set()
+  • Tuples are iterable, so they can be converted to sets
+  • Duplicates are removed: 1 and 2 appear only once in the result
+
+Line 4: print("Set from tuple:", my_set_from_tuple)
+  • Prints the set created from the tuple
+  • Output: {1, 2, 3, 4}
+  • Shows unique elements only
+
+Line 5: # Converting a string to a set (gets unique characters)
+  • Comment explaining the string example
+
+Line 6: my_string = "hello"
+  • Creates a string with the value "hello"
+  • The letter 'l' appears twice in the string
+
+Line 7: my_set_from_string = set(my_string)
+  • Converts the string to a set
+  • Strings are iterable (you can iterate over their characters)
+  • Each character becomes an element in the set
+  • Duplicate characters are removed
+
+Line 8: print("Set from string:", my_set_from_string)
+  • Prints the set created from the string
+  • Output: {'h', 'e', 'l', 'o'}
+  • Notice that 'l' appears only once, even though it appeared twice in "hello"
+  • This is a useful way to get unique characters from a string
+
+[END SECTION 2]
+================================================================================
+
+SECTION 3: UNDERSTANDING SET PROPERTIES
+================================================================================
+
+HASHABLE ELEMENTS REQUIREMENT
+================================================================================
+
+Sets can only contain "hashable" (immutable) elements. This means you cannot 
+put mutable objects like lists or dictionaries directly into a set.
+
+WHAT ARE HASHABLE ELEMENTS?
+Hashable elements are objects that:
+• Have a fixed value that doesn't change (immutable)
+• Can be used as dictionary keys
+• Have a hash value that Python can compute
+
+Hashable types include:
+• Numbers (int, float, complex)
+• Strings
+• Tuples (if they contain only hashable elements)
+• Booleans
+• None
+
+Non-hashable types (cannot be in sets):
+• Lists
+• Dictionaries
+• Other sets (unless using frozenset)
+
+CODE EXAMPLE 11: Valid Set Elements
+─────────────────────────────────────────────────────────────────────────────
+# Valid: Set with numbers
+numbers = {1, 2, 3, 4, 5}
+
+# Valid: Set with strings
+words = {"apple", "banana", "cherry"}
+
+# Valid: Set with tuples (tuples are hashable)
+coordinates = {(1, 2), (3, 4), (5, 6)}
+
+# Valid: Set with mixed hashable types
+mixed = {1, "hello", (1, 2), 3.14, True}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: numbers = {1, 2, 3, 4, 5}
+  • Creates a set with integers
+  • Integers are hashable (immutable)
+  • This is valid
+
+Line 2: words = {"apple", "banana", "cherry"}
+  • Creates a set with strings
+  • Strings are hashable (immutable)
+  • This is valid
+
+Line 3: coordinates = {(1, 2), (3, 4), (5, 6)}
+  • Creates a set with tuples
+  • Tuples are hashable if they contain only hashable elements
+  • These tuples contain only integers, so they're hashable
+  • This is valid
+
+Line 4: mixed = {1, "hello", (1, 2), 3.14, True}
+  • Creates a set with mixed types
+  • Contains: integer (1), string ("hello"), tuple ((1, 2)), float (3.14), boolean (True)
+  • All of these are hashable types
+  • This is valid
+
+CODE EXAMPLE 12: Invalid Set Elements (Will Cause Error)
+─────────────────────────────────────────────────────────────────────────────
+# INVALID: Set with a list (lists are not hashable)
+# This will cause a TypeError
+# invalid_set = {[1, 2, 3], "hello"}  # Uncomment to see error
+
+# INVALID: Set with a dictionary (dictionaries are not hashable)
+# invalid_set = {{"key": "value"}, "hello"}  # Uncomment to see error
+
+# INVALID: Set with another set (sets are not hashable)
+# invalid_set = {{1, 2, 3}, "hello"}  # Uncomment to see error
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: # INVALID: Set with a list (lists are not hashable)
+  • Comment explaining why this is invalid
+
+Line 2: # This will cause a TypeError
+  • Comment warning about the error
+
+Line 3: # invalid_set = {[1, 2, 3], "hello"}  # Uncomment to see error
+  • This line is commented out because it would cause an error
+  • Lists are mutable (can be changed), so they're not hashable
+  • Trying to put a list in a set would raise: TypeError: unhashable type: 'list'
+
+Line 4: # INVALID: Set with a dictionary (dictionaries are not hashable)
+  • Comment explaining why dictionaries can't be in sets
+
+Line 5: # invalid_set = {{"key": "value"}, "hello"}  # Uncomment to see error
+  • This would also cause an error
+  • Dictionaries are mutable, so they're not hashable
+  • Would raise: TypeError: unhashable type: 'dict'
+
+Line 6: # INVALID: Set with another set (sets are not hashable)
+  • Comment explaining why sets can't contain other sets
+
+Line 7: # invalid_set = {{1, 2, 3}, "hello"}  # Uncomment to see error
+  • This would also cause an error
+  • Sets are mutable, so they're not hashable
+  • Would raise: TypeError: unhashable type: 'set'
+  • Note: You CAN use frozenset (immutable set) if you need sets within sets
+
+[END SECTION 3]
+================================================================================
+
+SECTION 4: BASIC SET OPERATIONS - ADDING ELEMENTS
+================================================================================
+
+THE add() METHOD
+================================================================================
+
+We can add an item to a set using the add() method. We put the set name followed 
+by a dot (.), then the add() method. The argument is the new element we would 
+like to add.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+set_name.add(element)
+
+The add() method:
+• Adds a single element to the set
+• Takes one argument (the element to add)
+• Modifies the set in place (doesn't return a new set)
+• If the element already exists, nothing happens (no error, no duplicate)
+
+CODE EXAMPLE 13: Adding Elements to a Set
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {"ACDC", "BackInBlack"}
+print("Original set:", set_A)
+# Output: Original set: {'ACDC', 'BackInBlack'}
+
+# Add a new element
+set_A.add("inSync")
+print("After adding 'inSync':", set_A)
+# Output: After adding 'inSync': {'ACDC', 'BackInBlack', 'inSync'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack"}
+  • Creates a set named set_A with two elements
+  • Contains: "ACDC" and "BackInBlack"
+
+Line 2: print("Original set:", set_A)
+  • Prints the original set
+  • Shows the set before adding any new elements
+  • Output: {'ACDC', 'BackInBlack'}
+
+Line 3: # Add a new element
+  • Comment explaining what we're about to do
+
+Line 4: set_A.add("inSync")
+  • Uses the add() method to add "inSync" to the set
+  • The syntax is: set_name.add(element)
+  • set_A is the set we're modifying
+  • .add() is the method we're calling
+  • "inSync" is the argument (the element we want to add)
+  • This modifies set_A in place (changes the original set)
+
+Line 5: print("After adding 'inSync':", set_A)
+  • Prints the set after adding the new element
+  • Shows that "inSync" has been added
+  • Output: {'ACDC', 'BackInBlack', 'inSync'}
+  • The set now contains three elements
+
+ADDING DUPLICATE ELEMENTS
+================================================================================
+
+If we add the same item twice, nothing will happen as there can be no duplicates 
+in a set.
+
+CODE EXAMPLE 14: Adding Duplicate Elements (No Effect)
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {"ACDC", "BackInBlack"}
+print("Original set:", set_A)
+# Output: Original set: {'ACDC', 'BackInBlack'}
+
+# Add "inSync" for the first time
+set_A.add("inSync")
+print("After first add:", set_A)
+# Output: After first add: {'ACDC', 'BackInBlack', 'inSync'}
+
+# Try to add "inSync" again (duplicate)
+set_A.add("inSync")
+print("After second add (duplicate):", set_A)
+# Output: After second add (duplicate): {'ACDC', 'BackInBlack', 'inSync'}
+# Notice: The set is unchanged - no duplicate was added!
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack"}
+  • Creates a set with two elements
+
+Line 2: print("Original set:", set_A)
+  • Prints the original set
+
+Line 3: # Add "inSync" for the first time
+  • Comment explaining the first addition
+
+Line 4: set_A.add("inSync")
+  • Adds "inSync" to the set for the first time
+  • Since "inSync" doesn't exist in the set, it gets added
+
+Line 5: print("After first add:", set_A)
+  • Prints the set after the first addition
+  • Shows that "inSync" was successfully added
+
+Line 6: # Try to add "inSync" again (duplicate)
+  • Comment explaining we're trying to add a duplicate
+
+Line 7: set_A.add("inSync")
+  • Tries to add "inSync" again
+  • Since "inSync" already exists in the set, nothing happens
+  • No error is raised
+  • The set remains unchanged
+  • This demonstrates the "unique elements" property
+
+Line 8: print("After second add (duplicate):", set_A)
+  • Prints the set after trying to add the duplicate
+  • Output shows the set is unchanged
+  • No duplicate was added
+  • This proves that sets automatically prevent duplicates
+
+WHY NO ERROR?
+─────────────────────────────────────────────────────────────────────────────
+Python doesn't raise an error when you try to add a duplicate because:
+1. Sets are designed to automatically handle duplicates
+2. It's a common operation to add elements without checking if they exist first
+3. The behavior is predictable: adding a duplicate simply has no effect
+4. This makes sets convenient to use - you don't need to check for duplicates 
+   before adding
+
+ADDING MULTIPLE ELEMENTS
+================================================================================
+
+The add() method only adds one element at a time. To add multiple elements, 
+you can:
+1. Call add() multiple times
+2. Use the update() method (covered in Part 2)
+
+CODE EXAMPLE 15: Adding Multiple Elements One at a Time
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+colors = {"red", "blue"}
+print("Original:", colors)
+# Output: Original: {'red', 'blue'}
+
+# Add multiple elements one at a time
+colors.add("green")
+colors.add("yellow")
+colors.add("red")  # This duplicate will be ignored
+print("After adding multiple:", colors)
+# Output: After adding multiple: {'red', 'blue', 'green', 'yellow'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: colors = {"red", "blue"}
+  • Creates a set with two color names
+
+Line 2: print("Original:", colors)
+  • Prints the original set
+
+Line 3: # Add multiple elements one at a time
+  • Comment explaining the approach
+
+Line 4: colors.add("green")
+  • Adds "green" to the set
+  • First addition
+
+Line 5: colors.add("yellow")
+  • Adds "yellow" to the set
+  • Second addition
+
+Line 6: colors.add("red")
+  • Tries to add "red" again
+  • Since "red" already exists, this has no effect
+  • The duplicate is ignored
+
+Line 7: print("After adding multiple:", colors)
+  • Prints the final set
+  • Shows all unique colors that were added
+  • "red" appears only once (duplicate was ignored)
+
+[END SECTION 4]
+================================================================================
+
+SECTION 5: BASIC SET OPERATIONS - REMOVING ELEMENTS
+================================================================================
+
+THE remove() METHOD
+================================================================================
+
+We can remove an item from a set using the remove() method. We put the set name 
+followed by a dot (.), then the remove() method. The argument is the element we 
+would like to remove.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+set_name.remove(element)
+
+The remove() method:
+• Removes a specific element from the set
+• Takes one argument (the element to remove)
+• Modifies the set in place (doesn't return a new set)
+• Raises a KeyError if the element doesn't exist in the set
+
+CODE EXAMPLE 16: Removing Elements from a Set
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {"ACDC", "BackInBlack", "inSync"}
+print("Original set:", set_A)
+# Output: Original set: {'ACDC', 'BackInBlack', 'inSync'}
+
+# Remove an element
+set_A.remove("inSync")
+print("After removing 'inSync':", set_A)
+# Output: After removing 'inSync': {'ACDC', 'BackInBlack'}
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack", "inSync"}
+  • Creates a set with three elements
+  • Contains: "ACDC", "BackInBlack", and "inSync"
+
+Line 2: print("Original set:", set_A)
+  • Prints the original set
+  • Shows all three elements before removal
+
+Line 3: # Remove an element
+  • Comment explaining what we're about to do
+
+Line 4: set_A.remove("inSync")
+  • Uses the remove() method to remove "inSync" from the set
+  • The syntax is: set_name.remove(element)
+  • set_A is the set we're modifying
+  • .remove() is the method we're calling
+  • "inSync" is the argument (the element we want to remove)
+  • This modifies set_A in place (changes the original set)
+  • After this operation, "inSync" is no longer in the set
+
+Line 5: print("After removing 'inSync':", set_A)
+  • Prints the set after removal
+  • Shows that "inSync" has been removed
+  • Output: {'ACDC', 'BackInBlack'}
+  • The set now contains only two elements
+
+WHAT HAPPENS WHEN REMOVING NON-EXISTENT ELEMENTS?
+================================================================================
+
+If you try to remove an element that doesn't exist in the set, the remove() 
+method will raise a KeyError.
+
+CODE EXAMPLE 17: Removing Non-Existent Element (Causes Error)
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {"ACDC", "BackInBlack"}
+print("Original set:", set_A)
+# Output: Original set: {'ACDC', 'BackInBlack'}
+
+# Try to remove an element that doesn't exist
+# set_A.remove("inSync")  # This would raise: KeyError: 'inSync'
+# Uncomment the line above to see the error
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack"}
+  • Creates a set with two elements
+  • "inSync" is not in this set
+
+Line 2: print("Original set:", set_A)
+  • Prints the original set
+
+Line 3: # Try to remove an element that doesn't exist
+  • Comment explaining what we're about to do
+
+Line 4: # set_A.remove("inSync")  # This would raise: KeyError: 'inSync'
+  • This line is commented out because it would cause an error
+  • Trying to remove "inSync" when it doesn't exist raises a KeyError
+  • KeyError is Python's way of saying "this key/element doesn't exist"
+  • This is different from add(), which silently ignores duplicates
+
+WHY DOES remove() RAISE AN ERROR?
+─────────────────────────────────────────────────────────────────────────────
+The remove() method raises an error when the element doesn't exist because:
+1. It's often a programming mistake to try to remove something that doesn't exist
+2. Raising an error helps catch bugs early
+3. It forces you to check if an element exists before removing it (or use discard())
+
+THE discard() METHOD (SAFE ALTERNATIVE)
+================================================================================
+
+If you want to remove an element but don't want an error if it doesn't exist, 
+you can use the discard() method instead of remove().
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+set_name.discard(element)
+
+The discard() method:
+• Removes an element if it exists
+• Does nothing (no error) if the element doesn't exist
+• Safer than remove() when you're not sure if the element exists
+
+CODE EXAMPLE 18: Using discard() Instead of remove()
+─────────────────────────────────────────────────────────────────────────────
+# Starting with a set
+set_A = {"ACDC", "BackInBlack"}
+print("Original set:", set_A)
+# Output: Original set: {'ACDC', 'BackInBlack'}
+
+# Remove an element that exists (works like remove)
+set_A.discard("ACDC")
+print("After discarding 'ACDC':", set_A)
+# Output: After discarding 'ACDC': {'BackInBlack'}
+
+# Try to discard an element that doesn't exist (no error!)
+set_A.discard("inSync")  # No error raised
+print("After discarding 'inSync' (doesn't exist):", set_A)
+# Output: After discarding 'inSync' (doesn't exist): {'BackInBlack'}
+# Notice: No error, set is unchanged
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack"}
+  • Creates a set with two elements
+
+Line 2: print("Original set:", set_A)
+  • Prints the original set
+
+Line 3: # Remove an element that exists (works like remove)
+  • Comment explaining the first discard operation
+
+Line 4: set_A.discard("ACDC")
+  • Uses discard() to remove "ACDC"
+  • Since "ACDC" exists in the set, it gets removed
+  • Works exactly like remove() when the element exists
+
+Line 5: print("After discarding 'ACDC':", set_A)
+  • Prints the set after discarding
+  • Shows that "ACDC" was removed
+
+Line 6: # Try to discard an element that doesn't exist (no error!)
+  • Comment explaining the safe behavior
+
+Line 7: set_A.discard("inSync")
+  • Tries to discard "inSync" which doesn't exist in the set
+  • Unlike remove(), discard() does NOT raise an error
+  • The set remains unchanged
+  • This is the "safe" behavior
+
+Line 8: print("After discarding 'inSync' (doesn't exist):", set_A)
+  • Prints the set after trying to discard a non-existent element
+  • Shows the set is unchanged
+  • No error was raised
+
+WHEN TO USE remove() VS discard()?
+─────────────────────────────────────────────────────────────────────────────
+Use remove() when:
+• You're certain the element exists
+• You want to catch errors if the element is missing (helps find bugs)
+
+Use discard() when:
+• You're not sure if the element exists
+• You want to avoid errors
+• You just want to ensure an element is not in the set (whether it was there or not)
+
+[END SECTION 5]
+================================================================================
+
+SECTION 6: CHECKING MEMBERSHIP IN SETS
+================================================================================
+
+USING THE "in" OPERATOR
+================================================================================
+
+We can verify if an element is in the set using the "in" command (operator). The 
+command checks if the item is in the set. If the item is in the set, it returns 
+True. If the item is not in the set, it returns False.
+
+SYNTAX:
+─────────────────────────────────────────────────────────────────────────────
+element in set_name
+element not in set_name
+
+The "in" operator:
+• Returns True if the element exists in the set
+• Returns False if the element doesn't exist in the set
+• Works very efficiently with sets (very fast lookup)
+
+CODE EXAMPLE 19: Checking Membership with "in"
+─────────────────────────────────────────────────────────────────────────────
+# Create a set
+set_A = {"ACDC", "BackInBlack", "inSync"}
+print("Set A:", set_A)
+# Output: Set A: {'ACDC', 'BackInBlack', 'inSync'}
+
+# Check if "ACDC" is in the set (it is)
+result1 = "ACDC" in set_A
+print("Is 'ACDC' in set_A?", result1)
+# Output: Is 'ACDC' in set_A? True
+
+# Check if "Who" is in the set (it is not)
+result2 = "Who" in set_A
+print("Is 'Who' in set_A?", result2)
+# Output: Is 'Who' in set_A? False
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack", "inSync"}
+  • Creates a set with three elements
+
+Line 2: print("Set A:", set_A)
+  • Prints the set
+
+Line 3: # Check if "ACDC" is in the set (it is)
+  • Comment explaining the first membership check
+
+Line 4: result1 = "ACDC" in set_A
+  • Uses the "in" operator to check if "ACDC" is in set_A
+  • The syntax is: element in set_name
+  • "ACDC" is the element we're checking for
+  • in is the membership operator
+  • set_A is the set we're checking
+  • Since "ACDC" exists in set_A, the result is True
+  • The result is stored in result1
+
+Line 5: print("Is 'ACDC' in set_A?", result1)
+  • Prints the result of the membership check
+  • Output: Is 'ACDC' in set_A? True
+  • Confirms that "ACDC" is in the set
+
+Line 6: # Check if "Who" is in the set (it is not)
+  • Comment explaining the second membership check
+
+Line 7: result2 = "Who" in set_A
+  • Uses the "in" operator to check if "Who" is in set_A
+  • Since "Who" does NOT exist in set_A, the result is False
+  • The result is stored in result2
+
+Line 8: print("Is 'Who' in set_A?", result2)
+  • Prints the result of the membership check
+  • Output: Is 'Who' in set_A? False
+  • Confirms that "Who" is not in the set
+
+USING THE "not in" OPERATOR
+================================================================================
+
+You can also use "not in" to check if an element is NOT in the set. This is the 
+opposite of "in".
+
+CODE EXAMPLE 20: Using "not in" Operator
+─────────────────────────────────────────────────────────────────────────────
+# Create a set
+set_A = {"ACDC", "BackInBlack", "inSync"}
+
+# Check if "Who" is NOT in the set (it is not, so True)
+result = "Who" not in set_A
+print("Is 'Who' NOT in set_A?", result)
+# Output: Is 'Who' NOT in set_A? True
+
+# Check if "ACDC" is NOT in the set (it is, so False)
+result2 = "ACDC" not in set_A
+print("Is 'ACDC' NOT in set_A?", result2)
+# Output: Is 'ACDC' NOT in set_A? False
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: set_A = {"ACDC", "BackInBlack", "inSync"}
+  • Creates a set with three elements
+
+Line 2: # Check if "Who" is NOT in the set (it is not, so True)
+  • Comment explaining the first check
+
+Line 3: result = "Who" not in set_A
+  • Uses the "not in" operator
+  • Checks if "Who" is NOT in set_A
+  • Since "Who" is not in the set, the result is True
+  • "not in" returns True when the element is absent
+
+Line 4: print("Is 'Who' NOT in set_A?", result)
+  • Prints the result
+  • Output: True (because "Who" is indeed not in the set)
+
+Line 5: # Check if "ACDC" is NOT in the set (it is, so False)
+  • Comment explaining the second check
+
+Line 6: result2 = "ACDC" not in set_A
+  • Checks if "ACDC" is NOT in set_A
+  • Since "ACDC" IS in the set, the result is False
+  • "not in" returns False when the element is present
+
+Line 7: print("Is 'ACDC' NOT in set_A?", result2)
+  • Prints the result
+  • Output: False (because "ACDC" is actually in the set)
+
+PRACTICAL USE CASE: CONDITIONAL LOGIC
+─────────────────────────────────────────────────────────────────────────────
+The "in" operator is commonly used in if statements to check membership before 
+performing operations.
+
+CODE EXAMPLE 21: Using "in" in Conditional Statements
+─────────────────────────────────────────────────────────────────────────────
+# Create a set of allowed users
+allowed_users = {"admin", "user1", "user2", "moderator"}
+
+# Check if a user is allowed
+user = "admin"
+if user in allowed_users:
+    print(f"{user} is allowed to access the system.")
+else:
+    print(f"{user} is NOT allowed to access the system.")
+# Output: admin is allowed to access the system.
+
+# Check another user
+user2 = "guest"
+if user2 in allowed_users:
+    print(f"{user2} is allowed to access the system.")
+else:
+    print(f"{user2} is NOT allowed to access the system.")
+# Output: guest is NOT allowed to access the system.
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: allowed_users = {"admin", "user1", "user2", "moderator"}
+  • Creates a set of allowed user names
+  • This represents users who have permission to access a system
+
+Line 2: # Check if a user is allowed
+  • Comment explaining the purpose
+
+Line 3: user = "admin"
+  • Defines a variable with a user name to check
+
+Line 4: if user in allowed_users:
+  • Uses an if statement with the "in" operator
+  • Checks if the value of user ("admin") is in the allowed_users set
+  • Since "admin" is in the set, the condition is True
+  • The code in the if block will execute
+
+Line 5: print(f"{user} is allowed to access the system.")
+  • Prints a message indicating the user is allowed
+  • This line executes because the condition was True
+  • Output: admin is allowed to access the system.
+
+Line 6: else:
+  • Defines the else block (executes if the condition is False)
+
+Line 7: print(f"{user} is NOT allowed to access the system.")
+  • Prints a message indicating the user is not allowed
+  • This line would execute if the condition was False
+
+Line 8: # Check another user
+  • Comment for the second example
+
+Line 9: user2 = "guest"
+  • Defines another user name to check
+
+Line 10: if user2 in allowed_users:
+  • Checks if "guest" is in the allowed_users set
+  • Since "guest" is NOT in the set, the condition is False
+  • The else block will execute instead
+
+Line 11: print(f"{user2} is allowed to access the system.")
+  • This line would execute if the condition was True (but it's not)
+
+Line 12: else:
+  • Defines the else block
+
+Line 13: print(f"{user2} is NOT allowed to access the system.")
+  • Prints a message indicating the user is not allowed
+  • This line executes because the condition was False
+  • Output: guest is NOT allowed to access the system.
+
+MEMBERSHIP TESTING PERFORMANCE
+================================================================================
+
+One of the major advantages of sets is that membership testing (checking if an 
+element is in a set) is extremely fast, even for very large sets.
+
+PERFORMANCE COMPARISON:
+─────────────────────────────────────────────────────────────────────────────
+• Sets: O(1) average time complexity - very fast, constant time
+• Lists: O(n) time complexity - slower, time increases with list size
+• Tuples: O(n) time complexity - slower, time increases with tuple size
+
+This means:
+• Checking membership in a set takes the same time regardless of set size
+• Checking membership in a list/tuple takes longer as the collection grows
+• For large collections, sets are MUCH faster for membership testing
+
+CODE EXAMPLE 22: Performance Demonstration (Conceptual)
+─────────────────────────────────────────────────────────────────────────────
+# For demonstration purposes - showing the concept
+
+# Large list (slow membership testing)
+large_list = list(range(1000000))  # 1 million items
+# Checking if 999999 is in the list takes time proportional to the list size
+
+# Large set (fast membership testing)
+large_set = set(range(1000000))  # 1 million items
+# Checking if 999999 is in the set takes constant time (very fast!)
+
+# The set membership test is MUCH faster for large collections
+
+LINE-BY-LINE EXPLANATION:
+─────────────────────────────────────────────────────────────────────────────
+Line 1: # For demonstration purposes - showing the concept
+  • Comment explaining this is a conceptual example
+
+Line 2: # Large list (slow membership testing)
+  • Comment explaining the list example
+
+Line 3: large_list = list(range(1000000))
+  • Creates a list with 1 million items (0 to 999999)
+  • This is a large collection
+
+Line 4: # Checking if 999999 is in the list takes time proportional to the list size
+  • Comment explaining that list membership testing is slow
+  • Python may need to check many elements before finding (or not finding) the item
+  • Time complexity: O(n) - linear time
+
+Line 5: # Large set (fast membership testing)
+  • Comment explaining the set example
+
+Line 6: large_set = set(range(1000000))
+  • Creates a set with 1 million items
+  • This is also a large collection
+
+Line 7: # Checking if 999999 is in the set takes constant time (very fast!)
+  • Comment explaining that set membership testing is fast
+  • Sets use hash tables, so lookup is nearly instant
+  • Time complexity: O(1) - constant time
+
+Line 8: # The set membership test is MUCH faster for large collections
+  • Comment summarizing the performance advantage
+  • This is why sets are preferred when you need frequent membership testing
+
+[END SECTION 6]
+[END PART 1]
+================================================================================
+
+END OF PART 1
+================================================================================
+
+This is Part 1 of the comprehensive guide to Sets in Python. Part 2 will cover:
+  • Mathematical set operations (intersection, union, difference, symmetric difference)
+  • Set comparison methods (issubset, issuperset, isdisjoint)
+  • More set methods (update, pop, clear, copy)
+  • Set comprehensions
+  • Advanced set operations
+
+Part 3 will cover:
+  • Frozen sets (immutable sets)
+  • Set operations with multiple sets
+  • Practical examples and use cases
+  • Performance considerations
+  • Best practices and common patterns
+  • Common mistakes and how to avoid them
+
+================================================================================
