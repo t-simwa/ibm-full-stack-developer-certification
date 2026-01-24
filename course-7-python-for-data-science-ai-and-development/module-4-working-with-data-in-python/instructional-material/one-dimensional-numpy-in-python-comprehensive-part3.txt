@@ -1,0 +1,1304 @@
+================================================================================
+ONE-DIMENSIONAL NUMPY IN PYTHON
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+This is Part 3 of the comprehensive guide to One-Dimensional NumPy in Python. 
+In this final part, we'll explore universal functions, mathematical functions, 
+the linspace function for generating arrays, and plotting with matplotlib. 
+We'll also provide a comprehensive summary and quick reference guide.
+
+PREREQUISITES
+-------------
+Before starting Part 3, make sure you understand:
+• How to create NumPy arrays (from Part 1)
+• Basic operations (addition, subtraction, multiplication) (from Part 2)
+• Broadcasting concept (from Part 2)
+
+If you haven't completed Parts 1 and 2, please review them first.
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+This part covers universal functions, mathematical operations, and plotting:
+
+PART 1: UNIVERSAL FUNCTIONS (UFUNCS)
+  SECTION 1.1: WHAT ARE UNIVERSAL FUNCTIONS?
+  SECTION 1.2: USING UNIVERSAL FUNCTIONS
+  SECTION 1.3: COMMON UNIVERSAL FUNCTIONS
+  SECTION 1.4: ARRAY METHODS VS UNIVERSAL FUNCTIONS
+
+PART 2: MATHEMATICAL FUNCTIONS
+  SECTION 2.1: ACCESSING MATHEMATICAL CONSTANTS
+  SECTION 2.2: APPLYING FUNCTIONS TO ARRAYS
+  SECTION 2.3: TRIGONOMETRIC FUNCTIONS
+  SECTION 2.4: MAPPING ARRAYS TO NEW ARRAYS
+
+PART 3: THE LINSPACE FUNCTION
+  SECTION 3.1: WHAT IS LINSPACE?
+  SECTION 3.2: UNDERSTANDING LINSPACE PARAMETERS
+  SECTION 3.3: LINSPACE EXAMPLES
+  SECTION 3.4: USING LINSPACE FOR PLOTTING
+
+PART 4: PLOTTING WITH MATPLOTLIB
+  SECTION 4.1: INTRODUCTION TO MATPLOTLIB
+  SECTION 4.2: IMPORTING MATPLOTLIB
+  SECTION 4.3: CREATING BASIC PLOTS
+  SECTION 4.4: PLOTTING MATHEMATICAL FUNCTIONS
+
+PART 5: SUMMARY AND QUICK REFERENCE
+  SECTION 5.1: KEY CONCEPTS SUMMARY
+  SECTION 5.2: QUICK REFERENCE GUIDE
+  SECTION 5.3: COMMON PATTERNS AND EXAMPLES
+  SECTION 5.4: NEXT STEPS AND RESOURCES
+
+================================================================================
+PART 1: UNIVERSAL FUNCTIONS (UFUNCS)
+================================================================================
+
+SECTION 1.1: WHAT ARE UNIVERSAL FUNCTIONS?
+--------------------------------------------
+
+DEFINITION
+----------
+A universal function is a function that operates on ndarrays (NumPy arrays). 
+Universal functions, often abbreviated as "ufuncs," are functions that can 
+operate element-wise on arrays, applying the function to each element 
+individually.
+
+KEY CHARACTERISTICS
+-------------------
+Universal functions:
+• Operate element-wise on arrays
+• Support broadcasting
+• Are implemented in C for speed
+• Return arrays (not scalars, unless input is scalar)
+• Can handle arrays of any size
+
+WHY ARE THEY CALLED "UNIVERSAL"?
+----------------------------------
+They're called "universal" because:
+• They work with arrays of any size
+• They apply the same operation to every element
+• They're "universally" applicable across the entire array
+• They handle broadcasting automatically
+
+EXAMPLES OF UNIVERSAL FUNCTIONS
+-------------------------------
+• np.sin() - Sine function
+• np.cos() - Cosine function
+• np.exp() - Exponential function
+• np.log() - Natural logarithm
+• np.sqrt() - Square root
+• np.abs() - Absolute value
+• np.max() - Maximum value
+• np.min() - Minimum value
+• np.mean() - Average value
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: USING UNIVERSAL FUNCTIONS
+----------------------------------------
+
+BASIC SYNTAX
+------------
+We can apply a universal function to a NumPy array:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  result = np.sin(a)  # Apply sine function to each element
+
+DETAILED EXPLANATION
+--------------------
+• "np.sin()" is a universal function
+• It takes an array as input
+• It applies the sine function to each element
+• It returns a new array with the results
+
+WHAT HAPPENS ELEMENT-WISE
+-------------------------
+For array [1, 2, 3, 4, 5]:
+  np.sin([1, 2, 3, 4, 5])
+  
+  Becomes:
+  [sin(1), sin(2), sin(3), sin(4), sin(5)]
+  
+  Each element is processed independently.
+
+EXAMPLE
+-------
+  import numpy as np
+  a = np.array([0, np.pi/2, np.pi])
+  result = np.sin(a)
+  # Result: array([0.00000000e+00, 1.00000000e+00, 1.22464680e-16])
+  # sin(0) = 0, sin(π/2) = 1, sin(π) ≈ 0
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: COMMON UNIVERSAL FUNCTIONS
+----------------------------------------
+
+MEAN FUNCTION
+-------------
+Consider the arrays a. We can calculate the mean or average value of all the 
+elements in a using the method mean. This corresponds to the average of all 
+the elements. In this case, the result is zero.
+
+EXAMPLE: Calculating Mean
+---------------------------
+  import numpy as np
+  a = np.array([-2, -1, 0, 1, 2])
+  mean_value = a.mean()
+  # Or: mean_value = np.mean(a)
+  # Result: 0.0
+  # Calculation: (-2 + -1 + 0 + 1 + 2) / 5 = 0 / 5 = 0
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: a = np.array([-2, -1, 0, 1, 2])
+  • Creates array with values -2, -1, 0, 1, 2
+
+LINE 3: mean_value = a.mean()
+  • ".mean()" is a method that calculates the average
+  • Sums all elements: -2 + -1 + 0 + 1 + 2 = 0
+  • Divides by number of elements: 0 / 5 = 0
+  • Returns 0.0
+
+ALTERNATIVE SYNTAX
+-------------------
+You can also use the function form:
+  mean_value = np.mean(a)  # Same result
+
+MAX FUNCTION
+------------
+There are many other functions. For example, consider the NumPy arrays b. We 
+can find the maximum value using the method max. We see the largest value is 
+5. Therefore, the method max returns a 5.
+
+EXAMPLE: Finding Maximum
+-------------------------
+  import numpy as np
+  b = np.array([1, 3, 5, 2, 4])
+  max_value = b.max()
+  # Or: max_value = np.max(b)
+  # Result: 5
+  # The largest value in the array is 5
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: b = np.array([1, 3, 5, 2, 4])
+  • Creates array with values 1, 3, 5, 2, 4
+
+LINE 3: max_value = b.max()
+  • ".max()" method finds the maximum value
+  • Compares all elements: 1, 3, 5, 2, 4
+  • Finds largest: 5
+  • Returns 5
+
+MORE UNIVERSAL FUNCTIONS
+------------------------
+
+MIN FUNCTION
+  import numpy as np
+  arr = np.array([1, 3, 5, 2, 4])
+  min_value = arr.min()
+  # Result: 1
+
+SUM FUNCTION
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  sum_value = arr.sum()
+  # Result: 15  (1 + 2 + 3 + 4 + 5)
+
+STD FUNCTION (Standard Deviation)
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  std_value = arr.std()
+  # Result: 1.4142135623730951
+
+SQRT FUNCTION (Square Root)
+  import numpy as np
+  arr = np.array([4, 9, 16, 25])
+  sqrt_arr = np.sqrt(arr)
+  # Result: array([2., 3., 4., 5.])
+
+ABS FUNCTION (Absolute Value)
+  import numpy as np
+  arr = np.array([-2, -1, 0, 1, 2])
+  abs_arr = np.abs(arr)
+  # Result: array([2, 1, 0, 1, 2])
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: ARRAY METHODS VS UNIVERSAL FUNCTIONS
+---------------------------------------------------
+
+TWO WAYS TO CALL FUNCTIONS
+---------------------------
+There are two ways to use many NumPy functions:
+
+METHOD 1: Array Method (Object-Oriented)
+  arr.mean()    # Called on the array object
+  arr.max()     # Called on the array object
+  arr.min()     # Called on the array object
+
+METHOD 2: Universal Function (Functional)
+  np.mean(arr)  # Called as a function with array as argument
+  np.max(arr)   # Called as a function with array as argument
+  np.min(arr)   # Called as a function with array as argument
+
+WHICH TO USE?
+-------------
+Both methods work the same way. Choose based on:
+• Style preference
+• Consistency with your codebase
+• Readability
+
+EXAMPLES
+--------
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  
+  # Method approach
+  mean1 = arr.mean()
+  max1 = arr.max()
+  
+  # Function approach
+  mean2 = np.mean(arr)
+  max2 = np.max(arr)
+  
+  # Both give same results
+  print(mean1 == mean2)  # True
+  print(max1 == max2)    # True
+
+[END SECTION 1.4]
+================================================================================
+
+PART 2: MATHEMATICAL FUNCTIONS
+================================================================================
+
+SECTION 2.1: ACCESSING MATHEMATICAL CONSTANTS
+-----------------------------------------------
+
+MATHEMATICAL CONSTANTS IN NUMPY
+---------------------------------
+We can use NumPy to create functions that map NumPy arrays to new NumPy arrays. 
+Let's implement some code on the left side of the screen and use the right 
+side of the screen to demonstrate what's going on. We can access the value of 
+pi in NumPy as follows.
+
+ACCESSING PI
+------------
+  import numpy as np
+  pi_value = np.pi
+  print(pi_value)
+  # Output: 3.141592653589793
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: pi_value = np.pi
+  • "np.pi" is a constant representing π (pi)
+  • π ≈ 3.141592653589793
+  • Stores the value in variable "pi_value"
+
+LINE 3: print(pi_value)
+  • Prints the value of pi
+  • Output: 3.141592653589793
+
+OTHER MATHEMATICAL CONSTANTS
+----------------------------
+
+EULER'S NUMBER (e)
+  import numpy as np
+  e_value = np.e
+  print(e_value)
+  # Output: 2.718281828459045
+
+USING CONSTANTS IN CALCULATIONS
+--------------------------------
+  import numpy as np
+  radius = 5
+  circumference = 2 * np.pi * radius
+  # Result: 31.41592653589793
+  
+  area = np.pi * radius ** 2
+  # Result: 78.53981633974483
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: APPLYING FUNCTIONS TO ARRAYS
+-------------------------------------------
+
+CREATING ARRAYS WITH MATHEMATICAL VALUES
+-----------------------------------------
+We can create the following NumPy array in radians. This array corresponds to 
+the following vector.
+
+EXAMPLE: Creating Array in Radians
+-----------------------------------
+  import numpy as np
+  x = np.array([0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi])
+  # Result: array([0.        , 1.57079633, 3.14159265, 4.71238898, 6.28318531])
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: x = np.array([0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi])
+  • Creates array with angle values in radians
+  • 0: 0 radians (0 degrees)
+  • np.pi/2: π/2 radians (90 degrees)
+  • np.pi: π radians (180 degrees)
+  • 3*np.pi/2: 3π/2 radians (270 degrees)
+  • 2*np.pi: 2π radians (360 degrees)
+
+WHAT ARE RADIANS?
+-----------------
+Radians are a unit for measuring angles:
+• 0 radians = 0 degrees
+• π/2 radians = 90 degrees
+• π radians = 180 degrees
+• 3π/2 radians = 270 degrees
+• 2π radians = 360 degrees
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: TRIGONOMETRIC FUNCTIONS
+--------------------------------------
+
+APPLYING SINE FUNCTION
+----------------------
+We can apply the function sine to the array x and assign the values to the 
+array y. This applies the sine function to each element in the array. This 
+corresponds to applying the sine function to each component of the vector. 
+The result is a new array y where each value corresponds to a sine function 
+being applied to each element in the array x.
+
+EXAMPLE: Applying Sine Function
+--------------------------------
+  import numpy as np
+  x = np.array([0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi])
+  y = np.sin(x)
+  # Result: array([ 0.00000000e+00,  1.00000000e+00,  1.22464680e-16,
+  #                -1.00000000e+00, -2.44929360e-16])
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: x = np.array([0, np.pi/2, np.pi, 3*np.pi/2, 2*np.pi])
+  • Creates array x with angle values in radians
+  • Values: [0, π/2, π, 3π/2, 2π]
+
+LINE 3: y = np.sin(x)
+  • "np.sin()" is the sine universal function
+  • Takes array x as input
+  • Applies sine function to each element:
+    - sin(0) = 0
+    - sin(π/2) = 1
+    - sin(π) ≈ 0 (very small number due to floating-point precision)
+    - sin(3π/2) = -1
+    - sin(2π) ≈ 0
+  • Returns new array y with sine values
+  • Stores result in variable "y"
+
+ELEMENT-WISE APPLICATION
+-------------------------
+The sine function is applied to each element independently:
+
+  x = [0,        π/2,      π,        3π/2,      2π]
+       ↓          ↓         ↓          ↓          ↓
+  y = [sin(0), sin(π/2), sin(π), sin(3π/2), sin(2π)]
+       ↓          ↓         ↓          ↓          ↓
+     [0,         1,        ≈0,       -1,        ≈0]
+
+OTHER TRIGONOMETRIC FUNCTIONS
+-----------------------------
+
+COSINE FUNCTION
+  import numpy as np
+  x = np.array([0, np.pi/2, np.pi])
+  y = np.cos(x)
+  # Result: array([ 1.00000000e+00,  6.12323400e-17, -1.00000000e+00])
+  # cos(0) = 1, cos(π/2) ≈ 0, cos(π) = -1
+
+TANGENT FUNCTION
+  import numpy as np
+  x = np.array([0, np.pi/4, np.pi/2])
+  y = np.tan(x)
+  # Result: array([0.00000000e+00, 1.00000000e+00, 1.63312394e+16])
+  # tan(0) = 0, tan(π/4) = 1, tan(π/2) ≈ very large
+
+INVERSE TRIGONOMETRIC FUNCTIONS
+  import numpy as np
+  x = np.array([0, 0.5, 1])
+  y = np.arcsin(x)  # Inverse sine
+  # Result: array([0.        , 0.52359878, 1.57079633])
+
+EXPONENTIAL FUNCTION
+  import numpy as np
+  x = np.array([0, 1, 2])
+  y = np.exp(x)  # e^x
+  # Result: array([1.        , 2.71828183, 7.3890561 ])
+  # e^0 = 1, e^1 ≈ 2.718, e^2 ≈ 7.389
+
+LOGARITHM FUNCTION
+  import numpy as np
+  x = np.array([1, np.e, np.e**2])
+  y = np.log(x)  # Natural logarithm (base e)
+  # Result: array([0.        , 1.        , 2.        ])
+  # ln(1) = 0, ln(e) = 1, ln(e²) = 2
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: MAPPING ARRAYS TO NEW ARRAYS
+-------------------------------------------
+
+THE CONCEPT OF MAPPING
+----------------------
+We can use NumPy to create functions that map NumPy arrays to new NumPy arrays. 
+This means we take an input array, apply a function to each element, and get 
+a new array as output.
+
+VISUAL REPRESENTATION
+---------------------
+  Input Array:  [x₁, x₂, x₃, ..., xₙ]
+                    ↓    ↓    ↓       ↓
+              [f(x₁), f(x₂), f(x₃), ..., f(xₙ)]
+                    ↓    ↓    ↓       ↓
+  Output Array: [y₁, y₂, y₃, ..., yₙ]
+
+EXAMPLE: Mapping with Sine
+---------------------------
+  import numpy as np
+  x = np.array([0, np.pi/2, np.pi])
+  y = np.sin(x)
+  
+  # Mapping process:
+  # x = [0,      π/2,    π]
+  #      ↓        ↓      ↓
+  # y = [sin(0), sin(π/2), sin(π)]
+  #      ↓        ↓        ↓
+  # y = [0,      1,       0]
+
+EXAMPLE: Mapping with Square Root
+----------------------------------
+  import numpy as np
+  x = np.array([4, 9, 16, 25])
+  y = np.sqrt(x)
+  
+  # Mapping process:
+  # x = [4,   9,   16,  25]
+  #      ↓    ↓    ↓    ↓
+  # y = [√4, √9, √16, √25]
+  #      ↓    ↓    ↓    ↓
+  # y = [2,   3,   4,   5]
+
+EXAMPLE: Chaining Mappings
+---------------------------
+You can chain multiple operations:
+
+  import numpy as np
+  x = np.array([1, 2, 3, 4])
+  y = np.sqrt(x)      # First mapping: square root
+  z = y * 2           # Second mapping: multiply by 2
+  # Or in one line:
+  z = np.sqrt(x) * 2
+  # Result: array([2., 2.82842712, 3.46410162, 4.])
+
+[END SECTION 2.4]
+================================================================================
+
+PART 3: THE LINSPACE FUNCTION
+================================================================================
+
+SECTION 3.1: WHAT IS LINSPACE?
+-------------------------------
+
+DEFINITION
+----------
+A useful function for plotting mathematical functions is linspace. Linspace 
+returns evenly spaced numbers over specified interval. It's particularly 
+useful for creating arrays of values for plotting functions.
+
+BASIC CONCEPT
+-------------
+Linspace creates an array of evenly spaced numbers between a start value and 
+an end value. The spacing between numbers is automatically calculated based 
+on how many numbers you want.
+
+SYNTAX
+------
+  np.linspace(start, stop, num)
+
+Where:
+• start: The starting value of the sequence
+• stop: The ending value of the sequence (included by default)
+• num: The number of samples to generate
+
+EXAMPLE
+-------
+  import numpy as np
+  x = np.linspace(0, 10, 5)
+  # Result: array([ 0. ,  2.5,  5. ,  7.5, 10. ])
+  # Creates 5 evenly spaced numbers from 0 to 10
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: UNDERSTANDING LINSPACE PARAMETERS
+------------------------------------------------
+
+DETAILED PARAMETER EXPLANATION
+-------------------------------
+We specify the starting point of the sequence, the ending point of the 
+sequence, the parameter num indicates the number of samples to generate, in 
+this case, 5. The space between samples is 1.
+
+EXAMPLE 1: Basic Linspace
+--------------------------
+  import numpy as np
+  x = np.linspace(-2, 2, 5)
+  # Result: array([-2., -1.,  0.,  1.,  2.])
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: x = np.linspace(-2, 2, 5)
+  • "np.linspace()" is the linspace function
+  • First argument (-2): Starting point
+  • Second argument (2): Ending point
+  • Third argument (5): Number of samples to generate
+  • Creates 5 evenly spaced numbers from -2 to 2
+  • Result: [-2, -1, 0, 1, 2]
+  • The space between samples is 1
+
+CALCULATING THE SPACING
+------------------------
+For linspace(-2, 2, 5):
+• Total range: 2 - (-2) = 4
+• Number of intervals: 5 - 1 = 4
+• Spacing: 4 / 4 = 1
+
+So the values are: -2, -1, 0, 1, 2 (spacing of 1)
+
+EXAMPLE 2: More Samples
+------------------------
+If we change the parameter num to 9, we get 9 evenly spaced numbers over the 
+interval from negative 2 to 2. The result is the difference between 
+subsequent samples is 0.5 as opposed to 1 as before.
+
+  import numpy as np
+  x = np.linspace(-2, 2, 9)
+  # Result: array([-2. , -1.5, -1. , -0.5,  0. ,  0.5,  1. ,  1.5,  2. ])
+
+DETAILED EXPLANATION
+--------------------
+• Start: -2
+• Stop: 2
+• Num: 9 (9 samples)
+• Total range: 2 - (-2) = 4
+• Number of intervals: 9 - 1 = 8
+• Spacing: 4 / 8 = 0.5
+• Result: [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]
+
+The difference between subsequent samples is 0.5 as opposed to 1 as before.
+
+VISUAL COMPARISON
+-----------------
+  num=5:  [-2  -1   0   1   2]
+          └─1─┘└─1─┘└─1─┘└─1─┘
+          (spacing = 1)
+
+  num=9:  [-2 -1.5 -1 -0.5  0  0.5  1  1.5  2]
+          └─0.5─┘└─0.5─┘└─0.5─┘└─0.5─┘└─0.5─┘└─0.5─┘└─0.5─┘└─0.5─┘
+          (spacing = 0.5)
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: LINSPACE EXAMPLES
+--------------------------------
+
+EXAMPLE 1: Creating Array for Plotting
+---------------------------------------
+We can use the function linspace to generate 100 evenly spaced samples from 
+the interval 0 to 2 pi.
+
+  import numpy as np
+  x = np.linspace(0, 2*np.pi, 100)
+  # Result: array with 100 values from 0 to 2π
+  # This is perfect for plotting smooth curves
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: x = np.linspace(0, 2*np.pi, 100)
+  • "0" is the starting point
+  • "2*np.pi" is the ending point (approximately 6.283)
+  • "100" is the number of samples
+  • Creates 100 evenly spaced values from 0 to 2π
+  • Perfect for plotting trigonometric functions
+
+WHY 100 SAMPLES?
+----------------
+• More samples = smoother plot
+• 100 samples provides good balance between smoothness and performance
+• For most plotting purposes, 100-1000 samples work well
+
+EXAMPLE 2: Different Ranges
+-----------------------------
+
+CREATING VALUES FROM 0 TO 10
+  import numpy as np
+  x = np.linspace(0, 10, 11)
+  # Result: array([ 0.,  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  9., 10.])
+  # 11 samples from 0 to 10 (inclusive)
+
+CREATING VALUES FROM -5 TO 5
+  import numpy as np
+  x = np.linspace(-5, 5, 21)
+  # Result: 21 evenly spaced values from -5 to 5
+
+CREATING VALUES FOR LOGARITHMIC SCALE
+  import numpy as np
+  x = np.linspace(1, 100, 50)
+  # Result: 50 evenly spaced values from 1 to 100
+
+EXAMPLE 3: Using Linspace with Functions
+-----------------------------------------
+  import numpy as np
+  x = np.linspace(0, 2*np.pi, 100)
+  y = np.sin(x)  # Apply sine to all 100 values
+  # Now you have x and y arrays ready for plotting!
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: USING LINSPACE FOR PLOTTING
+-----------------------------------------
+
+WHY LINSPACE IS USEFUL FOR PLOTTING
+------------------------------------
+Linspace is essential for plotting because:
+• Creates smooth curves (many points)
+• Ensures even spacing
+• Makes plots look professional
+• Works perfectly with mathematical functions
+
+TYPICAL PLOTTING WORKFLOW
+--------------------------
+1. Create x values using linspace
+2. Calculate y values using a function
+3. Plot x vs y
+
+EXAMPLE: Preparing Data for Plot
+----------------------------------
+  import numpy as np
+  x = np.linspace(0, 2*np.pi, 100)  # 100 x-values
+  y = np.sin(x)                      # 100 y-values
+  # Now ready to plot x vs y
+
+COMPARISON: Linspace vs Range
+-----------------------------
+LINSPACE (for floats, inclusive end):
+  x = np.linspace(0, 10, 11)
+  # Result: [0, 1, 2, ..., 10] (floats, includes 10)
+
+RANGE (for integers, exclusive end):
+  x = np.array(range(11))
+  # Result: [0, 1, 2, ..., 10] (integers, but range(11) excludes 11)
+
+Linspace is better for:
+• Creating float values
+• Ensuring the end point is included
+• Plotting smooth curves
+
+[END SECTION 3.4]
+================================================================================
+
+PART 4: PLOTTING WITH MATPLOTLIB
+================================================================================
+
+SECTION 4.1: INTRODUCTION TO MATPLOTLIB
+----------------------------------------
+
+WHAT IS MATPLOTLIB?
+--------------------
+Matplotlib is a plotting library for Python. It's commonly used with NumPy to 
+visualize data and mathematical functions. The name comes from "MATLAB" 
+(another programming language) and "plot" (creating graphs).
+
+WHY USE MATPLOTLIB WITH NUMPY?
+-------------------------------
+• NumPy creates the data (arrays)
+• Matplotlib visualizes the data (plots)
+• They work together seamlessly
+• Essential for data science and scientific computing
+
+COMMON USE CASES
+----------------
+• Plotting mathematical functions
+• Visualizing data trends
+• Creating charts and graphs
+• Scientific visualization
+• Data exploration
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: IMPORTING MATPLOTLIB
+-----------------------------------
+
+HOW TO IMPORT MATPLOTLIB
+------------------------
+We can import the library matplotlib.pyplot as plt to help us plot the function.
+
+  import matplotlib.pyplot as plt
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import matplotlib.pyplot as plt
+  • "matplotlib" is the main library
+  • "pyplot" is a submodule for plotting
+  • "as plt" gives it a shorter alias (standard convention)
+  • Similar to "import numpy as np"
+
+WHY "AS PLT"?
+-------------
+• Shorter than typing "matplotlib.pyplot" every time
+• Standard convention in the data science community
+• Makes code more readable
+
+FOR JUPYTER NOTEBOOKS
+---------------------
+As we are using a Jupyter notebook, we use the command matplotlib inline to 
+display the plot.
+
+  %matplotlib inline
+
+DETAILED EXPLANATION
+--------------------
+• "%matplotlib inline" is a Jupyter notebook magic command
+• The "%" indicates it's a magic command (special Jupyter feature)
+• "inline" means plots will be displayed directly in the notebook
+• This is only needed in Jupyter notebooks, not in regular Python scripts
+
+COMPLETE IMPORT SETUP
+----------------------
+For Jupyter notebooks:
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+
+For regular Python scripts:
+  import numpy as np
+  import matplotlib.pyplot as plt
+  # No magic command needed
+  # Use plt.show() to display plots
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: CREATING BASIC PLOTS
+-----------------------------------
+
+THE PLOT FUNCTION
+-----------------
+The following command plots a graph. The first input corresponds to the 
+values for the horizontal or x-axis. The second input corresponds to the 
+values for the vertical or y-axis.
+
+BASIC PLOTTING SYNTAX
+---------------------
+  plt.plot(x, y)
+
+Where:
+• x: Array of x-axis values (horizontal)
+• y: Array of y-axis values (vertical)
+
+COMPLETE EXAMPLE
+----------------
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline  # Only for Jupyter notebooks
+  
+  # Create data
+  x = np.linspace(0, 2*np.pi, 100)
+  y = np.sin(x)
+  
+  # Plot the data
+  plt.plot(x, y)
+  plt.show()  # Display the plot (not needed in Jupyter with inline)
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1-2: Import statements
+  • Imports NumPy and matplotlib
+
+LINE 3: %matplotlib inline
+  • Jupyter magic command to display plots inline
+
+LINE 5-6: Create data arrays
+  • x: 100 evenly spaced values from 0 to 2π
+  • y: Sine values for each x
+
+LINE 8: plt.plot(x, y)
+  • "plt.plot()" creates a line plot
+  • First argument (x): x-axis values
+  • Second argument (y): y-axis values
+  • Plots y vs x (y on vertical axis, x on horizontal axis)
+
+LINE 9: plt.show()
+  • Displays the plot
+  • Not needed in Jupyter with %matplotlib inline
+  • Required in regular Python scripts
+
+WHAT THE PLOT SHOWS
+-------------------
+This creates a sine wave:
+• X-axis: Angles from 0 to 2π radians
+• Y-axis: Sine values (ranging from -1 to 1)
+• The curve shows how sine varies with angle
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: PLOTTING MATHEMATICAL FUNCTIONS
+---------------------------------------------
+
+COMPLETE WORKFLOW EXAMPLE
+-------------------------
+We can use the NumPy function sine to map the array x to a new array y. We can 
+import the library matplotlib.pyplot as plt to help us plot the function. As 
+we are using a Jupyter notebook, we use the command matplotlib inline to 
+display the plot. The following command plots a graph. The first input 
+corresponds to the values for the horizontal or x-axis. The second input 
+corresponds to the values for the vertical or y-axis.
+
+COMPLETE EXAMPLE: Plotting Sine Function
+-----------------------------------------
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  # Step 1: Create x values using linspace
+  x = np.linspace(0, 2*np.pi, 100)
+  
+  # Step 2: Calculate y values using sine function
+  y = np.sin(x)
+  
+  # Step 3: Plot the function
+  plt.plot(x, y)
+  plt.xlabel('Angle (radians)')      # Label x-axis
+  plt.ylabel('sin(x)')                # Label y-axis
+  plt.title('Sine Function')          # Add title
+  plt.grid(True)                      # Add grid
+  plt.show()
+
+DETAILED EXPLANATION OF EACH STEP
+----------------------------------
+STEP 1: Create x values
+  x = np.linspace(0, 2*np.pi, 100)
+  • Creates 100 evenly spaced values from 0 to 2π
+  • These will be the x-axis values
+
+STEP 2: Calculate y values
+  y = np.sin(x)
+  • Applies sine function to each x value
+  • Creates corresponding y values
+  • This maps the array x to a new array y
+
+STEP 3: Plot
+  plt.plot(x, y)
+  • Creates the plot
+  • First input (x): horizontal axis values
+  • Second input (y): vertical axis values
+
+STEP 4: Customize (optional)
+  plt.xlabel('Angle (radians)')  # Label for x-axis
+  plt.ylabel('sin(x)')            # Label for y-axis
+  plt.title('Sine Function')      # Plot title
+  plt.grid(True)                  # Show grid lines
+
+MORE PLOTTING EXAMPLES
+----------------------
+
+EXAMPLE 1: Cosine Function
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  x = np.linspace(0, 2*np.pi, 100)
+  y = np.cos(x)
+  plt.plot(x, y)
+  plt.title('Cosine Function')
+  plt.show()
+
+EXAMPLE 2: Multiple Functions on Same Plot
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  x = np.linspace(0, 2*np.pi, 100)
+  y1 = np.sin(x)
+  y2 = np.cos(x)
+  plt.plot(x, y1, label='sin(x)')
+  plt.plot(x, y2, label='cos(x)')
+  plt.legend()
+  plt.title('Sine and Cosine Functions')
+  plt.show()
+
+EXAMPLE 3: Exponential Function
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  x = np.linspace(-2, 2, 100)
+  y = np.exp(x)
+  plt.plot(x, y)
+  plt.title('Exponential Function')
+  plt.show()
+
+EXAMPLE 4: Polynomial Function
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  x = np.linspace(-5, 5, 100)
+  y = x**2  # Quadratic function
+  plt.plot(x, y)
+  plt.title('Quadratic Function: y = x²')
+  plt.show()
+
+PLOTTING TIPS
+-------------
+• Use linspace for smooth curves (100-1000 points)
+• Label your axes for clarity
+• Add titles to describe your plots
+• Use grid for easier reading
+• Use legends when plotting multiple functions
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: SUMMARY AND QUICK REFERENCE
+================================================================================
+
+SECTION 5.1: KEY CONCEPTS SUMMARY
+-----------------------------------
+
+WHAT YOU'VE LEARNED
+-------------------
+Throughout this comprehensive guide, you've learned:
+
+FROM PART 1:
+• NumPy is a powerful library for numerical computing
+• NumPy arrays (ndarrays) are more efficient than Python lists
+• How to create arrays from Python lists
+• Array attributes: dtype, size, ndim, shape
+• Indexing and slicing arrays
+• Modifying array elements
+
+FROM PART 2:
+• Vector operations: addition, subtraction, scalar multiplication
+• Hadamard product (element-wise multiplication)
+• Dot product (scalar result)
+• Broadcasting (operations with scalars)
+• Performance advantages of NumPy
+
+FROM PART 3:
+• Universal functions (ufuncs)
+• Mathematical functions (sin, cos, exp, log, etc.)
+• The linspace function for creating evenly spaced arrays
+• Plotting with matplotlib
+• Complete workflow for visualizing functions
+
+KEY TAKEAWAYS
+-------------
+1. NUMPY IS FAST: Operations are vectorized and optimized
+2. NUMPY IS EFFICIENT: Uses less memory than Python lists
+3. NUMPY IS POWERFUL: Essential for data science and scientific computing
+4. NUMPY IS FOUNDATIONAL: Basis for pandas and many other libraries
+5. NUMPY IS INTUITIVE: Operations are mathematically natural
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: QUICK REFERENCE GUIDE
+-----------------------------------
+
+ARRAY CREATION
+--------------
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])           # From list
+  arr = np.linspace(0, 10, 11)              # Evenly spaced
+  arr = np.zeros(5)                         # Array of zeros
+  arr = np.ones(5)                           # Array of ones
+  arr = np.arange(0, 10, 2)                 # Like range() but returns array
+
+ARRAY ATTRIBUTES
+----------------
+  arr.dtype    # Data type (e.g., int64, float64)
+  arr.size     # Number of elements
+  arr.ndim     # Number of dimensions
+  arr.shape    # Shape tuple (e.g., (5,))
+  arr.itemsize # Bytes per element
+  arr.nbytes   # Total bytes
+
+INDEXING AND SLICING
+---------------------
+  arr[0]           # First element
+  arr[-1]           # Last element
+  arr[1:3]          # Slice from index 1 to 2
+  arr[:3]           # First 3 elements
+  arr[2:]           # From index 2 to end
+  arr[::2]          # Every second element
+
+BASIC OPERATIONS
+----------------
+  arr1 + arr2       # Element-wise addition
+  arr1 - arr2       # Element-wise subtraction
+  arr * 2           # Scalar multiplication (broadcasting)
+  arr1 * arr2       # Hadamard product (element-wise)
+  np.dot(arr1, arr2) # Dot product (scalar result)
+  arr + 10          # Broadcasting (add 10 to each)
+
+UNIVERSAL FUNCTIONS
+-------------------
+  np.sin(arr)       # Sine
+  np.cos(arr)       # Cosine
+  np.exp(arr)       # Exponential (e^x)
+  np.log(arr)       # Natural logarithm
+  np.sqrt(arr)      # Square root
+  np.abs(arr)       # Absolute value
+
+ARRAY METHODS
+-------------
+  arr.mean()        # Mean (average)
+  arr.max()         # Maximum value
+  arr.min()         # Minimum value
+  arr.sum()         # Sum of elements
+  arr.std()         # Standard deviation
+
+MATHEMATICAL CONSTANTS
+-----------------------
+  np.pi             # π (pi) ≈ 3.14159
+  np.e              # e (Euler's number) ≈ 2.71828
+
+LINSPACE
+--------
+  np.linspace(start, stop, num)
+  # Creates num evenly spaced values from start to stop
+  # Example: np.linspace(0, 10, 11) → [0, 1, 2, ..., 10]
+
+PLOTTING
+--------
+  import matplotlib.pyplot as plt
+  %matplotlib inline  # For Jupyter notebooks
+  plt.plot(x, y)      # Create plot
+  plt.xlabel('X')     # Label x-axis
+  plt.ylabel('Y')     # Label y-axis
+  plt.title('Title')  # Add title
+  plt.grid(True)      # Show grid
+  plt.show()          # Display plot
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: COMMON PATTERNS AND EXAMPLES
+------------------------------------------
+
+PATTERN 1: Creating and Operating on Arrays
+-------------------------------------------
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  result = arr * 2 + 10
+  # Result: array([12, 14, 16, 18, 20])
+
+PATTERN 2: Vector Operations
+------------------------------
+  import numpy as np
+  u = np.array([1, 2])
+  v = np.array([3, 4])
+  sum_vec = u + v           # [4, 6]
+  diff_vec = u - v          # [-2, -2]
+  hadamard = u * v          # [3, 8]
+  dot_prod = np.dot(u, v)   # 11
+
+PATTERN 3: Applying Functions
+------------------------------
+  import numpy as np
+  x = np.array([0, np.pi/2, np.pi])
+  y = np.sin(x)
+  # Result: array([0., 1., 0.])
+
+PATTERN 4: Creating Data for Plotting
+--------------------------------------
+  import numpy as np
+  import matplotlib.pyplot as plt
+  %matplotlib inline
+  
+  x = np.linspace(0, 2*np.pi, 100)
+  y = np.sin(x)
+  plt.plot(x, y)
+  plt.show()
+
+PATTERN 5: Statistical Operations
+-----------------------------------
+  import numpy as np
+  data = np.array([1, 2, 3, 4, 5])
+  mean_val = data.mean()      # 3.0
+  max_val = data.max()        # 5
+  min_val = data.min()        # 1
+  std_val = data.std()        # Standard deviation
+
+[END SECTION 5.3]
+================================================================================
+
+SECTION 5.4: NEXT STEPS AND RESOURCES
+--------------------------------------
+
+THERE IS A LOT MORE YOU CAN DO WITH NUMPY
+------------------------------------------
+There is a lot more you can do with NumPy. Check out the labs at numpy.org 
+for more. Thanks for watching this video.
+
+CONTINUING YOUR LEARNING
+------------------------
+Now that you understand 1D NumPy arrays, you can:
+
+1. EXPLORE HIGHER DIMENSIONS
+   • Learn about 2D arrays (matrices)
+   • Understand 3D and higher-dimensional arrays
+   • Master array reshaping and manipulation
+
+2. ADVANCED OPERATIONS
+   • Matrix multiplication
+   • Linear algebra operations
+   • Array broadcasting with different shapes
+   • Advanced indexing (fancy indexing, boolean indexing)
+
+3. INTEGRATION WITH OTHER LIBRARIES
+   • pandas: Built on NumPy, essential for data analysis
+   • scikit-learn: Machine learning (uses NumPy arrays)
+   • matplotlib: Already covered, but more advanced plotting
+   • SciPy: Scientific computing extensions
+
+4. PERFORMANCE OPTIMIZATION
+   • Understanding memory layout
+   • Optimizing array operations
+   • Using NumPy with large datasets
+
+RECOMMENDED RESOURCES
+---------------------
+• NUMPY.ORG: Official NumPy documentation
+  - Comprehensive reference
+  - Tutorials and guides
+  - API documentation
+  - Examples and best practices
+
+• NUMPY DOCUMENTATION: https://numpy.org/doc/
+  - User guide
+  - Reference guide
+  - Array creation routines
+  - Mathematical functions
+
+• PRACTICE EXERCISES
+  - Try creating arrays of different sizes
+  - Practice all operations covered
+  - Plot different mathematical functions
+  - Work with real datasets
+
+• COURSE LABS
+  - Complete hands-on labs from your course
+  - Apply concepts to real problems
+  - Build projects using NumPy
+
+COMMON NEXT TOPICS
+------------------
+After mastering 1D NumPy arrays, typical next topics include:
+• 2D NumPy arrays and matrices
+• Array reshaping and manipulation
+• Boolean indexing and fancy indexing
+• Array concatenation and splitting
+• Working with pandas (built on NumPy)
+• Data visualization with matplotlib/seaborn
+• Statistical analysis with NumPy
+
+FINAL THOUGHTS
+--------------
+Congratulations on completing this comprehensive guide to One-Dimensional 
+NumPy in Python! You now have a solid foundation in:
+
+✓ Creating and manipulating NumPy arrays
+✓ Understanding array attributes and properties
+✓ Performing vector operations efficiently
+✓ Using universal functions
+✓ Creating mathematical visualizations
+✓ Understanding the power and efficiency of NumPy
+
+Remember:
+• Practice is essential - try the examples yourself
+• Experiment with different values and operations
+• Read the NumPy documentation for deeper understanding
+• Build projects to reinforce your learning
+• NumPy is a fundamental tool - mastery will serve you well!
+
+Keep learning, keep practicing, and enjoy your journey with NumPy and data 
+science!
+
+[END SECTION 5.4]
+================================================================================
+
+END OF COMPREHENSIVE GUIDE
+==========================
+
+You have completed all three parts of the comprehensive guide to 
+One-Dimensional NumPy in Python!
+
+PART 1: Foundations
+  • Introduction to NumPy
+  • Array creation
+  • Array attributes
+  • Indexing and slicing
+
+PART 2: Operations
+  • Vector operations
+  • Broadcasting
+  • Performance advantages
+
+PART 3: Advanced Topics
+  • Universal functions
+  • Mathematical functions
+  • Plotting
+  • Summary and reference
+
+Thank you for studying with this comprehensive guide. Good luck with your 
+NumPy journey!
+
+================================================================================

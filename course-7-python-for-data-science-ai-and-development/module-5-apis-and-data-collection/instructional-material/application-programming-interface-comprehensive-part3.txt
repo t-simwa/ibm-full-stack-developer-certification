@@ -1,0 +1,1920 @@
+================================================================================
+APPLICATION PROGRAMMING INTERFACES (APIs)
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+This is Part 3 of the Application Programming Interfaces comprehensive study 
+guide. In Parts 1 and 2, you learned about APIs in general, API libraries, 
+REST APIs, and the request-response pattern. Now we'll work through a complete 
+real-world example using PyCoinGecko to collect cryptocurrency data, with 
+detailed line-by-line explanations of every piece of code.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+120-150 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this part, you will be able to:
+• Install and import the PyCoinGecko library
+• Create a PyCoinGecko client object
+• Request cryptocurrency data from the CoinGecko API
+• Understand and process JSON responses from APIs
+• Work with nested dictionaries and lists in Python
+• Convert API data to pandas DataFrames
+• Understand and work with UNIX timestamps
+• Convert timestamps to readable datetime formats
+• Group and aggregate time series data
+• Create candlestick charts using plotly
+• Understand every line of code in a complete API example
+• Apply these patterns to other APIs
+
+OVERVIEW
+--------
+Cryptocurrency data is excellent to be used in an API because it is constantly 
+updated and it is vital to cryptocurrency trading. We will use the PyCoinGecko 
+Python client/wrapper for the CoinGecko API, updated every minute by CoinGecko. 
+We use the wrapper/client because it is easy to use so you can focus on the 
+task of collecting data. We will also introduce pandas time series functions 
+for dealing with time series data.
+
+In this part, we'll build a complete example that:
+1. Connects to the CoinGecko API using PyCoinGecko
+2. Retrieves Bitcoin price data for the past 30 days
+3. Processes the JSON response
+4. Converts the data to a pandas DataFrame
+5. Converts timestamps to readable dates
+6. Groups data for candlestick charts
+7. Creates a visualization
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+This part covers the complete PyCoinGecko example:
+
+PART 1: SETUP AND INSTALLATION
+  SECTION 1.1: WHY CRYPTOCURRENCY DATA FOR APIs?
+  SECTION 1.2: WHAT IS PYCOINGECKO?
+  SECTION 1.3: INSTALLING PYCOINGECKO
+  SECTION 1.4: IMPORTING THE LIBRARY
+
+PART 2: CREATING THE CLIENT
+  SECTION 2.1: UNDERSTANDING CLIENT OBJECTS
+  SECTION 2.2: CREATING A PYCOINGECKO CLIENT
+  SECTION 2.3: WHAT THE CLIENT OBJECT DOES
+
+PART 3: REQUESTING DATA
+  SECTION 3.1: UNDERSTANDING THE DATA REQUEST
+  SECTION 3.2: MAKING THE API CALL
+  SECTION 3.3: UNDERSTANDING THE RESPONSE STRUCTURE
+
+PART 4: PROCESSING THE RESPONSE
+  SECTION 4.1: UNDERSTANDING JSON RESPONSES
+  SECTION 4.2: ACCESSING NESTED DATA
+  SECTION 4.3: EXTRACTING PRICE DATA
+
+PART 5: CREATING A DATAFRAME
+  SECTION 5.1: CONVERTING TO DATAFRAME
+  SECTION 5.2: UNDERSTANDING THE DATAFRAME STRUCTURE
+  SECTION 5.3: WORKING WITH THE DATA
+
+PART 6: WORKING WITH TIMESTAMPS
+  SECTION 6.1: UNDERSTANDING UNIX TIMESTAMPS
+  SECTION 6.2: CONVERTING TO READABLE DATES
+  SECTION 6.3: USING PANDAS TO_DATETIME
+
+PART 7: CREATING CANDLESTICK DATA
+  SECTION 7.1: UNDERSTANDING CANDLESTICK CHARTS
+  SECTION 7.2: GROUPING DATA BY DATE
+  SECTION 7.3: CALCULATING OHLC VALUES
+
+PART 8: VISUALIZATION
+  SECTION 8.1: INTRODUCTION TO PLOTLY
+  SECTION 8.2: CREATING THE CANDLESTICK CHART
+  SECTION 8.3: DISPLAYING THE CHART
+
+PART 9: COMPLETE CODE EXAMPLE
+  SECTION 9.1: FULL CODE WITH LINE-BY-LINE EXPLANATIONS
+  SECTION 9.2: RUNNING THE EXAMPLE
+  SECTION 9.3: UNDERSTANDING THE OUTPUT
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: SETUP AND INSTALLATION
+================================================================================
+
+SECTION 1.1: WHY CRYPTOCURRENCY DATA FOR APIs?
+----------------------------------------------
+
+DEFINITION
+----------
+Cryptocurrency data is excellent to be used in an API because it is constantly 
+updated and it is vital to cryptocurrency trading.
+
+DETAILED EXPLANATION
+--------------------
+Cryptocurrency data makes an excellent example for learning APIs because:
+
+1. CONSTANTLY UPDATED
+   • Cryptocurrency prices change every second
+   • Market data is updated in real-time
+   • Perfect for demonstrating live data access
+   • Shows how APIs provide current information
+
+2. VITAL FOR TRADING
+   • Traders need up-to-date price information
+   • Historical data is important for analysis
+   • Market trends require current data
+   • Real-world application of APIs
+
+3. RICH DATA SET
+   • Multiple data points: price, volume, market cap
+   • Time series data (prices over time)
+   • Multiple cryptocurrencies available
+   • Historical data available
+
+4. PUBLICLY AVAILABLE
+   • Many free APIs available
+   • No authentication required for basic access
+   • Easy to experiment with
+   • Great for learning
+
+5. VISUALLY INTERESTING
+   • Price charts are engaging
+   • Candlestick charts are informative
+   • Good for data visualization examples
+   • Makes learning more interesting
+
+REAL-WORLD APPLICATIONS
+-----------------------
+Cryptocurrency APIs are used for:
+• Trading applications
+• Price tracking websites
+• Portfolio management tools
+• Market analysis applications
+• Alert systems
+• Research and analysis
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: WHAT IS PYCOINGECKO?
+-----------------------------------
+
+DEFINITION
+----------
+We will use the PyCoinGecko Python client/wrapper for the CoinGecko API, 
+updated every minute by CoinGecko. We use the wrapper/client because it is 
+easy to use so you can focus on the task of collecting data.
+
+DETAILED EXPLANATION
+--------------------
+PyCoinGecko is a Python library that makes it easy to access the CoinGecko API.
+
+WHAT IS COINGECKO?
+------------------
+CoinGecko is a cryptocurrency data platform that provides:
+• Real-time cryptocurrency prices
+• Market data and statistics
+• Historical price data
+• Market capitalization information
+• Trading volume data
+• Updated every minute
+
+WHAT IS PYCOINGECKO?
+--------------------
+PyCoinGecko is a Python wrapper/client for the CoinGecko API. This means:
+
+1. IT'S A WRAPPER
+   • Wraps the CoinGecko REST API
+   • Provides a simpler Python interface
+   • Hides the complexity of HTTP requests
+   • Makes API calls easier
+
+2. IT'S A CLIENT
+   • Acts as a client to the CoinGecko API
+   • Your program uses PyCoinGecko
+   • PyCoinGecko communicates with CoinGecko API
+   • You get the data you need
+
+WHY USE A WRAPPER/CLIENT?
+-------------------------
+Instead of making raw HTTP requests, you can use PyCoinGecko:
+
+WITHOUT WRAPPER (More Complex):
+    import requests
+    
+    url = 'https://api.coingecko.com/api/v3/simple/price'
+    params = {'ids': 'bitcoin', 'vs_currencies': 'usd'}
+    response = requests.get(url, params=params)
+    data = response.json()
+
+WITH WRAPPER (Simpler):
+    from pycoingecko import CoinGeckoAPI
+    
+    cg = CoinGeckoAPI()
+    data = cg.get_price(ids='bitcoin', vs_currencies='usd')
+
+BENEFITS OF USING PYCOINGECKO:
+• Simpler code: Easier to read and write
+• Less error-prone: Handles HTTP details for you
+• Better documentation: Python-specific docs
+• Type hints: Better IDE support
+• Error handling: Built-in error handling
+
+WHAT PYCOINGECKO DOES
+---------------------
+PyCoinGecko:
+• Handles HTTP requests for you
+• Formats requests correctly
+• Parses responses automatically
+• Converts JSON to Python objects
+• Provides convenient methods
+• Handles errors gracefully
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: INSTALLING PYCOINGECKO
+-------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Before you can use PyCoinGecko, you need to install it. Installation is done 
+using pip, Python's package installer.
+
+STEP-BY-STEP INSTALLATION
+-------------------------
+STEP 1: OPEN YOUR TERMINAL/COMMAND PROMPT
+    • On Windows: Open Command Prompt or PowerShell
+    • On Mac/Linux: Open Terminal
+    • Make sure Python is installed and accessible
+
+STEP 2: INSTALL PYCOINGECKO
+    Run this command:
+    
+    pip install pycoingecko
+    
+    OR if you have both Python 2 and 3:
+    
+    pip3 install pycoingecko
+
+STEP 3: VERIFY INSTALLATION
+    You can verify it's installed by running:
+    
+    pip show pycoingecko
+    
+    This will show information about the installed package.
+
+WHAT HAPPENS DURING INSTALLATION
+---------------------------------
+When you run `pip install pycoingecko`:
+
+1. PIP CONNECTS TO PYPI
+   • PyPI (Python Package Index) is the repository of Python packages
+   • pip downloads the pycoingecko package
+
+2. DEPENDENCIES ARE INSTALLED
+   • PyCoinGecko depends on other packages (like requests)
+   • pip automatically installs these dependencies
+
+3. PACKAGE IS INSTALLED
+   • The package is installed in your Python environment
+   • You can now import it in your Python code
+
+TROUBLESHOOTING
+---------------
+If you encounter issues:
+
+ISSUE: "pip is not recognized"
+    SOLUTION: Make sure Python is installed and added to PATH
+    • Reinstall Python and check "Add Python to PATH"
+    • Or use: python -m pip install pycoingecko
+
+ISSUE: Permission errors
+    SOLUTION: Use --user flag
+    • pip install --user pycoingecko
+
+ISSUE: Need specific version
+    SOLUTION: Specify version
+    • pip install pycoingecko==3.0.0
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: IMPORTING THE LIBRARY
+------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+After installation, you need to import PyCoinGecko into your Python script 
+to use it.
+
+THE IMPORT STATEMENT
+--------------------
+    from pycoingecko import CoinGeckoAPI
+
+LINE-BY-LINE EXPLANATION:
+
+from pycoingecko
+    • This tells Python to look in the pycoingecko package
+    • pycoingecko is the name of the installed package
+    • This is the package we installed with pip
+
+import CoinGeckoAPI
+    • This imports the CoinGeckoAPI class from the package
+    • CoinGeckoAPI is the main class we'll use
+    • It provides methods to access the CoinGecko API
+
+WHAT HAPPENS WHEN YOU IMPORT
+----------------------------
+When Python executes `from pycoingecko import CoinGeckoAPI`:
+
+1. PYTHON FINDS THE PACKAGE
+   • Looks in installed packages
+   • Finds the pycoingecko package
+   • Loads the package code
+
+2. PYTHON LOADS THE CLASS
+   • Finds the CoinGeckoAPI class
+   • Makes it available in your script
+   • You can now use it
+
+3. DEPENDENCIES ARE LOADED
+   • Any dependencies (like requests) are also loaded
+   • Everything needed is made available
+
+ALTERNATIVE IMPORT STYLES
+--------------------------
+You can also import in different ways:
+
+STYLE 1: Import the whole module
+    import pycoingecko
+    cg = pycoingecko.CoinGeckoAPI()
+
+STYLE 2: Import with alias
+    from pycoingecko import CoinGeckoAPI as CG
+    cg = CG()
+
+STYLE 3: Import everything (not recommended)
+    from pycoingecko import *
+    cg = CoinGeckoAPI()
+
+BEST PRACTICE
+-------------
+The recommended style is:
+    from pycoingecko import CoinGeckoAPI
+    
+This is:
+• Clear and explicit
+• Easy to read
+• Follows Python conventions
+• Makes it obvious what you're using
+
+[END SECTION 1.4]
+================================================================================
+
+PART 2: CREATING THE CLIENT
+================================================================================
+
+SECTION 2.1: UNDERSTANDING CLIENT OBJECTS
+------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+In API terminology, a client object is an instance of a class that provides 
+methods to interact with an API. Think of it as your "remote control" for 
+accessing the API.
+
+WHAT IS A CLIENT OBJECT?
+-------------------------
+A client object is:
+• An instance of the API's client class
+• Your interface to the API
+• Provides methods to make API calls
+• Handles communication with the server
+• Manages connection details
+
+ANALOGY
+-------
+Think of a client object like a phone:
+• The phone (client object) lets you call people (make API requests)
+• You don't need to know how phones work internally
+• You just use the phone's interface (buttons, screen)
+• The phone handles the complex communication (dialing, connecting)
+• Similarly, the client object handles API communication for you
+
+WHY USE CLIENT OBJECTS?
+-----------------------
+Client objects provide:
+• Convenience: Simple methods instead of raw HTTP requests
+• Abstraction: Hide HTTP details
+• Error handling: Built-in error handling
+• Configuration: Manage API keys, endpoints, etc.
+• Reusability: Create once, use many times
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: CREATING A PYCOINGECKO CLIENT
+-------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Creating a PyCoinGecko client is simple. All we need is to install and import 
+the library, then create a client object.
+
+THE CODE
+--------
+    from pycoingecko import CoinGeckoAPI
+    
+    cg = CoinGeckoAPI()
+
+LINE-BY-LINE EXPLANATION:
+
+LINE 1: from pycoingecko import CoinGeckoAPI
+    • Imports the CoinGeckoAPI class
+    • Makes it available in your script
+    • This is the class we'll use to create our client
+
+LINE 2: cg = CoinGeckoAPI()
+    • CoinGeckoAPI() creates a new instance of the CoinGeckoAPI class
+    • This is the constructor call - it creates the client object
+    • The parentheses () call the constructor method
+    • cg is a variable that stores the client object
+    • We can now use cg to make API calls
+
+WHAT HAPPENS WHEN YOU CREATE THE CLIENT
+----------------------------------------
+When you execute `cg = CoinGeckoAPI()`:
+
+1. PYTHON CALLS THE CONSTRUCTOR
+   • The CoinGeckoAPI class's __init__ method is called
+   • This initializes the client object
+
+2. CLIENT OBJECT IS CREATED
+   • An instance of CoinGeckoAPI is created
+   • Internal setup happens (default endpoints, etc.)
+   • The object is ready to use
+
+3. OBJECT IS ASSIGNED TO VARIABLE
+   • The created object is stored in the variable 'cg'
+   • You can now use cg to call methods
+
+THE CLIENT OBJECT'S CAPABILITIES
+---------------------------------
+Once created, the client object (cg) can:
+• Make API requests to CoinGecko
+• Retrieve cryptocurrency data
+• Access historical data
+• Get market information
+• Handle errors automatically
+
+EXAMPLE OF WHAT YOU CAN DO
+---------------------------
+    cg = CoinGeckoAPI()
+    
+    # Now you can use cg to make API calls:
+    price = cg.get_price(ids='bitcoin', vs_currencies='usd')
+    # This will get Bitcoin's price in USD
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: WHAT THE CLIENT OBJECT DOES
+------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+The client object acts as an intermediary between your code and the CoinGecko 
+API. It handles all the complex details of making HTTP requests.
+
+BEHIND THE SCENES
+-----------------
+When you call a method on the client object, here's what happens:
+
+    YOUR CODE
+         |
+         | cg.get_price(...)
+         |
+    CLIENT OBJECT (cg)
+         |
+         | Constructs HTTP request
+         | Adds headers
+         | Formats parameters
+         |
+    HTTP REQUEST
+         |
+         | Sent over internet
+         |
+    COINGECKO API SERVER
+         |
+         | Processes request
+         | Returns data
+         |
+    HTTP RESPONSE
+         |
+         | Received by client object
+         |
+    CLIENT OBJECT (cg)
+         |
+         | Parses JSON
+         | Handles errors
+         | Returns Python object
+         |
+    YOUR CODE (receives result)
+
+WHAT THE CLIENT HANDLES FOR YOU
+--------------------------------
+1. HTTP REQUEST CONSTRUCTION
+   • Builds the correct URL
+   • Formats parameters correctly
+   • Adds required headers
+   • Handles encoding
+
+2. NETWORK COMMUNICATION
+   • Sends requests over the internet
+   • Handles network errors
+   • Manages timeouts
+   • Retries if needed
+
+3. RESPONSE PROCESSING
+   • Receives HTTP responses
+   • Parses JSON data
+   • Converts to Python objects
+   • Handles errors
+
+4. ERROR HANDLING
+   • Catches network errors
+   • Handles API errors
+   • Provides error messages
+   • Makes debugging easier
+
+YOU DON'T NEED TO WORRY ABOUT:
+• Constructing URLs correctly
+• Formatting HTTP requests
+• Parsing JSON responses
+• Handling network errors
+• Managing connections
+
+YOU JUST CALL METHODS:
+    cg.get_price(ids='bitcoin', vs_currencies='usd')
+
+And the client handles everything else!
+
+[END SECTION 2.3]
+================================================================================
+
+PART 3: REQUESTING DATA
+================================================================================
+
+SECTION 3.1: UNDERSTANDING THE DATA REQUEST
+--------------------------------------------
+
+DEFINITION
+----------
+Using PyCoinGecko to collect data is simple. All we need is to install and 
+import the library, then create a client object, and finally use a function to 
+request our data. In this function we are getting data on bitcoin, in US 
+dollars, for the past 30 days.
+
+DETAILED EXPLANATION
+--------------------
+Now that we have our client object, we can use it to request data. We want to 
+get Bitcoin price data for the past 30 days in US dollars.
+
+WHAT DATA WE WANT
+-----------------
+• Cryptocurrency: Bitcoin
+• Currency: US Dollars (USD)
+• Time period: Past 30 days
+• Data type: Historical price data (time series)
+
+THE FUNCTION CALL
+-----------------
+    data = cg.get_coin_market_chart_by_id(
+        id='bitcoin',
+        vs_currency='usd',
+        days=30
+    )
+
+BREAKING DOWN THE FUNCTION CALL
+--------------------------------
+cg.get_coin_market_chart_by_id()
+    • cg: Our client object
+    • . (dot): Accesses a method belonging to the client
+    • get_coin_market_chart_by_id: The method name
+    • (): Method call with parameters
+
+PARAMETERS EXPLAINED
+--------------------
+id='bitcoin'
+    • id: Parameter name
+    • 'bitcoin': The value - Bitcoin's ID on CoinGecko
+    • Specifies which cryptocurrency we want
+
+vs_currency='usd'
+    • vs_currency: Parameter name (vs = versus)
+    • 'usd': US Dollars
+    • Specifies what currency to compare against
+    • Prices will be in USD
+
+days=30
+    • days: Parameter name
+    • 30: Number of days
+    • Specifies how far back to get data
+    • Gets data for the past 30 days
+
+WHAT THIS FUNCTION DOES
+-----------------------
+This function:
+1. Makes an API request to CoinGecko
+2. Requests Bitcoin price data
+3. Gets data for the past 30 days
+4. Returns prices in USD
+5. Returns the data as a Python dictionary
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: MAKING THE API CALL
+----------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Let's see the complete code for making the API call and understand what happens.
+
+THE COMPLETE CODE
+-----------------
+    from pycoingecko import CoinGeckoAPI
+    import pandas as pd
+    
+    # Create client
+    cg = CoinGeckoAPI()
+    
+    # Request data
+    data = cg.get_coin_market_chart_by_id(
+        id='bitcoin',
+        vs_currency='usd',
+        days=30
+    )
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+LINE 1: from pycoingecko import CoinGeckoAPI
+    • Imports the CoinGeckoAPI class
+    • Makes it available for use
+
+LINE 2: import pandas as pd
+    • Imports pandas library
+    • We'll use it later to work with the data
+    • 'as pd' creates an alias for easier typing
+
+LINE 4: # Create client
+    • This is a comment
+    • Explains what the next line does
+    • Comments help document your code
+
+LINE 5: cg = CoinGeckoAPI()
+    • Creates a client object
+    • Stores it in variable 'cg'
+    • This is our interface to the API
+
+LINE 7: # Request data
+    • Another comment
+    • Explains the purpose of the next section
+
+LINES 8-11: data = cg.get_coin_market_chart_by_id(...)
+    • Calls the method to get market chart data
+    • Passes three parameters:
+      - id='bitcoin': We want Bitcoin data
+      - vs_currency='usd': Prices in US dollars
+      - days=30: Past 30 days of data
+    • The result is stored in variable 'data'
+
+WHAT HAPPENS WHEN YOU RUN THIS
+-------------------------------
+1. CLIENT OBJECT MAKES REQUEST
+   • cg constructs an HTTP request
+   • URL: https://api.coingecko.com/api/v3/coins/bitcoin/market_chart
+   • Parameters: vs_currency=usd, days=30
+
+2. REQUEST TRAVELS TO SERVER
+   • HTTP request sent over internet
+   • Reaches CoinGecko's servers
+
+3. SERVER PROCESSES REQUEST
+   • CoinGecko retrieves Bitcoin price data
+   • Gets 30 days of historical prices
+   • Formats data as JSON
+
+4. RESPONSE RETURNS
+   • Server sends JSON response
+   • Response travels back over internet
+   • Client object receives response
+
+5. DATA IS PARSED
+   • Client object parses JSON
+   • Converts to Python dictionary
+   • Stores in 'data' variable
+
+6. YOU GET THE DATA
+   • Variable 'data' now contains the response
+   • Ready to use in your code
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: UNDERSTANDING THE RESPONSE STRUCTURE
+---------------------------------------------------
+
+DEFINITION
+----------
+In this case our response is a JSON expressed as a Python dictionary of nested 
+lists including price, market cap, and total volumes, which contain the UNIX 
+timestamp and the price at that time.
+
+DETAILED EXPLANATION
+--------------------
+The response from the API is a Python dictionary containing nested lists. Let's 
+understand its structure.
+
+THE RESPONSE STRUCTURE
+-----------------------
+The response looks like this:
+
+    {
+        'prices': [[timestamp1, price1], [timestamp2, price2], ...],
+        'market_caps': [[timestamp1, market_cap1], [timestamp2, market_cap2], ...],
+        'total_volumes': [[timestamp1, volume1], [timestamp2, volume2], ...]
+    }
+
+BREAKING IT DOWN
+----------------
+The response is a dictionary with three keys:
+
+1. 'prices'
+   • Contains price data
+   • Value is a list of lists
+   • Each inner list has: [timestamp, price]
+
+2. 'market_caps'
+   • Contains market capitalization data
+   • Value is a list of lists
+   • Each inner list has: [timestamp, market_cap]
+
+3. 'total_volumes'
+   • Contains trading volume data
+   • Value is a list of lists
+   • Each inner list has: [timestamp, volume]
+
+UNDERSTANDING NESTED LISTS
+---------------------------
+A nested list is a list that contains other lists:
+
+    [
+        [1609459200000, 29374.15],  # First data point
+        [1609545600000, 32127.48],  # Second data point
+        [1609632000000, 33005.76],  # Third data point
+        ...
+    ]
+
+Each inner list represents one data point:
+• First element: UNIX timestamp (time)
+• Second element: Value (price, market cap, or volume)
+
+WHAT IS A UNIX TIMESTAMP?
+--------------------------
+A UNIX timestamp is:
+• Number of milliseconds since January 1, 1970
+• Example: 1609459200000
+• Represents a specific point in time
+• Used by computers to store dates/times
+• Not human-readable (we'll convert it later)
+
+EXAMPLE RESPONSE DATA
+---------------------
+Here's what a small portion might look like:
+
+    {
+        'prices': [
+            [1609459200000, 29374.15],
+            [1609545600000, 32127.48],
+            [1609632000000, 33005.76]
+        ],
+        'market_caps': [
+            [1609459200000, 546231000000],
+            [1609545600000, 598456000000],
+            [1609632000000, 614789000000]
+        ],
+        'total_volumes': [
+            [1609459200000, 23456789012],
+            [1609545600000, 28765432109],
+            [1609632000000, 30123456789]
+        ]
+    }
+
+WHY THIS STRUCTURE?
+-------------------
+This structure allows:
+• Multiple data types in one response
+• Time series data (values over time)
+• Efficient data transmission
+• Easy to process programmatically
+
+[END SECTION 3.3]
+================================================================================
+
+PART 4: PROCESSING THE RESPONSE
+================================================================================
+
+SECTION 4.1: UNDERSTANDING JSON RESPONSES
+-------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+The API returns data as JSON, which PyCoinGecko automatically converts to a 
+Python dictionary. We need to understand how to work with this data.
+
+JSON TO PYTHON CONVERSION
+--------------------------
+JSON (JavaScript Object Notation) is automatically converted to Python:
+
+JSON:
+    {
+        "prices": [[1609459200000, 29374.15]]
+    }
+
+Python Dictionary:
+    {
+        'prices': [[1609459200000, 29374.15]]
+    }
+
+Note: JSON uses double quotes, Python can use single quotes.
+
+ACCESSING DICTIONARY DATA
+--------------------------
+To access data in a Python dictionary, use square brackets:
+
+    data = {
+        'prices': [[1609459200000, 29374.15]]
+    }
+    
+    prices = data['prices']  # Access the 'prices' key
+    # Result: [[1609459200000, 29374.15]]
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: ACCESSING NESTED DATA
+------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Since the response contains nested data (dictionary containing lists containing 
+lists), we need to know how to access it.
+
+ACCESSING THE PRICES KEY
+------------------------
+    prices = data['prices']
+
+This gets the list of price data points.
+
+ACCESSING INDIVIDUAL DATA POINTS
+--------------------------------
+    first_point = prices[0]
+    # Result: [1609459200000, 29374.15]
+
+ACCESSING TIMESTAMP AND PRICE
+------------------------------
+    timestamp = first_point[0]  # First element: timestamp
+    price = first_point[1]       # Second element: price
+
+CHAINED ACCESS
+--------------
+You can chain the access:
+
+    first_price = data['prices'][0][1]
+    # Gets: data → 'prices' → first item → second element (price)
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: EXTRACTING PRICE DATA
+------------------------------------
+
+DEFINITION
+----------
+We are only interested in price so that is what we will select using the key 
+price.
+
+DETAILED EXPLANATION
+--------------------
+The response contains three types of data (prices, market_caps, total_volumes), 
+but we only need the price data for our example.
+
+THE CODE
+--------
+    prices = data['prices']
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+data['prices']
+    • data: The dictionary containing the API response
+    • ['prices']: Accesses the 'prices' key
+    • Returns the list of price data points
+
+WHAT WE GET
+-----------
+    prices = [
+        [1609459200000, 29374.15],
+        [1609545600000, 32127.48],
+        [1609632000000, 33005.76],
+        ...
+    ]
+
+This is a list where each element is a list containing:
+• [0]: UNIX timestamp
+• [1]: Price in USD
+
+WHY ONLY PRICES?
+----------------
+For our example (creating a candlestick chart), we only need:
+• Price data (to calculate open, high, low, close)
+• Timestamps (to know when each price occurred)
+
+We don't need:
+• Market cap (not used in candlestick charts)
+• Volume (we could use it, but it's optional)
+
+[END SECTION 4.3]
+================================================================================
+
+PART 5: CREATING A DATAFRAME
+================================================================================
+
+SECTION 5.1: CONVERTING TO DATAFRAME
+--------------------------------------
+
+DEFINITION
+----------
+To make things simple, we can convert our nested list to a DataFrame, with 
+the columns timestamp and price.
+
+DETAILED EXPLANATION
+--------------------
+Working with nested lists can be cumbersome. Converting to a pandas DataFrame 
+makes the data easier to work with.
+
+THE CODE
+--------
+    df = pd.DataFrame(prices, columns=['timestamp', 'price'])
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+pd.DataFrame()
+    • pd: The pandas library (imported as pd)
+    • DataFrame: The class for creating dataframes
+    • (): Constructor call with parameters
+
+prices
+    • First parameter: The data to convert
+    • This is our list of [timestamp, price] pairs
+    • pandas will use this to create the dataframe
+
+columns=['timestamp', 'price']
+    • Second parameter: Column names
+    • Specifies what to name each column
+    • 'timestamp' for the first column
+    • 'price' for the second column
+
+WHAT HAPPENS
+------------
+pandas takes our nested list:
+    [
+        [1609459200000, 29374.15],
+        [1609545600000, 32127.48],
+        ...
+    ]
+
+And converts it to a DataFrame:
+        timestamp      price
+    0   1609459200000  29374.15
+    1   1609545600000  32127.48
+    2   1609632000000  33005.76
+    ...
+
+BENEFITS OF USING A DATAFRAME
+------------------------------
+• Easier to work with: Clear column names
+• Built-in methods: Many useful functions
+• Better visualization: Easy to see the data
+• Data manipulation: Filter, sort, group easily
+• Integration: Works well with other tools
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: UNDERSTANDING THE DATAFRAME STRUCTURE
+---------------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Now that we have a DataFrame, let's understand its structure.
+
+THE DATAFRAME STRUCTURE
+-----------------------
+    df = pd.DataFrame(prices, columns=['timestamp', 'price'])
+
+Result:
+        timestamp      price
+    0   1609459200000  29374.15
+    1   1609545600000  32127.48
+    2   1609632000000  33005.76
+    ...
+
+COMPONENTS
+----------
+1. COLUMNS
+   • 'timestamp': Contains UNIX timestamps
+   • 'price': Contains Bitcoin prices in USD
+
+2. ROWS (INDEX)
+   • 0, 1, 2, ...: Row numbers (index)
+   • Each row represents one data point
+   • One timestamp and one price per row
+
+3. DATA TYPES
+   • timestamp: Integer (large numbers)
+   • price: Float (decimal numbers)
+
+ACCESSING DATA IN DATAFRAME
+---------------------------
+You can access data in various ways:
+
+    df['timestamp']  # Get timestamp column
+    df['price']      # Get price column
+    df.iloc[0]       # Get first row
+    df.head()        # Get first 5 rows
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: WORKING WITH THE DATA
+-----------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Now that we have a DataFrame, we can easily work with the data using pandas 
+methods.
+
+VIEWING THE DATA
+----------------
+    print(df.head())
+    # Shows first 5 rows
+
+    print(df.info())
+    # Shows data types and memory usage
+
+    print(df.describe())
+    # Shows statistical summary
+
+THE CURRENT STATE
+----------------
+At this point, we have:
+• A DataFrame with timestamp and price columns
+• Data for the past 30 days
+• But timestamps are still in UNIX format (hard to read)
+
+NEXT STEP
+---------
+We need to convert the timestamps to readable dates. That's what we'll do next!
+
+[END SECTION 5.3]
+================================================================================
+
+PART 6: WORKING WITH TIMESTAMPS
+================================================================================
+
+SECTION 6.1: UNDERSTANDING UNIX TIMESTAMPS
+-------------------------------------------
+
+DEFINITION
+----------
+It's difficult to understand the column timestamp. We will convert it to a 
+more readable format using the pandas function to_datetime.
+
+DETAILED EXPLANATION
+--------------------
+UNIX timestamps are numbers that represent time, but they're not human-readable. 
+We need to convert them to readable dates.
+
+WHAT IS A UNIX TIMESTAMP?
+--------------------------
+A UNIX timestamp is:
+• Number of milliseconds since January 1, 1970, 00:00:00 UTC
+• Example: 1609459200000
+• Used by computers to store dates/times
+• Not easy for humans to read
+
+EXAMPLE:
+    1609459200000 = January 1, 2021, 00:00:00 UTC
+
+WHY USE TIMESTAMPS?
+-------------------
+Timestamps are used because:
+• Precise: Exact point in time
+• Universal: Same everywhere (UTC)
+• Efficient: Single number, easy to store
+• Standard: Widely used in computing
+
+WHY CONVERT THEM?
+-----------------
+We convert timestamps because:
+• Human-readable: "2021-01-01" is easier than 1609459200000
+• Better for display: Users understand dates
+• Easier to work with: Can filter by date, group by day, etc.
+• Better visualization: Charts show dates, not numbers
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: CONVERTING TO READABLE DATES
+------------------------------------------
+
+DEFINITION
+----------
+Using the to_datetime function, we create readable time data, the input is the 
+timestamp column, unit of time is set to milliseconds. We append the output to 
+the new column, date.
+
+DETAILED EXPLANATION
+--------------------
+We'll use pandas' to_datetime function to convert UNIX timestamps to readable 
+dates.
+
+THE CODE
+--------
+    df['date'] = pd.to_datetime(df['timestamp'], unit='ms')
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+df['date']
+    • df: Our DataFrame
+    • ['date']: Creates a new column named 'date'
+    • This is where we'll store the converted dates
+
+= (assignment operator)
+    • Assigns the result to the new column
+    • The converted dates will be stored here
+
+pd.to_datetime()
+    • pd: pandas library
+    • to_datetime: Function that converts to datetime
+    • (): Function call with parameters
+
+df['timestamp']
+    • First parameter: The column to convert
+    • This is our timestamp column with UNIX timestamps
+    • pandas will convert each value
+
+unit='ms'
+    • Second parameter: Unit of time
+    • 'ms' means milliseconds
+    • Tells pandas the timestamps are in milliseconds
+    • Other options: 's' (seconds), 'us' (microseconds), 'ns' (nanoseconds)
+
+WHAT HAPPENS
+------------
+BEFORE:
+        timestamp      price
+    0   1609459200000  29374.15
+    1   1609545600000  32127.48
+
+AFTER:
+        timestamp      price    date
+    0   1609459200000  29374.15  2021-01-01 00:00:00
+    1   1609545600000  32127.48  2021-01-02 00:00:00
+
+THE CONVERSION PROCESS
+-----------------------
+For each timestamp:
+1. Takes the number: 1609459200000
+2. Recognizes it's milliseconds since Jan 1, 1970
+3. Calculates the actual date and time
+4. Converts to datetime format
+5. Stores in the 'date' column
+
+RESULT
+------
+Now we have:
+• 'timestamp': Original UNIX timestamp (still there)
+• 'price': Bitcoin price
+• 'date': Readable date/time (new column)
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: USING PANDAS TO_DATETIME
+--------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Let's understand more about the to_datetime function and how it works.
+
+WHAT TO_DATETIME DOES
+---------------------
+pd.to_datetime() converts various date/time formats to pandas datetime objects:
+• UNIX timestamps (like we have)
+• Date strings ("2021-01-01")
+• Other date formats
+
+PARAMETERS
+----------
+pd.to_datetime(arg, unit=None, ...)
+
+arg
+    • The data to convert
+    • Can be a Series, list, or single value
+    • In our case: df['timestamp'] (a Series)
+
+unit
+    • The unit of the timestamp
+    • 'ms' = milliseconds
+    • 's' = seconds
+    • 'us' = microseconds
+    • 'ns' = nanoseconds
+
+WHY SPECIFY UNIT='ms'?
+---------------------
+Because our timestamps are in milliseconds:
+• 1609459200000 milliseconds
+• If we used unit='s', it would interpret as seconds
+• That would give us the wrong date!
+
+EXAMPLE OF WRONG UNIT
+---------------------
+    # WRONG - treating as seconds
+    pd.to_datetime(1609459200000, unit='s')
+    # Result: 1970-01-19 14:57:40 (WRONG!)
+
+    # CORRECT - treating as milliseconds
+    pd.to_datetime(1609459200000, unit='ms')
+    # Result: 2021-01-01 00:00:00 (CORRECT!)
+
+THE RESULT TYPE
+---------------
+The result is a pandas datetime Series:
+• Each value is a datetime object
+• Can be used for date operations
+• Can be formatted for display
+• Can be used for filtering/grouping by date
+
+[END SECTION 6.3]
+================================================================================
+
+PART 7: CREATING CANDLESTICK DATA
+================================================================================
+
+SECTION 7.1: UNDERSTANDING CANDLESTICK CHARTS
+-----------------------------------------------
+
+DEFINITION
+----------
+Now we want to create a candlestick plot. To get the data for the daily 
+candlesticks we will group by the date to find the minimum, maximum, first, 
+and last price of each day.
+
+DETAILED EXPLANATION
+--------------------
+A candlestick chart shows price movements over time. Each "candlestick" 
+represents one time period (in our case, one day) and shows four prices.
+
+WHAT IS A CANDLESTICK CHART?
+----------------------------
+A candlestick chart displays:
+• OPEN: Price at the start of the period
+• HIGH: Highest price during the period
+• LOW: Lowest price during the period
+• CLOSE: Price at the end of the period
+
+VISUAL REPRESENTATION:
+    |
+    |  ┌─┐  ← High
+    |  │ │
+    |  │ │  ← Body (open to close)
+    |  └─┘
+    |  └─┘  ← Low
+    |
+
+WHY USE CANDLESTICK CHARTS?
+---------------------------
+• Shows price range: High and low for the day
+• Shows direction: Whether price went up or down
+• Easy to read: Visual representation
+• Standard format: Widely used in finance
+• Shows volatility: Height of candle shows price movement
+
+WHAT WE NEED TO DO
+------------------
+Our data has prices at various times throughout each day. To create daily 
+candlesticks, we need to:
+1. Group data by date (all prices from the same day together)
+2. Find the first price of each day (OPEN)
+3. Find the highest price of each day (HIGH)
+4. Find the lowest price of each day (LOW)
+5. Find the last price of each day (CLOSE)
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: GROUPING DATA BY DATE
+-----------------------------------
+
+DETAILED EXPLANATION
+--------------------
+We need to group our data by date so we can calculate OHLC (Open, High, Low, 
+Close) values for each day.
+
+THE CODE
+--------
+    daily_data = df.groupby(df['date'].dt.date).agg({
+        'price': ['min', 'max', 'first', 'last']
+    })
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+df.groupby()
+    • df: Our DataFrame
+    • groupby: Groups rows by a column value
+    • Groups rows that have the same value in the specified column
+
+df['date'].dt.date
+    • df['date']: The date column
+    • .dt: Accessor for datetime operations
+    • .date: Extracts just the date part (removes time)
+    • This groups by date, ignoring the time component
+
+.agg()
+    • agg: Aggregate function
+    • Applies functions to each group
+    • Calculates values for each group
+
+{'price': ['min', 'max', 'first', 'last']}
+    • Dictionary specifying what to calculate
+    • 'price': The column to aggregate
+    • ['min', 'max', 'first', 'last']: Functions to apply
+      - min: Minimum price (LOW)
+      - max: Maximum price (HIGH)
+      - first: First price (OPEN)
+      - last: Last price (CLOSE)
+
+WHAT HAPPENS
+------------
+BEFORE (grouped by date):
+    date                price
+    2021-01-01 00:00    29374.15
+    2021-01-01 01:00    29380.20
+    2021-01-01 02:00    29365.10
+    ...
+    2021-01-02 00:00    32127.48
+    2021-01-02 01:00    32135.60
+    ...
+
+AFTER (aggregated by day):
+    date        price
+                min    max    first   last
+    2021-01-01  29365  29420  29374   29415
+    2021-01-02  32120  32180  32127   32175
+    ...
+
+RESULT STRUCTURE
+-----------------
+The result has a MultiIndex (hierarchical columns):
+• First level: 'price'
+• Second level: 'min', 'max', 'first', 'last'
+
+We'll need to flatten this structure for easier use.
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: CALCULATING OHLC VALUES
+------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+After grouping, we need to clean up the structure and rename columns to 
+standard OHLC names.
+
+CLEANING UP THE RESULT
+----------------------
+The grouped result has a MultiIndex structure. We need to flatten it:
+
+    daily_data.columns = ['low', 'high', 'open', 'close']
+    daily_data = daily_data.reset_index()
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+daily_data.columns = ['low', 'min', 'high', 'open', 'close']
+    • daily_data: Our grouped DataFrame
+    • .columns: The column names
+    • = ['low', 'high', 'open', 'close']: New column names
+    • Renames columns to standard OHLC names
+    • Note: Order matches ['min', 'max', 'first', 'last']
+
+daily_data = daily_data.reset_index()
+    • reset_index: Converts the grouped index to a column
+    • Makes 'date' a regular column instead of index
+    • Easier to work with
+
+FINAL STRUCTURE
+---------------
+After cleaning:
+        date        open    high    low     close
+    0   2021-01-01  29374   29420   29365   29415
+    1   2021-01-02  32127   32180   32120   32175
+    ...
+
+NOW WE HAVE:
+• date: The date for each candlestick
+• open: Opening price
+• high: Highest price
+• low: Lowest price
+• close: Closing price
+
+This is exactly what we need for a candlestick chart!
+
+[END SECTION 7.3]
+================================================================================
+
+PART 8: VISUALIZATION
+================================================================================
+
+SECTION 8.1: INTRODUCTION TO PLOTLY
+------------------------------------
+
+DEFINITION
+----------
+Finally we will use plotly to create the candlestick chart and plot it.
+
+DETAILED EXPLANATION
+--------------------
+Plotly is a Python library for creating interactive visualizations. We'll use 
+it to create our candlestick chart.
+
+WHAT IS PLOTLY?
+---------------
+Plotly is:
+• A library for creating interactive charts
+• Supports many chart types (line, bar, candlestick, etc.)
+• Creates HTML files with interactive charts
+• Can be used in Jupyter notebooks or standalone
+
+WHY USE PLOTLY?
+---------------
+• Interactive: Users can zoom, pan, hover
+• Professional: Publication-quality charts
+• Easy to use: Simple API
+• Many chart types: Supports candlestick charts
+• Exportable: Can save as HTML or images
+
+INSTALLING PLOTLY
+-----------------
+    pip install plotly
+
+IMPORTING PLOTLY
+----------------
+    import plotly.graph_objects as go
+
+[END SECTION 8.1]
+================================================================================
+
+SECTION 8.2: CREATING THE CANDLESTICK CHART
+--------------------------------------------
+
+DETAILED EXPLANATION
+--------------------
+Now we'll create the actual candlestick chart using plotly.
+
+THE CODE
+--------
+    import plotly.graph_objects as go
+    
+    fig = go.Figure(data=[go.Candlestick(
+        x=daily_data['date'],
+        open=daily_data['open'],
+        high=daily_data['high'],
+        low=daily_data['low'],
+        close=daily_data['close']
+    )])
+    
+    fig.update_layout(
+        title='Bitcoin Price (Last 30 Days)',
+        xaxis_title='Date',
+        yaxis_title='Price (USD)'
+    )
+    
+    fig.write_html('bitcoin_candlestick.html')
+
+LINE-BY-LINE EXPLANATION
+-------------------------
+LINE 1: import plotly.graph_objects as go
+    • Imports plotly's graph_objects module
+    • 'as go' creates an alias for shorter code
+    • go contains chart creation functions
+
+LINE 3: fig = go.Figure(...)
+    • go.Figure: Creates a new figure (chart)
+    • fig: Variable storing the figure object
+    • This is our chart container
+
+LINE 4: data=[go.Candlestick(...)]
+    • data: Parameter specifying chart data
+    • [ ]: List containing chart elements
+    • go.Candlestick: Creates a candlestick chart
+    • This defines what type of chart to create
+
+LINES 5-9: Candlestick parameters
+    • x=daily_data['date']: X-axis values (dates)
+    • open=daily_data['open']: Opening prices
+    • high=daily_data['high']: Highest prices
+    • low=daily_data['low']: Lowest prices
+    • close=daily_data['close']: Closing prices
+
+LINE 11: fig.update_layout(...)
+    • update_layout: Modifies chart appearance
+    • Adds title and axis labels
+    • Customizes the chart
+
+LINES 12-14: Layout parameters
+    • title: Chart title
+    • xaxis_title: X-axis label
+    • yaxis_title: Y-axis label
+
+LINE 16: fig.write_html('bitcoin_candlestick.html')
+    • write_html: Saves chart as HTML file
+    • 'bitcoin_candlestick.html': Filename
+    • Creates an interactive HTML file
+
+WHAT HAPPENS
+------------
+1. Chart is created with candlestick data
+2. Layout is customized with title and labels
+3. Chart is saved as HTML file
+4. You can open the HTML file in a browser
+5. Interactive chart is displayed
+
+[END SECTION 8.2]
+================================================================================
+
+SECTION 8.3: DISPLAYING THE CHART
+-----------------------------------
+
+DEFINITION
+----------
+Now we can view the candlestick chart by opening the HTML file and clicking 
+Trust HTML in the top left of the tab. It should look something like this.
+
+DETAILED EXPLANATION
+--------------------
+After creating the HTML file, you can view the chart in a web browser.
+
+VIEWING THE CHART
+-----------------
+1. FIND THE HTML FILE
+   • Look for 'bitcoin_candlestick.html' in your project folder
+   • This is the file created by fig.write_html()
+
+2. OPEN IN BROWSER
+   • Double-click the file (opens in default browser)
+   • OR right-click → Open with → Browser
+   • OR drag and drop into browser
+
+3. TRUST THE HTML (if needed)
+   • Some browsers may show a security warning
+   • Click "Trust HTML" or "Load Unsafe Scripts"
+   • This allows the interactive features to work
+
+4. INTERACT WITH THE CHART
+   • Hover over candlesticks to see values
+   • Zoom in/out with mouse wheel
+   • Pan by clicking and dragging
+   • Use toolbar for more options
+
+WHAT YOU'LL SEE
+---------------
+• X-axis: Dates (last 30 days)
+• Y-axis: Bitcoin price in USD
+• Candlesticks: Each represents one day
+  - Green/white: Price went up (close > open)
+  - Red/black: Price went down (close < open)
+  - Top of line: Highest price (high)
+  - Bottom of line: Lowest price (low)
+  - Top of body: Higher of open/close
+  - Bottom of body: Lower of open/close
+
+INTERACTIVE FEATURES
+--------------------
+• Hover: See exact values for each candlestick
+• Zoom: Click and drag to zoom in
+• Pan: Click and drag to move around
+• Reset: Double-click to reset zoom
+• Download: Save as PNG image
+
+[END SECTION 8.3]
+================================================================================
+
+PART 9: COMPLETE CODE EXAMPLE
+================================================================================
+
+SECTION 9.1: FULL CODE WITH LINE-BY-LINE EXPLANATIONS
+-------------------------------------------------------
+
+COMPLETE CODE
+-------------
+Here's the complete code with detailed explanations:
+
+    # ============================================================================
+    # IMPORT STATEMENTS
+    # ============================================================================
+    
+    from pycoingecko import CoinGeckoAPI
+    import pandas as pd
+    import plotly.graph_objects as go
+    
+    # LINE 1: from pycoingecko import CoinGeckoAPI
+    #   • Imports the CoinGeckoAPI class from pycoingecko package
+    #   • This class provides methods to access CoinGecko API
+    
+    # LINE 2: import pandas as pd
+    #   • Imports pandas library for data manipulation
+    #   • 'as pd' creates an alias for easier typing
+    
+    # LINE 3: import plotly.graph_objects as go
+    #   • Imports plotly for creating charts
+    #   • 'as go' creates an alias for shorter code
+    
+    # ============================================================================
+    # CREATE CLIENT OBJECT
+    # ============================================================================
+    
+    cg = CoinGeckoAPI()
+    
+    # LINE: cg = CoinGeckoAPI()
+    #   • Creates an instance of CoinGeckoAPI
+    #   • This is our client object for making API calls
+    #   • Stores it in variable 'cg' for later use
+    
+    # ============================================================================
+    # REQUEST DATA FROM API
+    # ============================================================================
+    
+    data = cg.get_coin_market_chart_by_id(
+        id='bitcoin',
+        vs_currency='usd',
+        days=30
+    )
+    
+    # LINE: data = cg.get_coin_market_chart_by_id(...)
+    #   • Calls the method to get market chart data
+    #   • id='bitcoin': We want Bitcoin data
+    #   • vs_currency='usd': Prices in US dollars
+    #   • days=30: Past 30 days of data
+    #   • Result stored in 'data' variable
+    #   • Returns a dictionary with 'prices', 'market_caps', 'total_volumes'
+    
+    # ============================================================================
+    # EXTRACT PRICE DATA
+    # ============================================================================
+    
+    prices = data['prices']
+    
+    # LINE: prices = data['prices']
+    #   • Accesses the 'prices' key from the response dictionary
+    #   • 'prices' contains list of [timestamp, price] pairs
+    #   • We only need price data for our chart
+    
+    # ============================================================================
+    # CONVERT TO DATAFRAME
+    # ============================================================================
+    
+    df = pd.DataFrame(prices, columns=['timestamp', 'price'])
+    
+    # LINE: df = pd.DataFrame(prices, columns=['timestamp', 'price'])
+    #   • Converts nested list to pandas DataFrame
+    #   • prices: The data (list of [timestamp, price] pairs)
+    #   • columns=['timestamp', 'price']: Names for the columns
+    #   • Result: DataFrame with timestamp and price columns
+    
+    # ============================================================================
+    # CONVERT TIMESTAMPS TO READABLE DATES
+    # ============================================================================
+    
+    df['date'] = pd.to_datetime(df['timestamp'], unit='ms')
+    
+    # LINE: df['date'] = pd.to_datetime(df['timestamp'], unit='ms')
+    #   • Creates new column 'date' with readable dates
+    #   • pd.to_datetime: Converts timestamps to datetime
+    #   • df['timestamp']: The column to convert
+    #   • unit='ms': Timestamps are in milliseconds
+    #   • Result: New 'date' column with readable dates
+    
+    # ============================================================================
+    # GROUP BY DATE AND CALCULATE OHLC
+    # ============================================================================
+    
+    daily_data = df.groupby(df['date'].dt.date).agg({
+        'price': ['min', 'max', 'first', 'last']
+    })
+    
+    # LINE: daily_data = df.groupby(df['date'].dt.date).agg({...})
+    #   • Groups data by date (ignoring time component)
+    #   • df['date'].dt.date: Extracts just the date part
+    #   • .agg(): Applies aggregation functions
+    #   • 'price': ['min', 'max', 'first', 'last']: Calculates:
+    #     - min: Minimum price (LOW)
+    #     - max: Maximum price (HIGH)
+    #     - first: First price (OPEN)
+    #     - last: Last price (CLOSE)
+    
+    # ============================================================================
+    # CLEAN UP COLUMN NAMES
+    # ============================================================================
+    
+    daily_data.columns = ['low', 'high', 'open', 'close']
+    daily_data = daily_data.reset_index()
+    
+    # LINE 1: daily_data.columns = ['low', 'high', 'open', 'close']
+    #   • Renames columns to standard OHLC names
+    #   • Order matches: min→low, max→high, first→open, last→close
+    
+    # LINE 2: daily_data = daily_data.reset_index()
+    #   • Converts the grouped index (date) to a regular column
+    #   • Makes 'date' accessible as a column
+    
+    # ============================================================================
+    # CREATE CANDLESTICK CHART
+    # ============================================================================
+    
+    fig = go.Figure(data=[go.Candlestick(
+        x=daily_data['date'],
+        open=daily_data['open'],
+        high=daily_data['high'],
+        low=daily_data['low'],
+        close=daily_data['close']
+    )])
+    
+    # LINE: fig = go.Figure(data=[go.Candlestick(...)])
+    #   • Creates a new plotly figure
+    #   • go.Candlestick: Specifies candlestick chart type
+    #   • x=daily_data['date']: X-axis (dates)
+    #   • open/high/low/close: Y-axis values (prices)
+    #   • Stores figure in 'fig' variable
+    
+    # ============================================================================
+    # CUSTOMIZE CHART LAYOUT
+    # ============================================================================
+    
+    fig.update_layout(
+        title='Bitcoin Price (Last 30 Days)',
+        xaxis_title='Date',
+        yaxis_title='Price (USD)'
+    )
+    
+    # LINE: fig.update_layout(...)
+    #   • Updates the chart's appearance
+    #   • title: Chart title
+    #   • xaxis_title: X-axis label
+    #   • yaxis_title: Y-axis label
+    
+    # ============================================================================
+    # SAVE CHART AS HTML FILE
+    # ============================================================================
+    
+    fig.write_html('bitcoin_candlestick.html')
+    
+    # LINE: fig.write_html('bitcoin_candlestick.html')
+    #   • Saves the chart as an HTML file
+    #   • 'bitcoin_candlestick.html': Filename
+    #   • Creates interactive HTML file
+    #   • Can be opened in any web browser
+
+[END SECTION 9.1]
+================================================================================
+
+SECTION 9.2: RUNNING THE EXAMPLE
+--------------------------------
+
+STEP-BY-STEP INSTRUCTIONS
+--------------------------
+1. INSTALL REQUIRED PACKAGES
+   pip install pycoingecko pandas plotly
+
+2. CREATE A PYTHON FILE
+   • Create a new file: bitcoin_chart.py
+   • Copy the complete code into it
+
+3. RUN THE SCRIPT
+   python bitcoin_chart.py
+
+4. OPEN THE HTML FILE
+   • Find bitcoin_candlestick.html in your folder
+   • Open it in a web browser
+   • View your interactive candlestick chart!
+
+EXPECTED OUTPUT
+---------------
+• Script runs without errors
+• HTML file is created
+• Chart displays Bitcoin price data for last 30 days
+• Interactive features work (hover, zoom, pan)
+
+[END SECTION 9.2]
+================================================================================
+
+SECTION 9.3: UNDERSTANDING THE OUTPUT
+---------------------------------------
+
+WHAT YOU GET
+------------
+1. DATAFRAME WITH PRICE DATA
+   • Timestamps converted to dates
+   • Price data for 30 days
+   • Ready for analysis
+
+2. DAILY OHLC DATA
+   • Open, High, Low, Close for each day
+   • Grouped and aggregated properly
+   • Perfect for candlestick charts
+
+3. INTERACTIVE CHART
+   • Visual representation of price movements
+   • Shows trends and patterns
+   • Professional-looking visualization
+
+WHAT YOU LEARNED
+----------------
+• How to use API libraries (PyCoinGecko)
+• How to make API requests
+• How to process JSON responses
+• How to work with DataFrames
+• How to convert timestamps
+• How to group and aggregate data
+• How to create visualizations
+• Complete API workflow from start to finish
+
+[END SECTION 9.3]
+================================================================================
+
+================================================================================
+END OF PART 3
+================================================================================
+
+This concludes Part 3 and the complete Application Programming Interfaces 
+comprehensive study guide. You have learned:
+
+✓ Why cryptocurrency data is excellent for API examples
+✓ What PyCoinGecko is and why we use it
+✓ How to install and import PyCoinGecko
+✓ How to create client objects
+✓ How to request data from APIs
+✓ How to understand and process JSON responses
+✓ How to extract nested data from dictionaries
+✓ How to convert data to DataFrames
+✓ How to work with UNIX timestamps
+✓ How to convert timestamps to readable dates
+✓ How to group data by date
+✓ How to calculate OHLC (Open, High, Low, Close) values
+✓ How to create candlestick charts with plotly
+✓ How to save and view interactive charts
+✓ Complete line-by-line understanding of a real API example
+
+CONGRATULATIONS!
+----------------
+You now have a comprehensive understanding of:
+• What APIs are and how they work
+• API libraries and how to use them
+• REST APIs and internet-based communication
+• Request and response patterns
+• Real-world API usage with complete code examples
+• Data processing and visualization
+
+You're ready to work with APIs in your own projects!
+
+================================================================================

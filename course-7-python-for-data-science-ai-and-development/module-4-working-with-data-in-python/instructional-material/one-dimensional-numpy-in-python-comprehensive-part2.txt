@@ -1,0 +1,1519 @@
+================================================================================
+ONE-DIMENSIONAL NUMPY IN PYTHON
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This is Part 2 of the comprehensive guide to One-Dimensional NumPy in Python. 
+In this part, we'll explore the powerful operations that make NumPy essential 
+for data science. You'll learn about vector operations, element-wise 
+operations, and broadcasting - concepts that enable efficient numerical 
+computing.
+
+PREREQUISITES
+-------------
+Before starting Part 2, make sure you understand:
+• How to create NumPy arrays (from Part 1)
+• Basic array attributes (dtype, size, shape)
+• Indexing and slicing (from Part 1)
+
+If you haven't completed Part 1, please review it first.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+This part covers vector operations and broadcasting:
+
+PART 1: INTRODUCTION TO NUMPY OPERATIONS
+  SECTION 1.1: WHY NUMPY OPERATIONS ARE POWERFUL
+  SECTION 1.2: VECTORIZED OPERATIONS VS LOOPS
+  SECTION 1.3: UNDERSTANDING EUCLIDEAN VECTORS
+
+PART 2: VECTOR ADDITION
+  SECTION 2.1: WHAT IS VECTOR ADDITION?
+  SECTION 2.2: VISUALIZING VECTOR ADDITION
+  SECTION 2.3: VECTOR ADDITION WITH PYTHON LISTS
+  SECTION 2.4: VECTOR ADDITION WITH NUMPY
+  SECTION 2.5: PERFORMANCE COMPARISON
+
+PART 3: VECTOR SUBTRACTION
+  SECTION 3.1: WHAT IS VECTOR SUBTRACTION?
+  SECTION 3.2: VECTOR SUBTRACTION WITH NUMPY
+  SECTION 3.3: VISUALIZING VECTOR SUBTRACTION
+
+PART 4: SCALAR MULTIPLICATION
+  SECTION 4.1: WHAT IS SCALAR MULTIPLICATION?
+  SECTION 4.2: SCALAR MULTIPLICATION WITH NUMPY
+  SECTION 4.3: VISUALIZING SCALAR MULTIPLICATION
+  SECTION 4.4: PERFORMANCE COMPARISON
+
+PART 5: HADAMARD PRODUCT
+  SECTION 5.1: WHAT IS HADAMARD PRODUCT?
+  SECTION 5.2: HADAMARD PRODUCT WITH NUMPY
+  SECTION 5.3: HADAMARD PRODUCT VS DOT PRODUCT
+
+PART 6: DOT PRODUCT
+  SECTION 6.1: WHAT IS DOT PRODUCT?
+  SECTION 6.2: CALCULATING DOT PRODUCT
+  SECTION 6.3: DOT PRODUCT WITH NUMPY
+  SECTION 6.4: UNDERSTANDING SIMILARITY
+
+PART 7: BROADCASTING
+  SECTION 7.1: WHAT IS BROADCASTING?
+  SECTION 7.2: BROADCASTING EXAMPLES
+  SECTION 7.3: WHEN BROADCASTING OCCURS
+
+NOTE: Part 3 of this guide covers:
+  • Universal functions (ufuncs)
+  • Mathematical functions (sine, cosine, etc.)
+  • The linspace function
+  • Plotting with matplotlib
+  • Summary and quick reference guide
+
+================================================================================
+PART 1: INTRODUCTION TO NUMPY OPERATIONS
+================================================================================
+
+SECTION 1.1: WHY NUMPY OPERATIONS ARE POWERFUL
+----------------------------------------------
+
+THE EFFICIENCY ADVANTAGE
+------------------------
+NumPy makes it easier to do many operations that are commonly performed in 
+data science. These same operations are usually computationally faster and 
+require less memory in NumPy compared to regular Python.
+
+KEY BENEFITS
+------------
+1. SIMPLICITY: Complex operations become simple one-liners
+2. SPEED: Operations are executed in optimized C code
+3. MEMORY EFFICIENCY: Less memory overhead than Python lists
+4. READABILITY: Code is more concise and easier to understand
+5. VECTORIZATION: Operations on entire arrays at once
+
+REAL-WORLD IMPACT
+-----------------
+Consider these scenarios:
+• Adding 1 million numbers: NumPy can be 10-100x faster
+• Matrix operations: Essential for machine learning
+• Data preprocessing: Common in data science workflows
+• Scientific computing: Used in physics, engineering, finance
+
+THE FUNDAMENTAL DIFFERENCE
+---------------------------
+WITH PYTHON LISTS:
+  • Operations require loops
+  • Each operation has Python overhead
+  • Slower for large datasets
+  • More code to write
+
+WITH NUMPY ARRAYS:
+  • Operations are vectorized (entire array at once)
+  • Executed in optimized C code
+  • Much faster for large datasets
+  • Less code, more readable
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: VECTORIZED OPERATIONS VS LOOPS
+---------------------------------------------
+
+WHAT ARE VECTORIZED OPERATIONS?
+--------------------------------
+Vectorized operations are operations that are applied to entire arrays at 
+once, rather than looping through individual elements. NumPy performs these 
+operations in optimized, compiled code (usually C or Fortran), making them 
+much faster than Python loops.
+
+PYTHON LOOP APPROACH
+--------------------
+To add two Python lists element-wise, you need a loop:
+
+  list1 = [1, 2, 3]
+  list2 = [4, 5, 6]
+  result = []
+  for i in range(len(list1)):
+      result.append(list1[i] + list2[i])
+  # Result: [5, 7, 9]
+
+DETAILED EXPLANATION OF THE LOOP:
+----------------------------------
+LINE 1: list1 = [1, 2, 3]
+  • Creates first Python list with three elements
+
+LINE 2: list2 = [4, 5, 6]
+  • Creates second Python list with three elements
+
+LINE 3: result = []
+  • Creates empty list to store results
+
+LINE 4: for i in range(len(list1)):
+  • "len(list1)" returns 3 (length of list1)
+  • "range(3)" creates sequence [0, 1, 2]
+  • Loop iterates 3 times with i = 0, 1, 2
+
+LINE 5: result.append(list1[i] + list2[i])
+  • "list1[i]" gets element at index i from list1
+  • "list2[i]" gets element at index i from list2
+  • Adds them together
+  • ".append()" adds the sum to result list
+  • First iteration: list1[0] + list2[0] = 1 + 4 = 5
+  • Second iteration: list1[1] + list2[1] = 2 + 5 = 7
+  • Third iteration: list1[2] + list2[2] = 3 + 6 = 9
+
+PROBLEMS WITH THIS APPROACH:
+-----------------------------
+• Requires multiple lines of code
+• Slower (Python loop overhead)
+• More error-prone (easy to make indexing mistakes)
+• Not intuitive for mathematical operations
+
+NUMPY VECTORIZED APPROACH
+-------------------------
+With NumPy, the same operation is a simple one-liner:
+
+  import numpy as np
+  arr1 = np.array([1, 2, 3])
+  arr2 = np.array([4, 5, 6])
+  result = arr1 + arr2
+  # Result: array([5, 7, 9])
+
+DETAILED EXPLANATION:
+---------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: arr1 = np.array([1, 2, 3])
+  • Creates first NumPy array
+
+LINE 3: arr2 = np.array([4, 5, 6])
+  • Creates second NumPy array
+
+LINE 4: result = arr1 + arr2
+  • "+" operator is overloaded for NumPy arrays
+  • NumPy automatically performs element-wise addition
+  • No loop needed - entire operation happens in C code
+  • Result: array([5, 7, 9])
+
+ADVANTAGES OF VECTORIZATION:
+----------------------------
+• One line instead of multiple
+• Much faster execution
+• More readable and intuitive
+• Less chance of errors
+• Works with arrays of any size
+
+PERFORMANCE COMPARISON EXAMPLE:
+--------------------------------
+For arrays with 1 million elements:
+
+PYTHON LOOP:
+  import time
+  list1 = list(range(1000000))
+  list2 = list(range(1000000, 2000000))
+  
+  start = time.time()
+  result = []
+  for i in range(len(list1)):
+      result.append(list1[i] + list2[i])
+  end = time.time()
+  print(f"Time: {end - start} seconds")
+  # Typical time: ~0.1-0.2 seconds
+
+NUMPY VECTORIZED:
+  import numpy as np
+  import time
+  arr1 = np.array(range(1000000))
+  arr2 = np.array(range(1000000, 2000000))
+  
+  start = time.time()
+  result = arr1 + arr2
+  end = time.time()
+  print(f"Time: {end - start} seconds")
+  # Typical time: ~0.001-0.01 seconds (10-100x faster!)
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: UNDERSTANDING EUCLIDEAN VECTORS
+----------------------------------------------
+
+WHAT ARE EUCLIDEAN VECTORS?
+----------------------------
+We will look at many of the operations in the context of Euclidean vectors to 
+make things more interesting. A Euclidean vector (or simply "vector") is a 
+mathematical object that has both magnitude (length) and direction.
+
+VECTORS IN DATA SCIENCE
+-----------------------
+Vectors are fundamental in data science because:
+• Data points can be represented as vectors
+• Features in machine learning are vectors
+• Images are represented as vectors of pixels
+• Text can be converted to vectors (word embeddings)
+• Many algorithms work with vectors
+
+1D VECTORS AS NUMPY ARRAYS
+---------------------------
+A 1D vector can be represented as a NumPy array:
+
+  import numpy as np
+  vector_u = np.array([1, 0])  # 2D vector (2 components)
+  vector_v = np.array([0, 1])  # 2D vector (2 components)
+
+VISUAL REPRESENTATION
+---------------------
+A 2D vector [1, 0] can be visualized as an arrow:
+• Starting at origin (0, 0)
+• Pointing 1 unit in the x-direction (horizontal)
+• Pointing 0 units in the y-direction (vertical)
+
+Similarly, [0, 1]:
+• Starting at origin (0, 0)
+• Pointing 0 units in the x-direction
+• Pointing 1 unit in the y-direction (vertical)
+
+WHY USE VECTORS FOR EXPLANATION?
+---------------------------------
+Using vectors helps us:
+• Understand the geometric meaning of operations
+• Visualize what's happening mathematically
+• Connect abstract operations to real-world concepts
+• Build intuition for higher-dimensional data
+
+[END SECTION 1.3]
+================================================================================
+
+PART 2: VECTOR ADDITION
+================================================================================
+
+SECTION 2.1: WHAT IS VECTOR ADDITION?
+--------------------------------------
+
+DEFINITION
+----------
+Vector addition is a widely used operation in data science. When you add two 
+vectors, you create a new vector where each component is the sum of the 
+corresponding components from the original vectors.
+
+BASIC CONCEPT
+-------------
+Consider the vector u with two elements. The elements are distinguished by 
+different colors to help visualize. Similarly, consider the vector v with two 
+components. In vector addition, we create a new vector, in this case z. The 
+first component of z is the addition of the first component of vectors u and 
+v. Similarly, the second component is the sum of the second components of u 
+and v.
+
+MATHEMATICAL DEFINITION
+-----------------------
+For two vectors u and v:
+  u = [u₁, u₂]
+  v = [v₁, v₂]
+  
+  z = u + v = [u₁ + v₁, u₂ + v₂]
+
+The new vector z is now a linear combination of the vectors u and v.
+
+EXAMPLE
+-------
+  import numpy as np
+  u = np.array([1, 0])  # Vector u
+  v = np.array([0, 1])  # Vector v
+  z = u + v             # Vector addition
+  # Result: array([1, 1])
+  
+  # First component: 1 + 0 = 1
+  # Second component: 0 + 1 = 1
+
+DETAILED BREAKDOWN
+------------------
+• u = [1, 0]: First vector with components 1 and 0
+• v = [0, 1]: Second vector with components 0 and 1
+• z = u + v: Add corresponding components
+  - First component: u[0] + v[0] = 1 + 0 = 1
+  - Second component: u[1] + v[1] = 0 + 1 = 1
+• Result: z = [1, 1]
+
+REAL-WORLD APPLICATIONS
+------------------------
+Vector addition is used in:
+• Physics: Combining forces or velocities
+• Computer graphics: Moving objects
+• Machine learning: Updating model parameters
+• Data analysis: Combining features
+• Signal processing: Adding signals
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: VISUALIZING VECTOR ADDITION
+-----------------------------------------
+
+GEOMETRIC INTERPRETATION
+-------------------------
+Representing vector addition with line segments or arrows is helpful for 
+understanding what's happening geometrically.
+
+VISUALIZING THE FIRST VECTOR (u)
+---------------------------------
+The first vector is represented in red. The vector will point in the direction 
+of the two components. The first component of the vector is 1. As a result, 
+the arrow is offset one unit from the origin in the horizontal direction. The 
+second component is 0. We represent this component in the vertical direction. 
+As this component is 0, the vector does not point in the vertical direction.
+
+VISUAL BREAKDOWN OF VECTOR u = [1, 0]:
+--------------------------------------
+  Y-axis
+    ↑
+    |     u (red arrow)
+    |     ───→
+    |     (points right, 1 unit)
+    |
+    └─────────────────→ X-axis
+  Origin
+
+• Starting point: Origin (0, 0)
+• Horizontal component: 1 (moves 1 unit right)
+• Vertical component: 0 (no vertical movement)
+• Result: Arrow pointing right (east)
+
+VISUALIZING THE SECOND VECTOR (v)
+----------------------------------
+We represent the second vector in blue. The first component is 0. Therefore, 
+the arrow does not point in the horizontal direction. The second component is 
+1. As a result, the vector points in the vertical direction one unit.
+
+VISUAL BREAKDOWN OF VECTOR v = [0, 1]:
+--------------------------------------
+  Y-axis
+    ↑
+    |     v (blue arrow)
+    |     │
+    |     │ (points up, 1 unit)
+    |     │
+    └─────────────────→ X-axis
+  Origin
+
+• Starting point: Origin (0, 0)
+• Horizontal component: 0 (no horizontal movement)
+• Vertical component: 1 (moves 1 unit up)
+• Result: Arrow pointing up (north)
+
+VISUALIZING THE SUM (z = u + v)
+--------------------------------
+When we add the vector u and v, we get the new vector z. We add the first 
+component. This corresponds to the horizontal direction. We also add the 
+second component.
+
+TIP-TO-TAIL METHOD
+------------------
+It's helpful to use the tip-to-tail method when adding vectors, placing the 
+tail of vector v on the tip of vector u. The new vector z is constructed by 
+connecting the base of the first vector u with the tail of the second v.
+
+VISUAL REPRESENTATION:
+----------------------
+  Y-axis
+    ↑
+    |     z (green arrow)
+    |     ╱
+    |    ╱  (diagonal, from origin to tip)
+    |   ╱
+    |  ╱
+    | ╱
+    └─────────────────→ X-axis
+  Origin
+
+STEP-BY-STEP VISUALIZATION:
+---------------------------
+1. Draw vector u from origin: → (points right)
+2. Draw vector v starting from tip of u: ↑ (points up from tip of u)
+3. Draw vector z from origin to tip of v: ↗ (diagonal)
+
+RESULT:
+-------
+  z = [1, 1]
+  • Horizontal component: 1 (from u)
+  • Vertical component: 1 (from v)
+  • Result: Arrow pointing diagonally up-right
+
+GEOMETRIC MEANING
+-----------------
+The sum vector z represents:
+• The combined effect of both vectors
+• The direct path from start to finish
+• A new direction and magnitude
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: VECTOR ADDITION WITH PYTHON LISTS
+-----------------------------------------------
+
+THE MANUAL APPROACH
+-------------------
+The following three lines of code will add the two lists and place the result 
+in the list z:
+
+  u = [1, 0]
+  v = [0, 1]
+  z = [u[0] + v[0], u[1] + v[1]]
+  # Result: [1, 1]
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: u = [1, 0]
+  • Creates Python list representing vector u
+  • First element (index 0): 1
+  • Second element (index 1): 0
+
+LINE 2: v = [0, 1]
+  • Creates Python list representing vector v
+  • First element (index 0): 0
+  • Second element (index 1): 1
+
+LINE 3: z = [u[0] + v[0], u[1] + v[1]]
+  • "u[0]" accesses first element of u: 1
+  • "v[0]" accesses first element of v: 0
+  • "u[0] + v[0]" adds them: 1 + 0 = 1
+  • "u[1]" accesses second element of u: 0
+  • "v[1]" accesses second element of v: 1
+  • "u[1] + v[1]" adds them: 0 + 1 = 1
+  • Creates new list z with [1, 1]
+
+USING A LOOP (FOR LONGER VECTORS)
+----------------------------------
+For longer vectors, you'd need a loop:
+
+  u = [1, 2, 3, 4, 5]
+  v = [6, 7, 8, 9, 10]
+  z = []
+  for i in range(len(u)):
+      z.append(u[i] + v[i])
+  # Result: [7, 9, 11, 13, 15]
+
+DETAILED EXPLANATION:
+---------------------
+LINE 1-2: Create input lists
+LINE 3: Initialize empty result list
+LINE 4: Loop through indices 0 to len(u)-1
+LINE 5: Add corresponding elements and append to result
+
+PROBLEMS WITH THIS APPROACH:
+----------------------------
+• Requires multiple lines of code
+• Gets more complex with longer vectors
+• Slower for large datasets
+• More error-prone
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: VECTOR ADDITION WITH NUMPY
+----------------------------------------
+
+THE NUMPY WAY
+-------------
+We can also perform vector addition with one line of NumPy code:
+
+  import numpy as np
+  u = np.array([1, 0])
+  v = np.array([0, 1])
+  z = u + v
+  # Result: array([1, 1])
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: import numpy as np
+  • Imports NumPy library with alias "np"
+
+LINE 2: u = np.array([1, 0])
+  • "np.array()" converts list [1, 0] to NumPy array
+  • Creates vector u as a NumPy array
+  • Stores in variable "u"
+
+LINE 3: v = np.array([0, 1])
+  • Converts list [0, 1] to NumPy array
+  • Creates vector v as a NumPy array
+  • Stores in variable "v"
+
+LINE 4: z = u + v
+  • "+" operator is overloaded for NumPy arrays
+  • NumPy automatically performs element-wise addition
+  • Adds corresponding components:
+    - u[0] + v[0] = 1 + 0 = 1
+    - u[1] + v[1] = 0 + 1 = 1
+  • Creates new array z = [1, 1]
+  • Stores result in variable "z"
+
+WHAT HAPPENS UNDER THE HOOD
+----------------------------
+When you write "u + v", NumPy:
+1. Checks that arrays have compatible shapes
+2. Allocates memory for result array
+3. Performs addition in optimized C code
+4. Returns the result array
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Longer vectors
+  import numpy as np
+  u = np.array([1, 2, 3, 4, 5])
+  v = np.array([6, 7, 8, 9, 10])
+  z = u + v
+  # Result: array([ 7,  9, 11, 13, 15])
+  # Still just one line!
+
+EXAMPLE 2: Different values
+  import numpy as np
+  u = np.array([10, 20])
+  v = np.array([5, 15])
+  z = u + v
+  # Result: array([15, 35])
+
+EXAMPLE 3: With floats
+  import numpy as np
+  u = np.array([1.5, 2.7])
+  v = np.array([3.2, 4.1])
+  z = u + v
+  # Result: array([4.7, 6.8])
+
+ADVANTAGES
+----------
+• One line instead of multiple
+• Works with arrays of any size
+• Much faster execution
+• More readable and intuitive
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: PERFORMANCE COMPARISON
+-------------------------------------
+
+SPEED ADVANTAGE
+---------------
+It would require multiple lines to perform vector addition on two lists, as 
+shown on the right side of the screen. In addition, the NumPy code will run 
+much faster. This is important if you have lots of data.
+
+PERFORMANCE TEST
+----------------
+Let's compare the performance:
+
+PYTHON LISTS (LOOP METHOD):
+  import time
+  u = list(range(1000000))  # 1 million elements
+  v = list(range(1000000, 2000000))
+  
+  start = time.time()
+  z = []
+  for i in range(len(u)):
+      z.append(u[i] + v[i])
+  end = time.time()
+  print(f"Python list time: {end - start:.4f} seconds")
+  # Typical: 0.10-0.20 seconds
+
+NUMPY ARRAYS:
+  import numpy as np
+  import time
+  u = np.array(range(1000000))
+  v = np.array(range(1000000, 2000000))
+  
+  start = time.time()
+  z = u + v
+  end = time.time()
+  print(f"NumPy time: {end - start:.4f} seconds")
+  # Typical: 0.001-0.010 seconds
+
+SPEEDUP FACTOR
+--------------
+NumPy is typically 10-100 times faster for large arrays!
+
+WHY IS NUMPY FASTER?
+--------------------
+1. VECTORIZED OPERATIONS: Entire array processed at once
+2. OPTIMIZED C CODE: Underlying implementation in C
+3. CONTIGUOUS MEMORY: Efficient memory access patterns
+4. NO PYTHON OVERHEAD: Avoids Python loop overhead
+5. CPU OPTIMIZATIONS: Uses SIMD (Single Instruction Multiple Data) instructions
+
+MEMORY EFFICIENCY
+-----------------
+NumPy also uses less memory:
+• Python lists: ~28 bytes per integer element
+• NumPy arrays: 4-8 bytes per integer element
+• For 1 million elements: ~28 MB vs ~4-8 MB
+
+REAL-WORLD IMPACT
+-----------------
+For data science applications:
+• Processing millions of data points: NumPy is essential
+• Machine learning: Training on large datasets requires speed
+• Image processing: Images have millions of pixels
+• Scientific computing: Simulations need efficiency
+
+[END SECTION 2.5]
+================================================================================
+
+PART 3: VECTOR SUBTRACTION
+================================================================================
+
+SECTION 3.1: WHAT IS VECTOR SUBTRACTION?
+-----------------------------------------
+
+DEFINITION
+----------
+Vector subtraction is similar to vector addition, but instead of adding 
+corresponding components, we subtract them. We can also perform vector 
+subtraction by changing the addition sign to a subtraction sign.
+
+MATHEMATICAL DEFINITION
+-----------------------
+For two vectors u and v:
+  u = [u₁, u₂]
+  v = [v₁, v₂]
+  
+  z = u - v = [u₁ - v₁, u₂ - v₂]
+
+EXAMPLE
+-------
+  import numpy as np
+  u = np.array([5, 3])
+  v = np.array([2, 1])
+  z = u - v
+  # Result: array([3, 2])
+  
+  # First component: 5 - 2 = 3
+  # Second component: 3 - 1 = 2
+
+GEOMETRIC INTERPRETATION
+------------------------
+Vector subtraction finds the difference between two vectors. Visually, it 
+represents the vector from the tip of v to the tip of u.
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: VECTOR SUBTRACTION WITH NUMPY
+--------------------------------------------
+
+THE NUMPY WAY
+-------------
+Vector subtraction with NumPy is just as simple as addition:
+
+  import numpy as np
+  u = np.array([5, 3])
+  v = np.array([2, 1])
+  z = u - v
+  # Result: array([3, 2])
+
+DETAILED EXPLANATION
+--------------------
+• "-" operator is overloaded for NumPy arrays
+• NumPy performs element-wise subtraction
+• Much simpler than Python lists
+
+PYTHON LIST APPROACH (FOR COMPARISON)
+-------------------------------------
+It would require multiple lines to perform vector subtraction on two lists, 
+as shown on the right side of the screen:
+
+  u = [5, 3]
+  v = [2, 1]
+  z = [u[0] - v[0], u[1] - v[1]]
+  # Result: [3, 2]
+
+Or with a loop for longer vectors:
+  u = [5, 3, 7]
+  v = [2, 1, 4]
+  z = []
+  for i in range(len(u)):
+      z.append(u[i] - v[i])
+  # Result: [3, 2, 3]
+
+NUMPY ADVANTAGE
+---------------
+With NumPy, it's still just one line regardless of vector length!
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Longer vectors
+  import numpy as np
+  u = np.array([10, 20, 30])
+  v = np.array([3, 7, 12])
+  z = u - v
+  # Result: array([ 7, 13, 18])
+
+EXAMPLE 2: With floats
+  import numpy as np
+  u = np.array([10.5, 20.7])
+  v = np.array([3.2, 7.1])
+  z = u - v
+  # Result: array([7.3, 13.6])
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: VISUALIZING VECTOR SUBTRACTION
+--------------------------------------------
+
+GEOMETRIC MEANING
+-----------------
+Vector subtraction u - v can be visualized as:
+• Starting from the tip of v
+• Ending at the tip of u
+• The result vector shows the "difference" or "displacement"
+
+VISUAL EXAMPLE
+--------------
+  u = [5, 3]
+  v = [2, 1]
+  z = u - v = [3, 2]
+
+The result [3, 2] represents:
+• Moving 3 units right
+• Moving 2 units up
+• From the tip of v to the tip of u
+
+[END SECTION 3.3]
+================================================================================
+
+PART 4: SCALAR MULTIPLICATION
+================================================================================
+
+SECTION 4.1: WHAT IS SCALAR MULTIPLICATION?
+--------------------------------------------
+
+DEFINITION
+----------
+Vector multiplication with a scalar is another commonly performed operation. 
+A scalar is a single number (not a vector). When you multiply a vector by a 
+scalar, you multiply each component of the vector by that scalar value.
+
+BASIC CONCEPT
+-------------
+Consider the vector y. Each component is specified by a different color. We 
+simply multiply the vector by a scalar value, in this case 2. Each component 
+of the vector is multiplied by 2. In this case, each component is doubled.
+
+MATHEMATICAL DEFINITION
+-----------------------
+For a vector y and scalar k:
+  y = [y₁, y₂]
+  k = 2 (scalar)
+  
+  z = k * y = [k * y₁, k * y₂] = [2 * y₁, 2 * y₂]
+
+EXAMPLE
+-------
+  import numpy as np
+  y = np.array([1, 2])
+  z = 2 * y
+  # Result: array([2, 4])
+  
+  # First component: 2 * 1 = 2
+  # Second component: 2 * 2 = 4
+
+GEOMETRIC INTERPRETATION
+------------------------
+Scalar multiplication:
+• Stretches or shrinks the vector
+• If scalar > 1: Vector gets longer
+• If 0 < scalar < 1: Vector gets shorter
+• If scalar < 0: Vector reverses direction
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: SCALAR MULTIPLICATION WITH NUMPY
+---------------------------------------------
+
+THE NUMPY WAY
+-------------
+Vector multiplication with a scalar only requires one line of code using 
+NumPy:
+
+  import numpy as np
+  y = np.array([1, 2])
+  z = 2 * y
+  # Result: array([2, 4])
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: y = np.array([1, 2])
+  • Creates vector y as NumPy array
+
+LINE 3: z = 2 * y
+  • "*" operator multiplies scalar 2 by array y
+  • NumPy automatically broadcasts the scalar to each element
+  • Each element is multiplied by 2
+  • Result: [2, 4]
+
+ALTERNATIVE SYNTAX
+------------------
+You can also write it as:
+  z = y * 2  # Same result
+
+Both forms work the same way.
+
+PYTHON LIST APPROACH (FOR COMPARISON)
+-------------------------------------
+It would require multiple lines to perform the same task as shown with Python 
+lists, as shown on the right side of the screen:
+
+  y = [1, 2]
+  z = []
+  for i in range(len(y)):
+      z.append(2 * y[i])
+  # Result: [2, 4]
+
+Or using list comprehension:
+  y = [1, 2]
+  z = [2 * element for element in y]
+  # Result: [2, 4]
+
+NUMPY ADVANTAGE
+---------------
+In addition, the operation would also be much slower with Python lists.
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Different scalar
+  import numpy as np
+  y = np.array([1, 2, 3])
+  z = 3 * y
+  # Result: array([3, 6, 9])
+
+EXAMPLE 2: Fractional scalar (shrinking)
+  import numpy as np
+  y = np.array([4, 8])
+  z = 0.5 * y
+  # Result: array([2., 4.])
+  # Vector is halved
+
+EXAMPLE 3: Negative scalar (reversing direction)
+  import numpy as np
+  y = np.array([1, 2])
+  z = -1 * y
+  # Result: array([-1, -2])
+  # Vector points in opposite direction
+
+EXAMPLE 4: Division (multiplying by 1/scalar)
+  import numpy as np
+  y = np.array([4, 8])
+  z = y / 2  # Equivalent to y * 0.5
+  # Result: array([2., 4.])
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: VISUALIZING SCALAR MULTIPLICATION
+----------------------------------------------
+
+GEOMETRIC INTERPRETATION
+------------------------
+We can use line segments or arrows to visualize what's going on. The original 
+vector y is in purple. After multiplying it by a scalar value of 2, the 
+vector is stretched out by 2 units, as shown in red. The new vector is twice 
+as long in each direction.
+
+VISUAL EXAMPLE: y * 2
+---------------------
+  Original vector y = [1, 2] (purple):
+    Y-axis
+      ↑
+      |     y
+      |     ╱
+      |    ╱
+      |   ╱
+      └──────────→ X-axis
+  
+  After multiplication: 2 * y = [2, 4] (red):
+    Y-axis
+      ↑
+      |        2*y (longer)
+      |        ╱
+      |       ╱
+      |      ╱
+      |     ╱
+      |    ╱
+      └──────────→ X-axis
+
+THE VECTOR IS STRETCHED:
+------------------------
+• Original length: √(1² + 2²) = √5 ≈ 2.24
+• New length: √(2² + 4²) = √20 ≈ 4.47
+• New length = 2 × original length
+
+EACH DIRECTION IS DOUBLED:
+--------------------------
+• Horizontal: 1 → 2 (doubled)
+• Vertical: 2 → 4 (doubled)
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: PERFORMANCE COMPARISON
+------------------------------------
+
+SPEED COMPARISON
+----------------
+Scalar multiplication with NumPy is much faster than Python lists:
+
+PYTHON LISTS:
+  import time
+  y = list(range(1000000))  # 1 million elements
+  
+  start = time.time()
+  z = [2 * element for element in y]
+  end = time.time()
+  print(f"Python time: {end - start:.4f} seconds")
+  # Typical: 0.05-0.15 seconds
+
+NUMPY:
+  import numpy as np
+  import time
+  y = np.array(range(1000000))
+  
+  start = time.time()
+  z = 2 * y
+  end = time.time()
+  print(f"NumPy time: {end - start:.4f} seconds")
+  # Typical: 0.001-0.005 seconds
+
+NumPy is typically 10-50 times faster!
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: HADAMARD PRODUCT
+================================================================================
+
+SECTION 5.1: WHAT IS HADAMARD PRODUCT?
+---------------------------------------
+
+DEFINITION
+----------
+Hadamard product is another widely used operation in data science. The 
+Hadamard product (also called element-wise product or entry-wise product) 
+multiplies corresponding elements of two vectors to create a new vector.
+
+MATHEMATICAL DEFINITION
+-----------------------
+Consider the following two vectors, u and v. The Hadamard product of u and v 
+is a new vector z. The first component of z is the product of the first 
+element of u and v. Similarly, the second component is the product of the 
+second element of u and v. The resultant vector consists of the entry-wise 
+product of u and v.
+
+FORMULA
+-------
+For vectors u and v:
+  u = [u₁, u₂]
+  v = [v₁, v₂]
+  
+  z = u ⊙ v = [u₁ * v₁, u₂ * v₂]
+  
+  (⊙ is the symbol for Hadamard product, but we use * in NumPy)
+
+EXAMPLE
+-------
+  import numpy as np
+  u = np.array([1, 2])
+  v = np.array([3, 4])
+  z = u * v  # Hadamard product
+  # Result: array([3, 8])
+  
+  # First component: 1 * 3 = 3
+  # Second component: 2 * 4 = 8
+
+KEY POINT
+---------
+Hadamard product is NOT the same as dot product:
+• Hadamard product: Element-wise multiplication → results in a vector
+• Dot product: Sum of element-wise products → results in a scalar (single number)
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: HADAMARD PRODUCT WITH NUMPY
+-----------------------------------------
+
+THE NUMPY WAY
+-------------
+We can also perform Hadamard product with one line of code in NumPy:
+
+  import numpy as np
+  u = np.array([1, 2])
+  v = np.array([3, 4])
+  z = u * v
+  # Result: array([3, 8])
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2-3: Create vectors u and v
+  • u = [1, 2]
+  • v = [3, 4]
+
+LINE 4: z = u * v
+  • "*" operator performs element-wise multiplication
+  • u[0] * v[0] = 1 * 3 = 3
+  • u[1] * v[1] = 2 * 4 = 8
+  • Result: [3, 8]
+
+PYTHON LIST APPROACH (FOR COMPARISON)
+-------------------------------------
+It would require multiple lines to perform Hadamard product on two lists, as 
+shown on the right side of the screen:
+
+  u = [1, 2]
+  v = [3, 4]
+  z = []
+  for i in range(len(u)):
+      z.append(u[i] * v[i])
+  # Result: [3, 8]
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Longer vectors
+  import numpy as np
+  u = np.array([1, 2, 3, 4])
+  v = np.array([5, 6, 7, 8])
+  z = u * v
+  # Result: array([ 5, 12, 21, 32])
+
+EXAMPLE 2: With floats
+  import numpy as np
+  u = np.array([1.5, 2.5])
+  v = np.array([2.0, 3.0])
+  z = u * v
+  # Result: array([3. , 7.5])
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: HADAMARD PRODUCT VS DOT PRODUCT
+---------------------------------------------
+
+IMPORTANT DISTINCTION
+---------------------
+Hadamard product and dot product are different:
+
+HADAMARD PRODUCT (u * v):
+  • Element-wise multiplication
+  • Result: A vector (same size as inputs)
+  • Example: [1, 2] * [3, 4] = [3, 8]
+
+DOT PRODUCT (u · v or np.dot(u, v)):
+  • Element-wise multiplication + sum
+  • Result: A scalar (single number)
+  • Example: [1, 2] · [3, 4] = 1*3 + 2*4 = 11
+
+VISUAL COMPARISON
+-----------------
+  import numpy as np
+  u = np.array([1, 2])
+  v = np.array([3, 4])
+  
+  # Hadamard product
+  hadamard = u * v
+  print(hadamard)  # Output: [3 8]  (vector)
+  
+  # Dot product
+  dot = np.dot(u, v)
+  print(dot)  # Output: 11  (scalar)
+
+[END SECTION 5.3]
+================================================================================
+
+PART 6: DOT PRODUCT
+================================================================================
+
+SECTION 6.1: WHAT IS DOT PRODUCT?
+----------------------------------
+
+DEFINITION
+----------
+The dot product is another widely used operation in data science. Consider 
+the vector u and v. The dot product is a single number given by the following 
+term and represents how similar two vectors are.
+
+MATHEMATICAL DEFINITION
+-----------------------
+For vectors u and v:
+  u = [u₁, u₂]
+  v = [v₁, v₂]
+  
+  Dot product = u · v = u₁ * v₁ + u₂ * v₂
+
+The result is a scalar (single number), not a vector.
+
+CALCULATION PROCESS
+-------------------
+We multiply the first component from v and u. We then multiply the second 
+component and add the result together. The result is a number that represents 
+how similar the two vectors are.
+
+EXAMPLE CALCULATION
+-------------------
+  u = [1, 2]
+  v = [3, 4]
+  
+  Dot product = 1*3 + 2*4
+             = 3 + 8
+             = 11
+
+GEOMETRIC INTERPRETATION
+------------------------
+The dot product has geometric meaning:
+• Related to the angle between vectors
+• If vectors point in similar directions: larger positive value
+• If vectors are perpendicular: zero
+• If vectors point in opposite directions: negative value
+
+[END SECTION 6.1]
+================================================================================
+
+SECTION 6.2: CALCULATING DOT PRODUCT
+-------------------------------------
+
+STEP-BY-STEP PROCESS
+--------------------
+For vectors u = [1, 2] and v = [3, 4]:
+
+STEP 1: Multiply corresponding components
+  • First components: u[0] * v[0] = 1 * 3 = 3
+  • Second components: u[1] * v[1] = 2 * 4 = 8
+
+STEP 2: Sum the products
+  • Sum = 3 + 8 = 11
+
+RESULT: Dot product = 11
+
+MANUAL CALCULATION EXAMPLE
+--------------------------
+  u = [2, 3]
+  v = [4, 5]
+  
+  Dot product = 2*4 + 3*5
+             = 8 + 15
+             = 23
+
+[END SECTION 6.2]
+================================================================================
+
+SECTION 6.3: DOT PRODUCT WITH NUMPY
+-------------------------------------
+
+THE NUMPY WAY
+-------------
+We can also perform dot product using the NumPy function dot and assign it 
+with the variable result as follows:
+
+  import numpy as np
+  u = np.array([1, 2])
+  v = np.array([3, 4])
+  result = np.dot(u, v)
+  # Result: 11
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: u = np.array([1, 2])
+  • Creates vector u as NumPy array
+
+LINE 3: v = np.array([3, 4])
+  • Creates vector v as NumPy array
+
+LINE 4: result = np.dot(u, v)
+  • "np.dot()" is NumPy's dot product function
+  • Takes two arrays as arguments
+  • Calculates: u[0]*v[0] + u[1]*v[1] = 1*3 + 2*4 = 11
+  • Returns scalar value 11
+  • Stores result in variable "result"
+
+ALTERNATIVE SYNTAX
+------------------
+You can also use the @ operator (Python 3.5+):
+  result = u @ v  # Same as np.dot(u, v)
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Different vectors
+  import numpy as np
+  u = np.array([2, 3])
+  v = np.array([4, 5])
+  result = np.dot(u, v)
+  # Result: 23  (2*4 + 3*5 = 8 + 15 = 23)
+
+EXAMPLE 2: Longer vectors
+  import numpy as np
+  u = np.array([1, 2, 3])
+  v = np.array([4, 5, 6])
+  result = np.dot(u, v)
+  # Result: 32  (1*4 + 2*5 + 3*6 = 4 + 10 + 18 = 32)
+
+EXAMPLE 3: With floats
+  import numpy as np
+  u = np.array([1.5, 2.5])
+  v = np.array([3.0, 4.0])
+  result = np.dot(u, v)
+  # Result: 14.5  (1.5*3.0 + 2.5*4.0 = 4.5 + 10.0 = 14.5)
+
+[END SECTION 6.3]
+================================================================================
+
+SECTION 6.4: UNDERSTANDING SIMILARITY
+--------------------------------------
+
+WHAT DOES "SIMILARITY" MEAN?
+----------------------------
+The dot product represents how similar two vectors are. This means:
+• Larger positive values: Vectors point in similar directions
+• Zero: Vectors are perpendicular (orthogonal)
+• Negative values: Vectors point in opposite directions
+
+GEOMETRIC INTERPRETATION
+-----------------------
+The dot product is related to:
+  u · v = |u| * |v| * cos(θ)
+
+Where:
+• |u| is the magnitude (length) of vector u
+• |v| is the magnitude (length) of vector v
+• θ is the angle between the vectors
+
+EXAMPLES OF SIMILARITY
+----------------------
+
+EXAMPLE 1: Similar directions
+  import numpy as np
+  u = np.array([1, 0])  # Points right
+  v = np.array([2, 0])  # Also points right
+  result = np.dot(u, v)
+  # Result: 2 (positive, vectors point same direction)
+
+EXAMPLE 2: Perpendicular vectors
+  import numpy as np
+  u = np.array([1, 0])  # Points right
+  v = np.array([0, 1])  # Points up
+  result = np.dot(u, v)
+  # Result: 0 (vectors are perpendicular)
+
+EXAMPLE 3: Opposite directions
+  import numpy as np
+  u = np.array([1, 0])   # Points right
+  v = np.array([-1, 0])  # Points left
+  result = np.dot(u, v)
+  # Result: -1 (negative, vectors point opposite directions)
+
+APPLICATIONS
+------------
+Dot product is used in:
+• Machine learning: Feature similarity, neural networks
+• Computer graphics: Lighting calculations
+• Physics: Work, projections
+• Data analysis: Correlation, similarity measures
+
+[END SECTION 6.4]
+================================================================================
+
+PART 7: BROADCASTING
+================================================================================
+
+SECTION 7.1: WHAT IS BROADCASTING?
+-----------------------------------
+
+DEFINITION
+----------
+Consider the array u. The array contains the following elements. If we add a 
+scalar value to the array, NumPy will add that value to each element. This 
+property is known as broadcasting.
+
+BASIC CONCEPT
+-------------
+Broadcasting is NumPy's ability to perform operations between arrays of 
+different sizes. When you perform an operation between an array and a scalar, 
+NumPy automatically "broadcasts" the scalar to match the array's shape.
+
+EXAMPLE
+--------
+  import numpy as np
+  u = np.array([1, 2, 3, 4, 5])
+  
+  # Add scalar 10 to array
+  result = u + 10
+  # Result: array([11, 12, 13, 14, 15])
+  
+  # NumPy automatically adds 10 to each element
+
+DETAILED EXPLANATION
+--------------------
+LINE 1: import numpy as np
+  • Imports NumPy
+
+LINE 2: u = np.array([1, 2, 3, 4, 5])
+  • Creates array u
+
+LINE 3: result = u + 10
+  • "10" is a scalar (single number)
+  • NumPy broadcasts 10 to [10, 10, 10, 10, 10]
+  • Then performs element-wise addition
+  • [1, 2, 3, 4, 5] + [10, 10, 10, 10, 10] = [11, 12, 13, 14, 15]
+
+WHAT HAPPENS VISUALLY
+---------------------
+  Original array:  [1,  2,  3,  4,  5]
+  Scalar value:     10
+                    ↓ (broadcasted)
+  Becomes:         [10, 10, 10, 10, 10]
+                    +
+  Result:          [11, 12, 13, 14, 15]
+
+[END SECTION 7.1]
+================================================================================
+
+SECTION 7.2: BROADCASTING EXAMPLES
+------------------------------------
+
+EXAMPLE 1: Addition with scalar
+  import numpy as np
+  u = np.array([1, 2, 3])
+  result = u + 5
+  # Result: array([6, 7, 8])
+  # 5 is broadcasted to each element
+
+EXAMPLE 2: Subtraction with scalar
+  import numpy as np
+  u = np.array([10, 20, 30])
+  result = u - 3
+  # Result: array([7, 17, 27])
+
+EXAMPLE 3: Multiplication with scalar
+  import numpy as np
+  u = np.array([1, 2, 3])
+  result = u * 2
+  # Result: array([2, 4, 6])
+  # We saw this earlier in scalar multiplication!
+
+EXAMPLE 4: Division with scalar
+  import numpy as np
+  u = np.array([10, 20, 30])
+  result = u / 2
+  # Result: array([5., 10., 15.])
+
+EXAMPLE 5: Multiple operations
+  import numpy as np
+  u = np.array([1, 2, 3, 4, 5])
+  result = (u + 10) * 2
+  # Result: array([22, 24, 26, 28, 30])
+  # Step 1: u + 10 = [11, 12, 13, 14, 15]
+  # Step 2: * 2 = [22, 24, 26, 28, 30]
+
+WHY BROADCASTING IS POWERFUL
+----------------------------
+• Simplifies code: No need for loops
+• Intuitive: Mathematically natural
+• Efficient: Optimized implementation
+• Flexible: Works with different array sizes
+
+[END SECTION 7.2]
+================================================================================
+
+SECTION 7.3: WHEN BROADCASTING OCCURS
+--------------------------------------
+
+BROADCASTING RULES
+------------------
+Broadcasting occurs when:
+1. OPERATIONS WITH SCALARS: Array + scalar, array * scalar, etc.
+2. ARRAYS OF COMPATIBLE SHAPES: NumPy can automatically align dimensions
+
+RULE 1: SCALAR OPERATIONS
+-------------------------
+Any operation between an array and a scalar uses broadcasting:
+
+  import numpy as np
+  arr = np.array([1, 2, 3])
+  
+  arr + 5    # Broadcasting
+  arr - 2    # Broadcasting
+  arr * 3    # Broadcasting
+  arr / 2    # Broadcasting
+  arr ** 2   # Broadcasting (exponentiation)
+
+RULE 2: COMPATIBLE SHAPES
+--------------------------
+Arrays with compatible shapes can be broadcasted:
+• (5,) and (1,) → (5,)
+• (3, 1) and (1, 3) → (3, 3)
+• (4, 1) and (4,) → (4, 4)
+
+EXAMPLES OF COMPATIBLE BROADCASTING
+------------------------------------
+
+EXAMPLE 1: 1D arrays
+  import numpy as np
+  a = np.array([1, 2, 3])      # Shape: (3,)
+  b = np.array([10])           # Shape: (1,)
+  result = a + b               # Broadcasts to (3,)
+  # Result: array([11, 12, 13])
+
+EXAMPLE 2: Array and scalar (most common)
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  result = a + 10
+  # Broadcasting: 10 → [10, 10, 10, 10, 10]
+  # Result: array([11, 12, 13, 14, 15])
+
+WHEN BROADCASTING FAILS
+-----------------------
+Broadcasting fails when shapes are incompatible:
+
+  import numpy as np
+  a = np.array([1, 2, 3])      # Shape: (3,)
+  b = np.array([10, 20])       # Shape: (2,)
+  # result = a + b  # ERROR! Shapes (3,) and (2,) are incompatible
+
+[END SECTION 7.3]
+================================================================================
+
+END OF PART 2
+=============
+
+Congratulations! You've completed Part 2 of the One-Dimensional NumPy guide. 
+You now understand:
+• Why NumPy operations are powerful and efficient
+• Vector addition and subtraction
+• Scalar multiplication
+• Hadamard product (element-wise multiplication)
+• Dot product
+• Broadcasting concept
+
+Continue to Part 3 to learn about:
+• Universal functions (ufuncs)
+• Mathematical functions (sine, cosine, etc.)
+• The linspace function
+• Plotting with matplotlib
+• Summary and quick reference
+
+================================================================================

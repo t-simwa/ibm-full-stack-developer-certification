@@ -1,0 +1,1822 @@
+================================================================================
+ONE-DIMENSIONAL NUMPY IN PYTHON
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to One-Dimensional NumPy in Python. This comprehensive guide will teach 
+you everything you need to know about NumPy arrays (ndarrays) in one dimension, 
+from the basics of array creation to advanced operations and universal functions. 
+You'll learn the fundamentals, understand how NumPy differs from Python lists, 
+and master array manipulation through detailed examples and exhaustive 
+explanations.
+
+ESTIMATED TIME NEEDED
+---------------------
+10 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Explain what NumPy is and why it's important for data science
+• Understand the difference between Python lists and NumPy arrays (ndarrays)
+• Create NumPy arrays from Python lists and other sources
+• Access and understand NumPy array attributes (size, ndim, shape, dtype)
+• Perform indexing and slicing operations on NumPy arrays
+• Modify array elements using indexing and slicing
+• Understand how NumPy arrays store data and why they're efficient
+• Recognize when to use NumPy arrays versus Python lists
+• Apply NumPy array operations in data science contexts
+
+OVERVIEW
+--------
+NumPy is a library for scientific computing in Python. It has many useful 
+functions and provides significant advantages in terms of speed and memory 
+efficiency compared to regular Python data structures. NumPy is also the 
+foundation for pandas, which is one of the most popular data analysis libraries 
+in Python. In this guide, we will be covering the basics of NumPy arrays 
+(ndarrays) in one dimension, including array creation, indexing and slicing, 
+basic operations, and universal functions.
+
+This comprehensive guide is divided into three parts:
+• Part 1: Introduction to NumPy, array creation, attributes, indexing and slicing
+• Part 2: Basic operations (vector addition, subtraction, scalar multiplication, 
+  Hadamard product, dot product, broadcasting)
+• Part 3: Universal functions, mathematical functions, plotting, and summary
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of NumPy arrays:
+
+PART 1: INTRODUCTION TO NUMPY
+  SECTION 1.1: WHAT IS NUMPY?
+  SECTION 1.2: WHY USE NUMPY?
+  SECTION 1.3: NUMPY VS PYTHON LISTS
+
+PART 2: CREATING NUMPY ARRAYS
+  SECTION 2.1: UNDERSTANDING NDARRAYS
+  SECTION 2.2: IMPORTING NUMPY
+  SECTION 2.3: CREATING ARRAYS FROM PYTHON LISTS
+  SECTION 2.4: CREATING ARRAYS WITH DIFFERENT DATA TYPES
+
+PART 3: NUMPY ARRAY ATTRIBUTES
+  SECTION 3.1: THE TYPE ATTRIBUTE
+  SECTION 3.2: THE DTYPE ATTRIBUTE
+  SECTION 3.3: THE SIZE ATTRIBUTE
+  SECTION 3.4: THE NDIM ATTRIBUTE
+  SECTION 3.5: THE SHAPE ATTRIBUTE
+  SECTION 3.6: OTHER USEFUL ATTRIBUTES
+
+PART 4: INDEXING AND SLICING NUMPY ARRAYS
+  SECTION 4.1: UNDERSTANDING INDEXING
+  SECTION 4.2: ACCESSING ARRAY ELEMENTS
+  SECTION 4.3: MODIFYING ARRAY ELEMENTS
+  SECTION 4.4: UNDERSTANDING SLICING
+  SECTION 4.5: SLICING ARRAYS
+  SECTION 4.6: MODIFYING ARRAYS USING SLICING
+
+NOTE: Part 2 of this guide covers:
+  • Vector operations (addition, subtraction, scalar multiplication)
+  • Hadamard product and dot product
+  • Broadcasting concept and examples
+  • Performance comparisons with Python lists
+
+NOTE: Part 3 of this guide covers:
+  • Universal functions (ufuncs)
+  • Mathematical functions (sine, cosine, etc.)
+  • The linspace function
+  • Plotting with matplotlib
+  • Summary and quick reference guide
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO NUMPY
+================================================================================
+
+SECTION 1.1: WHAT IS NUMPY?
+----------------------------
+
+DEFINITION
+----------
+NumPy is a library for scientific computing in Python. The name "NumPy" stands 
+for "Numerical Python." It provides a powerful N-dimensional array object 
+called ndarray (n-dimensional array) and a collection of functions for working 
+with these arrays.
+
+DETAILED EXPLANATION
+--------------------
+NumPy is one of the most fundamental libraries in the Python data science 
+ecosystem. It was created to provide efficient array operations and 
+mathematical functions that are essential for scientific computing, data 
+analysis, and machine learning.
+
+WHAT NUMPY PROVIDES:
+• A powerful array object (ndarray) that can store large amounts of data 
+  efficiently
+• Mathematical functions for performing operations on arrays
+• Tools for integrating C/C++ and Fortran code
+• Linear algebra, Fourier transform, and random number capabilities
+• A foundation for many other scientific Python libraries
+
+THE CORE CONCEPT: NDARRAYS
+---------------------------
+The most important concept in NumPy is the ndarray (n-dimensional array). 
+An ndarray is:
+• A homogeneous multidimensional array (all elements are of the same type)
+• A fixed-size array (once created, its size cannot change)
+• An efficient container for large amounts of data
+• Optimized for mathematical operations
+
+REAL-WORLD ANALOGY
+------------------
+Think of NumPy arrays like a well-organized warehouse:
+• Python lists are like a storage room where boxes (data) can be different 
+  sizes and scattered around
+• NumPy arrays are like a warehouse with uniform shelves where every box 
+  (data element) is the same size and stored in a perfectly organized grid
+• The uniform organization makes it much faster to find and process items
+• The warehouse (NumPy) can handle much larger quantities efficiently
+
+WHY NUMERICAL PYTHON?
+---------------------
+Python is a great language, but it wasn't originally designed for numerical 
+computing. Regular Python lists are:
+• Flexible but slow for mathematical operations
+• Memory-intensive for large datasets
+• Not optimized for vectorized operations
+
+NumPy solves these problems by:
+• Providing arrays optimized for numerical operations
+• Using efficient C code under the hood
+• Supporting vectorized operations (operations on entire arrays at once)
+• Using less memory than Python lists for numerical data
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: WHY USE NUMPY?
+----------------------------
+
+THE ADVANTAGES OF NUMPY
+-----------------------
+NumPy has many useful functions and provides significant advantages in terms of 
+speed and memory efficiency compared to regular Python data structures.
+
+ADVANTAGE 1: SPEED
+------------------
+NumPy operations are much faster than equivalent operations on Python lists. 
+This is because:
+• NumPy is written in C, which is much faster than Python
+• NumPy arrays are stored in contiguous memory blocks, making access faster
+• NumPy uses vectorized operations that process entire arrays at once
+• NumPy avoids the overhead of Python's dynamic typing
+
+PERFORMANCE COMPARISON EXAMPLE:
+--------------------------------
+Imagine you want to add two arrays of 1 million numbers:
+
+WITH PYTHON LISTS:
+  list1 = [1, 2, 3, ..., 1000000]  # 1 million elements
+  list2 = [4, 5, 6, ..., 1000003]  # 1 million elements
+  result = []
+  for i in range(len(list1)):
+      result.append(list1[i] + list2[i])
+  # This requires 1 million Python operations, each with overhead
+
+WITH NUMPY:
+  import numpy as np
+  arr1 = np.array([1, 2, 3, ..., 1000000])
+  arr2 = np.array([4, 5, 6, ..., 1000003])
+  result = arr1 + arr2
+  # This is a single vectorized operation, executed in optimized C code
+
+The NumPy version can be 10-100 times faster!
+
+ADVANTAGE 2: MEMORY EFFICIENCY
+-------------------------------
+NumPy arrays use less memory than Python lists because:
+• All elements are the same type (homogeneous), so memory is allocated 
+  efficiently
+• Data is stored in contiguous memory blocks
+• No overhead for storing type information with each element
+• Can use specific data types (int8, int16, float32, etc.) to minimize 
+  memory usage
+
+MEMORY COMPARISON EXAMPLE:
+--------------------------
+For an array of 1000 integers:
+• Python list: Each element is a Python object with overhead (type info, 
+  reference count, etc.) - approximately 28 bytes per integer = ~28 KB
+• NumPy array: Just the raw data - 4 bytes per integer (for int32) = ~4 KB
+
+That's 7 times less memory!
+
+ADVANTAGE 3: CONVENIENT OPERATIONS
+-----------------------------------
+NumPy makes it easier to do many operations that are commonly performed in 
+data science:
+• Mathematical operations (addition, subtraction, multiplication, division)
+• Statistical operations (mean, median, standard deviation)
+• Linear algebra operations (matrix multiplication, dot product)
+• Element-wise operations (applying functions to every element)
+• Broadcasting (operations between arrays of different sizes)
+
+ADVANTAGE 4: FOUNDATION FOR OTHER LIBRARIES
+--------------------------------------------
+NumPy is also the basis for pandas, which is one of the most popular data 
+analysis libraries. Many other important libraries depend on NumPy:
+• pandas: Data analysis and manipulation
+• scikit-learn: Machine learning
+• matplotlib: Plotting and visualization
+• SciPy: Scientific computing
+• TensorFlow and PyTorch: Deep learning
+
+If you want to work with data in Python, you need to understand NumPy!
+
+ADVANTAGE 5: VECTORIZED OPERATIONS
+------------------------------------
+Vectorized operations allow you to perform operations on entire arrays at 
+once, rather than looping through elements. This is:
+• More readable (less code)
+• Faster (optimized C code)
+• More Pythonic (follows Python's philosophy of simplicity)
+
+EXAMPLE OF VECTORIZATION:
+--------------------------
+Instead of writing:
+  result = []
+  for i in range(len(list1)):
+      result.append(list1[i] * 2)
+
+You can simply write:
+  result = arr1 * 2
+
+The second version is cleaner, faster, and easier to understand.
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: NUMPY VS PYTHON LISTS
+-----------------------------------
+
+UNDERSTANDING THE DIFFERENCE
+-----------------------------
+Before we dive into NumPy arrays, it's important to understand how they differ 
+from Python lists, which you're probably already familiar with.
+
+PYTHON LISTS: THE BASICS
+-------------------------
+A Python list is a container that allows you to store and access data. Each 
+element is associated with an index, and we can access each element using 
+square brackets.
+
+EXAMPLE OF A PYTHON LIST:
+-------------------------
+  my_list = [1, 2, 3, 4, 5]
+  
+  # Accessing elements using index
+  first_element = my_list[0]    # Returns 1
+  second_element = my_list[1]   # Returns 2
+  last_element = my_list[4]     # Returns 5
+
+CHARACTERISTICS OF PYTHON LISTS:
+---------------------------------
+• Can contain elements of different types (heterogeneous)
+• Dynamic size (can grow or shrink)
+• Each element is a Python object with overhead
+• Flexible but slower for numerical operations
+• Good for general-purpose data storage
+
+NUMPY ARRAYS: THE BASICS
+-------------------------
+A NumPy array, or ndarray, is similar to a list but with important 
+differences. It's usually fixed in size, and each element is of the same type.
+
+EXAMPLE OF A NUMPY ARRAY:
+--------------------------
+  import numpy as np
+  my_array = np.array([1, 2, 3, 4, 5])
+  
+  # Accessing elements using index (same syntax as lists)
+  first_element = my_array[0]    # Returns 1
+  second_element = my_array[1]   # Returns 2
+  last_element = my_array[4]      # Returns 5
+
+CHARACTERISTICS OF NUMPY ARRAYS:
+---------------------------------
+• All elements must be of the same type (homogeneous)
+• Fixed size (size cannot change after creation)
+• Efficient memory usage
+• Optimized for numerical operations
+• Supports vectorized operations
+
+SIDE-BY-SIDE COMPARISON
+-----------------------
+
+FEATURE                    PYTHON LIST          NUMPY ARRAY
+-------------------------  -------------------  -------------------
+Element Types             Can be different      Must be the same
+                          (heterogeneous)      (homogeneous)
+Size                      Dynamic (can change) Fixed (cannot change)
+Memory Usage              Higher overhead       Lower overhead
+Speed for Math Ops        Slower               Much faster
+Vectorized Operations     Not supported        Fully supported
+Use Case                  General purpose      Numerical computing
+
+DETAILED COMPARISON EXAMPLES
+----------------------------
+
+EXAMPLE 1: MIXED DATA TYPES
+----------------------------
+Python lists allow mixed types:
+  list_mixed = [1, "hello", 3.14, True]
+  # This works fine - list can contain integers, strings, floats, booleans
+
+NumPy arrays convert to a common type:
+  import numpy as np
+  array_mixed = np.array([1, "hello", 3.14, True])
+  # NumPy converts everything to strings to maintain homogeneity
+  # Result: array(['1', 'hello', '3.14', 'True'], dtype='<U32')
+
+EXAMPLE 2: SIZE FLEXIBILITY
+----------------------------
+Python lists can grow and shrink:
+  my_list = [1, 2, 3]
+  my_list.append(4)        # Now [1, 2, 3, 4]
+  my_list.pop()            # Now [1, 2, 3]
+  my_list.insert(0, 0)     # Now [0, 1, 2, 3]
+
+NumPy arrays have fixed size:
+  import numpy as np
+  my_array = np.array([1, 2, 3])
+  # my_array.append(4)     # ERROR! Arrays don't have append method
+  # To add elements, you must create a new array
+
+EXAMPLE 3: MATHEMATICAL OPERATIONS
+-----------------------------------
+Python lists require loops:
+  list1 = [1, 2, 3]
+  list2 = [4, 5, 6]
+  result = []
+  for i in range(len(list1)):
+      result.append(list1[i] + list2[i])
+  # Result: [5, 7, 9]
+
+NumPy arrays support direct operations:
+  import numpy as np
+  arr1 = np.array([1, 2, 3])
+  arr2 = np.array([4, 5, 6])
+  result = arr1 + arr2
+  # Result: array([5, 7, 9])
+  # Much simpler and faster!
+
+WHEN TO USE PYTHON LISTS
+-------------------------
+Use Python lists when:
+• You need to store elements of different types
+• You need a dynamic size (adding/removing elements frequently)
+• You're doing general-purpose programming (not numerical computing)
+• The dataset is small and performance doesn't matter
+
+WHEN TO USE NUMPY ARRAYS
+-------------------------
+Use NumPy arrays when:
+• You're working with numerical data
+• You need to perform mathematical operations
+• Performance and memory efficiency matter
+• You're doing data science, machine learning, or scientific computing
+• You need vectorized operations
+
+[END SECTION 1.3]
+================================================================================
+
+PART 2: CREATING NUMPY ARRAYS
+================================================================================
+
+SECTION 2.1: UNDERSTANDING NDARRAYS
+------------------------------------
+
+DEFINITION
+----------
+An ndarray (n-dimensional array) is NumPy's core data structure. It's a 
+homogeneous multidimensional array - meaning all elements are of the same type, 
+and it can have any number of dimensions (1D, 2D, 3D, etc.).
+
+DETAILED EXPLANATION
+--------------------
+The term "ndarray" stands for "n-dimensional array," where "n" can be any 
+number:
+• 1D array: A simple list-like structure [1, 2, 3, 4, 5]
+• 2D array: A matrix-like structure [[1, 2], [3, 4], [5, 6]]
+• 3D array: A cube-like structure with three dimensions
+• And so on...
+
+In this guide, we focus on 1D arrays, but the concepts extend to higher 
+dimensions.
+
+VISUAL REPRESENTATION OF 1D ARRAY
+----------------------------------
+A 1D NumPy array can be visualized as:
+
+  Index:  0    1    2    3    4
+  Value: [1]  [2]  [3]  [4]  [5]
+         └─────────────────────┘
+              One dimension
+
+This is similar to a Python list, but with the key difference that all 
+elements must be the same type.
+
+KEY PROPERTIES OF NDARRAYS
+---------------------------
+1. HOMOGENEOUS: All elements are the same data type
+2. FIXED SIZE: Once created, the size cannot change
+3. CONTIGUOUS MEMORY: Elements are stored in adjacent memory locations
+4. EFFICIENT: Optimized for numerical operations
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: IMPORTING NUMPY
+-----------------------------
+
+HOW TO IMPORT NUMPY
+-------------------
+Before you can use NumPy, you need to import it. The standard way to import 
+NumPy is:
+
+  import numpy as np
+
+DETAILED EXPLANATION OF THIS LINE
+----------------------------------
+Let's break down this import statement word by word:
+
+  import numpy as np
+
+• "import" - This is a Python keyword that tells Python to load a module 
+  (a collection of code) into your program
+• "numpy" - This is the name of the NumPy library/package
+• "as" - This keyword allows you to give the imported module a shorter alias
+• "np" - This is the alias (nickname) we're giving to NumPy
+
+WHY USE "AS NP"?
+----------------
+We use "as np" because:
+• "np" is much shorter than typing "numpy" every time
+• It's the standard convention used by the entire Python data science community
+• It makes code more readable and concise
+• Everyone in the data science field recognizes "np" as NumPy
+
+EXAMPLES OF USING THE IMPORT
+-----------------------------
+After importing, you use "np" instead of "numpy":
+
+  import numpy as np
+  
+  # Instead of: numpy.array([1, 2, 3])
+  # You write:
+  arr = np.array([1, 2, 3])
+  
+  # Instead of: numpy.zeros(5)
+  # You write:
+  zeros = np.zeros(5)
+
+ALTERNATIVE IMPORT METHODS
+---------------------------
+While "import numpy as np" is the standard, there are other ways to import:
+
+METHOD 1: Import everything (NOT RECOMMENDED)
+  from numpy import *
+  # Now you can use array([1, 2, 3]) without "np."
+  # Problem: This pollutes your namespace and can cause naming conflicts
+
+METHOD 2: Import specific functions
+  from numpy import array, zeros, ones
+  # Now you can use array([1, 2, 3]) directly
+  # Problem: Less clear where functions come from
+
+METHOD 3: Standard import (RECOMMENDED)
+  import numpy as np
+  # Use np.array([1, 2, 3])
+  # This is the best practice - clear and standard
+
+VERIFYING THE IMPORT
+--------------------
+You can verify that NumPy is installed and imported correctly:
+
+  import numpy as np
+  
+  # Check NumPy version
+  print(np.__version__)
+  # Output: e.g., '1.24.3'
+  
+  # Check if NumPy is available
+  print(np)
+  # Output: <module 'numpy' from '/path/to/numpy/__init__.py'>
+
+INSTALLING NUMPY (IF NEEDED)
+-----------------------------
+If you get an error when trying to import NumPy, you need to install it:
+
+  pip install numpy
+
+Or if you're using conda:
+
+  conda install numpy
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: CREATING ARRAYS FROM PYTHON LISTS
+-----------------------------------------------
+
+THE BASIC METHOD: NP.ARRAY()
+-----------------------------
+The most common way to create a NumPy array is by converting a Python list 
+using the np.array() function.
+
+BASIC SYNTAX
+------------
+  import numpy as np
+  my_list = [1, 2, 3, 4, 5]
+  my_array = np.array(my_list)
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+Let's break down this code example:
+
+LINE 1: import numpy as np
+  • This imports the NumPy library and gives it the alias "np"
+  • Without this line, Python wouldn't know what "np" means
+  • This must be done before using any NumPy functions
+
+LINE 2: my_list = [1, 2, 3, 4, 5]
+  • This creates a Python list containing the integers 1, 2, 3, 4, and 5
+  • The square brackets [] indicate a list
+  • The elements are separated by commas
+  • This is a regular Python list, not a NumPy array yet
+
+LINE 3: my_array = np.array(my_list)
+  • "np" refers to the NumPy library we imported
+  • ".array()" is a function provided by NumPy that converts data into a 
+    NumPy array
+  • "my_list" is the Python list we want to convert
+  • The result is stored in the variable "my_array"
+  • After this line, "my_array" is a NumPy array (ndarray), not a Python list
+
+WHAT HAPPENS DURING CONVERSION
+-------------------------------
+When you call np.array() on a Python list:
+1. NumPy examines all elements in the list
+2. NumPy determines the most appropriate data type (dtype) that can represent 
+   all elements
+3. NumPy creates a new array in memory with that data type
+4. NumPy copies the data from the list into the array
+5. The array is stored in contiguous memory blocks for efficiency
+
+VISUAL REPRESENTATION
+---------------------
+Before conversion (Python list):
+  my_list = [1, 2, 3, 4, 5]
+  Memory: [Python object] [Python object] [Python object] [Python object] [Python object]
+          (each with overhead)
+
+After conversion (NumPy array):
+  my_array = np.array([1, 2, 3, 4, 5])
+  Memory: [1][2][3][4][5]
+          (contiguous, efficient)
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Array of integers
+  import numpy as np
+  numbers = [10, 20, 30, 40, 50]
+  arr = np.array(numbers)
+  print(arr)
+  # Output: [10 20 30 40 50]
+  # Notice: No commas in the output - this indicates it's a NumPy array
+
+EXAMPLE 2: Array of floats
+  import numpy as np
+  prices = [9.99, 19.99, 29.99]
+  arr = np.array(prices)
+  print(arr)
+  # Output: [ 9.99 19.99 29.99]
+
+EXAMPLE 3: Creating array directly (without intermediate list)
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  # This is equivalent to the previous example but more concise
+
+EXAMPLE 4: Empty array
+  import numpy as np
+  arr = np.array([])
+  print(arr)
+  # Output: []
+  # This creates an empty array
+
+VERIFYING THE ARRAY TYPE
+------------------------
+You can verify that you've created a NumPy array:
+
+  import numpy as np
+  my_list = [1, 2, 3, 4, 5]
+  my_array = np.array(my_list)
+  
+  # Check the type
+  print(type(my_list))    # Output: <class 'list'>
+  print(type(my_array))   # Output: <class 'numpy.ndarray'>
+  
+  # The type of my_array is numpy.ndarray, confirming it's a NumPy array
+
+ACCESSING THE ARRAY
+-------------------
+Once created, you can access the array elements just like a Python list:
+
+  import numpy as np
+  my_array = np.array([1, 2, 3, 4, 5])
+  
+  # Access individual elements
+  print(my_array[0])   # Output: 1 (first element, index 0)
+  print(my_array[2])   # Output: 3 (third element, index 2)
+  print(my_array[4])   # Output: 5 (fifth element, index 4)
+
+The value of the array is stored as shown above, with indices starting at 0, 
+just like Python lists.
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: CREATING ARRAYS WITH DIFFERENT DATA TYPES
+-------------------------------------------------------
+
+UNDERSTANDING DATA TYPES IN NUMPY
+----------------------------------
+As NumPy arrays contain data of the same type, NumPy automatically determines 
+the data type (dtype) when you create an array. However, you can also 
+explicitly specify the data type.
+
+CREATING ARRAYS WITH REAL NUMBERS (FLOATS)
+-------------------------------------------
+When you create a NumPy array with real numbers (numbers with decimal points), 
+NumPy automatically uses a float data type.
+
+EXAMPLE: Array with floats
+  import numpy as np
+  float_array = np.array([1.5, 2.7, 3.14, 4.0, 5.9])
+  
+  # Check the type of the array
+  print(type(float_array))
+  # Output: <class 'numpy.ndarray'>
+  # The type is still numpy.ndarray (all arrays have this type)
+  
+  # Check the data type of elements
+  print(float_array.dtype)
+  # Output: float64
+  # This means each element is a 64-bit floating-point number
+
+DETAILED EXPLANATION
+--------------------
+When we check the type of the array using type(), we get numpy.ndarray. This 
+is the same for all NumPy arrays regardless of their element types. However, 
+if we examine the attribute dtype (data type), we see float64 because the 
+elements are not integers - they are floating-point numbers.
+
+UNDERSTANDING DTYPE: FLOAT64
+-----------------------------
+• "float" means floating-point number (a number with decimal places)
+• "64" means 64 bits (8 bytes) are used to store each number
+• This provides high precision (about 15-17 decimal digits)
+• Float64 is the default for floating-point numbers in NumPy
+
+COMMON DATA TYPES IN NUMPY
+---------------------------
+NumPy supports many data types. Here are the most common:
+
+INTEGER TYPES:
+  • int8: 8-bit integer (-128 to 127)
+  • int16: 16-bit integer (-32,768 to 32,767)
+  • int32: 32-bit integer (default for integers)
+  • int64: 64-bit integer
+  • uint8: Unsigned 8-bit integer (0 to 255)
+  • uint16, uint32, uint64: Other unsigned integer types
+
+FLOATING-POINT TYPES:
+  • float16: Half precision (16 bits)
+  • float32: Single precision (32 bits)
+  • float64: Double precision (64 bits, default for floats)
+
+OTHER TYPES:
+  • bool: Boolean (True/False)
+  • complex64, complex128: Complex numbers
+  • object: Python objects
+  • string: String arrays
+
+SPECIFYING DATA TYPES EXPLICITLY
+---------------------------------
+You can explicitly specify the data type when creating an array:
+
+EXAMPLE 1: Specify integer type
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5], dtype=np.int32)
+  print(arr.dtype)
+  # Output: int32
+
+EXAMPLE 2: Specify float type
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5], dtype=np.float64)
+  print(arr.dtype)
+  # Output: float64
+  # Note: The integers are converted to floats: [1. 2. 3. 4. 5.]
+
+EXAMPLE 3: Convert integers to floats
+  import numpy as np
+  int_list = [1, 2, 3, 4, 5]
+  float_array = np.array(int_list, dtype=np.float64)
+  print(float_array)
+  # Output: [1. 2. 3. 4. 5.]
+  # The integers are converted to floating-point numbers
+
+EXAMPLE 4: Mixed types (NumPy chooses the most general type)
+  import numpy as np
+  mixed = np.array([1, 2.5, 3])
+  print(mixed.dtype)
+  # Output: float64
+  # NumPy converts all to float to accommodate the 2.5
+
+WHY DATA TYPES MATTER
+---------------------
+Choosing the right data type is important for:
+• MEMORY EFFICIENCY: Smaller types use less memory
+  - int8 uses 1 byte per element
+  - int64 uses 8 bytes per element
+  - For 1 million elements: int8 = 1 MB, int64 = 8 MB
+  
+• PERFORMANCE: Smaller types can be processed faster
+• PRECISION: Float32 has less precision than float64
+• COMPATIBILITY: Some operations require specific types
+
+EXAMPLE: Memory savings
+  import numpy as np
+  
+  # Using default int64 (8 bytes per element)
+  arr1 = np.array([1, 2, 3, 4, 5])
+  print(arr1.nbytes)  # Output: 40 (5 elements × 8 bytes)
+  
+  # Using int8 (1 byte per element)
+  arr2 = np.array([1, 2, 3, 4, 5], dtype=np.int8)
+  print(arr2.nbytes)  # Output: 5 (5 elements × 1 byte)
+  
+  # 8 times less memory!
+
+CHECKING DATA TYPE
+------------------
+You can check the data type of an array using the dtype attribute:
+
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  print(arr.dtype)  # Output: int64 (on most systems)
+
+[END SECTION 2.4]
+================================================================================
+
+PART 3: NUMPY ARRAY ATTRIBUTES
+================================================================================
+
+SECTION 3.1: THE TYPE ATTRIBUTE
+---------------------------------
+
+CHECKING THE ARRAY TYPE
+-----------------------
+If we check the type of a NumPy array using Python's type() function, we get 
+numpy.ndarray. This confirms that the variable is indeed a NumPy array.
+
+EXAMPLE
+-------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Check the type
+  print(type(a))
+  # Output: <class 'numpy.ndarray'>
+
+DETAILED EXPLANATION
+--------------------
+• "type()" is a built-in Python function that returns the type of an object
+• When applied to a NumPy array, it returns "<class 'numpy.ndarray'>"
+• This tells us that "a" is an instance of the numpy.ndarray class
+• All NumPy arrays, regardless of their dimensions or data types, have this 
+  same type
+
+WHY CHECK THE TYPE?
+-------------------
+Checking the type is useful for:
+• Debugging: Confirming you're working with a NumPy array, not a Python list
+• Type validation: Ensuring data is in the expected format
+• Understanding: Learning what kind of object you're working with
+
+COMPARISON: LIST VS ARRAY TYPE
+-------------------------------
+  import numpy as np
+  
+  # Python list
+  my_list = [1, 2, 3, 4, 5]
+  print(type(my_list))
+  # Output: <class 'list'>
+  
+  # NumPy array
+  my_array = np.array([1, 2, 3, 4, 5])
+  print(type(my_array))
+  # Output: <class 'numpy.ndarray'>
+  
+  # They have different types!
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: THE DTYPE ATTRIBUTE
+----------------------------------
+
+UNDERSTANDING DTYPE
+-------------------
+As NumPy arrays contain data of the same type, we can use the attribute dtype 
+to obtain the data type of the array's elements. The dtype (data type) tells 
+us what kind of data is stored in the array.
+
+ACCESSING THE DTYPE ATTRIBUTE
+------------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Get the data type
+  print(a.dtype)
+  # Output: int64
+  # In this case, a 64-bit integer
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array
+• ".dtype" is an attribute (a property) of the array
+• It returns the data type of the elements in the array
+• "int64" means 64-bit integer (each element is an integer stored in 64 bits)
+
+COMMON DTYPE VALUES
+-------------------
+
+FOR INTEGERS:
+  • int8, int16, int32, int64: Signed integers
+  • uint8, uint16, uint32, uint64: Unsigned integers (only positive)
+
+FOR FLOATING-POINT NUMBERS:
+  • float16: Half precision (16 bits)
+  • float32: Single precision (32 bits)
+  • float64: Double precision (64 bits, most common)
+
+FOR OTHER TYPES:
+  • bool: Boolean (True/False)
+  • object: Python objects
+  • string: String arrays
+
+EXAMPLES OF DIFFERENT DTYPES
+-----------------------------
+
+EXAMPLE 1: Integer array
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.dtype)
+  # Output: int64
+
+EXAMPLE 2: Float array
+  import numpy as np
+  b = np.array([1.5, 2.7, 3.14])
+  print(b.dtype)
+  # Output: float64
+  # As the elements are not integers, we see float64
+
+EXAMPLE 3: Boolean array
+  import numpy as np
+  c = np.array([True, False, True])
+  print(c.dtype)
+  # Output: bool
+
+EXAMPLE 4: String array
+  import numpy as np
+  d = np.array(['hello', 'world'])
+  print(d.dtype)
+  # Output: <U5 (Unicode string, max 5 characters)
+
+WHY DTYPE MATTERS
+-----------------
+The dtype is important because:
+• It determines how much memory each element uses
+• It affects the precision of calculations
+• Some operations require specific dtypes
+• It impacts performance
+
+CHECKING DTYPE IN PRACTICE
+---------------------------
+  import numpy as np
+  
+  # Create array with integers
+  arr_int = np.array([1, 2, 3])
+  print(f"Integer array dtype: {arr_int.dtype}")
+  # Output: Integer array dtype: int64
+  
+  # Create array with floats
+  arr_float = np.array([1.0, 2.0, 3.0])
+  print(f"Float array dtype: {arr_float.dtype}")
+  # Output: Float array dtype: float64
+  
+  # Create array with mixed (becomes float)
+  arr_mixed = np.array([1, 2.5, 3])
+  print(f"Mixed array dtype: {arr_mixed.dtype}")
+  # Output: Mixed array dtype: float64
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: THE SIZE ATTRIBUTE
+--------------------------------
+
+UNDERSTANDING SIZE
+------------------
+The attribute size is the number of elements in the array. It tells us how 
+many total elements the array contains.
+
+ACCESSING THE SIZE ATTRIBUTE
+-----------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Get the size
+  print(a.size)
+  # Output: 5
+  # As there are five elements, the result is five
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array containing [1, 2, 3, 4, 5]
+• ".size" is an attribute that returns the total number of elements
+• Since the array has 5 elements (1, 2, 3, 4, and 5), a.size returns 5
+• This works for arrays of any dimension
+
+MORE EXAMPLES
+-------------
+
+EXAMPLE 1: Empty array
+  import numpy as np
+  empty = np.array([])
+  print(empty.size)
+  # Output: 0
+  # No elements, so size is 0
+
+EXAMPLE 2: Single element array
+  import numpy as np
+  single = np.array([42])
+  print(single.size)
+  # Output: 1
+  # One element, so size is 1
+
+EXAMPLE 3: Large array
+  import numpy as np
+  large = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  print(large.size)
+  # Output: 10
+  # Ten elements, so size is 10
+
+EXAMPLE 4: Using size in calculations
+  import numpy as np
+  arr = np.array([10, 20, 30, 40, 50])
+  
+  # Calculate average manually using size
+  total = arr.sum()  # Sum of all elements
+  count = arr.size   # Number of elements
+  average = total / count
+  print(f"Average: {average}")
+  # Output: Average: 30.0
+
+SIZE VS LEN()
+-------------
+Both size and len() return the number of elements for 1D arrays:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  print(a.size)    # Output: 5
+  print(len(a))    # Output: 5
+  
+  # For 1D arrays, they're the same
+  # For higher dimensions, size gives total elements, len() gives first dimension
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: THE NDIM ATTRIBUTE
+---------------------------------
+
+UNDERSTANDING NDIM
+------------------
+The attribute ndim represents the number of array dimensions or the rank of 
+the array. For a 1D array, ndim is 1. For a 2D array (matrix), ndim is 2, 
+and so on.
+
+ACCESSING THE NDIM ATTRIBUTE
+-----------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Get the number of dimensions
+  print(a.ndim)
+  # Output: 1
+  # In this case, one (because it's a 1D array)
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array
+• ".ndim" is an attribute that returns the number of dimensions
+• For a 1D array like [1, 2, 3, 4, 5], ndim returns 1
+• The next two attributes (ndim and shape) will make more sense when we get 
+  to higher dimensions, but let's review them now
+
+WHAT ARE DIMENSIONS?
+--------------------
+Dimensions refer to how many "axes" or "directions" the array has:
+
+• 1D ARRAY (ndim=1): Like a line
+  [1, 2, 3, 4, 5]
+  One direction: left to right
+
+• 2D ARRAY (ndim=2): Like a table/matrix
+  [[1, 2, 3],
+   [4, 5, 6]]
+  Two directions: rows and columns
+
+• 3D ARRAY (ndim=3): Like a cube
+  Three directions: depth, rows, columns
+
+EXAMPLES OF DIFFERENT DIMENSIONS
+--------------------------------
+
+EXAMPLE 1: 1D array
+  import numpy as np
+  arr_1d = np.array([1, 2, 3, 4, 5])
+  print(arr_1d.ndim)
+  # Output: 1
+
+EXAMPLE 2: 2D array
+  import numpy as np
+  arr_2d = np.array([[1, 2, 3], [4, 5, 6]])
+  print(arr_2d.ndim)
+  # Output: 2
+
+EXAMPLE 3: 3D array
+  import numpy as np
+  arr_3d = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+  print(arr_3d.ndim)
+  # Output: 3
+
+WHY NDIM MATTERS
+----------------
+The number of dimensions affects:
+• How you index the array
+• What operations are available
+• How the array is stored in memory
+• The shape of the array
+
+VISUAL UNDERSTANDING
+--------------------
+Think of dimensions like directions in space:
+• 1D = a line (one direction)
+• 2D = a plane (two directions: up/down, left/right)
+• 3D = a cube (three directions: up/down, left/right, forward/backward)
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: THE SHAPE ATTRIBUTE
+---------------------------------
+
+UNDERSTANDING SHAPE
+-------------------
+The attribute shape is a tuple of integers indicating the size of the array in 
+each dimension. For a 1D array, shape returns a tuple with one number 
+representing the length of the array.
+
+ACCESSING THE SHAPE ATTRIBUTE
+-----------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Get the shape
+  print(a.shape)
+  # Output: (5,)
+  # A tuple indicating the size in each dimension
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array containing [1, 2, 3, 4, 5]
+• ".shape" is an attribute that returns a tuple describing the array's 
+  dimensions
+• For a 1D array with 5 elements, shape returns (5,)
+• The comma after 5 indicates this is a tuple (even with one element)
+• The number 5 means the array has 5 elements along its single dimension
+
+UNDERSTANDING THE SHAPE TUPLE
+------------------------------
+The shape tuple tells you the size along each dimension:
+
+• 1D ARRAY: shape = (length,)
+  Example: [1, 2, 3, 4, 5] has shape (5,)
+  - One dimension with 5 elements
+
+• 2D ARRAY: shape = (rows, columns)
+  Example: [[1, 2, 3], [4, 5, 6]] has shape (2, 3)
+  - Two rows, three columns
+
+• 3D ARRAY: shape = (depth, rows, columns)
+  Example: shape might be (2, 3, 4)
+  - Two layers, each with 3 rows and 4 columns
+
+EXAMPLES OF SHAPE
+-----------------
+
+EXAMPLE 1: 1D array
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  print(arr.shape)
+  # Output: (5,)
+  # One dimension with 5 elements
+
+EXAMPLE 2: Different sized 1D array
+  import numpy as np
+  arr = np.array([10, 20, 30])
+  print(arr.shape)
+  # Output: (3,)
+  # One dimension with 3 elements
+
+EXAMPLE 3: 2D array (for comparison)
+  import numpy as np
+  arr_2d = np.array([[1, 2, 3], [4, 5, 6]])
+  print(arr_2d.shape)
+  # Output: (2, 3)
+  # Two rows, three columns
+
+RELATIONSHIP BETWEEN SIZE AND SHAPE
+------------------------------------
+For a 1D array:
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  print(a.size)    # Output: 5
+  print(a.shape)  # Output: (5,)
+  
+  # For 1D arrays, size equals the first (and only) element of shape
+
+For higher dimensions, size is the product of all shape elements:
+  import numpy as np
+  arr_2d = np.array([[1, 2, 3], [4, 5, 6]])
+  
+  print(arr_2d.size)    # Output: 6 (total elements)
+  print(arr_2d.shape)   # Output: (2, 3)
+  # 2 × 3 = 6, which equals size
+
+USING SHAPE IN PRACTICE
+-----------------------
+  import numpy as np
+  arr = np.array([1, 2, 3, 4, 5])
+  
+  # Get shape
+  shape = arr.shape
+  print(f"Shape: {shape}")           # Output: Shape: (5,)
+  print(f"Length: {shape[0]}")       # Output: Length: 5
+  print(f"Dimensions: {len(shape)}") # Output: Dimensions: 1
+
+[END SECTION 3.5]
+================================================================================
+
+SECTION 3.6: OTHER USEFUL ATTRIBUTES
+--------------------------------------
+
+ADDITIONAL ARRAY ATTRIBUTES
+---------------------------
+There are many other attributes available for NumPy arrays. Here are some 
+commonly used ones:
+
+ITEMSIZE ATTRIBUTE
+------------------
+Returns the size in bytes of each element:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.itemsize)
+  # Output: 8 (for int64, each element uses 8 bytes)
+
+NBYTES ATTRIBUTE
+----------------
+Returns the total number of bytes used by the array:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.nbytes)
+  # Output: 40 (5 elements × 8 bytes each = 40 bytes)
+
+STRIDES ATTRIBUTE
+-----------------
+Returns the number of bytes to step in each dimension when traversing the array:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.strides)
+  # Output: (8,) (for 1D array, step 8 bytes to next element)
+
+DATA ATTRIBUTE
+--------------
+Returns a buffer object pointing to the array's data:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.data)
+  # Output: <memory at 0x...> (memory address of the data)
+
+FLAGS ATTRIBUTE
+---------------
+Returns information about memory layout:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a.flags)
+  # Output: Information about C_CONTIGUOUS, F_CONTIGUOUS, etc.
+
+WHERE TO FIND MORE
+------------------
+There are many other attributes. Check out NumPy.org for more information. 
+The official NumPy documentation provides a complete list of all array 
+attributes and their uses.
+
+QUICK REFERENCE: COMMON ATTRIBUTES
+-----------------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  print(a.dtype)   # Data type: int64
+  print(a.size)    # Number of elements: 5
+  print(a.ndim)    # Number of dimensions: 1
+  print(a.shape)   # Shape tuple: (5,)
+  print(a.itemsize) # Bytes per element: 8
+  print(a.nbytes)  # Total bytes: 40
+
+[END SECTION 3.6]
+================================================================================
+
+PART 4: INDEXING AND SLICING NUMPY ARRAYS
+================================================================================
+
+SECTION 4.1: UNDERSTANDING INDEXING
+------------------------------------
+
+WHAT IS INDEXING?
+-----------------
+Indexing is the process of accessing individual elements in an array using 
+their position (index). In NumPy arrays, just like Python lists, indices 
+start at 0.
+
+INDEX NUMBERING SYSTEM
+----------------------
+For an array with 5 elements:
+  Index:  0    1    2    3    4
+  Value: [1]  [2]  [3]  [4]  [5]
+         └─────────────────────┘
+
+• The first element is at index 0
+• The second element is at index 1
+• The third element is at index 2
+• The fourth element is at index 3
+• The fifth element is at index 4
+
+KEY POINTS ABOUT INDEXING
+-------------------------
+• Indices start at 0 (not 1)
+• The last index is always (length - 1)
+• Negative indices count from the end (-1 is the last element)
+• Indexing uses square brackets []
+
+POSITIVE VS NEGATIVE INDICES
+----------------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Positive indices (from start)
+  a[0]  # First element: 1
+  a[1]  # Second element: 2
+  a[4]  # Fifth element: 5
+  
+  # Negative indices (from end)
+  a[-1] # Last element: 5
+  a[-2] # Second to last: 4
+  a[-5] # First element: 1
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: ACCESSING ARRAY ELEMENTS
+--------------------------------------
+
+BASIC ACCESS SYNTAX
+-------------------
+As with lists, we can access each element with an integer and a square bracket:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Access elements
+  first = a[0]    # Gets the first element
+  second = a[1]  # Gets the second element
+  third = a[2]   # Gets the third element
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array
+• Square brackets [] are used for indexing
+• The number inside is the index (position) of the element we want
+• Index 0 gives us the first element
+• Index 1 gives us the second element
+• And so on...
+
+EXAMPLES OF ACCESSING ELEMENTS
+-------------------------------
+
+EXAMPLE 1: Access first element
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a[0])
+  # Output: 1
+
+EXAMPLE 2: Access middle element
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a[2])
+  # Output: 3
+  # Index 2 is the third element (0, 1, 2)
+
+EXAMPLE 3: Access last element
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(a[4])    # Using positive index
+  print(a[-1])   # Using negative index (easier!)
+  # Both output: 5
+
+EXAMPLE 4: Access multiple elements (store in variables)
+  import numpy as np
+  a = np.array([10, 20, 30, 40, 50])
+  
+  first = a[0]
+  last = a[-1]
+  middle = a[2]
+  
+  print(f"First: {first}, Middle: {middle}, Last: {last}")
+  # Output: First: 10, Middle: 30, Last: 50
+
+INDEX OUT OF BOUNDS ERROR
+--------------------------
+If you try to access an index that doesn't exist, you'll get an error:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # This will cause an error:
+  # print(a[10])  # IndexError: index 10 is out of bounds for axis 0 with size 5
+  
+  # Valid indices are 0, 1, 2, 3, 4 (or -5, -4, -3, -2, -1)
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: MODIFYING ARRAY ELEMENTS
+--------------------------------------
+
+CHANGING ELEMENT VALUES
+------------------------
+We can change the value of array elements by assigning new values to specific 
+indices.
+
+CHANGING THE FIRST ELEMENT
+---------------------------
+We can change the first element of the array to 100 as follows:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Change the first element (index 0) to 100
+  a[0] = 100
+  
+  print(a)
+  # Output: [100   2   3   4   5]
+  # The array's first value is now 100
+
+DETAILED EXPLANATION
+--------------------
+• "a" is our NumPy array [1, 2, 3, 4, 5]
+• "a[0]" selects the first element (at index 0)
+• "= 100" assigns the value 100 to that position
+• After this assignment, the array becomes [100, 2, 3, 4, 5]
+• The original value (1) is replaced with 100
+
+CHANGING THE FIFTH ELEMENT
+---------------------------
+We can change the fifth element of the array as follows:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # Change the fifth element (index 4) to 0
+  a[4] = 0
+  
+  print(a)
+  # Output: [1   2   3   4   0]
+  # The fifth element is now zero
+
+DETAILED EXPLANATION
+--------------------
+• "a[4]" selects the fifth element (remember, indices start at 0, so index 4 
+  is the fifth element)
+• "= 0" assigns the value 0 to that position
+• After this assignment, the array becomes [1, 2, 3, 4, 0]
+• The original value (5) is replaced with 0
+
+MORE EXAMPLES OF MODIFICATION
+------------------------------
+
+EXAMPLE 1: Change multiple elements
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  a[0] = 10
+  a[1] = 20
+  a[2] = 30
+  
+  print(a)
+  # Output: [10  20  30   4   5]
+
+EXAMPLE 2: Change using negative indices
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  a[-1] = 99  # Change last element
+  a[-2] = 88  # Change second to last
+  
+  print(a)
+  # Output: [  1   2   3  88  99]
+
+EXAMPLE 3: Change middle elements
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  a[2] = 999  # Change middle element (index 2)
+  
+  print(a)
+  # Output: [  1   2 999   4   5]
+
+IMPORTANT NOTE: MODIFICATION IS IN-PLACE
+-----------------------------------------
+When you modify an array element, the change happens immediately and 
+permanently:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  print(f"Before: {a}")
+  # Output: Before: [1 2 3 4 5]
+  
+  a[0] = 100
+  print(f"After: {a}")
+  # Output: After: [100   2   3   4   5]
+  
+  # The change is permanent - there's no "undo"
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: UNDERSTANDING SLICING
+-----------------------------------
+
+WHAT IS SLICING?
+----------------
+Slicing is the process of selecting a portion (subset) of an array. Like lists 
+and tuples, we can slice a NumPy array to get a range of elements.
+
+SLICING SYNTAX
+--------------
+The basic slicing syntax is:
+  array[start:end]
+
+Where:
+• start: The index where slicing begins (inclusive)
+• end: The index where slicing ends (exclusive - not included)
+
+UNDERSTANDING THE INDEX CORRESPONDENCE
+--------------------------------------
+The elements of the array correspond to the following indices:
+
+  Array:  [1,  2,  3,  4,  5]
+  Index:   0   1   2   3   4
+
+When slicing, remember:
+• The start index is INCLUDED in the result
+• The end index is EXCLUDED from the result
+• This is the same behavior as Python lists
+
+VISUAL EXAMPLE
+---------------
+For array [1, 2, 3, 4, 5]:
+  a[1:3] means: "Get elements from index 1 up to (but not including) index 3"
+  
+  Index:  0    1    2    3    4
+  Value: [1]  [2]  [3]  [4]  [5]
+                └─────┘
+              Included in slice
+  
+  Result: [2, 3]
+
+COMMON SLICING PATTERNS
+-----------------------
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  a[1:3]    # Elements from index 1 to 2: [2, 3]
+  a[:3]     # Elements from start to index 2: [1, 2, 3]
+  a[2:]     # Elements from index 2 to end: [3, 4, 5]
+  a[:]      # All elements: [1, 2, 3, 4, 5]
+  a[::2]    # Every second element: [1, 3, 5] (step of 2)
+
+[END SECTION 4.4]
+================================================================================
+
+SECTION 4.5: SLICING ARRAYS
+-----------------------------
+
+BASIC SLICING EXAMPLE
+----------------------
+We can select the elements from index 1 to 3 and assign it to a new NumPy 
+array, d, as follows:
+
+  import numpy as np
+  c = np.array([1, 2, 3, 4, 5])
+  
+  # Slice from index 1 to 3 (exclusive)
+  d = c[1:3]
+  
+  print(d)
+  # Output: [2 3]
+  # The elements in d correspond to indices 1 and 2
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: import numpy as np
+  • Imports NumPy library with alias "np"
+
+LINE 2: c = np.array([1, 2, 3, 4, 5])
+  • Creates a NumPy array with values 1, 2, 3, 4, 5
+  • Stores it in variable "c"
+
+LINE 3: d = c[1:3]
+  • "c[1:3]" performs slicing on array c
+  • Start index: 1 (inclusive - element at index 1 is included)
+  • End index: 3 (exclusive - element at index 3 is NOT included)
+  • This selects elements at indices 1 and 2: [2, 3]
+  • The result is stored in variable "d"
+
+LINE 4: print(d)
+  • Prints the sliced array
+  • Output: [2 3]
+
+WHY INDEX 3 IS EXCLUDED
+------------------------
+Like lists, we do not count the element corresponding to the last index. This 
+means:
+• c[1:3] includes indices 1 and 2
+• Index 3 is NOT included
+• This is consistent with Python's slicing behavior
+
+VISUAL BREAKDOWN
+----------------
+  Original array c:
+  Index:  0    1    2    3    4
+  Value: [1]  [2]  [3]  [4]  [5]
+                └─────┘
+              c[1:3] selects these
+  
+  Result array d:
+  Index:  0    1
+  Value: [2]  [3]
+
+MORE SLICING EXAMPLES
+---------------------
+
+EXAMPLE 1: Slice from beginning
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[:3]  # From start to index 2
+  print(b)
+  # Output: [1 2 3]
+
+EXAMPLE 2: Slice to end
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[2:]  # From index 2 to end
+  print(b)
+  # Output: [3 4 5]
+
+EXAMPLE 3: Slice middle portion
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[1:4]  # From index 1 to 3
+  print(b)
+  # Output: [2 3 4]
+
+EXAMPLE 4: Slice with step
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[::2]  # Every second element
+  print(b)
+  # Output: [1 3 5]
+
+EXAMPLE 5: Slice with negative indices
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[-3:-1]  # From third to last, to second to last
+  print(b)
+  # Output: [3 4]
+
+SLICING CREATES A VIEW (USUALLY)
+--------------------------------
+Important: Slicing typically creates a "view" of the original array, not a 
+copy. This means changes to the slice can affect the original:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[1:4]  # Slice
+  b[0] = 999  # Modify slice
+  
+  print(b)  # Output: [999   3   4]
+  print(a)  # Output: [  1 999   3   4   5]  # Original also changed!
+
+To create an independent copy, use .copy():
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  b = a[1:4].copy()  # Independent copy
+  b[0] = 999
+  
+  print(b)  # Output: [999   3   4]
+  print(a)  # Output: [1 2 3 4 5]  # Original unchanged
+
+[END SECTION 4.5]
+================================================================================
+
+SECTION 4.6: MODIFYING ARRAYS USING SLICING
+--------------------------------------------
+
+ASSIGNING VALUES TO SLICES
+---------------------------
+We can assign new values to a slice of an array. The corresponding indices 
+will be updated with the new values.
+
+BASIC EXAMPLE
+-------------
+We can assign the corresponding indices to new values as follows:
+
+  import numpy as np
+  c = np.array([1, 2, 3, 4, 5])
+  
+  # Assign new values to slice
+  c[1:3] = [20, 30]
+  
+  print(c)
+  # Output: [ 1 20 30  4  5]
+  # The array c now has new values
+
+DETAILED LINE-BY-LINE EXPLANATION
+----------------------------------
+LINE 1: import numpy as np
+  • Imports NumPy library
+
+LINE 2: c = np.array([1, 2, 3, 4, 5])
+  • Creates array [1, 2, 3, 4, 5] and stores in variable c
+
+LINE 3: c[1:3] = [20, 30]
+  • "c[1:3]" selects the slice from index 1 to 2 (elements [2, 3])
+  • "= [20, 30]" assigns new values to this slice
+  • Element at index 1 becomes 20 (was 2)
+  • Element at index 2 becomes 30 (was 3)
+  • The array is modified in-place
+
+LINE 4: print(c)
+  • Prints the modified array
+  • Output: [ 1 20 30  4  5]
+
+VISUAL BREAKDOWN
+----------------
+Before assignment:
+  Index:  0    1    2    3    4
+  Value: [1]  [2]  [3]  [4]  [5]
+                └─────┘
+              This slice will be modified
+
+After c[1:3] = [20, 30]:
+  Index:  0    1     2     3    4
+  Value: [1]  [20]  [30]  [4]  [5]
+                └──────┘
+              New values assigned
+
+MORE EXAMPLES OF SLICE ASSIGNMENT
+----------------------------------
+
+EXAMPLE 1: Assign single value to slice
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  a[1:4] = 99  # Assign 99 to all elements in slice
+  print(a)
+  # Output: [ 1 99 99 99  5]
+
+EXAMPLE 2: Assign array to slice
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  a[:3] = [10, 20, 30]  # Assign to first three elements
+  print(a)
+  # Output: [10 20 30  4  5]
+
+EXAMPLE 3: Assign to slice with step
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  a[::2] = [100, 200, 300]  # Assign to every second element
+  print(a)
+  # Output: [100   2 200   4 300]
+
+EXAMPLE 4: Modify end of array
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  a[-2:] = [88, 99]  # Modify last two elements
+  print(a)
+  # Output: [ 1  2  3 88 99]
+
+BROADCASTING IN SLICE ASSIGNMENT
+---------------------------------
+When you assign a single value to a slice, NumPy "broadcasts" it to all 
+elements in the slice:
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  a[1:4] = 0  # Single value broadcasted to all elements in slice
+  print(a)
+  # Output: [1 0 0 0 5]
+
+This is equivalent to:
+  a[1:4] = [0, 0, 0]
+
+IMPORTANT: SIZE MUST MATCH
+--------------------------
+When assigning an array to a slice, the sizes must match (or use broadcasting):
+
+  import numpy as np
+  a = np.array([1, 2, 3, 4, 5])
+  
+  # This works - sizes match
+  a[1:3] = [20, 30]  # 2 elements assigned to 2-element slice
+  
+  # This would cause an error:
+  # a[1:3] = [20, 30, 40]  # ValueError: cannot assign 3 values to 2-element slice
+
+[END SECTION 4.6]
+================================================================================
+
+END OF PART 1
+==============
+
+Congratulations! You've completed Part 1 of the One-Dimensional NumPy guide. 
+You now understand:
+• What NumPy is and why it's important
+• How to create NumPy arrays
+• Array attributes (type, dtype, size, ndim, shape)
+• How to index and slice arrays
+• How to modify array elements
+
+Continue to Part 2 to learn about:
+• Vector operations (addition, subtraction, scalar multiplication)
+• Hadamard product and dot product
+• Broadcasting
+• Performance comparisons
+
+================================================================================

@@ -1,0 +1,2321 @@
+================================================================================
+TWO-DIMENSIONAL NUMPY IN PYTHON
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Two-Dimensional NumPy in Python. This comprehensive guide will teach 
+you everything you need to know about NumPy arrays with more than one dimension, 
+specifically focusing on 2D arrays. You'll learn how to create 2D arrays, 
+understand their structure and attributes, master indexing and slicing in 2D, 
+and perform various operations. This guide provides exhaustive explanations, 
+numerous examples, and detailed line-by-line code explanations to ensure you 
+understand every concept thoroughly.
+
+ESTIMATED TIME NEEDED
+---------------------
+15 minutes (for basic reading)
+120-150 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what 2D NumPy arrays are and how they differ from 1D arrays
+• Create 2D NumPy arrays from nested Python lists
+• Visualize 2D arrays as rectangular matrices
+• Understand and use array attributes: ndim, shape, and size
+• Understand the concept of axes and dimensions in NumPy arrays
+• Access individual elements using double bracket notation
+• Perform slicing operations on 2D arrays
+• Understand row and column indexing conventions
+• Recognize when to use 2D arrays versus 1D arrays
+• Apply 2D array concepts to real-world data science problems
+
+OVERVIEW
+--------
+We can create NumPy arrays with more than one dimension. This section focuses 
+on 2D arrays, but you can use NumPy to build arrays of much higher dimensions 
+(3D, 4D, and beyond). In this comprehensive guide, we will cover:
+
+• The basics of 2D array creation
+• Understanding dimensions, axes, and array structure
+• Array attributes (ndim, shape, size)
+• Indexing and slicing in 2D arrays
+• Basic operations in 2D (addition, scalar multiplication, element-wise 
+  multiplication, matrix multiplication)
+
+This comprehensive guide is divided into two parts:
+• Part 1: Introduction to 2D arrays, array creation, attributes, indexing and 
+  slicing
+• Part 2: Array operations (addition, scalar multiplication, Hadamard product, 
+  matrix multiplication)
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of 2D NumPy arrays:
+
+PART 1: INTRODUCTION TO 2D NUMPY ARRAYS
+  SECTION 1.1: WHAT ARE 2D NUMPY ARRAYS?
+  SECTION 1.2: UNDERSTANDING DIMENSIONS IN NUMPY
+  SECTION 1.3: VISUALIZING 2D ARRAYS AS MATRICES
+
+PART 2: CREATING 2D NUMPY ARRAYS
+  SECTION 2.1: CREATING ARRAYS FROM NESTED LISTS
+  SECTION 2.2: REQUIREMENTS FOR CREATING 2D ARRAYS
+  SECTION 2.3: EXAMPLES OF VALID 2D ARRAY CREATION
+
+PART 3: UNDERSTANDING ARRAY ATTRIBUTES
+  SECTION 3.1: THE NDIM ATTRIBUTE (NUMBER OF DIMENSIONS)
+  SECTION 3.2: UNDERSTANDING AXES AND RANK
+  SECTION 3.3: THE SHAPE ATTRIBUTE
+  SECTION 3.4: THE SIZE ATTRIBUTE
+  SECTION 3.5: PRACTICAL EXAMPLES OF ATTRIBUTES
+
+PART 4: INDEXING IN 2D ARRAYS
+  SECTION 4.1: UNDERSTANDING 2D INDEXING
+  SECTION 4.2: ACCESSING ELEMENTS WITH DOUBLE BRACKETS
+  SECTION 4.3: ROW AND COLUMN INDEXING CONVENTIONS
+  SECTION 4.4: PRACTICAL EXAMPLES OF INDEXING
+
+PART 5: SLICING IN 2D ARRAYS
+  SECTION 5.1: UNDERSTANDING 2D SLICING
+  SECTION 5.2: SLICING ROWS AND COLUMNS
+  SECTION 5.3: PRACTICAL EXAMPLES OF SLICING
+
+NOTE: Part 2 of this guide covers:
+  • Array addition (matrix addition)
+  • Scalar multiplication
+  • Element-wise multiplication (Hadamard product)
+  • Matrix multiplication
+  • Detailed examples and explanations for each operation
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO 2D NUMPY ARRAYS
+================================================================================
+
+SECTION 1.1: WHAT ARE 2D NUMPY ARRAYS?
+---------------------------------------
+
+DEFINITION
+----------
+A 2D NumPy array is an array that has two dimensions - it can be visualized as 
+a rectangular grid or matrix with rows and columns. Unlike 1D arrays which are 
+like a single row of data, 2D arrays are like a table with multiple rows and 
+columns.
+
+DETAILED EXPLANATION
+--------------------
+When we talk about dimensions in NumPy arrays, we're referring to the number of 
+axes (or directions) along which data is organized. A 2D array has two axes:
+• Axis 0: Represents rows (vertical direction)
+• Axis 1: Represents columns (horizontal direction)
+
+Think of a 2D array like a spreadsheet or a table:
+• Each row represents one set of related data
+• Each column represents one type of data across all rows
+• The intersection of a row and column is a single data element
+
+REAL-WORLD ANALOGY
+------------------
+Imagine a 2D NumPy array like a chessboard:
+• The chessboard has 8 rows and 8 columns
+• Each square on the board is like an element in the array
+• You can identify any square by its row number and column number
+• The entire board is the 2D array
+
+Or think of it like a classroom seating chart:
+• Rows represent different rows of desks
+• Columns represent different positions within each row
+• Each seat (element) can be identified by its row and column position
+• The entire seating chart is the 2D array
+
+WHY USE 2D ARRAYS?
+------------------
+2D arrays are essential for representing:
+• Matrices in mathematics and linear algebra
+• Images (where each pixel has a row and column position)
+• Spreadsheet data (rows = records, columns = attributes)
+• Time series data with multiple variables
+• Any data that naturally has a two-dimensional structure
+
+COMPARISON: 1D VS 2D ARRAYS
+----------------------------
+1D ARRAY (One Dimension):
+  [1, 2, 3, 4, 5]
+  This is like a single row of numbers.
+
+2D ARRAY (Two Dimensions):
+  [[1, 2, 3],
+   [4, 5, 6],
+   [7, 8, 9]]
+  This is like a table with 3 rows and 3 columns.
+
+The key difference is that a 2D array contains nested structures - each element 
+in the outer array is itself an array (or list).
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: UNDERSTANDING DIMENSIONS IN NUMPY
+----------------------------------------------
+
+DEFINITION
+----------
+Dimensions in NumPy refer to the number of axes (or directions) along which 
+data is organized. A 2D array has two dimensions, meaning it has two axes.
+
+DETAILED EXPLANATION
+--------------------
+In NumPy, the concept of dimensions is fundamental to understanding how arrays 
+are structured. Let's break this down:
+
+WHAT IS A DIMENSION?
+--------------------
+A dimension is a direction along which data is organized. Think of it like 
+directions in space:
+• 1D: One direction (like a line) - forward/backward
+• 2D: Two directions (like a plane) - forward/backward AND left/right
+• 3D: Three directions (like a cube) - forward/backward, left/right, AND up/down
+
+In NumPy arrays:
+• 1D array: Data organized in one direction (a single row or column)
+• 2D array: Data organized in two directions (rows AND columns)
+• 3D array: Data organized in three directions (rows, columns, AND depth)
+
+UNDERSTANDING NESTED STRUCTURES
+--------------------------------
+A 2D array is created from nested lists. The nesting level tells us about 
+dimensions:
+
+SINGLE LIST (1D):
+  a = [1, 2, 3]
+  This is one list containing three numbers.
+  Dimension: 1 (one level of structure)
+
+NESTED LISTS (2D):
+  a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+  This is one list containing three lists, each containing three numbers.
+  Dimension: 2 (two levels of nesting)
+
+HOW TO COUNT DIMENSIONS
+-----------------------
+To determine the number of dimensions, count the levels of nesting:
+• No nesting (flat list): 1D
+• One level of nesting: 2D
+• Two levels of nesting: 3D
+• And so on...
+
+EXAMPLE:
+--------
+Consider this nested list structure:
+
+a = [[1, 2, 3], [4, 5, 6]]
+
+Let's count the dimensions:
+1. The outermost brackets [] contain the entire structure → First dimension
+2. Inside, we have two lists [1,2,3] and [4,5,6] → Second dimension
+3. Inside each inner list, we have individual numbers → These are elements, not 
+   another dimension
+
+So this is a 2D structure.
+
+VISUAL REPRESENTATION
+---------------------
+1D Array:
+  [1, 2, 3, 4, 5]
+  └─┬─┘
+    └── One direction (horizontal line)
+
+2D Array:
+  [[1, 2, 3],
+   [4, 5, 6],
+   [7, 8, 9]]
+  └─┬─┘
+    └── Two directions (rows ↓ and columns →)
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: VISUALIZING 2D ARRAYS AS MATRICES
+-----------------------------------------------
+
+DEFINITION
+----------
+It is helpful to visualize NumPy arrays as rectangular arrays (matrices) where 
+each nested list corresponds to a different row of the matrix.
+
+DETAILED EXPLANATION
+--------------------
+When working with 2D NumPy arrays, thinking of them as matrices (rectangular 
+tables) makes operations much easier to understand. This visualization helps you 
+understand:
+• How data is organized
+• How indexing works
+• How operations are performed
+• How to think about rows and columns
+
+THE RECTANGULAR REPRESENTATION
+-------------------------------
+Consider this nested list:
+  a = [[1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 9]]
+
+When we visualize it as a matrix, it looks like:
+
+        Column 0  Column 1  Column 2
+Row 0:     1         2         3
+Row 1:     4         5         6
+Row 2:     7         8         9
+
+KEY POINTS ABOUT THIS VISUALIZATION:
+• Each nested list becomes a row
+• Elements at the same position in each nested list form columns
+• The first element of each nested list is in column 0
+• The second element of each nested list is in column 1
+• And so on...
+
+WHY THIS VISUALIZATION HELPS
+-----------------------------
+1. UNDERSTANDING INDEXING:
+   When you see a[1][2], you can immediately think:
+   • Row 1, Column 2
+   • Which is the element 6 in our example
+
+2. UNDERSTANDING OPERATIONS:
+   When adding two matrices, you can visualize adding corresponding elements 
+   in the same positions.
+
+3. UNDERSTANDING SHAPE:
+   The shape (3, 3) immediately tells you: 3 rows, 3 columns
+
+4. UNDERSTANDING SLICING:
+   When you slice a[0:2, 1:3], you can visualize:
+   • Rows 0 to 1 (first two rows)
+   • Columns 1 to 2 (last two columns)
+
+REAL-WORLD EXAMPLES
+-------------------
+SPREADSHEET ANALOGY:
+A 2D array is like an Excel spreadsheet:
+• Rows = different records (e.g., different students)
+• Columns = different attributes (e.g., name, age, grade)
+• Each cell = one piece of data
+
+IMAGE ANALOGY:
+A grayscale image is a 2D array:
+• Rows = vertical position (y-coordinate)
+• Columns = horizontal position (x-coordinate)
+• Each element = pixel brightness value
+
+MATRIX NOTATION:
+In mathematics, we write matrices like:
+    [1  2  3]
+A = [4  5  6]
+    [7  8  9]
+
+This is exactly how we visualize 2D NumPy arrays!
+
+[END SECTION 1.3]
+================================================================================
+
+PART 2: CREATING 2D NUMPY ARRAYS
+================================================================================
+
+SECTION 2.1: CREATING ARRAYS FROM NESTED LISTS
+-----------------------------------------------
+
+DEFINITION
+----------
+We can create 2D NumPy arrays by casting nested Python lists to NumPy arrays 
+using np.array().
+
+DETAILED EXPLANATION
+--------------------
+The most common way to create a 2D NumPy array is to start with nested Python 
+lists and convert them to a NumPy array. This process is called "casting" - 
+we're converting one data type (nested lists) to another (NumPy array).
+
+THE PROCESS
+-----------
+1. Create nested Python lists (lists containing lists)
+2. Pass the nested lists to np.array()
+3. NumPy converts it to a 2D array
+
+STEP-BY-STEP EXAMPLE
+--------------------
+Let's create a 2D array step by step:
+
+STEP 1: CREATE NESTED LISTS
+----------------------------
+First, we create a Python list containing three nested lists:
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+EXPLANATION:
+• a is a Python list
+• It contains three elements
+• Each element is itself a list
+• Each nested list has three elements
+• The nested lists are color-coded for visualization (in the original material)
+
+STEP 2: IMPORT NUMPY
+--------------------
+Before we can create NumPy arrays, we need to import NumPy:
+
+import numpy as np
+
+EXPLANATION:
+• import numpy: Imports the NumPy library
+• as np: Creates an alias 'np' so we can type 'np' instead of 'numpy'
+• This is a standard convention in the Python data science community
+
+STEP 3: CAST TO NUMPY ARRAY
+-----------------------------
+Now we convert the nested lists to a NumPy array:
+
+A = np.array(a)
+
+EXPLANATION:
+• np.array(): NumPy function that converts Python lists to NumPy arrays
+• a: The nested list we created in step 1
+• A: The resulting 2D NumPy array
+• The variable name is capitalized (A) to follow mathematical convention for 
+  matrices
+
+COMPLETE CODE EXAMPLE
+---------------------
+Here's the complete code:
+
+import numpy as np
+
+# Step 1: Create nested lists
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+# Step 2: Cast to NumPy array
+A = np.array(a)
+
+# Step 3: Verify it's a NumPy array
+print(A)
+print(type(A))
+
+OUTPUT:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+<class 'numpy.ndarray'>
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import numpy as np
+  • Imports the NumPy library and creates the alias 'np'
+  • This must be done before using any NumPy functions
+
+Line 3-5: a = [[11, 12, 13], [21, 22, 23], [31, 32, 33]]
+  • Creates a Python list called 'a'
+  • Contains three nested lists
+  • Each nested list has three elements
+  • The numbers are chosen to show row-column relationships (first digit = row, 
+    second digit = column)
+
+Line 7: A = np.array(a)
+  • Calls the np.array() function
+  • Passes the nested list 'a' as an argument
+  • Converts the nested lists to a 2D NumPy array
+  • Stores the result in variable 'A'
+
+Line 9: print(A)
+  • Prints the array to see its structure
+  • NumPy arrays print in a nice matrix-like format
+  • Notice no commas between elements (unlike Python lists)
+
+Line 10: print(type(A))
+  • Prints the type of A
+  • Confirms it's a numpy.ndarray (NumPy n-dimensional array)
+  • This is different from a regular Python list
+
+VISUAL REPRESENTATION
+---------------------
+The nested list structure:
+  a = [[11, 12, 13],    ← First nested list (Row 0)
+       [21, 22, 23],    ← Second nested list (Row 1)
+       [31, 32, 33]]    ← Third nested list (Row 2)
+
+Becomes the NumPy array:
+        Column 0  Column 1  Column 2
+Row 0:    11        12        13
+Row 1:    21        22        23
+Row 2:    31        32        33
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: REQUIREMENTS FOR CREATING 2D ARRAYS
+--------------------------------------------------
+
+DEFINITION
+----------
+To create a valid 2D NumPy array, the nested lists must each be of equal size. 
+This ensures the array has a rectangular (matrix) shape.
+
+DETAILED EXPLANATION
+--------------------
+NumPy arrays require that all rows have the same number of columns. This is 
+different from Python lists, which can have nested lists of different lengths. 
+This requirement ensures that the array forms a perfect rectangle (matrix), 
+which is necessary for mathematical operations.
+
+WHY EQUAL SIZE IS REQUIRED
+---------------------------
+1. MATHEMATICAL CONSISTENCY:
+   Matrices in mathematics must be rectangular. You can't have a matrix where 
+   one row has 3 elements and another has 5 elements.
+
+2. MEMORY EFFICIENCY:
+   NumPy stores arrays in contiguous memory blocks. If rows had different 
+   lengths, this efficient storage wouldn't be possible.
+
+3. OPERATION COMPATIBILITY:
+   Most array operations (addition, multiplication, etc.) require arrays of 
+   the same shape. Equal-sized rows ensure consistent shapes.
+
+VALID EXAMPLE (EQUAL SIZES)
+---------------------------
+This creates a valid 2D array because all nested lists have the same length:
+
+a = [[1, 2, 3],
+     [4, 5, 6],
+     [7, 8, 9]]
+
+All three nested lists have 3 elements each.
+Result: A 3x3 array (3 rows, 3 columns)
+
+INVALID EXAMPLE (UNEQUAL SIZES)
+--------------------------------
+This would cause issues because nested lists have different lengths:
+
+a = [[1, 2, 3],
+     [4, 5],
+     [7, 8, 9, 10]]
+
+The first list has 3 elements, the second has 2, and the third has 4.
+NumPy will still create an array, but it will be a 1D array of lists, not a 
+2D array!
+
+WHAT HAPPENS WITH UNEQUAL SIZES?
+---------------------------------
+If you try to create an array from lists of different sizes:
+
+import numpy as np
+
+a = [[1, 2, 3],
+     [4, 5],
+     [7, 8, 9]]
+
+A = np.array(a)
+print(A)
+print(A.shape)
+print(A.ndim)
+
+OUTPUT:
+[list([1, 2, 3]) list([4, 5]) list([7, 8, 9])]
+(3,)
+1
+
+EXPLANATION:
+• NumPy creates a 1D array containing Python list objects
+• The shape is (3,) meaning 3 elements (not 3 rows and columns)
+• The dimension is 1, not 2
+• This is NOT what we want for a 2D array!
+
+HOW TO ENSURE EQUAL SIZES
+--------------------------
+Always check that your nested lists have the same length:
+
+METHOD 1: Manual Check
+  a = [[1, 2, 3],
+       [4, 5, 6],
+       [7, 8, 9]]
+  # Count elements in each list: 3, 3, 3 ✓
+
+METHOD 2: Programmatic Check
+  lengths = [len(row) for row in a]
+  print(lengths)  # Should all be the same
+  # [3, 3, 3] ✓
+
+METHOD 3: Use NumPy's Validation
+  A = np.array(a)
+  if A.ndim == 2:
+      print("Valid 2D array!")
+  else:
+      print("Not a valid 2D array!")
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: EXAMPLES OF VALID 2D ARRAY CREATION
+-------------------------------------------------
+
+This section provides multiple examples of creating 2D arrays with different 
+sizes and data types.
+
+EXAMPLE 1: SMALL 2X2 ARRAY
+----------------------------
+Code:
+import numpy as np
+
+a = [[1, 2],
+     [3, 4]]
+
+A = np.array(a)
+print(A)
+print("Shape:", A.shape)
+print("Dimensions:", A.ndim)
+
+Output:
+[[1 2]
+ [3 4]]
+Shape: (2, 2)
+Dimensions: 2
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import numpy as np
+  • Imports NumPy library
+
+Line 3-4: a = [[1, 2], [3, 4]]
+  • Creates nested lists with 2 rows and 2 columns
+  • Each nested list has 2 elements
+
+Line 6: A = np.array(a)
+  • Converts to 2D NumPy array
+  • Result is a 2x2 matrix
+
+Line 7: print(A)
+  • Displays the array in matrix format
+
+Line 8: print("Shape:", A.shape)
+  • Shows (2, 2) meaning 2 rows, 2 columns
+
+Line 9: print("Dimensions:", A.ndim)
+  • Shows 2, confirming it's a 2D array
+
+EXAMPLE 2: RECTANGULAR 2X3 ARRAY
+---------------------------------
+Code:
+import numpy as np
+
+a = [[1, 2, 3],
+     [4, 5, 6]]
+
+A = np.array(a)
+print(A)
+print("Shape:", A.shape)
+
+Output:
+[[1 2 3]
+ [4 5 6]]
+Shape: (2, 3)
+
+EXPLANATION:
+• 2 rows, 3 columns
+• Rectangular (not square) array
+• Still a valid 2D array
+
+EXAMPLE 3: LARGE 4X4 ARRAY
+---------------------------
+Code:
+import numpy as np
+
+a = [[1, 2, 3, 4],
+     [5, 6, 7, 8],
+     [9, 10, 11, 12],
+     [13, 14, 15, 16]]
+
+A = np.array(a)
+print(A)
+print("Shape:", A.shape)
+print("Size:", A.size)
+
+Output:
+[[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]
+ [13 14 15 16]]
+Shape: (4, 4)
+Size: 16
+
+EXPLANATION:
+• 4 rows, 4 columns
+• Total of 16 elements (4 × 4 = 16)
+• Square matrix
+
+EXAMPLE 4: ARRAY WITH FLOATS
+-----------------------------
+Code:
+import numpy as np
+
+a = [[1.5, 2.7, 3.2],
+     [4.1, 5.9, 6.3],
+     [7.8, 8.4, 9.6]]
+
+A = np.array(a)
+print(A)
+print("Data type:", A.dtype)
+
+Output:
+[[1.5 2.7 3.2]
+ [4.1 5.9 6.3]
+ [7.8 8.4 9.6]]
+Data type: float64
+
+EXPLANATION:
+• NumPy automatically detects float values
+• Data type is float64 (64-bit floating point)
+• All elements are converted to the same type
+
+EXAMPLE 5: ARRAY WITH MIXED TYPES (AUTOMATIC CONVERSION)
+--------------------------------------------------------
+Code:
+import numpy as np
+
+a = [[1, 2.5, 3],
+     [4, 5, 6.7]]
+
+A = np.array(a)
+print(A)
+print("Data type:", A.dtype)
+
+Output:
+[[1.  2.5 3. ]
+ [4.  5.  6.7]]
+Data type: float64
+
+EXPLANATION:
+• Mixed integers and floats
+• NumPy converts all to float64 (upcasting)
+• This ensures all elements have the same type
+• 1 becomes 1.0, 5 becomes 5.0
+
+[END SECTION 2.3]
+================================================================================
+
+PART 3: UNDERSTANDING ARRAY ATTRIBUTES
+================================================================================
+
+SECTION 3.1: THE NDIM ATTRIBUTE (NUMBER OF DIMENSIONS)
+--------------------------------------------------------
+
+DEFINITION
+----------
+We can use the attribute ndim to obtain the number of axes or dimensions, 
+referred to as the rank. The term rank does not refer to the number of linearly 
+independent columns like in matrix theory. It's useful to think of ndim as the 
+number of nested lists.
+
+DETAILED EXPLANATION
+--------------------
+The ndim attribute is one of the most fundamental attributes of NumPy arrays. 
+It tells you how many dimensions the array has. Understanding ndim is crucial 
+for working with multi-dimensional arrays.
+
+WHAT IS NDIM?
+-------------
+ndim stands for "number of dimensions." It returns an integer representing how 
+many axes the array has.
+
+UNDERSTANDING THE TERM "RANK"
+-----------------------------
+In the original material, the term "rank" is used, but it's important to note:
+• In NumPy: rank = number of dimensions = ndim
+• In linear algebra: rank = number of linearly independent columns/rows
+• These are DIFFERENT concepts!
+
+For example:
+• A 2D array with ndim=2 might have rank 1 or 2 in linear algebra (depending 
+  on linear independence)
+• Don't confuse NumPy's "rank" (dimensions) with matrix rank (linear algebra)
+
+HOW NDIM RELATES TO NESTING
+----------------------------
+The ndim value directly corresponds to the level of nesting:
+
+1D ARRAY (ndim = 1):
+  a = [1, 2, 3]
+  • One level: a list containing numbers
+  • ndim = 1
+
+2D ARRAY (ndim = 2):
+  a = [[1, 2, 3], [4, 5, 6]]
+  • Two levels: a list containing lists containing numbers
+  • ndim = 2
+
+3D ARRAY (ndim = 3):
+  a = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
+  • Three levels: a list containing lists containing lists containing numbers
+  • ndim = 3
+
+PRACTICAL EXAMPLE
+-----------------
+Code:
+import numpy as np
+
+# Create a 2D array
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Check dimensions
+print("Array:")
+print(A)
+print("\nNumber of dimensions (ndim):", A.ndim)
+print("This means the array has", A.ndim, "axes")
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Number of dimensions (ndim): 2
+This means the array has 2 axes
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import numpy as np
+  • Imports NumPy
+
+Line 3-5: a = [[11, 12, 13], [21, 22, 23], [31, 32, 33]]
+  • Creates nested lists (2 levels of nesting)
+  • This will become a 2D array
+
+Line 7: A = np.array(a)
+  • Converts nested lists to NumPy array
+  • NumPy detects 2 levels of nesting → 2D array
+
+Line 10: print("Number of dimensions (ndim):", A.ndim)
+  • Accesses the ndim attribute
+  • A.ndim returns 2 (the number of dimensions)
+  • Prints the result
+
+UNDERSTANDING AXES
+------------------
+For a 2D array with ndim=2, we have two axes:
+• Axis 0: The first dimension (rows)
+• Axis 1: The second dimension (columns)
+
+Visual representation:
+        Axis 1 (columns) →
+Axis 0   [11  12  13]
+(rows)   [21  22  23]
+  ↓      [31  32  33]
+
+COMPARISON: 1D VS 2D NDIM
+--------------------------
+1D Array:
+  a = [1, 2, 3, 4, 5]
+  A = np.array(a)
+  print(A.ndim)  # Output: 1
+  • Only one axis (one direction)
+
+2D Array:
+  a = [[1, 2, 3], [4, 5, 6]]
+  A = np.array(a)
+  print(A.ndim)  # Output: 2
+  • Two axes (rows and columns)
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: UNDERSTANDING AXES AND RANK
+-----------------------------------------
+
+DEFINITION
+----------
+The first list represents the first dimension. This list contains another set 
+of lists. This represents the second dimension or axis. The number of lists the 
+list contains does not have to do with the dimension but the shape of the list.
+
+DETAILED EXPLANATION
+--------------------
+This section clarifies the relationship between dimensions, axes, and the 
+structure of nested lists. It's important to understand that:
+• Dimensions are about the LEVELS of nesting
+• Shape is about the SIZE at each level
+
+WHAT ARE AXES?
+--------------
+An axis is a direction along which you can perform operations. For a 2D array:
+• Axis 0: Vertical direction (rows)
+• Axis 1: Horizontal direction (columns)
+
+Think of axes like directions on a map:
+• North-South = Axis 0 (rows)
+• East-West = Axis 1 (columns)
+
+THE RELATIONSHIP BETWEEN NESTING AND DIMENSIONS
+-----------------------------------------------
+Consider this nested structure:
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+BREAKING DOWN THE STRUCTURE:
+----------------------------
+Level 1 (First Dimension - Axis 0):
+  The outermost list: [list1, list2, list3]
+  • This is the first dimension
+  • Contains 3 elements (3 nested lists)
+  • This becomes the ROWS in the 2D array
+
+Level 2 (Second Dimension - Axis 1):
+  Each nested list: [11, 12, 13]
+  • This is the second dimension
+  • Contains 3 elements (3 numbers)
+  • This becomes the COLUMNS in the 2D array
+
+KEY INSIGHT
+-----------
+The NUMBER of lists at the first level determines the number of ROWS.
+The SIZE of each nested list determines the number of COLUMNS.
+
+But the DIMENSION (ndim) is determined by the LEVELS of nesting, not the 
+number of elements!
+
+EXAMPLES TO ILLUSTRATE
+----------------------
+EXAMPLE 1: Small 2D Array
+  a = [[1, 2],
+       [3, 4]]
+  • 2 levels of nesting → ndim = 2
+  • 2 lists at level 1 → 2 rows
+  • 2 elements in each list → 2 columns
+  • Shape: (2, 2)
+
+EXAMPLE 2: Large 2D Array
+  a = [[1, 2, 3, 4, 5],
+       [6, 7, 8, 9, 10],
+       [11, 12, 13, 14, 15]]
+  • 2 levels of nesting → ndim = 2 (same as Example 1!)
+  • 3 lists at level 1 → 3 rows
+  • 5 elements in each list → 5 columns
+  • Shape: (3, 5)
+
+Notice: Both have ndim=2, but different shapes!
+
+THE CONVENTION: LABELING AXES
+------------------------------
+The convention is to label axes starting from 0:
+• Axis 0: First dimension (rows)
+• Axis 1: Second dimension (columns)
+• Axis 2: Third dimension (if 3D)
+• And so on...
+
+This follows Python's zero-based indexing convention.
+
+VISUAL REPRESENTATION
+---------------------
+For array: [[11, 12, 13], [21, 22, 23], [31, 32, 33]]
+
+Structure:
+  Level 1 (Axis 0):  [  List1    List2    List3  ]
+                        ↓         ↓         ↓
+  Level 2 (Axis 1):  [11,12,13] [21,22,23] [31,32,33]
+
+As Matrix:
+        Axis 1 (columns) →
+Axis 0     0    1    2
+(rows) 0 [11   12   13]
+       1 [21   22   23]
+       2 [31   32   33]
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: THE SHAPE ATTRIBUTE
+----------------------------------
+
+DEFINITION
+----------
+As with a 1D array, the attribute shape returns a tuple. The first element in 
+the tuple corresponds to the number of nested lists contained in the original 
+list or the number of rows in the rectangular representation. The second 
+element corresponds to the size of each of the nested lists or the number of 
+columns in the rectangular array.
+
+DETAILED EXPLANATION
+--------------------
+The shape attribute is one of the most important attributes for understanding 
+array structure. It tells you the size of the array along each dimension.
+
+WHAT IS SHAPE?
+--------------
+Shape returns a tuple (an ordered, immutable sequence) where:
+• Each element represents the size along one dimension
+• The first element = size along axis 0 (rows)
+• The second element = size along axis 1 (columns)
+• For 2D: shape = (rows, columns)
+
+UNDERSTANDING THE TUPLE
+-----------------------
+A tuple in Python is like a list but immutable (can't be changed). For shape:
+• (3, 3) means 3 rows and 3 columns
+• (2, 5) means 2 rows and 5 columns
+• (4, 1) means 4 rows and 1 column
+
+HOW SHAPE RELATES TO STRUCTURE
+------------------------------
+Consider:
+  a = [[11, 12, 13],
+       [21, 22, 23],
+       [31, 32, 33]]
+
+Shape analysis:
+• Number of nested lists (outer level): 3 → First element of shape
+• Size of each nested list: 3 → Second element of shape
+• Shape: (3, 3)
+
+PRACTICAL EXAMPLE
+-----------------
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+print("Array:")
+print(A)
+print("\nShape:", A.shape)
+print("Type of shape:", type(A.shape))
+print("\nBreakdown:")
+print("  Rows (axis 0):", A.shape[0])
+print("  Columns (axis 1):", A.shape[1])
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Shape: (3, 3)
+Type of shape: <class 'tuple'>
+
+Breakdown:
+  Rows (axis 0): 3
+  Columns (axis 1): 3
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 7: A = np.array(a)
+  • Creates 2D NumPy array
+
+Line 10: print("Shape:", A.shape)
+  • A.shape accesses the shape attribute
+  • Returns tuple (3, 3)
+  • Prints the shape
+
+Line 11: print("Type of shape:", type(A.shape))
+  • Confirms shape is a tuple
+  • Tuples are immutable sequences
+
+Line 13-14: A.shape[0] and A.shape[1]
+  • A.shape[0]: First element = number of rows = 3
+  • A.shape[1]: Second element = number of columns = 3
+  • Indexing tuples works like lists (but can't modify)
+
+VISUAL REPRESENTATION OF SHAPE
+-------------------------------
+For shape (3, 3):
+
+        Columns (3)
+      ┌─────────────┐
+Rows  │  [11 12 13] │
+ (3)  │  [21 22 23] │
+      │  [31 32 33] │
+      └─────────────┘
+
+Shape (3, 3) = 3 rows × 3 columns
+
+EXAMPLES WITH DIFFERENT SHAPES
+-------------------------------
+EXAMPLE 1: Square Matrix (3×3)
+  a = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+  A = np.array(a)
+  print(A.shape)  # (3, 3)
+  • Equal rows and columns
+
+EXAMPLE 2: Rectangular Matrix (2×4)
+  a = [[1, 2, 3, 4], [5, 6, 7, 8]]
+  A = np.array(a)
+  print(A.shape)  # (2, 4)
+  • 2 rows, 4 columns
+
+EXAMPLE 3: Column Vector (3×1)
+  a = [[1], [2], [3]]
+  A = np.array(a)
+  print(A.shape)  # (3, 1)
+  • 3 rows, 1 column
+
+EXAMPLE 4: Row Vector (1×3)
+  a = [[1, 2, 3]]
+  A = np.array(a)
+  print(A.shape)  # (1, 3)
+  • 1 row, 3 columns
+
+UNDERSTANDING SHAPE INDEXING
+----------------------------
+You can access individual dimensions:
+
+A.shape[0]  # Number of rows
+A.shape[1]  # Number of columns
+
+For a 2D array, shape always has 2 elements.
+For a 1D array, shape has 1 element: (5,) means 5 elements.
+For a 3D array, shape has 3 elements: (2, 3, 4) means 2×3×4.
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: THE SIZE ATTRIBUTE
+---------------------------------
+
+DEFINITION
+----------
+We can also use the attribute size to get the size of the array. We see there 
+are three rows and three columns. Multiplying the number of columns and rows 
+together, we get the total number of elements, in this case nine.
+
+DETAILED EXPLANATION
+--------------------
+The size attribute tells you the total number of elements in the entire array, 
+regardless of its dimensions. It's simply the product of all dimensions.
+
+WHAT IS SIZE?
+-------------
+Size returns a single integer representing the total count of all elements in 
+the array. For a 2D array:
+  size = rows × columns
+
+HOW SIZE IS CALCULATED
+---------------------
+For a 2D array with shape (rows, columns):
+  size = shape[0] × shape[1]
+  size = rows × columns
+
+PRACTICAL EXAMPLE
+-----------------
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+print("Array:")
+print(A)
+print("\nShape:", A.shape)
+print("Size:", A.size)
+print("\nVerification:")
+print("  Rows:", A.shape[0])
+print("  Columns:", A.shape[1])
+print("  Calculated size:", A.shape[0] * A.shape[1])
+print("  Size matches:", A.size == A.shape[0] * A.shape[1])
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Shape: (3, 3)
+Size: 9
+
+Verification:
+  Rows: 3
+  Columns: 3
+  Calculated size: 9
+  Size matches: True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 10: print("Size:", A.size)
+  • A.size accesses the size attribute
+  • Returns total number of elements: 9
+  • This is 3 rows × 3 columns = 9 elements
+
+Line 14: print("  Calculated size:", A.shape[0] * A.shape[1])
+  • Manually calculates size
+  • A.shape[0] = 3 (rows)
+  • A.shape[1] = 3 (columns)
+  • 3 × 3 = 9
+  • Confirms the size attribute
+
+VISUAL COUNTING
+---------------
+For array:
+  [[11, 12, 13],
+   [21, 22, 23],
+   [31, 32, 33]]
+
+Counting elements:
+  Row 0: 11, 12, 13 → 3 elements
+  Row 1: 21, 22, 23 → 3 elements
+  Row 2: 31, 32, 33 → 3 elements
+  Total: 3 + 3 + 3 = 9 elements
+
+Or: 3 rows × 3 columns = 9 elements
+
+EXAMPLES WITH DIFFERENT SIZES
+------------------------------
+EXAMPLE 1: Small Array (2×2)
+  a = [[1, 2], [3, 4]]
+  A = np.array(a)
+  print(A.size)  # 4 (2 × 2 = 4)
+
+EXAMPLE 2: Rectangular Array (2×5)
+  a = [[1, 2, 3, 4, 5], [6, 7, 8, 9, 10]]
+  A = np.array(a)
+  print(A.size)  # 10 (2 × 5 = 10)
+
+EXAMPLE 3: Large Array (4×6)
+  a = [[...24 elements...]]
+  A = np.array(a)
+  print(A.size)  # 24 (4 × 6 = 24)
+
+WHY SIZE IS USEFUL
+------------------
+1. MEMORY ESTIMATION:
+   Knowing size helps estimate memory usage
+   • Each float64 element = 8 bytes
+   • Array with 1000 elements = ~8000 bytes
+
+2. ITERATION:
+   You can iterate over all elements:
+   for i in range(A.size):
+       # Process element i
+
+3. VALIDATION:
+   Check if arrays have the same number of elements before operations
+
+4. PERFORMANCE:
+   Larger arrays take more time to process
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: PRACTICAL EXAMPLES OF ATTRIBUTES
+----------------------------------------------
+
+This section provides comprehensive examples combining all attributes.
+
+COMPLETE EXAMPLE: ALL ATTRIBUTES
+---------------------------------
+Code:
+import numpy as np
+
+# Create 2D array
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Display all attributes
+print("=" * 50)
+print("ARRAY ATTRIBUTES ANALYSIS")
+print("=" * 50)
+print("\nArray:")
+print(A)
+print("\n" + "-" * 50)
+print("ATTRIBUTE VALUES:")
+print("-" * 50)
+print(f"ndim (dimensions):     {A.ndim}")
+print(f"shape (rows, cols):    {A.shape}")
+print(f"size (total elements): {A.size}")
+print(f"dtype (data type):     {A.dtype}")
+print("\n" + "-" * 50)
+print("DETAILED BREAKDOWN:")
+print("-" * 50)
+print(f"  Number of dimensions: {A.ndim}")
+print(f"  Axis 0 (rows):         {A.shape[0]}")
+print(f"  Axis 1 (columns):      {A.shape[1]}")
+print(f"  Total elements:        {A.size}")
+print(f"  Elements per row:      {A.shape[1]}")
+print(f"  Elements per column:   {A.shape[0]}")
+
+Output:
+==================================================
+ARRAY ATTRIBUTES ANALYSIS
+==================================================
+
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+--------------------------------------------------
+ATTRIBUTE VALUES:
+--------------------------------------------------
+ndim (dimensions):     2
+shape (rows, cols):    (3, 3)
+size (total elements): 9
+dtype (data type):     int64
+
+--------------------------------------------------
+DETAILED BREAKDOWN:
+--------------------------------------------------
+  Number of dimensions: 2
+  Axis 0 (rows):         3
+  Axis 1 (columns):      3
+  Total elements:        9
+  Elements per row:      3
+  Elements per column:   3
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import numpy as np
+  • Standard NumPy import
+
+Line 3-5: a = [[11, 12, 13], [21, 22, 23], [31, 32, 33]]
+  • Creates nested lists
+  • 3 rows, 3 columns
+
+Line 7: A = np.array(a)
+  • Converts to NumPy array
+
+Line 12: print(A)
+  • Displays array in matrix format
+
+Line 17: print(f"ndim (dimensions):     {A.ndim}")
+  • f-string formatting
+  • {A.ndim} inserts the value (2)
+  • Shows number of dimensions
+
+Line 18: print(f"shape (rows, cols):    {A.shape}")
+  • Shows shape tuple (3, 3)
+  • First number = rows, second = columns
+
+Line 19: print(f"size (total elements): {A.size}")
+  • Shows total element count (9)
+  • Calculated as 3 × 3
+
+Line 20: print(f"dtype (data type):     {A.dtype}")
+  • Shows data type (int64)
+  • 64-bit integers
+
+COMPARISON: DIFFERENT ARRAY SIZES
+----------------------------------
+Code:
+import numpy as np
+
+arrays = {
+    "2x2": [[1, 2], [3, 4]],
+    "2x3": [[1, 2, 3], [4, 5, 6]],
+    "3x2": [[1, 2], [3, 4], [5, 6]],
+    "4x4": [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]]
+}
+
+print("=" * 60)
+print("COMPARING ARRAYS OF DIFFERENT SIZES")
+print("=" * 60)
+
+for name, data in arrays.items():
+    A = np.array(data)
+    print(f"\n{name} Array:")
+    print(A)
+    print(f"  ndim:  {A.ndim}")
+    print(f"  shape: {A.shape} (rows={A.shape[0]}, cols={A.shape[1]})")
+    print(f"  size:  {A.size} ({A.shape[0]} × {A.shape[1]} = {A.size})")
+
+Output:
+============================================================
+COMPARING ARRAYS OF DIFFERENT SIZES
+============================================================
+
+2x2 Array:
+[[1 2]
+ [3 4]]
+  ndim:  2
+  shape: (2, 2) (rows=2, cols=2)
+  size:  4 (2 × 2 = 4)
+
+2x3 Array:
+[[1 2 3]
+ [4 5 6]]
+  ndim:  2
+  shape: (2, 3) (rows=2, cols=3)
+  size:  6 (2 × 3 = 6)
+
+3x2 Array:
+[[1 2]
+ [3 4]
+ [5 6]]
+  ndim:  2
+  shape: (3, 2) (rows=3, cols=2)
+  size:  6 (3 × 2 = 6)
+
+4x4 Array:
+[[ 1  2  3  4]
+ [ 5  6  7  8]
+ [ 9 10 11 12]
+ [13 14 15 16]]
+  ndim:  2
+  shape: (4, 4) (rows=4, cols=4)
+  size:  16 (4 × 4 = 16)
+
+KEY OBSERVATIONS:
+-----------------
+1. All arrays have ndim=2 (they're all 2D)
+2. Shape varies: (2,2), (2,3), (3,2), (4,4)
+3. Size = rows × columns in all cases
+4. Different shapes can have the same size:
+   • (2,3) and (3,2) both have size 6
+
+[END SECTION 3.5]
+================================================================================
+
+PART 4: INDEXING IN 2D ARRAYS
+================================================================================
+
+SECTION 4.1: UNDERSTANDING 2D INDEXING
+-------------------------------------
+
+DEFINITION
+----------
+We can use rectangular brackets to access the different elements of the array. 
+The index in the first bracket corresponds to the different nested lists (each 
+a different color). The second bracket corresponds to the index of a particular 
+element within the nested list. Using the rectangular representation, the first 
+index corresponds to the row index. The second index corresponds to the column 
+index.
+
+DETAILED EXPLANATION
+--------------------
+Indexing in 2D arrays requires two indices: one for the row and one for the 
+column. This is different from 1D arrays which only need one index.
+
+THE INDEXING CONVENTION
+-----------------------
+For a 2D array, we use: array[row_index][column_index]
+
+Or alternatively: array[row_index, column_index]
+
+Both methods work, but the comma notation is more NumPy-idiomatic.
+
+UNDERSTANDING THE TWO INDICES
+-----------------------------
+INDEX 1 (First Bracket): Row Index
+  • Specifies which row to access
+  • Corresponds to which nested list
+  • Starts at 0 (first row is row 0)
+
+INDEX 2 (Second Bracket): Column Index
+  • Specifies which column to access
+  • Corresponds to position within the nested list
+  • Starts at 0 (first column is column 0)
+
+VISUAL REPRESENTATION
+---------------------
+For array:
+  [[11, 12, 13],
+   [21, 22, 23],
+   [31, 32, 33]]
+
+Index positions:
+        Column:  0    1    2
+Row 0:          [11   12   13]
+Row 1:          [21   22   23]
+Row 2:          [31   32   33]
+
+Examples:
+• A[0][0] = 11 (row 0, column 0)
+• A[0][1] = 12 (row 0, column 1)
+• A[1][0] = 21 (row 1, column 0)
+• A[2][2] = 33 (row 2, column 2)
+
+THE RELATIONSHIP BETWEEN LIST STRUCTURE AND INDEXING
+-----------------------------------------------------
+Consider the nested list structure:
+  a = [[11, 12, 13],    ← Index 0 (first nested list)
+       [21, 22, 23],    ← Index 1 (second nested list)
+       [31, 32, 33]]    ← Index 2 (third nested list)
+
+When accessing A[1][2]:
+• A[1]: Gets the second nested list [21, 22, 23]
+• [2]: Gets the third element of that list: 23
+• Result: 23
+
+ZERO-BASED INDEXING
+-------------------
+Remember: Python uses zero-based indexing!
+• First row = index 0 (not 1)
+• First column = index 0 (not 1)
+• Last row = index (rows - 1)
+• Last column = index (columns - 1)
+
+For a 3×3 array:
+• Valid row indices: 0, 1, 2
+• Valid column indices: 0, 1, 2
+• Invalid: 3 (out of bounds!)
+
+[END SECTION 4.1]
+================================================================================
+
+SECTION 4.2: ACCESSING ELEMENTS WITH DOUBLE BRACKETS
+------------------------------------------------------
+
+DEFINITION
+----------
+We could also use a single bracket to access the elements as follows. Consider 
+the following syntax. This index corresponds to the second row, and this index 
+the third column, the value is 23.
+
+DETAILED EXPLANATION
+--------------------
+There are two ways to access elements in 2D NumPy arrays:
+1. Double bracket notation: A[row][col]
+2. Comma notation: A[row, col]
+
+Both work, but the comma notation is preferred in NumPy.
+
+METHOD 1: DOUBLE BRACKET NOTATION
+----------------------------------
+Syntax: array[row_index][column_index]
+
+This is like accessing nested lists in Python.
+
+EXAMPLE:
+--------
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Access element at row 1, column 2
+element = A[1][2]
+print("Array:")
+print(A)
+print(f"\nA[1][2] = {element}")
+print("\nExplanation:")
+print("  A[1] gets row 1: [21, 22, 23]")
+print("  [2] gets column 2 (third element): 23")
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+A[1][2] = 23
+
+Explanation:
+  A[1] gets row 1: [21, 22, 23]
+  [2] gets column 2 (third element): 23
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 9: element = A[1][2]
+  • A[1]: First accesses row 1 (second row, zero-indexed)
+    - Returns: [21, 22, 23] (a 1D array)
+  • [2]: Then accesses column 2 (third column) of that row
+    - Returns: 23 (a scalar value)
+  • The result is stored in 'element'
+
+STEP-BY-STEP BREAKDOWN:
+-----------------------
+Step 1: A[1]
+  • Accesses the element at index 1 of the outer array
+  • This is the second nested list
+  • Result: array([21, 22, 23])
+
+Step 2: [2] applied to the result
+  • Takes the result from step 1: [21, 22, 23]
+  • Accesses element at index 2
+  • Result: 23
+
+METHOD 2: COMMA NOTATION (PREFERRED)
+-------------------------------------
+Syntax: array[row_index, column_index]
+
+This is the NumPy-preferred method.
+
+EXAMPLE:
+--------
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Access element at row 1, column 2 using comma notation
+element = A[1, 2]
+print("Array:")
+print(A)
+print(f"\nA[1, 2] = {element}")
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+A[1, 2] = 23
+
+EXPLANATION:
+• A[1, 2] directly specifies row 1 and column 2
+• More efficient (single operation)
+• More readable
+• NumPy's preferred method
+
+WHICH METHOD TO USE?
+--------------------
+• Use comma notation (A[row, col]) for NumPy arrays - it's faster and clearer
+• Double brackets (A[row][col]) work but are less efficient
+• Both methods produce the same result
+
+COMPARISON EXAMPLE
+------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+# Both methods work
+print("Method 1 (double brackets):", A[1][2])
+print("Method 2 (comma notation):", A[1, 2])
+print("Are they equal?", A[1][2] == A[1, 2])
+
+Output:
+Method 1 (double brackets): 23
+Method 2 (comma notation): 23
+Are they equal? True
+
+[END SECTION 4.2]
+================================================================================
+
+SECTION 4.3: ROW AND COLUMN INDEXING CONVENTIONS
+-------------------------------------------------
+
+DEFINITION
+----------
+Consider this example, this index corresponds to the first row and the second 
+index corresponds to the first column, and a value of 11.
+
+DETAILED EXPLANATION
+--------------------
+This section clarifies the indexing convention with a specific example. Let's 
+break down what "first row" and "first column" mean in zero-based indexing.
+
+UNDERSTANDING "FIRST" IN ZERO-BASED INDEXING
+--------------------------------------------
+In zero-based indexing:
+• "First row" = Row index 0 (not 1!)
+• "First column" = Column index 0 (not 1!)
+• "Second row" = Row index 1
+• "Second column" = Column index 1
+
+EXAMPLE: ACCESSING FIRST ROW, FIRST COLUMN
+-------------------------------------------
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Access first row, first column
+element = A[0][0]  # or A[0, 0]
+
+print("Array:")
+print(A)
+print(f"\nA[0][0] = {element}")
+print("\nExplanation:")
+print("  Index [0] (first bracket): First row")
+print("  Index [0] (second bracket): First column")
+print("  Result: Element at first row, first column = 11")
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+A[0][0] = 11
+
+Explanation:
+  Index [0] (first bracket): First row
+  Index [0] (second bracket): First column
+  Result: Element at first row, first column = 11
+
+VISUAL GUIDE TO INDEXING
+-------------------------
+For array A:
+        Column:  0    1    2
+Row 0:          [11   12   13]  ← First row
+Row 1:          [21   22   23]  ← Second row
+Row 2:          [31   32   33]  ← Third row
+
+Accessing different positions:
+• A[0, 0] = 11 (first row, first column)
+• A[0, 1] = 12 (first row, second column)
+• A[0, 2] = 13 (first row, third column)
+• A[1, 0] = 21 (second row, first column)
+• A[1, 1] = 22 (second row, second column)
+• A[1, 2] = 23 (second row, third column)
+• A[2, 0] = 31 (third row, first column)
+• A[2, 1] = 32 (third row, second column)
+• A[2, 2] = 33 (third row, third column)
+
+COMPREHENSIVE INDEXING EXAMPLE
+-------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("=" * 50)
+print("COMPLETE INDEXING REFERENCE")
+print("=" * 50)
+print("\nArray:")
+print(A)
+print("\nAll element accesses:")
+print("-" * 50)
+
+for row in range(3):
+    for col in range(3):
+        value = A[row, col]
+        print(f"A[{row}, {col}] = {value:2d}  (row {row+1}, col {col+1})")
+
+Output:
+==================================================
+COMPLETE INDEXING REFERENCE
+==================================================
+
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+All element accesses:
+--------------------------------------------------
+A[0, 0] = 11  (row 1, col 1)
+A[0, 1] = 12  (row 1, col 2)
+A[0, 2] = 13  (row 1, col 3)
+A[1, 0] = 21  (row 2, col 1)
+A[1, 1] = 22  (row 2, col 2)
+A[1, 2] = 23  (row 2, col 3)
+A[2, 0] = 31  (row 3, col 1)
+A[2, 1] = 32  (row 3, col 2)
+A[2, 2] = 33  (row 3, col 3)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 11-14: Nested loops
+  • for row in range(3): Iterates through rows 0, 1, 2
+  • for col in range(3): Iterates through columns 0, 1, 2
+  • A[row, col]: Accesses element at current row and column
+  • Prints both zero-based index and human-readable (1-based) position
+
+COMMON MISTAKES TO AVOID
+------------------------
+MISTAKE 1: Using 1-based indexing
+  ❌ A[1, 1] thinking it's "first row, first column"
+  ✓ A[0, 0] is actually "first row, first column"
+
+MISTAKE 2: Confusing row and column order
+  ❌ A[col, row] (swapped)
+  ✓ A[row, col] (correct order)
+
+MISTAKE 3: Out of bounds indexing
+  ❌ A[3, 0] for a 3×3 array (only rows 0, 1, 2 exist)
+  ✓ A[2, 0] is the last valid row
+
+[END SECTION 4.3]
+================================================================================
+
+SECTION 4.4: PRACTICAL EXAMPLES OF INDEXING
+--------------------------------------------
+
+This section provides numerous practical examples of indexing.
+
+EXAMPLE 1: ACCESSING DIAGONAL ELEMENTS
+----------------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("Array:")
+print(A)
+print("\nDiagonal elements:")
+print(f"  A[0, 0] = {A[0, 0]}")  # Top-left
+print(f"  A[1, 1] = {A[1, 1]}")  # Center
+print(f"  A[2, 2] = {A[2, 2]}")  # Bottom-right
+
+# Or using a loop
+diagonal = [A[i, i] for i in range(3)]
+print(f"\nAll diagonal elements: {diagonal}")
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Diagonal elements:
+  A[0, 0] = 11
+  A[1, 1] = 22
+  A[2, 2] = 33
+
+All diagonal elements: [11, 22, 33]
+
+EXPLANATION:
+• Diagonal elements have row index == column index
+• Pattern: A[i, i] for i = 0, 1, 2
+
+EXAMPLE 2: ACCESSING ENTIRE ROWS
+---------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("Array:")
+print(A)
+print("\nAccessing entire rows:")
+print(f"Row 0: {A[0, :]}")  # All columns of row 0
+print(f"Row 1: {A[1, :]}")  # All columns of row 1
+print(f"Row 2: {A[2, :]}")  # All columns of row 2
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Accessing entire rows:
+Row 0: [11 12 13]
+Row 1: [21 22 23]
+Row 2: [31 32 33]
+
+EXPLANATION:
+• A[row, :] gets all columns for that row
+• The colon (:) means "all elements along this axis"
+• Result is a 1D array
+
+EXAMPLE 3: ACCESSING ENTIRE COLUMNS
+------------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("Array:")
+print(A)
+print("\nAccessing entire columns:")
+print(f"Column 0: {A[:, 0]}")  # All rows of column 0
+print(f"Column 1: {A[:, 1]}")  # All rows of column 1
+print(f"Column 2: {A[:, 2]}")  # All rows of column 2
+
+Output:
+Array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Accessing entire columns:
+Column 0: [11 21 31]
+Column 1: [12 22 32]
+Column 2: [13 23 33]
+
+EXPLANATION:
+• A[:, col] gets all rows for that column
+• The colon (:) before the comma means "all rows"
+• Result is a 1D array
+
+EXAMPLE 4: MODIFYING INDIVIDUAL ELEMENTS
+-----------------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("Original array:")
+print(A)
+
+# Modify element at row 1, column 2
+A[1, 2] = 99
+
+print("\nAfter A[1, 2] = 99:")
+print(A)
+
+Output:
+Original array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+After A[1, 2] = 99:
+[[11 12 13]
+ [21 99 23]
+ [31 32 33]]
+
+EXPLANATION:
+• A[1, 2] = 99 modifies the element at row 1, column 2
+• Original value 23 is replaced with 99
+• The array is modified in place
+
+[END SECTION 4.4]
+================================================================================
+
+PART 5: SLICING IN 2D ARRAYS
+================================================================================
+
+SECTION 5.1: UNDERSTANDING 2D SLICING
+--------------------------------------
+
+DEFINITION
+----------
+We can also use slicing in NumPy arrays. The first index corresponds to the 
+first row. The second index accesses the first two columns.
+
+DETAILED EXPLANATION
+--------------------
+Slicing in 2D arrays allows you to extract subarrays (portions of the original 
+array). You can slice along both dimensions simultaneously.
+
+SLICING SYNTAX
+--------------
+For 2D arrays: array[row_slice, column_slice]
+
+Where slice can be:
+• start:stop (elements from start to stop-1)
+• start: (elements from start to end)
+• :stop (elements from beginning to stop-1)
+• : (all elements)
+• start:stop:step (elements with step size)
+
+UNDERSTANDING 2D SLICING
+-------------------------
+When you slice a 2D array, you specify:
+1. Which rows to include (row slice)
+2. Which columns to include (column slice)
+
+The result is a smaller 2D array containing only the selected rows and columns.
+
+VISUAL REPRESENTATION
+---------------------
+For array:
+  [[11, 12, 13],
+   [21, 22, 23],
+   [31, 32, 33]]
+
+Slicing A[0:2, 0:2]:
+  • Row slice 0:2 means rows 0 and 1 (first two rows)
+  • Column slice 0:2 means columns 0 and 1 (first two columns)
+  • Result: [[11, 12], [21, 22]]
+
+[END SECTION 5.1]
+================================================================================
+
+SECTION 5.2: SLICING ROWS AND COLUMNS
+--------------------------------------
+
+DEFINITION
+----------
+Consider this example, the first index corresponds to the first two rows. The 
+second index accesses the last column.
+
+DETAILED EXPLANATION
+--------------------
+This section demonstrates slicing with specific examples from the original 
+material.
+
+EXAMPLE 1: FIRST ROW, FIRST TWO COLUMNS
+----------------------------------------
+From the original material: "The first index corresponds to the first row. The 
+second index accesses the first two columns."
+
+Code:
+import numpy as np
+
+a = [[11, 12, 13],
+     [21, 22, 23],
+     [31, 32, 33]]
+
+A = np.array(a)
+
+# Slice: first row, first two columns
+slice_result = A[0:1, 0:2]  # or A[0, 0:2] for just the row
+
+print("Original array:")
+print(A)
+print("\nSlice A[0:1, 0:2] (first row, first two columns):")
+print(slice_result)
+print(f"Shape: {slice_result.shape}")
+
+Output:
+Original array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Slice A[0:1, 0:2] (first row, first two columns):
+[[11 12]]
+Shape: (1, 2)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 10: slice_result = A[0:1, 0:2]
+  • A[0:1, ...]: Row slice from 0 to 1 (exclusive), so only row 0
+    - 0:1 means start at 0, stop before 1 → only index 0
+  • A[..., 0:2]: Column slice from 0 to 2 (exclusive), so columns 0 and 1
+    - 0:2 means start at 0, stop before 2 → indices 0 and 1
+  • Result: 1×2 array containing [[11, 12]]
+
+ALTERNATIVE: A[0, 0:2]
+----------------------
+If you want just the row as a 1D array:
+
+Code:
+row_slice = A[0, 0:2]
+print(row_slice)
+print(f"Shape: {row_slice.shape}")
+
+Output:
+[11 12]
+Shape: (2,)
+
+EXPLANATION:
+• A[0, 0:2] uses a single index for rows (not a slice)
+• This returns a 1D array instead of 2D
+• Shape is (2,) not (1, 2)
+
+EXAMPLE 2: FIRST TWO ROWS, LAST COLUMN
+---------------------------------------
+From the original material: "The first index corresponds to the first two rows. 
+The second index accesses the last column."
+
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+# Slice: first two rows, last column
+slice_result = A[0:2, 2:3]  # or A[0:2, 2]
+
+print("Original array:")
+print(A)
+print("\nSlice A[0:2, 2:3] (first two rows, last column):")
+print(slice_result)
+print(f"Shape: {slice_result.shape}")
+
+Output:
+Original array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+Slice A[0:2, 2:3] (first two rows, last column):
+[[13]
+ [23]]
+Shape: (2, 1)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 7: slice_result = A[0:2, 2:3]
+  • A[0:2, ...]: Row slice from 0 to 2 (exclusive)
+    - 0:2 means start at 0, stop before 2 → indices 0 and 1
+    - Gets first two rows
+  • A[..., 2:3]: Column slice from 2 to 3 (exclusive)
+    - 2:3 means start at 2, stop before 3 → only index 2
+    - Gets last column (column 2)
+  • Result: 2×1 array containing [[13], [23]]
+
+VISUAL BREAKDOWN:
+-----------------
+Original:
+        Column:  0    1    2
+Row 0:          [11   12   13]
+Row 1:          [21   22   23]
+Row 2:          [31   32   33]
+
+After A[0:2, 2:3]:
+  • Rows 0:2 → Rows 0 and 1
+  • Columns 2:3 → Column 2
+  • Result:
+        Column:  2
+Row 0:          [13]
+Row 1:          [23]
+
+ALTERNATIVE: A[0:2, 2]
+-----------------------
+If you use a single index for columns:
+
+Code:
+col_slice = A[0:2, 2]
+print(col_slice)
+print(f"Shape: {col_slice.shape}")
+
+Output:
+[13 23]
+Shape: (2,)
+
+EXPLANATION:
+• A[0:2, 2] uses a single index for columns
+• Returns a 1D array instead of 2D
+• Shape is (2,) not (2, 1)
+
+[END SECTION 5.2]
+================================================================================
+
+SECTION 5.3: PRACTICAL EXAMPLES OF SLICING
+-------------------------------------------
+
+This section provides comprehensive examples of slicing operations.
+
+EXAMPLE 1: EXTRACTING A SUBMATRIX
+----------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13, 14],
+              [21, 22, 23, 24],
+              [31, 32, 33, 34],
+              [41, 42, 43, 44]])
+
+print("Original array:")
+print(A)
+
+# Extract middle 2x2 submatrix
+submatrix = A[1:3, 1:3]
+print("\nSubmatrix A[1:3, 1:3] (rows 1-2, cols 1-2):")
+print(submatrix)
+
+Output:
+Original array:
+[[11 12 13 14]
+ [21 22 23 24]
+ [31 32 33 34]
+ [41 42 43 44]]
+
+Submatrix A[1:3, 1:3] (rows 1-2, cols 1-2):
+[[22 23]
+ [32 33]]
+
+EXPLANATION:
+• A[1:3, 1:3] extracts rows 1-2 and columns 1-2
+• Creates a 2×2 submatrix
+• Original array is not modified
+
+EXAMPLE 2: EXTRACTING MULTIPLE ROWS
+-----------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33],
+              [41, 42, 43]])
+
+# Get first and last rows
+first_last = A[[0, 3], :]
+print("Original array:")
+print(A)
+print("\nFirst and last rows A[[0, 3], :]:")
+print(first_last)
+
+Output:
+Original array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]
+ [41 42 43]]
+
+First and last rows A[[0, 3], :]:
+[[11 12 13]
+ [41 42 43]]
+
+EXPLANATION:
+• A[[0, 3], :] uses fancy indexing
+• [0, 3] selects specific rows (0 and 3)
+• : selects all columns
+• Result: 2×3 array
+
+EXAMPLE 3: EXTRACTING MULTIPLE COLUMNS
+---------------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13, 14],
+              [21, 22, 23, 24],
+              [31, 32, 33, 34]])
+
+# Get first and third columns
+first_third = A[:, [0, 2]]
+print("Original array:")
+print(A)
+print("\nFirst and third columns A[:, [0, 2]]:")
+print(first_third)
+
+Output:
+Original array:
+[[11 12 13 14]
+ [21 22 23 24]
+ [31 32 33 34]]
+
+First and third columns A[:, [0, 2]]:
+[[11 13]
+ [21 23]
+ [31 33]]
+
+EXPLANATION:
+• A[:, [0, 2]] selects all rows and specific columns
+• : selects all rows
+• [0, 2] selects columns 0 and 2
+• Result: 3×2 array
+
+EXAMPLE 4: SLICING WITH STEP
+-----------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13, 14, 15],
+              [21, 22, 23, 24, 25],
+              [31, 32, 33, 34, 35],
+              [41, 42, 43, 44, 45]])
+
+# Get every other row, every other column
+stepped = A[::2, ::2]
+print("Original array:")
+print(A)
+print("\nEvery other row and column A[::2, ::2]:")
+print(stepped)
+
+Output:
+Original array:
+[[11 12 13 14 15]
+ [21 22 23 24 25]
+ [31 32 33 34 35]
+ [41 42 43 44 45]]
+
+Every other row and column A[::2, ::2]:
+[[11 13 15]
+ [31 33 35]]
+
+EXPLANATION:
+• A[::2, ::2] uses step size of 2
+• ::2 means start:stop:step with step=2
+• Rows: 0, 2 (every other row)
+• Columns: 0, 2, 4 (every other column)
+• Result: 2×3 array
+
+EXAMPLE 5: MODIFYING ARRAYS USING SLICING
+-----------------------------------------
+Code:
+import numpy as np
+
+A = np.array([[11, 12, 13],
+              [21, 22, 23],
+              [31, 32, 33]])
+
+print("Original array:")
+print(A)
+
+# Modify a slice
+A[0:2, 0:2] = [[99, 99], [99, 99]]
+
+print("\nAfter A[0:2, 0:2] = [[99, 99], [99, 99]]:")
+print(A)
+
+Output:
+Original array:
+[[11 12 13]
+ [21 22 23]
+ [31 32 33]]
+
+After A[0:2, 0:2] = [[99, 99], [99, 99]]:
+[[99 99 13]
+ [99 99 23]
+ [31 32 33]]
+
+EXPLANATION:
+• A[0:2, 0:2] selects first two rows and columns
+• Assigns new values to that submatrix
+• Original array is modified in place
+
+[END SECTION 5.3]
+================================================================================
+
+END OF PART 1
+=============
+
+This concludes Part 1 of the Two-Dimensional NumPy in Python comprehensive 
+study guide. You have learned:
+
+✓ What 2D NumPy arrays are and how they differ from 1D arrays
+✓ How to create 2D arrays from nested Python lists
+✓ How to visualize 2D arrays as rectangular matrices
+✓ Understanding array attributes: ndim, shape, and size
+✓ Understanding axes and dimensions
+✓ How to index individual elements in 2D arrays
+✓ How to slice 2D arrays to extract subarrays
+
+Continue to Part 2 to learn about:
+• Array addition (matrix addition)
+• Scalar multiplication
+• Element-wise multiplication (Hadamard product)
+• Matrix multiplication
+• Detailed examples and explanations for each operation
+
+================================================================================

@@ -1,0 +1,1391 @@
+================================================================================
+PANDAS: LOADING DATA
+Comprehensive Study Guide - Part 3
+================================================================================
+
+WELCOME TO PART 3
+-----------------
+This is Part 3 of the Pandas: Loading Data comprehensive study guide. In this 
+part, you will learn how to slice DataFrames to extract subsets of data using 
+both iloc and loc methods. You will also learn best practices and get a 
+comprehensive summary of everything covered in this guide.
+
+PREREQUISITES
+-------------
+Before starting Part 3, make sure you understand:
+• How to create and load DataFrames
+• How to select columns
+• How to access individual elements with iloc and loc
+• The difference between position-based (iloc) and label-based (loc) indexing
+
+If you haven't completed Parts 1 and 2, please review them first.
+
+================================================================================
+TABLE OF CONTENTS - PART 3
+================================================================================
+
+PART 3: SLICING AND ADVANCED OPERATIONS
+  SECTION 3.1: SLICING DATAFRAMES WITH ILOC
+  SECTION 3.2: SLICING DATAFRAMES WITH LOC
+  SECTION 3.3: SUMMARY AND BEST PRACTICES
+  SECTION 3.4: QUICK REFERENCE GUIDE
+  SECTION 3.5: COMMON PATTERNS AND EXAMPLES
+
+================================================================================
+PART 3: SLICING AND ADVANCED OPERATIONS
+================================================================================
+
+SECTION 3.1: SLICING DATAFRAMES WITH ILOC
+------------------------------------------
+
+DEFINITION
+----------
+You can slice DataFrames and assign the values to a new DataFrame. You can 
+assign the first two rows and the first three columns to a variable. The result 
+is a DataFrame comprised of the selected rows and columns. Slicing with iloc 
+allows you to extract rectangular subsets of data using integer positions.
+
+DETAILED EXPLANATION
+--------------------
+Slicing is the process of extracting a subset of data from a DataFrame. With 
+iloc, you can slice by specifying:
+• Range of rows (e.g., rows 0 to 2)
+• Range of columns (e.g., columns 0 to 2)
+• Both rows and columns together
+
+Slicing syntax uses colons (:) to specify ranges, similar to Python list 
+slicing. The general format is:
+    df.iloc[start_row:end_row, start_col:end_col]
+
+IMPORTANT SLICING RULES:
+• start:end means "from start up to (but not including) end"
+• [0:2] means rows/columns 0 and 1 (not 2)
+• [0:3] means rows/columns 0, 1, and 2 (not 3)
+• You can omit start (starts from beginning) or end (goes to end)
+
+COMPLETE CODE EXAMPLE: SLICING WITH ILOC
+-----------------------------------------
+
+EXAMPLE 1: Setting Up Sample DataFrame
+----------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen', 'The Rolling Stones'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera', 'Sticky Fingers'],
+        'Released': [1969, 1973, 1971, 1975, 1971],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock', 'Rock'],
+        'Sales': [5000000, 45000000, 37000000, 6000000, 3000000]
+    }
+    df = pd.DataFrame(data)
+
+    print("Full DataFrame:")
+    print(df)
+    print(f"\nShape: {df.shape}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 5 columns and 5 rows
+  - Columns: Artist, Album, Released, Genre, Sales
+
+• Line 11: df = pd.DataFrame(data)
+  - Creates DataFrame
+  - 5 rows (index: 0, 1, 2, 3, 4)
+  - 5 columns (positions: 0=Artist, 1=Album, 2=Released, 3=Genre, 4=Sales)
+
+• Line 13: print("Full DataFrame:")
+  - Label for output
+
+• Line 14: print(df)
+  - Displays entire DataFrame
+
+• Line 15: print(f"\nShape: {df.shape}")
+  - Shows (5, 5) = 5 rows, 5 columns
+
+OUTPUT:
+    Full DataFrame:
+              Artist                    Album  Released           Genre     Sales
+    0    The Beatles            Abbey Road      1969            Rock   5000000
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock  45000000
+    2    Led Zeppelin                      IV      1971            Rock  37000000
+    3         Queen    A Night at the Opera      1975            Rock   6000000
+    4  The Rolling Stones         Sticky Fingers      1971            Rock   3000000
+
+    Shape: (5, 5)
+
+VISUAL REPRESENTATION OF POSITIONS:
+    Column Positions:    0           1                       2        3                   4
+    Row Positions  |  Artist    |  Album                 |  Released|  Genre            |  Sales
+    --------------|------------|------------------------|----------|-------------------|----------
+    0             |  The Beatles|  Abbey Road            |  1969     |  Rock             |  5000000
+    1             |  Pink Floyd |  The Dark Side...      |  1973     |  Progressive Rock |  45000000
+    2             |  Led Zeppelin|  IV                    |  1971     |  Rock             |  37000000
+    3             |  Queen      |  A Night at the Opera |  1975     |  Rock             |  3000000
+    4             |  Rolling Stones|  Sticky Fingers     |  1971     |  Rock             |  3000000
+
+EXAMPLE 2: Slicing First Two Rows and First Three Columns
+-----------------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Slice: first two rows, first three columns
+    Z = df.iloc[0:2, 0:3]
+
+    print("Original DataFrame:")
+    print(df)
+    print("\nSliced DataFrame (first 2 rows, first 3 columns):")
+    print(Z)
+    print(f"\nShape of sliced DataFrame: {Z.shape}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame with 4 rows, 4 columns
+
+• Line 12: Z = df.iloc[0:2, 0:3]
+  - Z = Variable to store the sliced DataFrame
+  - df = Our original DataFrame
+  - .iloc = Integer location method for slicing
+  - [0:2, 0:3] = Slice specification
+  - First part (0:2) = Row slice: from row 0 to row 2 (exclusive)
+    • This means rows 0 and 1 (first two rows)
+    • Remember: end is exclusive, so 0:2 means 0 and 1
+  - Second part (0:3) = Column slice: from column 0 to column 3 (exclusive)
+    • This means columns 0, 1, and 2 (first three columns)
+    • Columns: 0=Artist, 1=Album, 2=Released
+  - Result: A new DataFrame with 2 rows and 3 columns
+  - Stored in variable 'Z'
+
+• Line 14: print("Original DataFrame:")
+  - Label for output
+
+• Line 15: print(df)
+  - Displays original DataFrame (4 rows, 4 columns)
+
+• Line 16: print("\nSliced DataFrame (first 2 rows, first 3 columns):")
+  - Label for output
+
+• Line 17: print(Z)
+  - Displays sliced DataFrame
+  - Should show 2 rows and 3 columns
+
+• Line 18: print(f"\nShape of sliced DataFrame: {Z.shape}")
+  - Shows shape of sliced DataFrame
+  - Should be (2, 3) = 2 rows, 3 columns
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Sliced DataFrame (first 2 rows, first 3 columns):
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+
+    Shape of sliced DataFrame: (2, 3)
+
+BREAKDOWN:
+• Original DataFrame = 4 rows × 4 columns
+• Sliced DataFrame = 2 rows × 3 columns
+• Rows selected: 0 and 1 (first two rows)
+• Columns selected: 0, 1, 2 (Artist, Album, Released)
+• Genre column (column 3) was excluded
+• Rows 2 and 3 were excluded
+
+UNDERSTANDING THE SLICE [0:2, 0:3]:
+• [0:2] for rows means: start at row 0, go up to (but not including) row 2
+  • This gives us rows: 0, 1
+  • Total: 2 rows
+• [0:3] for columns means: start at column 0, go up to (but not including) column 3
+  • This gives us columns: 0, 1, 2
+  • Total: 3 columns
+
+EXAMPLE 3: Different Slicing Patterns
+--------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    print("Original DataFrame:")
+    print(df)
+
+    # Slice 1: First 3 rows, all columns
+    slice1 = df.iloc[0:3, :]
+    print("\nSlice 1 - First 3 rows, all columns:")
+    print(slice1)
+
+    # Slice 2: All rows, first 2 columns
+    slice2 = df.iloc[:, 0:2]
+    print("\nSlice 2 - All rows, first 2 columns:")
+    print(slice2)
+
+    # Slice 3: Rows 1 to 3, columns 1 to 3
+    slice3 = df.iloc[1:3, 1:3]
+    print("\nSlice 3 - Rows 1 to 3, columns 1 to 3:")
+    print(slice3)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame
+
+• Line 14: slice1 = df.iloc[0:3, :]
+  - [0:3, :] = Row slice 0:3, all columns
+  - 0:3 = Rows 0, 1, 2 (first three rows)
+  - : = All columns (no start/end specified)
+  - Result: 3 rows, all 4 columns
+
+• Line 17: slice2 = df.iloc[:, 0:2]
+  - [:, 0:2] = All rows, column slice 0:2
+  - : = All rows
+  - 0:2 = Columns 0, 1 (first two columns)
+  - Result: All 4 rows, 2 columns
+
+• Line 20: slice3 = df.iloc[1:3, 1:3]
+  - [1:3, 1:3] = Row slice 1:3, column slice 1:3
+  - 1:3 = Rows 1, 2 (second and third rows)
+  - 1:3 = Columns 1, 2 (Album and Released)
+  - Result: 2 rows, 2 columns
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Slice 1 - First 3 rows, all columns:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+
+    Slice 2 - All rows, first 2 columns:
+              Artist                    Album
+    0    The Beatles            Abbey Road
+    1      Pink Floyd  The Dark Side of the Moon
+    2    Led Zeppelin                      IV
+    3         Queen    A Night at the Opera
+
+    Slice 3 - Rows 1 to 3, columns 1 to 3:
+                    Album  Released
+    1  The Dark Side of the Moon      1973
+    2                      IV      1971
+
+EXAMPLE 4: Using Omitted Start or End
+---------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975]
+    }
+    df = pd.DataFrame(data)
+
+    # Omit start: starts from beginning
+    slice_from_start = df.iloc[:2, :]  # First 2 rows, all columns
+    print("First 2 rows:")
+    print(slice_from_start)
+
+    # Omit end: goes to end
+    slice_to_end = df.iloc[2:, :]  # From row 2 to end, all columns
+    print("\nFrom row 2 to end:")
+    print(slice_to_end)
+
+    # Omit both: gets everything
+    slice_all = df.iloc[:, :]  # All rows, all columns (same as df)
+    print("\nAll rows and columns:")
+    print(slice_all)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: slice_from_start = df.iloc[:2, :]
+  - [:2, :] = Omit start, specify end
+  - :2 = From beginning to row 2 (exclusive) = rows 0, 1
+  - : = All columns
+  - Result: First 2 rows, all columns
+
+• Line 15: slice_to_end = df.iloc[2:, :]
+  - [2:, :] = Specify start, omit end
+  - 2: = From row 2 to end = rows 2, 3
+  - : = All columns
+  - Result: From row 2 onwards, all columns
+
+• Line 19: slice_all = df.iloc[:, :]
+  - [:, :] = Omit both start and end
+  - : = All rows
+  - : = All columns
+  - Result: Entire DataFrame (same as df)
+
+OUTPUT:
+    First 2 rows:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+
+    From row 2 to end:
+              Artist                    Album  Released
+    2    Led Zeppelin                      IV      1971
+    3         Queen    A Night at the Opera      1975
+
+    All rows and columns:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+    3         Queen    A Night at the Opera      1975
+
+EXAMPLE 5: Selecting Specific Rows and Columns (Not Continuous)
+-----------------------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Select specific rows and columns using lists
+    # Rows 0 and 2, columns 0 and 3
+    specific = df.iloc[[0, 2], [0, 3]]
+
+    print("Original DataFrame:")
+    print(df)
+    print("\nSelected rows [0, 2] and columns [0, 3]:")
+    print(specific)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame
+
+• Line 12: specific = df.iloc[[0, 2], [0, 3]]
+  - [[0, 2], [0, 3]] = Using lists instead of slices
+  - [0, 2] = Select rows 0 and 2 specifically (not a range)
+  - [0, 3] = Select columns 0 and 3 specifically (not a range)
+  - Double brackets [] = List of indices to select
+  - Result: Rows 0 and 2, columns 0 and 3
+
+• Line 14: print("Original DataFrame:")
+  - Label for output
+
+• Line 15: print(df)
+  - Displays original DataFrame
+
+• Line 16: print("\nSelected rows [0, 2] and columns [0, 3]:")
+  - Label for output
+
+• Line 17: print(specific)
+  - Displays selected subset
+  - Should show rows 0 and 2, columns Artist (0) and Genre (3)
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Selected rows [0, 2] and columns [0, 3]:
+              Artist Genre
+    0    The Beatles  Rock
+    2    Led Zeppelin  Rock
+
+BREAKDOWN:
+• Selected rows: 0 and 2 (The Beatles and Led Zeppelin)
+• Selected columns: 0 and 3 (Artist and Genre)
+• Result: 2 rows × 2 columns
+• Note: Row 1 and 3 were skipped, columns 1 and 2 were skipped
+
+KEY POINTS ABOUT ILOC SLICING
+------------------------------
+1. SLICE SYNTAX [start:end]
+   • start:end means "from start up to (but not including) end"
+   • [0:2] selects positions 0 and 1 (2 items)
+   • [0:3] selects positions 0, 1, and 2 (3 items)
+
+2. OMITTING VALUES
+   • [:end] = From beginning to end (exclusive)
+   • [start:] = From start to end
+   • [:] = Everything
+
+3. USING LISTS FOR NON-CONTIGUOUS SELECTION
+   • [[0, 2], [1, 3]] = Select specific rows/columns
+   • Not a range, but specific positions
+
+4. RESULT IS ALWAYS A DATAFRAME
+   • Even if selecting one row or one column
+   • Maintains DataFrame structure
+
+COMMON MISTAKES
+---------------
+1. CONFUSING INCLUSIVE VS EXCLUSIVE
+   ❌ Thinking [0:2] includes row 2
+   ✅ [0:2] means rows 0 and 1 (2 is exclusive)
+
+2. FORGETTING COMMA
+   ❌ df.iloc[0:2 0:3] - Syntax error
+   ✅ df.iloc[0:2, 0:3] - Need comma between row and column slices
+
+3. USING COLUMN NAMES
+   ❌ df.iloc[0:2, 'Artist':'Released'] - Error! iloc uses positions
+   ✅ df.iloc[0:2, 0:2] - Use integer positions
+
+[END SECTION 3.1]
+================================================================================
+
+SECTION 3.2: SLICING DATAFRAMES WITH LOC
+-----------------------------------------
+
+DEFINITION
+----------
+You can also slice DataFrames and assign the values to a new DataFrame using 
+loc. The code assigns the first two rows and all columns in between the columns 
+named Artist and Released. The result is a new DataFrame with the corresponding 
+values. loc uses label-based slicing, meaning you use row labels and column 
+names instead of integer positions.
+
+DETAILED EXPLANATION
+--------------------
+Slicing with loc is similar to iloc, but uses labels instead of positions:
+• Row labels (can be integers, strings, dates, etc.)
+• Column names (strings)
+• More readable and intuitive
+• Works with custom index labels
+
+The general format is:
+    df.loc[start_row_label:end_row_label, start_col_name:end_col_name]
+
+IMPORTANT: With loc, the end is INCLUSIVE (unlike iloc where end is exclusive).
+    df.loc[0:2, 'Artist':'Released'] includes row 2 and column 'Released'
+
+COMPLETE CODE EXAMPLE: SLICING WITH LOC
+----------------------------------------
+
+EXAMPLE 1: Basic Slicing with loc
+----------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Slice using loc: first two rows, columns from 'Artist' to 'Released'
+    Z = df.loc[0:1, 'Artist':'Released']
+
+    print("Original DataFrame:")
+    print(df)
+    print("\nSliced DataFrame using loc:")
+    print(Z)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame with default integer index (0, 1, 2, 3)
+
+• Line 12: Z = df.loc[0:1, 'Artist':'Released']
+  - Z = Variable to store sliced DataFrame
+  - df = Our original DataFrame
+  - .loc = Label-based location method for slicing
+  - [0:1, 'Artist':'Released'] = Slice specification
+  - First part (0:1) = Row slice: from row label 0 to row label 1
+    • With loc, end is INCLUSIVE
+    • So 0:1 means rows 0 and 1 (first two rows)
+  - Second part ('Artist':'Released') = Column slice: from column 'Artist' to column 'Released'
+    • Column names are used, not positions
+    • 'Artist' to 'Released' means: Artist, Album, Released
+    • Includes all columns between Artist and Released (inclusive)
+  - Result: A new DataFrame with 2 rows and 3 columns
+  - Stored in variable 'Z'
+
+• Line 14: print("Original DataFrame:")
+  - Label for output
+
+• Line 15: print(df)
+  - Displays original DataFrame
+
+• Line 16: print("\nSliced DataFrame using loc:")
+  - Label for output
+
+• Line 17: print(Z)
+  - Displays sliced DataFrame
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Sliced DataFrame using loc:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+
+BREAKDOWN:
+• Original DataFrame = 4 rows × 4 columns
+• Sliced DataFrame = 2 rows × 3 columns
+• Rows selected: 0 and 1 (first two rows)
+• Columns selected: Artist, Album, Released (columns between Artist and Released)
+• Genre column was excluded (outside the range)
+
+IMPORTANT DIFFERENCE: LOC IS INCLUSIVE
+--------------------------------------
+With loc, the end value is INCLUDED:
+• df.loc[0:1, ...] includes row 1 (inclusive)
+• df.loc[0:2, ...] includes rows 0, 1, and 2 (all inclusive)
+
+With iloc, the end value is EXCLUDED:
+• df.iloc[0:1, ...] includes only row 0 (1 is exclusive)
+• df.iloc[0:2, ...] includes rows 0 and 1 (2 is exclusive)
+
+EXAMPLE 2: Slicing with Custom Index Labels
+--------------------------------------------
+    import pandas as pd
+
+    # Create DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Create new DataFrame with custom index
+    df_new = df.copy()
+    df_new.index = ['A', 'B', 'C', 'D']  # Custom labels: A, B, C, D
+
+    # Slice using custom labels
+    Z = df_new.loc['A':'B', 'Artist':'Released']
+
+    print("Original DataFrame (integer index):")
+    print(df)
+    print("\nNew DataFrame (custom index):")
+    print(df_new)
+    print("\nSliced DataFrame (rows A to B, columns Artist to Released):")
+    print(Z)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame with default integer index
+
+• Line 12: df_new = df.copy()
+  - Creates a copy so we don't modify original
+
+• Line 13: df_new.index = ['A', 'B', 'C', 'D']
+  - Replaces default index (0, 1, 2, 3) with custom labels (A, B, C, D)
+  - Row 0 becomes 'A', row 1 becomes 'B', etc.
+
+• Line 15: Z = df_new.loc['A':'B', 'Artist':'Released']
+  - ['A':'B', 'Artist':'Released'] = Slice with custom labels
+  - 'A':'B' = Row labels from 'A' to 'B' (inclusive)
+    • Includes rows 'A' and 'B' (first two rows)
+  - 'Artist':'Released' = Column names from 'Artist' to 'Released'
+    • Includes Artist, Album, Released columns
+  - Result: 2 rows × 3 columns
+
+• Line 17: print("Original DataFrame (integer index):")
+  - Label for output
+
+• Line 18: print(df)
+  - Shows original with integer index
+
+• Line 19: print("\nNew DataFrame (custom index):")
+  - Label for output
+
+• Line 20: print(df_new)
+  - Shows DataFrame with custom index A, B, C, D
+
+• Line 21: print("\nSliced DataFrame (rows A to B, columns Artist to Released):")
+  - Label for output
+
+• Line 22: print(Z)
+  - Displays sliced DataFrame
+
+OUTPUT:
+    Original DataFrame (integer index):
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    New DataFrame (custom index):
+              Artist                    Album  Released           Genre
+    A    The Beatles            Abbey Road      1969            Rock
+    B      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    C    Led Zeppelin                      IV      1971            Rock
+    D         Queen    A Night at the Opera      1975            Rock
+
+    Sliced DataFrame (rows A to B, columns Artist to Released):
+              Artist                    Album  Released
+    A    The Beatles            Abbey Road      1969
+    B      Pink Floyd  The Dark Side of the Moon  1973
+
+BREAKDOWN:
+• Original DataFrame = Integer index (0, 1, 2, 3)
+• New DataFrame = Custom index (A, B, C, D)
+• Sliced DataFrame = Rows A and B, columns Artist to Released
+• This demonstrates loc's flexibility with custom labels
+
+EXAMPLE 3: Different Slicing Patterns with loc
+---------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    print("Original DataFrame:")
+    print(df)
+
+    # Slice 1: First 2 rows, all columns
+    slice1 = df.loc[0:1, :]
+    print("\nSlice 1 - Rows 0 to 1, all columns:")
+    print(slice1)
+
+    # Slice 2: All rows, columns Artist to Released
+    slice2 = df.loc[:, 'Artist':'Released']
+    print("\nSlice 2 - All rows, columns Artist to Released:")
+    print(slice2)
+
+    # Slice 3: Rows 1 to 2, columns Album to Genre
+    slice3 = df.loc[1:2, 'Album':'Genre']
+    print("\nSlice 3 - Rows 1 to 2, columns Album to Genre:")
+    print(slice3)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame
+
+• Line 14: slice1 = df.loc[0:1, :]
+  - [0:1, :] = Rows 0 to 1 (inclusive), all columns
+  - 0:1 = Rows 0 and 1 (with loc, end is inclusive)
+  - : = All columns
+  - Result: 2 rows, all 4 columns
+
+• Line 17: slice2 = df.loc[:, 'Artist':'Released']
+  - [:, 'Artist':'Released'] = All rows, columns Artist to Released
+  - : = All rows
+  - 'Artist':'Released' = Columns from Artist to Released (inclusive)
+    • Includes: Artist, Album, Released
+  - Result: All 4 rows, 3 columns
+
+• Line 20: slice3 = df.loc[1:2, 'Album':'Genre']
+  - [1:2, 'Album':'Genre'] = Rows 1 to 2, columns Album to Genre
+  - 1:2 = Rows 1 and 2 (inclusive)
+  - 'Album':'Genre' = Columns from Album to Genre (inclusive)
+    • Includes: Album, Released, Genre
+  - Result: 2 rows, 3 columns
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Slice 1 - Rows 0 to 1, all columns:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+
+    Slice 2 - All rows, columns Artist to Released:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+    3         Queen    A Night at the Opera      1975
+
+    Slice 3 - Rows 1 to 2, columns Album to Genre:
+                    Album  Released           Genre
+    1  The Dark Side of the Moon      1973  Progressive Rock
+    2                      IV      1971            Rock
+
+EXAMPLE 4: Selecting Specific Rows and Columns with Lists
+-----------------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Select specific rows and columns using lists
+    # Rows 0 and 2, columns 'Artist' and 'Genre'
+    specific = df.loc[[0, 2], ['Artist', 'Genre']]
+
+    print("Original DataFrame:")
+    print(df)
+    print("\nSelected rows [0, 2] and columns ['Artist', 'Genre']:")
+    print(specific)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-10: Creates DataFrame
+
+• Line 12: specific = df.loc[[0, 2], ['Artist', 'Genre']]
+  - [[0, 2], ['Artist', 'Genre']] = Using lists for specific selection
+  - [0, 2] = Select rows with labels 0 and 2 specifically
+  - ['Artist', 'Genre'] = Select columns named 'Artist' and 'Genre'
+  - Double brackets [] = List of labels to select
+  - Result: Rows 0 and 2, columns Artist and Genre
+
+• Line 14: print("Original DataFrame:")
+  - Label for output
+
+• Line 15: print(df)
+  - Displays original DataFrame
+
+• Line 16: print("\nSelected rows [0, 2] and columns ['Artist', 'Genre']:")
+  - Label for output
+
+• Line 17: print(specific)
+  - Displays selected subset
+  - Should show rows 0 and 2, columns Artist and Genre
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+    3         Queen    A Night at the Opera      1975            Rock
+
+    Selected rows [0, 2] and columns ['Artist', 'Genre']:
+              Artist Genre
+    0    The Beatles  Rock
+    2    Led Zeppelin  Rock
+
+BREAKDOWN:
+• Selected rows: 0 and 2 (The Beatles and Led Zeppelin)
+• Selected columns: Artist and Genre
+• Result: 2 rows × 2 columns
+• Rows 1 and 3 were skipped, columns Album and Released were skipped
+
+KEY DIFFERENCES: ILOC VS LOC FOR SLICING
+----------------------------------------
+ILOC (Position-based):
+• Uses integer positions: df.iloc[0:2, 0:3]
+• End is EXCLUSIVE: [0:2] means positions 0 and 1
+• Column positions: [0:3] means columns 0, 1, 2
+• Works regardless of index labels
+
+LOC (Label-based):
+• Uses labels: df.loc[0:1, 'Artist':'Released']
+• End is INCLUSIVE: [0:1] means labels 0 and 1
+• Column names: 'Artist':'Released' means Artist, Album, Released
+• Works with any index labels (integers, strings, dates)
+
+COMPARISON EXAMPLE:
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # iloc: position-based, end exclusive
+    slice_iloc = df.iloc[0:2, 0:2]  # Rows 0,1; Columns 0,1
+    print("iloc[0:2, 0:2]:")
+    print(slice_iloc)
+
+    # loc: label-based, end inclusive
+    slice_loc = df.loc[0:1, 'Artist':'Album']  # Rows 0,1; Columns Artist,Album
+    print("\nloc[0:1, 'Artist':'Album']:")
+    print(slice_loc)
+
+OUTPUT:
+    iloc[0:2, 0:2]:
+              Artist                    Album
+    0    The Beatles            Abbey Road
+    1      Pink Floyd  The Dark Side of the Moon
+
+    loc[0:1, 'Artist':'Album']:
+              Artist                    Album
+    0    The Beatles            Abbey Road
+    1      Pink Floyd  The Dark Side of the Moon
+
+NOTE: In this case, both produce the same result, but:
+• iloc uses positions (0:2 means 0 and 1, 2 is exclusive)
+• loc uses labels (0:1 means 0 and 1, 1 is inclusive)
+
+COMMON MISTAKES WITH LOC SLICING
+---------------------------------
+1. CONFUSING INCLUSIVE VS EXCLUSIVE
+   ❌ Thinking loc[0:1] excludes row 1
+   ✅ loc[0:1] includes row 1 (inclusive)
+
+2. USING POSITIONS INSTEAD OF LABELS
+   ❌ df.loc[0:2, 0:2] - Error! loc needs column names, not positions
+   ✅ df.loc[0:2, 'Artist':'Album'] - Use column names
+
+3. MISSING QUOTES AROUND COLUMN NAMES
+   ❌ df.loc[0:1, Artist:Released] - Error! Column names must be strings
+   ✅ df.loc[0:1, 'Artist':'Released'] - Use quotes
+
+4. NON-EXISTENT LABELS
+   ❌ df.loc[0:10, 'Artist':'Song'] - Error if row 10 or column 'Song' doesn't exist
+   ✅ Check valid labels first
+
+BEST PRACTICES FOR SLICING
+---------------------------
+1. USE LOC FOR READABILITY
+   • More self-documenting
+   • Easier to understand
+   • Better for maintenance
+
+2. USE ILOC FOR PROGRAMMATIC ACCESS
+   • When positions matter
+   • For automated processing
+   • When index labels are not meaningful
+
+3. REMEMBER INCLUSIVE VS EXCLUSIVE
+   • loc: end is inclusive
+   • iloc: end is exclusive
+
+4. CHECK YOUR DATA AFTER SLICING
+   • Verify shape is correct
+   • Check that you got the right subset
+   • Use head() or print() to inspect
+
+[END SECTION 3.2]
+================================================================================
+
+SECTION 3.3: SUMMARY AND BEST PRACTICES
+----------------------------------------
+
+COMPREHENSIVE SUMMARY
+---------------------
+This guide has covered everything you need to know about loading data into 
+Pandas DataFrames and working with them. Let's summarize the key concepts:
+
+1. LIBRARIES AND DEPENDENCIES
+   • Libraries are pre-written code to solve problems
+   • Import libraries using: import library_name
+   • Use aliases: import pandas as pd
+   • Standard alias for pandas is 'pd'
+
+2. LOADING DATA
+   • CSV files: pd.read_csv('file.csv')
+   • Excel files: pd.read_excel('file.xlsx')
+   • From dictionaries: pd.DataFrame(dictionary)
+   • Always check your data after loading (use head(), info(), shape)
+
+3. DATAFRAMES
+   • Two-dimensional data structure (rows and columns)
+   • Like a spreadsheet or database table
+   • Can contain different data types in different columns
+   • Has index (row labels) and columns (column names)
+
+4. SELECTING COLUMNS
+   • Single bracket []: Returns Series (one column)
+   • Double brackets [[]]: Returns DataFrame (one or more columns)
+   • Example: df['Name'] vs df[['Name', 'Age']]
+
+5. ACCESSING ELEMENTS
+   • iloc: Position-based (integer positions)
+     - df.iloc[0, 0] = First row, first column
+     - Uses 0-based indexing
+   • loc: Label-based (row labels and column names)
+     - df.loc[0, 'Artist'] = Row label 0, column 'Artist'
+     - More readable and intuitive
+
+6. SLICING DATAFRAMES
+   • iloc slicing: df.iloc[0:2, 0:3]
+     - Position-based
+     - End is EXCLUSIVE
+   • loc slicing: df.loc[0:1, 'Artist':'Released']
+     - Label-based
+     - End is INCLUSIVE
+     - Uses column names
+
+KEY DEFINITIONS
+---------------
+DEPENDENCY/LIBRARY:
+Pre-written code that provides functions and classes to solve common problems. 
+Libraries must be installed before use and imported in your code.
+
+DATAFRAME:
+A two-dimensional labeled data structure in Pandas with rows and columns. It's 
+the primary data structure for working with tabular data in Pandas.
+
+ILOC:
+Integer location - method for accessing DataFrame elements by their integer 
+position (row number and column number). Uses 0-based indexing.
+
+LOC:
+Location - method for accessing DataFrame elements by their labels (row index 
+labels and column names). More readable than iloc.
+
+SLICING:
+The process of extracting a subset of data from a DataFrame by specifying ranges 
+of rows and/or columns.
+
+BEST PRACTICES
+--------------
+1. ALWAYS IMPORT PANDAS WITH STANDARD ALIAS
+   ✅ import pandas as pd
+   ❌ import pandas as banana
+
+2. CHECK YOUR DATA AFTER LOADING
+   ✅ df.head() - See first few rows
+   ✅ df.info() - See data types and missing values
+   ✅ df.shape - See dimensions
+
+3. USE DESCRIPTIVE VARIABLE NAMES
+   ✅ df_sales = pd.read_csv('sales.csv')
+   ✅ df_customers = pd.read_csv('customers.csv')
+   ❌ df = pd.read_csv('sales.csv')  # If you have multiple DataFrames
+
+4. USE LOC FOR READABILITY
+   ✅ df.loc[0, 'Name'] - Clear and readable
+   ✅ df.loc[0:2, 'Name':'Age'] - Self-documenting
+   ❌ df.iloc[0, 0] - Less clear what you're accessing
+
+5. USE ILOC FOR PROGRAMMATIC ACCESS
+   ✅ When you know positions
+   ✅ For automated processing
+   ✅ When index labels aren't meaningful
+
+6. REMEMBER INCLUSIVE VS EXCLUSIVE
+   • loc: end is inclusive (0:1 includes 1)
+   • iloc: end is exclusive (0:2 excludes 2, includes 0 and 1)
+
+7. HANDLE ERRORS GRACEFULLY
+   ✅ Use try-except blocks
+   ✅ Check if files exist
+   ✅ Provide helpful error messages
+
+8. DOCUMENT YOUR CODE
+   ✅ Add comments explaining complex operations
+   ✅ Use descriptive variable names
+   ✅ Explain why you're doing something, not just what
+
+COMMON PATTERNS
+---------------
+PATTERN 1: Load and Inspect
+    import pandas as pd
+    df = pd.read_csv('data.csv')
+    print(df.head())
+    print(df.info())
+    print(df.shape)
+
+PATTERN 2: Select Columns for Analysis
+    import pandas as pd
+    df = pd.read_csv('data.csv')
+    # Select specific columns
+    subset = df[['Name', 'Age', 'Salary']]
+    print(subset.head())
+
+PATTERN 3: Access Specific Values
+    import pandas as pd
+    df = pd.read_csv('data.csv')
+    # Get value at specific location
+    value = df.loc[0, 'Name']
+    print(value)
+
+PATTERN 4: Slice Data
+    import pandas as pd
+    df = pd.read_csv('data.csv')
+    # Get first 10 rows, specific columns
+    subset = df.loc[0:9, 'Name':'Age']
+    print(subset)
+
+PATTERN 5: Create DataFrame from Dictionary
+    import pandas as pd
+    data = {
+        'Name': ['Alice', 'Bob'],
+        'Age': [25, 30]
+    }
+    df = pd.DataFrame(data)
+    print(df)
+
+WHAT TO DO NEXT
+---------------
+Now that you've mastered loading data and basic DataFrame operations, you can:
+
+1. EXPLORE MORE PANDAS OPERATIONS
+   • Filtering data: df[df['Age'] > 25]
+   • Sorting: df.sort_values('Age')
+   • Grouping: df.groupby('Department')
+   • Aggregations: df.mean(), df.sum()
+
+2. DATA CLEANING
+   • Handle missing values: df.fillna(), df.dropna()
+   • Remove duplicates: df.drop_duplicates()
+   • Data type conversion: df.astype()
+
+3. DATA VISUALIZATION
+   • Use matplotlib or seaborn with DataFrames
+   • Create charts and graphs
+   • Visualize patterns in your data
+
+4. ADVANCED OPERATIONS
+   • Merging DataFrames: pd.merge()
+   • Concatenating: pd.concat()
+   • Pivot tables: pd.pivot_table()
+
+5. PRACTICE WITH REAL DATA
+   • Find datasets online (Kaggle, UCI ML Repository)
+   • Load and explore the data
+   • Practice all the operations you've learned
+
+[END SECTION 3.3]
+================================================================================
+
+SECTION 3.4: QUICK REFERENCE GUIDE
+-----------------------------------
+
+QUICK REFERENCE: IMPORTING AND LOADING
+--------------------------------------
+    # Import pandas
+    import pandas as pd
+
+    # Load CSV file
+    df = pd.read_csv('file.csv')
+
+    # Load Excel file
+    df = pd.read_excel('file.xlsx', sheet_name='Sheet1')
+
+    # Create from dictionary
+    data = {'A': [1, 2], 'B': [3, 4]}
+    df = pd.DataFrame(data)
+
+QUICK REFERENCE: INSPECTING DATA
+---------------------------------
+    # First 5 rows
+    df.head()
+
+    # Last 5 rows
+    df.tail()
+
+    # Data types and info
+    df.info()
+
+    # Shape (rows, columns)
+    df.shape
+
+    # Column names
+    df.columns
+
+    # Index
+    df.index
+
+QUICK REFERENCE: SELECTING COLUMNS
+----------------------------------
+    # Single column (returns Series)
+    df['ColumnName']
+
+    # Single column (returns DataFrame)
+    df[['ColumnName']]
+
+    # Multiple columns
+    df[['Col1', 'Col2', 'Col3']]
+
+QUICK REFERENCE: ACCESSING ELEMENTS (ILOC)
+-------------------------------------------
+    # Single element
+    df.iloc[0, 0]              # Row 0, Column 0
+
+    # Single row
+    df.iloc[0, :]               # Row 0, all columns
+
+    # Single column
+    df.iloc[:, 0]               # All rows, column 0
+
+    # Slice rows and columns
+    df.iloc[0:2, 0:3]           # Rows 0-1, Columns 0-2 (end exclusive)
+
+    # Specific rows/columns
+    df.iloc[[0, 2], [0, 1]]     # Rows 0 and 2, Columns 0 and 1
+
+QUICK REFERENCE: ACCESSING ELEMENTS (LOC)
+-----------------------------------------
+    # Single element
+    df.loc[0, 'ColumnName']     # Row label 0, column 'ColumnName'
+
+    # Single row
+    df.loc[0, :]                # Row label 0, all columns
+
+    # Single column
+    df.loc[:, 'ColumnName']      # All rows, column 'ColumnName'
+
+    # Slice rows and columns
+    df.loc[0:1, 'A':'C']        # Rows 0-1, Columns A to C (end inclusive)
+
+    # Specific rows/columns
+    df.loc[[0, 2], ['A', 'B']]  # Rows 0 and 2, Columns A and B
+
+QUICK REFERENCE: SLICING COMPARISON
+-----------------------------------
+    # iloc: position-based, end EXCLUSIVE
+    df.iloc[0:2, 0:3]           # Rows 0,1; Columns 0,1,2
+
+    # loc: label-based, end INCLUSIVE
+    df.loc[0:1, 'A':'C']        # Rows 0,1; Columns A,B,C
+
+QUICK REFERENCE: COMMON OPERATIONS
+----------------------------------
+    # Check for missing values
+    df.isna()
+
+    # Drop missing values
+    df.dropna()
+
+    # Fill missing values
+    df.fillna(0)
+
+    # Rename columns
+    df.rename(columns={'Old': 'New'})
+
+    # Reset index
+    df.reset_index()
+
+[END SECTION 3.4]
+================================================================================
+
+SECTION 3.5: COMMON PATTERNS AND EXAMPLES
+------------------------------------------
+
+COMPLETE WORKFLOW EXAMPLE
+--------------------------
+    import pandas as pd
+
+    # Step 1: Load data
+    df = pd.read_csv('sales_data.csv')
+
+    # Step 2: Inspect data
+    print("Shape:", df.shape)
+    print("\nFirst few rows:")
+    print(df.head())
+    print("\nData types:")
+    print(df.dtypes)
+
+    # Step 3: Select columns of interest
+    important_cols = df[['Date', 'Product', 'Sales', 'Region']]
+
+    # Step 4: Access specific values
+    first_sale = df.loc[0, 'Sales']
+    print(f"\nFirst sale amount: {first_sale}")
+
+    # Step 5: Slice data
+    first_quarter = df.loc[0:89, 'Date':'Sales']  # First 90 rows
+    print(f"\nFirst quarter shape: {first_quarter.shape}")
+
+    # Step 6: Work with the data
+    average_sales = df['Sales'].mean()
+    print(f"\nAverage sales: {average_sales}")
+
+EXAMPLE: Creating and Manipulating DataFrame
+---------------------------------------------
+    import pandas as pd
+
+    # Create DataFrame from dictionary
+    employee_data = {
+        'EmployeeID': [101, 102, 103, 104],
+        'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+        'Department': ['Sales', 'IT', 'IT', 'Sales'],
+        'Salary': [50000, 60000, 65000, 55000],
+        'HireDate': ['2020-01-15', '2019-03-20', '2021-06-10', '2020-11-05']
+    }
+    df = pd.DataFrame(employee_data)
+
+    # Display full DataFrame
+    print("Full DataFrame:")
+    print(df)
+
+    # Select specific columns
+    names_salaries = df[['Name', 'Salary']]
+    print("\nNames and Salaries:")
+    print(names_salaries)
+
+    # Access specific element
+    bob_salary = df.loc[1, 'Salary']
+    print(f"\nBob's salary: ${bob_salary:,}")
+
+    # Slice data
+    it_department = df.loc[1:2, 'Name':'Salary']
+    print("\nIT Department employees:")
+    print(it_department)
+
+EXAMPLE: Loading and Exploring CSV Data
+----------------------------------------
+    import pandas as pd
+
+    # Load CSV file
+    df = pd.read_csv('music_albums.csv')
+
+    # Basic information
+    print("Dataset Information:")
+    print(f"Shape: {df.shape}")
+    print(f"Columns: {df.columns.tolist()}")
+    print(f"\nData types:\n{df.dtypes}")
+
+    # First few rows
+    print("\nFirst 5 rows:")
+    print(df.head())
+
+    # Select columns
+    artist_album = df[['Artist', 'Album']]
+    print("\nArtist and Album columns:")
+    print(artist_album.head())
+
+    # Access using iloc
+    first_artist = df.iloc[0, 0]
+    print(f"\nFirst artist (iloc): {first_artist}")
+
+    # Access using loc
+    first_artist_loc = df.loc[0, 'Artist']
+    print(f"First artist (loc): {first_artist_loc}")
+
+    # Slice using iloc
+    first_two_rows = df.iloc[0:2, 0:3]
+    print("\nFirst 2 rows, first 3 columns (iloc):")
+    print(first_two_rows)
+
+    # Slice using loc
+    first_two_rows_loc = df.loc[0:1, 'Artist':'Released']
+    print("\nFirst 2 rows, Artist to Released columns (loc):")
+    print(first_two_rows_loc)
+
+EXAMPLE: Working with Excel Files
+----------------------------------
+    import pandas as pd
+
+    # Load Excel file
+    df = pd.read_excel('financial_data.xlsx', sheet_name='Q1')
+
+    # Inspect
+    print("Q1 Financial Data:")
+    print(df.head())
+
+    # Select specific columns
+    revenue_expenses = df[['Month', 'Revenue', 'Expenses']]
+    print("\nRevenue and Expenses:")
+    print(revenue_expenses)
+
+    # Access specific value
+    jan_revenue = df.loc[0, 'Revenue']
+    print(f"\nJanuary Revenue: ${jan_revenue:,.2f}")
+
+    # Slice data
+    first_half = df.loc[0:2, 'Month':'Expenses']
+    print("\nFirst half of quarter:")
+    print(first_half)
+
+EXAMPLE: Dictionary to DataFrame Workflow
+-----------------------------------------
+    import pandas as pd
+
+    # Create data as dictionary
+    sales_data = {
+        'Product': ['Widget A', 'Widget B', 'Widget C', 'Widget D'],
+        'Q1_Sales': [1000, 1500, 800, 1200],
+        'Q2_Sales': [1100, 1600, 900, 1300],
+        'Q3_Sales': [1200, 1700, 1000, 1400],
+        'Q4_Sales': [1300, 1800, 1100, 1500]
+    }
+
+    # Convert to DataFrame
+    df = pd.DataFrame(sales_data)
+
+    # Display
+    print("Sales DataFrame:")
+    print(df)
+
+    # Select product and total columns
+    products_q1_q2 = df[['Product', 'Q1_Sales', 'Q2_Sales']]
+    print("\nProducts and Q1-Q2 Sales:")
+    print(products_q1_q2)
+
+    # Access specific product's Q1 sales
+    widget_a_q1 = df.loc[0, 'Q1_Sales']
+    print(f"\nWidget A Q1 Sales: {widget_a_q1}")
+
+    # Slice to get first two products, first three columns
+    subset = df.loc[0:1, 'Product':'Q2_Sales']
+    print("\nFirst two products, Product to Q2_Sales:")
+    print(subset)
+
+[END SECTION 3.5]
+================================================================================
+
+END OF PART 3 AND COMPLETE GUIDE
+=================================
+
+This concludes Part 3 and the complete Pandas: Loading Data comprehensive 
+study guide.
+
+FINAL SUMMARY
+-------------
+You have now learned:
+
+PART 1:
+• What dependencies and libraries are
+• How to import Pandas
+• How to load CSV files
+• How to load Excel files
+• What DataFrames are and their structure
+
+PART 2:
+• How to create DataFrames from dictionaries
+• How to select single and multiple columns
+• How to access elements using iloc (position-based)
+• How to access elements using loc (label-based)
+
+PART 3:
+• How to slice DataFrames with iloc
+• How to slice DataFrames with loc
+• Best practices and patterns
+• Quick reference guide
+• Common examples and workflows
+
+NEXT STEPS
+----------
+1. Practice with real datasets
+2. Explore more Pandas operations (filtering, grouping, merging)
+3. Learn data cleaning techniques
+4. Combine with visualization libraries
+5. Build data analysis projects
+
+Remember: Practice is key! The more you work with DataFrames, the more 
+comfortable you'll become. Start with simple operations and gradually work 
+your way up to more complex data manipulation tasks.
+
+Good luck with your data science journey!
+
+================================================================================

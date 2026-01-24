@@ -1,0 +1,1613 @@
+================================================================================
+PANDAS: LOADING DATA
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This is Part 2 of the Pandas: Loading Data comprehensive study guide. In this 
+part, you will learn how to create DataFrames from dictionaries, select columns, 
+and access individual elements using iloc and loc methods.
+
+PREREQUISITES
+-------------
+Before starting Part 2, make sure you understand:
+• How to import Pandas (import pandas as pd)
+• What DataFrames are (rows and columns structure)
+• Basic DataFrame operations (head(), shape, columns)
+
+If you haven't completed Part 1, please review it first.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: CREATING AND MANIPULATING DATAFRAMES
+  SECTION 2.1: CREATING DATAFRAMES FROM DICTIONARIES
+  SECTION 2.2: SELECTING COLUMNS FROM DATAFRAMES
+  SECTION 2.3: ACCESSING ELEMENTS WITH ILOC
+  SECTION 2.4: ACCESSING ELEMENTS WITH LOC
+
+NOTE: Part 3 covers slicing DataFrames and advanced operations.
+
+================================================================================
+PART 2: CREATING AND MANIPULATING DATAFRAMES
+================================================================================
+
+SECTION 2.1: CREATING DATAFRAMES FROM DICTIONARIES
+----------------------------------------------------
+
+DEFINITION
+----------
+You can create a DataFrame out of a dictionary. The keys correspond to the 
+column labels. The values are lists corresponding to the rows. You can then 
+cast the dictionary to a DataFrame using the function DataFrame(). Notice the 
+direct correspondence between the table: the keys correspond to the table headers, 
+and the values are lists corresponding to the rows.
+
+DETAILED EXPLANATION
+--------------------
+While loading data from files (CSV, Excel) is common, sometimes you need to 
+create a DataFrame from data that's already in your Python code. One of the 
+most common ways to do this is using a Python dictionary. This is especially 
+useful when:
+• You have data in Python variables
+• You're building data programmatically
+• You're combining data from multiple sources
+• You're creating test data or examples
+
+HOW DICTIONARIES MAP TO DATAFRAMES
+-----------------------------------
+In a dictionary:
+• KEYS = Column names (headers)
+• VALUES = Lists containing data for each column (rows)
+
+The mapping is straightforward:
+• Each dictionary key becomes a column name
+• Each list value becomes the data in that column
+• All lists must have the same length (same number of rows)
+
+VISUAL REPRESENTATION:
+    Dictionary Structure:
+    {
+        'Column1': [Value1, Value4, Value7],
+        'Column2': [Value2, Value5, Value8],
+        'Column3': [Value3, Value6, Value9]
+    }
+
+    Becomes DataFrame:
+    
+    Index | Column1 | Column2 | Column3
+    ------|---------|---------|---------
+    0     | Value1  | Value2  | Value3
+    1     | Value4  | Value5  | Value6
+    2     | Value7  | Value8  | Value9
+
+COMPLETE CODE EXAMPLE: CREATING DATAFRAME FROM DICTIONARY
+-----------------------------------------------------------
+
+EXAMPLE 1: Basic Dictionary to DataFrame
+-----------------------------------------
+    import pandas as pd
+
+    # Create a dictionary
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+
+    # Convert dictionary to DataFrame
+    df = pd.DataFrame(data)
+
+    # Display the DataFrame
+    print(df)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Imports pandas library with alias 'pd'
+  - Makes DataFrame() function available
+
+• Line 3: data = { ... }
+  - Creates a Python dictionary named 'data'
+  - Dictionary contains key-value pairs
+  - This will be our source data
+
+• Line 4: 'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin']
+  - 'Artist' = Dictionary key (becomes column name)
+  - ['...'] = List of values (becomes column data)
+  - Three values = Three rows in this column
+  - Each value is a string (band name)
+
+• Line 5: 'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV']
+  - 'Album' = Another dictionary key (another column)
+  - List contains album names
+  - Must have same length as 'Artist' list (3 items)
+
+• Line 6: 'Released': [1969, 1973, 1971]
+  - 'Released' = Another dictionary key (another column)
+  - List contains years (integers)
+  - Must have same length as other lists (3 items)
+
+• Line 8: df = pd.DataFrame(data)
+  - df = Variable to store the result
+  - pd = References pandas library
+  - .DataFrame = The function that creates a DataFrame
+  - (data) = Passes our dictionary as argument
+  - Function converts dictionary to DataFrame
+  - Keys become column headers
+  - Values become column data
+  - Returns DataFrame object stored in 'df'
+
+• Line 10: print(df)
+  - Displays the entire DataFrame
+  - Shows all rows and columns in tabular format
+
+OUTPUT:
+           Artist                    Album  Released
+    0  The Beatles            Abbey Road      1969
+    1    Pink Floyd  The Dark Side of the Moon  1973
+    2  Led Zeppelin                      IV      1971
+
+BREAKDOWN OF THE OUTPUT:
+• Index column (0, 1, 2) = Row numbers (automatically created)
+• Artist column = First column from dictionary key 'Artist'
+• Album column = Second column from dictionary key 'Album'
+• Released column = Third column from dictionary key 'Released'
+• Each row = One record (one band's information)
+
+EXAMPLE 2: More Complex Dictionary
+-----------------------------------
+    import pandas as pd
+
+    # Dictionary with more columns and rows
+    data = {
+        'Name': ['Alice', 'Bob', 'Charlie', 'Diana'],
+        'Age': [25, 30, 35, 28],
+        'City': ['New York', 'London', 'Tokyo', 'Paris'],
+        'Salary': [50000, 60000, 70000, 55000],
+        'Department': ['Sales', 'IT', 'IT', 'Sales']
+    }
+
+    # Create DataFrame
+    df = pd.DataFrame(data)
+
+    # Display
+    print(df)
+    print("\nShape:", df.shape)
+    print("Columns:", df.columns.tolist())
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard pandas import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 5 keys (5 columns)
+  - Each value is a list with 4 items (4 rows)
+
+• Line 4: 'Name': ['Alice', 'Bob', 'Charlie', 'Diana']
+  - String column with names
+  - 4 names = 4 rows
+
+• Line 5: 'Age': [25, 30, 35, 28]
+  - Integer column with ages
+  - 4 ages = 4 rows
+
+• Line 6: 'City': ['New York', 'London', 'Tokyo', 'Paris']
+  - String column with cities
+  - 4 cities = 4 rows
+
+• Line 7: 'Salary': [50000, 60000, 70000, 55000]
+  - Integer column with salaries
+  - 4 salaries = 4 rows
+
+• Line 8: 'Department': ['Sales', 'IT', 'IT', 'Sales']
+  - String column with departments
+  - 4 departments = 4 rows
+
+• Line 10: df = pd.DataFrame(data)
+  - Converts dictionary to DataFrame
+  - All 5 keys become columns
+  - All 4 items in each list become rows
+
+• Line 12: print(df)
+  - Displays the DataFrame
+
+• Line 13: print("\nShape:", df.shape)
+  - \n = New line
+  - df.shape = Returns (rows, columns)
+  - Should be (4, 5) - 4 rows, 5 columns
+
+• Line 14: print("Columns:", df.columns.tolist())
+  - df.columns = Column names
+  - .tolist() = Converts to list
+  - Shows all column names
+
+OUTPUT:
+        Name  Age      City  Salary Department
+    0  Alice   25  New York   50000      Sales
+    1    Bob   30    London   60000         IT
+    2  Charlie  35     Tokyo   70000         IT
+    3   Diana   28     Paris   55000      Sales
+
+    Shape: (4, 5)
+    Columns: ['Name', 'Age', 'City', 'Salary', 'Department']
+
+IMPORTANT RULES FOR DICTIONARY TO DATAFRAME CONVERSION
+-------------------------------------------------------
+1. ALL LISTS MUST HAVE THE SAME LENGTH
+   ✅ CORRECT:
+      data = {
+          'A': [1, 2, 3],
+          'B': [4, 5, 6]
+      }
+   ❌ WRONG:
+      data = {
+          'A': [1, 2, 3],
+          'B': [4, 5]  # Different length!
+      }
+   Error: ValueError: arrays must all be same length
+
+2. KEYS BECOME COLUMN NAMES
+   • Dictionary keys automatically become column headers
+   • Keys should be strings (best practice)
+   • Column names are case-sensitive
+
+3. VALUES MUST BE LISTS OR ARRAYS
+   • Each dictionary value must be a list or array-like
+   • Can contain any data type (int, float, string, bool)
+   • Can mix data types across columns (but not within a column)
+
+4. ORDER OF COLUMNS
+   • In Python 3.7+, dictionaries maintain insertion order
+   • Columns appear in the order keys were added
+   • Can specify column order using columns parameter
+
+EXAMPLE 3: Specifying Column Order
+-----------------------------------
+    import pandas as pd
+
+    data = {
+        'Zebra': [1, 2, 3],
+        'Apple': [4, 5, 6],
+        'Banana': [7, 8, 9]
+    }
+
+    # Default order (dictionary order)
+    df1 = pd.DataFrame(data)
+    print("Default order:")
+    print(df1.columns.tolist())
+
+    # Custom column order
+    df2 = pd.DataFrame(data, columns=['Apple', 'Banana', 'Zebra'])
+    print("\nCustom order:")
+    print(df2.columns.tolist())
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Dictionary with keys in order: Zebra, Apple, Banana
+
+• Line 9: df1 = pd.DataFrame(data)
+  - Creates DataFrame with default order
+  - Columns appear as: Zebra, Apple, Banana
+
+• Line 12: df2 = pd.DataFrame(data, columns=['Apple', 'Banana', 'Zebra'])
+  - columns=['Apple', 'Banana', 'Zebra'] = Specifies column order
+  - Columns appear as: Apple, Banana, Zebra
+  - Order specified in columns parameter
+
+EXAMPLE 4: Dictionary with Different Data Types
+------------------------------------------------
+    import pandas as pd
+
+    # Dictionary with mixed data types
+    data = {
+        'Name': ['Alice', 'Bob', 'Charlie'],        # Strings
+        'Age': [25, 30, 35],                        # Integers
+        'Height': [5.5, 6.0, 5.8],                 # Floats
+        'IsStudent': [True, False, True],            # Booleans
+        'Score': [85.5, 92.0, 78.5]                # Floats
+    }
+
+    df = pd.DataFrame(data)
+    print(df)
+    print("\nData types:")
+    print(df.dtypes)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Dictionary with different data types in each column
+
+• Line 4: 'Name': ['Alice', 'Bob', 'Charlie']
+  - String values (object dtype in pandas)
+
+• Line 5: 'Age': [25, 30, 35]
+  - Integer values (int64 dtype)
+
+• Line 6: 'Height': [5.5, 6.0, 5.8]
+  - Float values (float64 dtype)
+
+• Line 7: 'IsStudent': [True, False, True]
+  - Boolean values (bool dtype)
+
+• Line 8: 'Score': [85.5, 92.0, 78.5]
+  - Float values (float64 dtype)
+
+• Line 10: df = pd.DataFrame(data)
+  - Converts to DataFrame
+  - Pandas automatically infers data types
+
+• Line 11: print(df)
+  - Displays DataFrame
+
+• Line 12: print("\nData types:")
+  - Label for output
+
+• Line 13: print(df.dtypes)
+  - Shows data type of each column
+  - Important for understanding your data
+
+OUTPUT:
+        Name  Age  Height  IsStudent  Score
+    0  Alice   25     5.5       True   85.5
+    1    Bob   30     6.0      False   92.0
+    2  Charlie  35     5.8       True   78.5
+
+    Data types:
+    Name         object
+    Age           int64
+    Height      float64
+    IsStudent      bool
+    Score       float64
+
+WHY CREATE DATAFRAMES FROM DICTIONARIES?
+----------------------------------------
+1. PROGRAMMATIC DATA CREATION
+   • Build data in code
+   • Generate test data
+   • Create sample datasets
+
+2. DATA TRANSFORMATION
+   • Combine data from multiple sources
+   • Transform existing data structures
+   • Prepare data for analysis
+
+3. QUICK PROTOTYPING
+   • Test code without loading files
+   • Create examples quickly
+   • Demonstrate concepts
+
+4. INTEGRATION
+   • Convert from other Python data structures
+   • Work with API responses (often dictionaries)
+   • Bridge between different data formats
+
+COMMON MISTAKES AND SOLUTIONS
+------------------------------
+1. UNEQUAL LIST LENGTHS
+   Error: ValueError: arrays must all be same length
+   Solution: Ensure all lists have the same number of elements
+
+2. NON-LIST VALUES
+   Error: TypeError or unexpected behavior
+   Solution: Convert values to lists: {'A': [1, 2], 'B': [3, 4]}
+
+3. MISSING VALUES HANDLING
+   • Use None or np.nan for missing values
+   • Example: 'Age': [25, None, 30]
+
+4. NESTED STRUCTURES
+   • Can't directly use nested dictionaries
+   • Need to flatten or restructure first
+
+EXAMPLE: Handling Missing Values
+    import pandas as pd
+    import numpy as np
+
+    data = {
+        'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, None, 30],           # None = missing value
+        'Score': [85.5, np.nan, 92.0]     # np.nan = missing value
+    }
+
+    df = pd.DataFrame(data)
+    print(df)
+    print("\nMissing values:")
+    print(df.isna())
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: SELECTING COLUMNS FROM DATAFRAMES
+----------------------------------------------
+
+DEFINITION
+----------
+You can create a new DataFrame consisting of one column by enclosing the 
+DataFrame name and the column header in double brackets. The result is a new 
+DataFrame comprised of the original column. You can do the same thing for 
+multiple columns by enclosing the DataFrame name and multiple column headers 
+in double brackets. The result is a new DataFrame comprised of the specified 
+columns.
+
+DETAILED EXPLANATION
+--------------------
+Selecting columns is one of the most common operations when working with 
+DataFrames. You often need to:
+• Focus on specific columns for analysis
+• Create subsets of your data
+• Extract columns for further processing
+• Reduce memory usage by selecting only needed columns
+
+There are two main ways to select columns:
+1. Single bracket [] - Returns a Series (one column)
+2. Double brackets [[]] - Returns a DataFrame (one or more columns)
+
+UNDERSTANDING SINGLE VS DOUBLE BRACKETS
+----------------------------------------
+SINGLE BRACKET []:
+• Selects one column
+• Returns a Series (one-dimensional)
+• Example: df['Name'] returns a Series
+
+DOUBLE BRACKETS [[]]:
+• Selects one or more columns
+• Returns a DataFrame (two-dimensional)
+• Example: df[['Name']] returns a DataFrame with one column
+• Example: df[['Name', 'Age']] returns a DataFrame with two columns
+
+WHY THE DIFFERENCE MATTERS:
+• Series = One column, one-dimensional
+• DataFrame = One or more columns, two-dimensional
+• Some operations require DataFrame, not Series
+• Double brackets ensure you get a DataFrame
+
+COMPLETE CODE EXAMPLE: SELECTING COLUMNS
+-----------------------------------------
+
+EXAMPLE 1: Selecting One Column (Single Bracket)
+-------------------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Select one column using single bracket
+    artist_column = df['Artist']
+
+    # Display
+    print("Type:", type(artist_column))
+    print("\nArtist column:")
+    print(artist_column)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 3 columns
+
+• Line 9: df = pd.DataFrame(data)
+  - Converts dictionary to DataFrame
+  - DataFrame has 3 columns: Artist, Album, Released
+
+• Line 11: artist_column = df['Artist']
+  - df = Our DataFrame
+  - ['Artist'] = Single bracket with column name as string
+  - Selects the 'Artist' column
+  - Returns a Series (one-dimensional)
+  - Stores result in variable 'artist_column'
+
+• Line 13: print("Type:", type(artist_column))
+  - type() = Shows the data type of the variable
+  - Will show: <class 'pandas.core.series.Series'>
+  - Confirms it's a Series, not a DataFrame
+
+• Line 14: print("\nArtist column:")
+  - Label for output
+
+• Line 15: print(artist_column)
+  - Displays the Series
+  - Shows index and values
+
+OUTPUT:
+    Type: <class 'pandas.core.series.Series'>
+
+    Artist column:
+    0    The Beatles
+    1      Pink Floyd
+    2    Led Zeppelin
+    Name: Artist, dtype: object
+
+BREAKDOWN:
+• Type = Series (one-dimensional)
+• Index = 0, 1, 2 (row numbers)
+• Values = The band names
+• Name = Artist (column name)
+• dtype = object (string type)
+
+EXAMPLE 2: Selecting One Column (Double Brackets)
+--------------------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Select one column using double brackets
+    artist_column = df[['Artist']]
+
+    # Display
+    print("Type:", type(artist_column))
+    print("\nArtist column:")
+    print(artist_column)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Same as Example 1
+  - Creates DataFrame with 3 columns
+
+• Line 11: artist_column = df[['Artist']]
+  - df = Our DataFrame
+  - [['Artist']] = Double brackets with column name in list
+  - Selects the 'Artist' column
+  - Returns a DataFrame (two-dimensional, but with one column)
+  - Stores result in variable 'artist_column'
+
+• Line 13: print("Type:", type(artist_column))
+  - Will show: <class 'pandas.core.frame.DataFrame'>
+  - Confirms it's a DataFrame, not a Series
+
+• Line 14: print("\nArtist column:")
+  - Label for output
+
+• Line 15: print(artist_column)
+  - Displays the DataFrame
+  - Shows index, column header, and values
+
+OUTPUT:
+    Type: <class 'pandas.core.frame.DataFrame'>
+
+    Artist column:
+              Artist
+    0    The Beatles
+    1      Pink Floyd
+    2    Led Zeppelin
+
+BREAKDOWN:
+• Type = DataFrame (two-dimensional)
+• Index = 0, 1, 2 (row numbers)
+• Column header = Artist
+• Values = The band names
+• Still looks like one column, but it's a DataFrame structure
+
+KEY DIFFERENCE:
+• Single bracket [] = Series (one-dimensional)
+• Double brackets [[]] = DataFrame (two-dimensional)
+• Both contain the same data, but different structure
+
+EXAMPLE 3: Selecting Multiple Columns
+--------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971],
+        'Genre': ['Rock', 'Progressive Rock', 'Rock']
+    }
+    df = pd.DataFrame(data)
+
+    # Select multiple columns using double brackets
+    selected_columns = df[['Artist', 'Album']]
+
+    # Display
+    print("Original DataFrame:")
+    print(df)
+    print("\nSelected columns (Artist and Album):")
+    print(selected_columns)
+    print("\nType:", type(selected_columns))
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 4 columns
+  - Artist, Album, Released, Genre
+
+• Line 10: df = pd.DataFrame(data)
+  - Creates DataFrame with all 4 columns
+
+• Line 12: selected_columns = df[['Artist', 'Album']]
+  - df = Our DataFrame
+  - [['Artist', 'Album']] = Double brackets with list of column names
+  - Selects two columns: 'Artist' and 'Album'
+  - Returns a DataFrame with only these two columns
+  - Order matters: Artist comes first, then Album
+  - Stores result in 'selected_columns'
+
+• Line 14: print("Original DataFrame:")
+  - Label for output
+
+• Line 15: print(df)
+  - Displays original DataFrame with all 4 columns
+
+• Line 16: print("\nSelected columns (Artist and Album):")
+  - Label for output
+
+• Line 17: print(selected_columns)
+  - Displays new DataFrame with only 2 columns
+  - Shows Artist and Album columns only
+
+• Line 18: print("\nType:", type(selected_columns))
+  - Confirms it's a DataFrame
+
+OUTPUT:
+    Original DataFrame:
+              Artist                    Album  Released           Genre
+    0    The Beatles            Abbey Road      1969            Rock
+    1      Pink Floyd  The Dark Side of the Moon  1973  Progressive Rock
+    2    Led Zeppelin                      IV      1971            Rock
+
+    Selected columns (Artist and Album):
+              Artist                    Album
+    0    The Beatles            Abbey Road
+    1      Pink Floyd  The Dark Side of the Moon
+    2    Led Zeppelin                      IV
+
+    Type: <class 'pandas.core.frame.DataFrame'>
+
+BREAKDOWN:
+• Original DataFrame = 4 columns (Artist, Album, Released, Genre)
+• Selected DataFrame = 2 columns (Artist, Album)
+• Rows remain the same (3 rows)
+• Type = DataFrame (two-dimensional structure)
+
+EXAMPLE 4: Selecting Multiple Columns in Different Order
+---------------------------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Select columns in different order
+    reordered = df[['Released', 'Artist', 'Album']]
+
+    print("Original order:")
+    print(df.columns.tolist())
+    print("\nReordered columns:")
+    print(reordered.columns.tolist())
+    print("\nReordered DataFrame:")
+    print(reordered)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame with columns: Artist, Album, Released
+
+• Line 11: reordered = df[['Released', 'Artist', 'Album']]
+  - Selects same columns but in different order
+  - Released comes first, then Artist, then Album
+  - Order in the list determines column order in result
+
+• Line 13: print("Original order:")
+  - Label for output
+
+• Line 14: print(df.columns.tolist())
+  - Shows original column order: ['Artist', 'Album', 'Released']
+
+• Line 15: print("\nReordered columns:")
+  - Label for output
+
+• Line 16: print(reordered.columns.tolist())
+  - Shows new column order: ['Released', 'Artist', 'Album']
+
+• Line 17: print("\nReordered DataFrame:")
+  - Label for output
+
+• Line 18: print(reordered)
+  - Displays DataFrame with columns in new order
+
+OUTPUT:
+    Original order:
+    ['Artist', 'Album', 'Released']
+
+    Reordered columns:
+    ['Released', 'Artist', 'Album']
+
+    Reordered DataFrame:
+       Released           Artist                    Album
+    0      1969    The Beatles            Abbey Road
+    1      1973      Pink Floyd  The Dark Side of the Moon
+    2      1971    Led Zeppelin                      IV
+
+IMPORTANT NOTES ABOUT COLUMN SELECTION
+---------------------------------------
+1. COLUMN NAMES ARE CASE-SENSITIVE
+   ✅ df['Artist'] - Correct
+   ❌ df['artist'] - Error if column is 'Artist'
+
+2. COLUMN NAMES MUST EXIST
+   ✅ df[['Artist', 'Album']] - Correct
+   ❌ df[['Artist', 'Song']] - Error if 'Song' doesn't exist
+
+3. DOUBLE BRACKETS FOR MULTIPLE COLUMNS
+   ✅ df[['A', 'B']] - Correct (list of column names)
+   ❌ df['A', 'B'] - Error (syntax error)
+
+4. ORDER MATTERS
+   • Columns appear in the order you specify
+   • df[['A', 'B']] ≠ df[['B', 'A']]
+
+WHEN TO USE SINGLE VS DOUBLE BRACKETS
+--------------------------------------
+USE SINGLE BRACKET [] WHEN:
+• You need a Series (one-dimensional)
+• You're working with one column
+• You want to use Series-specific methods
+• You're doing operations on a single column
+
+USE DOUBLE BRACKETS [[]] WHEN:
+• You need a DataFrame (two-dimensional)
+• You're selecting multiple columns
+• You want to maintain DataFrame structure
+• You're creating a subset for further DataFrame operations
+
+EXAMPLE: Practical Use Case
+    import pandas as pd
+
+    data = {
+        'Name': ['Alice', 'Bob', 'Charlie'],
+        'Age': [25, 30, 35],
+        'Salary': [50000, 60000, 70000],
+        'Department': ['Sales', 'IT', 'IT']
+    }
+    df = pd.DataFrame(data)
+
+    # Use case: Get only name and salary for analysis
+    name_salary = df[['Name', 'Salary']]
+    print("Name and Salary only:")
+    print(name_salary)
+
+    # Use case: Get age column as Series for calculations
+    ages = df['Age']
+    average_age = ages.mean()
+    print(f"\nAverage age: {average_age}")
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: ACCESSING ELEMENTS WITH ILOC
+------------------------------------------
+
+DEFINITION
+----------
+One way to access unique elements is with the iloc method. The first input is 
+an integer representing the row index, and the second is an integer representing 
+the column index. You can access the first row and first column, the second row 
+and first column, the first row and third column, and so on. iloc uses 
+integer-based indexing (position-based), meaning you access elements by their 
+numerical position in the DataFrame.
+
+DETAILED EXPLANATION
+--------------------
+iloc stands for "integer location" and is used to access DataFrame elements by 
+their integer position (row number and column number). This is position-based 
+indexing, meaning:
+• Rows are numbered starting from 0
+• Columns are numbered starting from 0
+• You use integers to specify positions
+• Position doesn't change even if you rename columns or change the index
+
+WHY USE ILOC?
+-------------
+• Position-based: Access by position, not by name
+• Consistent: Always uses 0-based indexing
+• Flexible: Can access single values, rows, columns, or slices
+• Predictable: Position-based access is straightforward
+
+ILOC SYNTAX
+-----------
+BASIC SYNTAX:
+    df.iloc[row_index, column_index]
+
+WHERE:
+• df = Your DataFrame
+• .iloc = The method for integer-based access
+• row_index = Integer position of the row (0, 1, 2, ...)
+• column_index = Integer position of the column (0, 1, 2, ...)
+
+IMPORTANT: INDEXING STARTS AT 0
+• First row = 0 (not 1)
+• First column = 0 (not 1)
+• Second row = 1
+• Second column = 1
+• And so on...
+
+COMPLETE CODE EXAMPLE: ACCESSING ELEMENTS WITH ILOC
+----------------------------------------------------
+
+EXAMPLE 1: Setting Up Sample DataFrame
+----------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin', 'Queen'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV', 'A Night at the Opera'],
+        'Released': [1969, 1973, 1971, 1975]
+    }
+    df = pd.DataFrame(data)
+
+    print("DataFrame:")
+    print(df)
+    print("\nShape:", df.shape)
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 3 columns and 4 rows
+
+• Line 9: df = pd.DataFrame(data)
+  - Creates DataFrame
+  - 4 rows (index: 0, 1, 2, 3)
+  - 3 columns (positions: 0=Artist, 1=Album, 2=Released)
+
+• Line 11: print("DataFrame:")
+  - Label for output
+
+• Line 12: print(df)
+  - Displays entire DataFrame
+
+• Line 13: print("\nShape:", df.shape)
+  - Shows (4, 3) = 4 rows, 3 columns
+
+OUTPUT:
+    DataFrame:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+    3         Queen    A Night at the Opera      1975
+
+    Shape: (4, 3)
+
+VISUAL REPRESENTATION OF POSITIONS:
+    Column Positions:    0           1                       2
+    Row Positions  |  Artist    |  Album                 |  Released
+    --------------|------------|------------------------|----------
+    0             |  The Beatles|  Abbey Road            |  1969
+    1             |  Pink Floyd |  The Dark Side...      |  1973
+    2             |  Led Zeppelin|  IV                   |  1971
+    3             |  Queen      |  A Night at the Opera   |  1975
+
+EXAMPLE 2: Accessing First Row, First Column
+---------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access first row, first column
+    value = df.iloc[0, 0]
+
+    print("DataFrame:")
+    print(df)
+    print(f"\nValue at iloc[0, 0]: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame with 3 rows, 3 columns
+
+• Line 11: value = df.iloc[0, 0]
+  - df = Our DataFrame
+  - .iloc = Integer location method
+  - [0, 0] = Row 0, Column 0
+  - First number (0) = Row index (first row)
+  - Second number (0) = Column index (first column)
+  - Returns the value at that position
+  - Stores result in 'value' variable
+
+• Line 13: print("DataFrame:")
+  - Label for output
+
+• Line 14: print(df)
+  - Displays DataFrame
+
+• Line 15: print(f"\nValue at iloc[0, 0]: {value}")
+  - f-string for formatted output
+  - Shows the value at position [0, 0]
+  - Should be 'The Beatles' (first row, first column)
+
+OUTPUT:
+    DataFrame:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+
+    Value at iloc[0, 0]: The Beatles
+
+BREAKDOWN:
+• iloc[0, 0] = Row 0 (first row), Column 0 (first column)
+• Position [0, 0] = Top-left corner
+• Value = 'The Beatles'
+
+EXAMPLE 3: Accessing Second Row, First Column
+----------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access second row, first column
+    value = df.iloc[1, 0]
+
+    print(f"Value at iloc[1, 0]: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: value = df.iloc[1, 0]
+  - [1, 0] = Row 1 (second row), Column 0 (first column)
+  - First number (1) = Second row (remember: 0-based indexing)
+  - Second number (0) = First column
+  - Returns value at that position
+
+• Line 13: print(f"Value at iloc[1, 0]: {value}")
+  - Displays the value
+  - Should be 'Pink Floyd'
+
+OUTPUT:
+    Value at iloc[1, 0]: Pink Floyd
+
+BREAKDOWN:
+• iloc[1, 0] = Row 1 (second row), Column 0 (first column)
+• Position [1, 0] = Second row, first column
+• Value = 'Pink Floyd'
+
+EXAMPLE 4: Accessing First Row, Third Column
+---------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access first row, third column
+    value = df.iloc[0, 2]
+
+    print(f"Value at iloc[0, 2]: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: value = df.iloc[0, 2]
+  - [0, 2] = Row 0 (first row), Column 2 (third column)
+  - First number (0) = First row
+  - Second number (2) = Third column (0=Artist, 1=Album, 2=Released)
+  - Returns value at that position
+
+• Line 13: print(f"Value at iloc[0, 2]: {value}")
+  - Displays the value
+  - Should be 1969 (the year)
+
+OUTPUT:
+    Value at iloc[0, 2]: 1969
+
+BREAKDOWN:
+• iloc[0, 2] = Row 0 (first row), Column 2 (third column)
+• Position [0, 2] = First row, third column
+• Value = 1969 (integer)
+
+EXAMPLE 5: Accessing Second Row, Third Column
+----------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access second row, third column
+    value = df.iloc[1, 2]
+
+    print(f"Value at iloc[1, 2]: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: value = df.iloc[1, 2]
+  - [1, 2] = Row 1 (second row), Column 2 (third column)
+  - First number (1) = Second row
+  - Second number (2) = Third column
+  - Returns value at that position
+
+• Line 13: print(f"Value at iloc[1, 2]: {value}")
+  - Displays the value
+  - Should be 1973
+
+OUTPUT:
+    Value at iloc[1, 2]: 1973
+
+BREAKDOWN:
+• iloc[1, 2] = Row 1 (second row), Column 2 (third column)
+• Position [1, 2] = Second row, third column
+• Value = 1973 (integer)
+
+COMPREHENSIVE EXAMPLE: All Basic iloc Access Patterns
+------------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    print("DataFrame:")
+    print(df)
+    print("\nAccessing different elements:")
+
+    # First row, first column
+    print(f"iloc[0, 0] = {df.iloc[0, 0]}")
+
+    # Second row, first column
+    print(f"iloc[1, 0] = {df.iloc[1, 0]}")
+
+    # First row, third column
+    print(f"iloc[0, 2] = {df.iloc[0, 2]}")
+
+    # Second row, third column
+    print(f"iloc[1, 2] = {df.iloc[1, 2]}")
+
+    # Third row, second column
+    print(f"iloc[2, 1] = {df.iloc[2, 1]}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: print("DataFrame:")
+  - Label for output
+
+• Line 12: print(df)
+  - Displays entire DataFrame
+
+• Line 15: print(f"iloc[0, 0] = {df.iloc[0, 0]}")
+  - Accesses position [0, 0]
+  - Displays value: 'The Beatles'
+
+• Line 17: print(f"iloc[1, 0] = {df.iloc[1, 0]}")
+  - Accesses position [1, 0]
+  - Displays value: 'Pink Floyd'
+
+• Line 19: print(f"iloc[0, 2] = {df.iloc[0, 2]}")
+  - Accesses position [0, 2]
+  - Displays value: 1969
+
+• Line 21: print(f"iloc[1, 2] = {df.iloc[1, 2]}")
+  - Accesses position [1, 2]
+  - Displays value: 1973
+
+• Line 23: print(f"iloc[2, 1] = {df.iloc[2, 1]}")
+  - Accesses position [2, 1]
+  - Displays value: 'IV'
+
+OUTPUT:
+    DataFrame:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+
+    Accessing different elements:
+    iloc[0, 0] = The Beatles
+    iloc[1, 0] = Pink Floyd
+    iloc[0, 2] = 1969
+    iloc[1, 2] = 1973
+    iloc[2, 1] = IV
+
+ILOC WITH COLUMN NAMES (USING LOC INSTEAD)
+-------------------------------------------
+IMPORTANT: iloc uses integer positions, NOT column names. If you want to use 
+column names, you need to use loc instead (covered in next section).
+
+However, you CAN combine iloc with column position to access by column name 
+indirectly:
+
+    # Get column position first
+    col_position = df.columns.get_loc('Released')
+    value = df.iloc[0, col_position]
+
+But this is more complex. For column names, use loc instead.
+
+COMMON MISTAKES WITH ILOC
+-------------------------
+1. USING COLUMN NAMES
+   ❌ df.iloc[0, 'Artist'] - Error! iloc doesn't accept column names
+   ✅ df.iloc[0, 0] - Correct! Use integer position
+
+2. INDEXING FROM 1 INSTEAD OF 0
+   ❌ df.iloc[1, 1] thinking it's first row, first column
+   ✅ df.iloc[0, 0] - Remember: indexing starts at 0
+
+3. OUT OF RANGE ERRORS
+   ❌ df.iloc[10, 0] - Error if DataFrame only has 3 rows
+   ✅ Check df.shape first to know valid ranges
+
+4. FORGETTING COMMA
+   ❌ df.iloc[0 0] - Syntax error
+   ✅ df.iloc[0, 0] - Need comma between row and column
+
+BEST PRACTICES
+--------------
+1. REMEMBER 0-BASED INDEXING
+   • First row = 0, not 1
+   • First column = 0, not 1
+
+2. CHECK BOUNDS BEFORE ACCESSING
+   • Use df.shape to know valid ranges
+   • Row range: 0 to (number of rows - 1)
+   • Column range: 0 to (number of columns - 1)
+
+3. USE ILOC FOR POSITION-BASED ACCESS
+   • When you know the position
+   • When position matters more than labels
+   • For programmatic access
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: ACCESSING ELEMENTS WITH LOC
+-----------------------------------------
+
+DEFINITION
+----------
+You can use the name of the row index and the column name as well. You can 
+access the first row of the column named Artist, the second row of the column 
+named Artist, and so on. loc can also be used if the index is not an integer. 
+loc uses label-based indexing, meaning you access elements by their labels 
+(row index labels and column names) rather than their positions.
+
+DETAILED EXPLANATION
+--------------------
+loc stands for "location" and is used to access DataFrame elements by their 
+labels (row index labels and column names). This is label-based indexing, 
+meaning:
+• You use row index labels (which can be integers, strings, dates, etc.)
+• You use column names (strings)
+• Labels are more readable than positions
+• Works even if you change the order of rows or columns
+
+WHY USE LOC?
+------------
+• Label-based: Access by meaningful labels, not positions
+• Readable: Code is more self-documenting
+• Flexible: Works with custom index labels
+• Intuitive: Matches how you think about data
+
+LOC SYNTAX
+----------
+BASIC SYNTAX:
+    df.loc[row_label, column_name]
+
+WHERE:
+• df = Your DataFrame
+• .loc = The method for label-based access
+• row_label = Label of the row (default: 0, 1, 2, ... or custom labels)
+• column_name = Name of the column (string)
+
+IMPORTANT: DEFAULT INDEX LABELS
+• By default, row labels are integers (0, 1, 2, ...)
+• So df.loc[0, 'Artist'] works the same as df.iloc[0, 0] in this case
+• But loc uses labels, iloc uses positions
+
+COMPLETE CODE EXAMPLE: ACCESSING ELEMENTS WITH LOC
+----------------------------------------------------
+
+EXAMPLE 1: Accessing with Default Integer Index
+------------------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access first row of column named 'Artist'
+    value = df.loc[0, 'Artist']
+
+    print("DataFrame:")
+    print(df)
+    print(f"\nValue at loc[0, 'Artist']: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1: import pandas as pd
+  - Standard import
+
+• Line 3: data = { ... }
+  - Creates dictionary with 3 columns, 3 rows
+
+• Line 9: df = pd.DataFrame(data)
+  - Creates DataFrame
+  - Default index: 0, 1, 2 (integer labels)
+  - Columns: 'Artist', 'Album', 'Released'
+
+• Line 11: value = df.loc[0, 'Artist']
+  - df = Our DataFrame
+  - .loc = Label-based location method
+  - [0, 'Artist'] = Row label 0, Column name 'Artist'
+  - First value (0) = Row label (first row has label 0)
+  - Second value ('Artist') = Column name (string)
+  - Returns the value at that location
+  - Stores result in 'value'
+
+• Line 13: print("DataFrame:")
+  - Label for output
+
+• Line 14: print(df)
+  - Displays entire DataFrame
+
+• Line 15: print(f"\nValue at loc[0, 'Artist']: {value}")
+  - Shows the value at loc[0, 'Artist']
+  - Should be 'The Beatles'
+
+OUTPUT:
+    DataFrame:
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+
+    Value at loc[0, 'Artist']: The Beatles
+
+BREAKDOWN:
+• loc[0, 'Artist'] = Row label 0, Column name 'Artist'
+• Row label 0 = First row (default integer index)
+• Column 'Artist' = First column (by name)
+• Value = 'The Beatles'
+
+EXAMPLE 2: Accessing Second Row of Column 'Artist'
+---------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access second row of column named 'Artist'
+    value = df.loc[1, 'Artist']
+
+    print(f"Value at loc[1, 'Artist']: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: value = df.loc[1, 'Artist']
+  - [1, 'Artist'] = Row label 1, Column name 'Artist'
+  - First value (1) = Row label 1 (second row)
+  - Second value ('Artist') = Column name 'Artist'
+  - Returns value at that location
+
+• Line 13: print(f"Value at loc[1, 'Artist']: {value}")
+  - Displays the value
+  - Should be 'Pink Floyd'
+
+OUTPUT:
+    Value at loc[1, 'Artist']: Pink Floyd
+
+BREAKDOWN:
+• loc[1, 'Artist'] = Row label 1, Column name 'Artist'
+• Row label 1 = Second row
+• Column 'Artist' = Column named 'Artist'
+• Value = 'Pink Floyd'
+
+EXAMPLE 3: Accessing First Row of Column 'Released'
+----------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access first row of column named 'Released'
+    value = df.loc[0, 'Released']
+
+    print(f"Value at loc[0, 'Released']: {value}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: value = df.loc[0, 'Released']
+  - [0, 'Released'] = Row label 0, Column name 'Released'
+  - First value (0) = Row label 0 (first row)
+  - Second value ('Released') = Column name 'Released'
+  - Returns value at that location
+
+• Line 13: print(f"Value at loc[0, 'Released']: {value}")
+  - Displays the value
+  - Should be 1969
+
+OUTPUT:
+    Value at loc[0, 'Released']: 1969
+
+BREAKDOWN:
+• loc[0, 'Released'] = Row label 0, Column name 'Released'
+• Row label 0 = First row
+• Column 'Released' = Column named 'Released'
+• Value = 1969
+
+EXAMPLE 4: Using Custom Index Labels
+-------------------------------------
+    import pandas as pd
+
+    # Create sample DataFrame
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Create new DataFrame with custom index labels
+    df_new = df.copy()
+    df_new.index = ['A', 'B', 'C']  # Replace index 0,1,2 with A,B,C
+
+    print("Original DataFrame (integer index):")
+    print(df)
+    print("\nNew DataFrame (custom index):")
+    print(df_new)
+
+    # Access using custom index labels
+    value_a = df_new.loc['A', 'Artist']
+    value_b = df_new.loc['B', 'Artist']
+
+    print(f"\nValue at loc['A', 'Artist']: {value_a}")
+    print(f"Value at loc['B', 'Artist']: {value_b}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame with default integer index (0, 1, 2)
+
+• Line 11: df_new = df.copy()
+  - Creates a copy of the DataFrame
+  - So we don't modify the original
+
+• Line 12: df_new.index = ['A', 'B', 'C']
+  - df_new.index = Accesses the index of the DataFrame
+  - = ['A', 'B', 'C'] = Replaces default index with custom labels
+  - Row 0 becomes 'A', Row 1 becomes 'B', Row 2 becomes 'C'
+  - This is why loc is powerful - it works with any labels!
+
+• Line 14: print("Original DataFrame (integer index):")
+  - Label for output
+
+• Line 15: print(df)
+  - Shows original DataFrame with index 0, 1, 2
+
+• Line 16: print("\nNew DataFrame (custom index):")
+  - Label for output
+
+• Line 17: print(df_new)
+  - Shows new DataFrame with index A, B, C
+
+• Line 19: value_a = df_new.loc['A', 'Artist']
+  - ['A', 'Artist'] = Row label 'A', Column name 'Artist'
+  - 'A' = Custom row label (was row 0)
+  - 'Artist' = Column name
+  - Returns value at that location
+
+• Line 20: value_b = df_new.loc['B', 'Artist']
+  - ['B', 'Artist'] = Row label 'B', Column name 'Artist'
+  - 'B' = Custom row label (was row 1)
+  - Returns value at that location
+
+• Line 22: print(f"\nValue at loc['A', 'Artist']: {value_a}")
+  - Displays value for row 'A'
+  - Should be 'The Beatles'
+
+• Line 23: print(f"Value at loc['B', 'Artist']: {value_b}")
+  - Displays value for row 'B'
+  - Should be 'Pink Floyd'
+
+OUTPUT:
+    Original DataFrame (integer index):
+              Artist                    Album  Released
+    0    The Beatles            Abbey Road      1969
+    1      Pink Floyd  The Dark Side of the Moon  1973
+    2    Led Zeppelin                      IV      1971
+
+    New DataFrame (custom index):
+              Artist                    Album  Released
+    A    The Beatles            Abbey Road      1969
+    B      Pink Floyd  The Dark Side of the Moon  1973
+    C    Led Zeppelin                      IV      1971
+
+    Value at loc['A', 'Artist']: The Beatles
+    Value at loc['B', 'Artist']: Pink Floyd
+
+BREAKDOWN:
+• Original DataFrame = Integer index (0, 1, 2)
+• New DataFrame = Custom index (A, B, C)
+• loc['A', 'Artist'] = Uses custom label 'A', not position
+• This demonstrates loc's flexibility with custom labels
+
+EXAMPLE 5: Accessing Multiple Rows of Same Column
+---------------------------------------------------
+    import pandas as pd
+
+    data = {
+        'Artist': ['The Beatles', 'Pink Floyd', 'Led Zeppelin'],
+        'Album': ['Abbey Road', 'The Dark Side of the Moon', 'IV'],
+        'Released': [1969, 1973, 1971]
+    }
+    df = pd.DataFrame(data)
+
+    # Access first row of 'Artist'
+    artist_0 = df.loc[0, 'Artist']
+    print(f"Row 0, Artist: {artist_0}")
+
+    # Access second row of 'Artist'
+    artist_1 = df.loc[1, 'Artist']
+    print(f"Row 1, Artist: {artist_1}")
+
+    # Access third row of 'Artist'
+    artist_2 = df.loc[2, 'Artist']
+    print(f"Row 2, Artist: {artist_2}")
+
+LINE-BY-LINE EXPLANATION:
+• Line 1-9: Creates DataFrame
+
+• Line 11: artist_0 = df.loc[0, 'Artist']
+  - Accesses row label 0, column 'Artist'
+  - Stores in 'artist_0'
+
+• Line 12: print(f"Row 0, Artist: {artist_0}")
+  - Displays: 'The Beatles'
+
+• Line 14: artist_1 = df.loc[1, 'Artist']
+  - Accesses row label 1, column 'Artist'
+  - Stores in 'artist_1'
+
+• Line 15: print(f"Row 1, Artist: {artist_1}")
+  - Displays: 'Pink Floyd'
+
+• Line 17: artist_2 = df.loc[2, 'Artist']
+  - Accesses row label 2, column 'Artist'
+  - Stores in 'artist_2'
+
+• Line 18: print(f"Row 2, Artist: {artist_2}")
+  - Displays: 'Led Zeppelin'
+
+OUTPUT:
+    Row 0, Artist: The Beatles
+    Row 1, Artist: Pink Floyd
+    Row 2, Artist: Led Zeppelin
+
+ILOC VS LOC: KEY DIFFERENCES
+-----------------------------
+ILOC (Integer Location):
+• Uses integer positions: df.iloc[0, 0]
+• Position-based indexing
+• First row = 0, first column = 0
+• Doesn't work with column names directly
+• Works regardless of index labels
+
+LOC (Location):
+• Uses labels: df.loc[0, 'Artist']
+• Label-based indexing
+• Row labels can be integers, strings, dates, etc.
+• Column names are strings
+• More readable and intuitive
+
+WHEN TO USE ILOC VS LOC
+-----------------------
+USE ILOC WHEN:
+• You know the position (row number, column number)
+• Position matters more than labels
+• You're doing programmatic access
+• You want position-based slicing
+
+USE LOC WHEN:
+• You know the labels (row labels, column names)
+• Labels are more meaningful
+• You want readable code
+• You're working with custom index labels
+
+COMMON MISTAKES WITH LOC
+------------------------
+1. USING INTEGER POSITIONS FOR COLUMNS
+   ❌ df.loc[0, 0] - Error! loc needs column name, not position
+   ✅ df.loc[0, 'Artist'] - Correct! Use column name
+
+2. MISSING QUOTES AROUND COLUMN NAME
+   ❌ df.loc[0, Artist] - Error! Column name must be string
+   ✅ df.loc[0, 'Artist'] - Correct! Use quotes
+
+3. USING NON-EXISTENT LABELS
+   ❌ df.loc[10, 'Artist'] - Error if row 10 doesn't exist
+   ✅ Check valid labels first
+
+4. CASE-SENSITIVE COLUMN NAMES
+   ❌ df.loc[0, 'artist'] - Error if column is 'Artist'
+   ✅ df.loc[0, 'Artist'] - Match exact case
+
+BEST PRACTICES
+--------------
+1. USE LOC FOR READABILITY
+   • More self-documenting code
+   • Easier to understand
+   • Better for maintenance
+
+2. CHECK LABELS BEFORE ACCESSING
+   • Use df.index to see row labels
+   • Use df.columns to see column names
+   • Verify labels exist
+
+3. USE APPROPRIATE METHOD
+   • loc for labels
+   • iloc for positions
+   • Don't mix unnecessarily
+
+[END SECTION 2.4]
+================================================================================
+
+END OF PART 2
+=============
+
+This concludes Part 2 of the Pandas: Loading Data comprehensive study guide.
+
+In Part 2, you learned:
+• How to create DataFrames from dictionaries
+• How to select single and multiple columns
+• How to access elements using iloc (position-based)
+• How to access elements using loc (label-based)
+
+Continue to Part 3 to learn:
+• Slicing DataFrames with iloc
+• Slicing DataFrames with loc
+• Advanced operations and best practices
+
+================================================================================

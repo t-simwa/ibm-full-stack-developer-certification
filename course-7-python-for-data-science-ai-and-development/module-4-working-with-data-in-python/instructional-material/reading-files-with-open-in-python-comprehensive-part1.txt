@@ -1,0 +1,822 @@
+================================================================================
+READING FILES WITH OPEN() IN PYTHON
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Reading Files with open() in Python. This comprehensive guide will 
+teach you everything you need to know about using Python's built-in open() 
+function to create file objects and read data from text files. You will learn 
+how to open files, understand file modes, work with file objects, and use 
+various methods to read file contents in different ways.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Understand what file objects are and how they work in Python
+• Use Python's built-in open() function to open files
+• Understand different file modes (read, write, append) and when to use them
+• Access file object attributes (name, mode) to get file information
+• Properly close file objects to prevent resource leaks
+• Use the with statement for automatic file management
+• Read entire file contents using the read() method
+• Read files line by line using readline() and readlines() methods
+• Read specific numbers of characters from files
+• Understand the difference between reading methods and when to use each
+• Handle file paths and directories correctly
+• Understand newline characters and how Python represents them
+• Use loops to iterate through file contents
+• Apply best practices for file handling in Python
+
+OVERVIEW
+--------
+In this section, we will use Python's built-in open() function to create a file 
+object and obtain the data from a txt file. We will use Python's open() function 
+to get a file object. We can apply methods to that object to read data from the 
+file. Understanding file operations is fundamental to working with data in Python, 
+as files are one of the primary ways to store and retrieve information in 
+applications.
+
+File handling in Python involves several key concepts:
+• Opening files using the open() function
+• Specifying file modes (read, write, append)
+• Working with file objects and their methods
+• Properly closing files to free system resources
+• Using context managers (with statement) for safe file handling
+• Reading file contents in various ways depending on your needs
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of file handling:
+
+PART 1: INTRODUCTION TO FILE HANDLING IN PYTHON
+  SECTION 1.1: WHAT IS FILE HANDLING?
+  SECTION 1.2: UNDERSTANDING THE OPEN() FUNCTION
+  SECTION 1.3: FILE PATHS AND DIRECTORY STRUCTURE
+  SECTION 1.4: FILE MODES EXPLAINED
+  SECTION 1.5: CREATING FILE OBJECTS
+  SECTION 1.6: FILE OBJECT ATTRIBUTES
+
+NOTE: Part 2 covers reading methods (read, readline, readlines), the with 
+statement, and practical examples. Part 3 covers advanced topics, best practices, 
+common patterns, and summary.
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO FILE HANDLING IN PYTHON
+================================================================================
+
+SECTION 1.1: WHAT IS FILE HANDLING?
+------------------------------------
+
+DEFINITION
+----------
+File handling refers to the process of working with files stored on your 
+computer's storage system (hard drive, SSD, etc.). In Python, file handling 
+allows you to read data from files, write data to files, and manipulate file 
+contents programmatically.
+
+DETAILED EXPLANATION
+--------------------
+Think of file handling like reading a book from a library:
+• The file = The book stored on the shelf
+• Opening the file = Taking the book off the shelf
+• Reading the file = Reading the pages of the book
+• Closing the file = Returning the book to the shelf
+
+Just as you need to properly handle a library book (check it out, read it, 
+return it), you need to properly handle files in Python (open them, work with 
+them, close them).
+
+WHY IS FILE HANDLING IMPORTANT?
+-------------------------------
+Files are essential for:
+• Storing data permanently (data persists after program ends)
+• Reading configuration files
+• Processing data files (CSV, JSON, text files)
+• Logging application events
+• Saving user data and preferences
+• Reading and writing data for data science applications
+• Working with datasets and large amounts of information
+
+TYPES OF FILES YOU CAN WORK WITH IN PYTHON:
+-------------------------------------------
+• Text files (.txt) - Plain text documents
+• CSV files (.csv) - Comma-separated values (spreadsheet data)
+• JSON files (.json) - JavaScript Object Notation (structured data)
+• Python files (.py) - Python source code
+• XML files (.xml) - Extensible Markup Language
+• And many more!
+
+For this guide, we focus on text files (.txt), but the concepts apply to many 
+file types.
+
+THE FILE HANDLING PROCESS IN PYTHON:
+-------------------------------------
+1. Open the file using open() function
+   → Creates a file object
+   → Establishes a connection between your program and the file
+   
+2. Perform operations (read, write, etc.)
+   → Use methods on the file object
+   → Read or modify file contents
+   
+3. Close the file
+   → Releases system resources
+   → Ensures data is saved (for write operations)
+   → Prevents file corruption
+
+REAL-WORLD ANALOGY
+------------------
+Imagine you're working at a filing cabinet:
+• Opening a file = Opening a drawer and pulling out a folder
+• Reading the file = Reading the documents inside the folder
+• Closing the file = Putting the folder back and closing the drawer
+
+If you forget to close the drawer (file), other people (programs) might not be 
+able to access it, and you might lose your place or cause problems.
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: UNDERSTANDING THE OPEN() FUNCTION
+-----------------------------------------------
+
+DEFINITION
+----------
+The open() function is Python's built-in function used to open files and return 
+a file object. It creates a connection between your Python program and a file 
+on your computer's storage system.
+
+SYNTAX
+------
+  file_object = open(file_path, mode)
+
+WHERE:
+• file_object = The variable that will store the file object
+• file_path = The location and name of the file (string)
+• mode = How you want to open the file (string, optional - defaults to 'r')
+
+DETAILED EXPLANATION
+--------------------
+The open() function is like a key that unlocks access to a file. When you call 
+open(), Python:
+1. Locates the file on your storage system
+2. Checks if the file exists (for reading) or creates it (for writing)
+3. Establishes a connection to the file
+4. Returns a file object that you can use to interact with the file
+
+WHAT IS A FILE OBJECT?
+----------------------
+A file object is a Python object that represents an open file. Think of it as 
+a "handle" or "interface" that gives you access to the file's contents and 
+allows you to perform operations on it.
+
+Think of a file object like a remote control:
+• The file = The TV
+• The file object = The remote control
+• Methods (like read()) = Buttons on the remote control
+• Pressing buttons = Calling methods on the file object
+
+You can't directly interact with the TV (file), but you can use the remote 
+control (file object) to control it.
+
+BASIC EXAMPLE
+-------------
+  # Opening a file named Example1.txt
+  file1 = open("Example1.txt", "r")
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: file1 = open("Example1.txt", "r")
+        • file1 = This is a variable name that will store the file object
+        • = = Assignment operator (assigns the result to the variable)
+        • open = Python's built-in function for opening files
+        • ( = Opening parenthesis - starts the function call
+        • "Example1.txt" = First argument - the file path/name
+        • , = Comma separator between arguments
+        • "r" = Second argument - the mode (read mode)
+        • ) = Closing parenthesis - ends the function call
+        
+        WHAT HAPPENS:
+        • Python looks for a file named "Example1.txt" in the current directory
+        • If found, Python opens it in read mode
+        • Python creates a file object
+        • The file object is stored in the variable file1
+        • You can now use file1 to read from the file
+
+WHAT IF THE FILE DOESN'T EXIST?
+-------------------------------
+If you try to open a file in read mode ("r") and it doesn't exist, Python will 
+raise a FileNotFoundError:
+
+  file1 = open("NonExistentFile.txt", "r")
+  # This will cause: FileNotFoundError: [Errno 2] No such file or directory: 
+  # 'NonExistentFile.txt'
+
+This is Python's way of telling you that the file you're looking for doesn't 
+exist at that location.
+
+THE FILE OBJECT VARIABLE NAME
+-----------------------------
+You can name the file object variable anything you want:
+  my_file = open("Example1.txt", "r")
+  data_file = open("Example1.txt", "r")
+  file_handle = open("Example1.txt", "r")
+  f = open("Example1.txt", "r")  # Short, common convention
+
+All of these are valid. Choose a name that makes sense for your code. Common 
+conventions:
+• file1, file2 - Simple and clear
+• f - Short, commonly used in examples
+• data_file - Descriptive of what the file contains
+• input_file, output_file - Descriptive of the file's purpose
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: FILE PATHS AND DIRECTORY STRUCTURE
+------------------------------------------------
+
+DEFINITION
+----------
+A file path is the location of a file on your computer's storage system. It 
+consists of the file directory (folder location) and the file name. The file 
+path tells Python exactly where to find the file you want to open.
+
+DETAILED EXPLANATION
+--------------------
+Think of a file path like a mailing address:
+• Directory = The street address (where the file lives)
+• Filename = The apartment/house number (the specific file)
+• Full path = Complete address (directory + filename)
+
+Just as you need a complete address to mail a letter, Python needs a complete 
+path to find a file.
+
+TYPES OF FILE PATHS
+-------------------
+1. RELATIVE PATH
+   A path relative to your current working directory (where your Python script 
+   is running from).
+   
+   Example: "Example1.txt"
+   • Python looks for Example1.txt in the current directory
+   • The current directory is usually where you run your Python script from
+   
+2. ABSOLUTE PATH
+   A complete path from the root of your file system.
+   
+   Windows Example: "C:\\Users\\YourName\\Documents\\Example1.txt"
+   Mac/Linux Example: "/Users/YourName/Documents/Example1.txt"
+   • Python looks for the file at this exact location
+   • Works regardless of where you run your script from
+
+WHAT IS THE CURRENT DIRECTORY?
+-------------------------------
+The current directory (also called working directory) is the folder where 
+Python is currently "looking" for files. When you run a Python script, Python 
+starts in a specific directory, and relative paths are resolved from there.
+
+HOW TO FIND YOUR CURRENT DIRECTORY:
+-----------------------------------
+You can check your current directory using Python:
+
+  import os
+  current_directory = os.getcwd()
+  print(current_directory)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: import os
+        • Imports the os module (operating system interface)
+        • Provides functions for interacting with the operating system
+        
+Line 2: current_directory = os.getcwd()
+        • os.getcwd() = "get current working directory"
+        • Returns the path of the current directory as a string
+        • Stores it in the variable current_directory
+        
+Line 3: print(current_directory)
+        • Prints the current directory path
+        • Example output: "C:\\Users\\YourName\\Documents"
+
+EXAMPLES OF FILE PATHS
+----------------------
+Example 1: File in the same directory as your script
+  file1 = open("Example1.txt", "r")
+  # Looks for Example1.txt in the same folder as your Python script
+
+Example 2: File in a subdirectory
+  file1 = open("data/Example1.txt", "r")
+  # Looks for Example1.txt inside a folder named "data"
+  # The "data" folder should be in the same directory as your script
+
+Example 3: File in a parent directory
+  file1 = open("../Example1.txt", "r")
+  # Looks for Example1.txt one level up from your current directory
+  # ".." means "go up one directory level"
+
+Example 4: Absolute path (Windows)
+  file1 = open("C:\\Users\\YourName\\Documents\\Example1.txt", "r")
+  # Looks for the file at this exact location
+  # Note: Windows uses backslashes (\), but you need to escape them (\\)
+  # Or use a raw string: r"C:\Users\YourName\Documents\Example1.txt"
+
+Example 5: Absolute path (Mac/Linux)
+  file1 = open("/Users/YourName/Documents/Example1.txt", "r")
+  # Looks for the file at this exact location
+  # Mac/Linux use forward slashes (/)
+
+IMPORTANT NOTES ABOUT PATHS
+---------------------------
+1. WINDOWS PATH SEPARATORS
+   Windows uses backslashes (\), but in Python strings, backslashes are escape 
+   characters. You have two options:
+   
+   Option A: Use double backslashes
+     "C:\\Users\\Documents\\file.txt"
+   
+   Option B: Use forward slashes (Python converts them)
+     "C:/Users/Documents/file.txt"
+   
+   Option C: Use raw strings (r prefix)
+     r"C:\Users\Documents\file.txt"
+
+2. CASE SENSITIVITY
+   • Windows: Usually not case-sensitive ("File.txt" = "file.txt")
+   • Mac/Linux: Case-sensitive ("File.txt" ≠ "file.txt")
+   • Best practice: Always match the exact case to avoid issues
+
+3. FILE EXTENSIONS
+   File extensions (.txt, .csv, .json) help identify file types but are not 
+   always required. However, it's good practice to include them.
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: FILE MODES EXPLAINED
+----------------------------------
+
+DEFINITION
+----------
+File modes specify how you want to open a file - whether you want to read from 
+it, write to it, or append to it. The mode determines what operations you can 
+perform on the file and how Python handles the file.
+
+SYNTAX
+------
+  file_object = open(file_path, mode)
+
+WHERE mode can be:
+• "r" - Read mode (default)
+• "w" - Write mode
+• "a" - Append mode
+• "r+" - Read and write mode
+• And more (we'll focus on the main three)
+
+DETAILED EXPLANATION
+--------------------
+Think of file modes like different ways to interact with a notebook:
+• Read mode ("r") = Reading the notebook (you can't write, only read)
+• Write mode ("w") = Starting a new notebook (erases old content, writes new)
+• Append mode ("a") = Adding to the end of the notebook (keeps old content, 
+  adds new)
+
+Each mode has specific rules and behaviors that you need to understand.
+
+MODE 1: READ MODE ("r")
+-----------------------
+WHAT IT DOES:
+• Opens file for reading only
+• File must exist (will raise error if it doesn't)
+• You can only read from the file, not write to it
+• File pointer starts at the beginning of the file
+
+EXAMPLE:
+  file1 = open("Example1.txt", "r")
+  # Opens Example1.txt in read mode
+  # You can read from it but cannot modify it
+
+WHEN TO USE:
+• Reading configuration files
+• Processing data files
+• Reading logs
+• Any time you only need to read data
+
+WHAT HAPPENS IF FILE DOESN'T EXIST:
+  file1 = open("NonExistent.txt", "r")
+  # FileNotFoundError: [Errno 2] No such file or directory: 'NonExistent.txt'
+
+MODE 2: WRITE MODE ("w")
+-------------------------
+WHAT IT DOES:
+• Opens file for writing
+• Creates the file if it doesn't exist
+• ERASES all existing content if file already exists
+• You can only write to the file, not read from it (in basic usage)
+• File pointer starts at the beginning (but file is empty)
+
+EXAMPLE:
+  file1 = open("Example1.txt", "w")
+  # Opens Example1.txt in write mode
+  # If file exists, all content is deleted
+  # If file doesn't exist, it's created
+  # You can write to it but cannot read from it (in basic usage)
+
+WHEN TO USE:
+• Creating new files
+• Overwriting existing files with new content
+• Logging (when you want to start fresh)
+
+WARNING:
+  file1 = open("ImportantData.txt", "w")
+  # ⚠️ DANGER: This will DELETE all existing content!
+  # Always be careful with write mode
+
+MODE 3: APPEND MODE ("a")
+--------------------------
+WHAT IT DOES:
+• Opens file for writing
+• Creates the file if it doesn't exist
+• Keeps all existing content
+• Adds new content to the END of the file
+• File pointer starts at the end of the file
+
+EXAMPLE:
+  file1 = open("Example1.txt", "a")
+  # Opens Example1.txt in append mode
+  # Existing content is preserved
+  # New content is added to the end
+  # If file doesn't exist, it's created
+
+WHEN TO USE:
+• Adding to log files
+• Appending data to existing files
+• Building up file content over time
+
+COMPARISON TABLE
+----------------
+Mode | File Exists? | Existing Content | Can Read? | Can Write? | Pointer Position
+-----|-------------|------------------|-----------|------------|-----------------
+"r"  | Must exist  | Preserved        | Yes       | No         | Beginning
+"w"  | Created if  | DELETED          | No*       | Yes        | Beginning
+     | missing     |                  |           |            |
+"a"  | Created if  | Preserved        | No*       | Yes        | End
+     | missing     |                  |           |            |
+
+*In basic usage. Advanced modes like "r+" allow both reading and writing.
+
+DEFAULT MODE
+------------
+If you don't specify a mode, Python defaults to read mode ("r"):
+
+  file1 = open("Example1.txt")
+  # Same as: file1 = open("Example1.txt", "r")
+
+However, it's best practice to always specify the mode explicitly for clarity.
+
+OTHER MODES (ADVANCED)
+----------------------
+• "r+" - Read and write (file must exist)
+• "w+" - Read and write (creates/overwrites file)
+• "a+" - Read and append (creates if doesn't exist)
+• "x" - Exclusive creation (fails if file exists)
+• "b" - Binary mode (for images, videos, etc.)
+• "t" - Text mode (default)
+
+For this guide, we focus on "r", "w", and "a" as they are the most commonly 
+used modes for text files.
+
+[END SECTION 1.4]
+================================================================================
+
+SECTION 1.5: CREATING FILE OBJECTS
+-----------------------------------
+
+DEFINITION
+----------
+A file object is a Python object returned by the open() function that provides 
+an interface for interacting with a file. Once you have a file object, you can 
+use various methods to read from or write to the file.
+
+DETAILED EXPLANATION
+--------------------
+When you call open(), Python doesn't just give you the file contents directly. 
+Instead, it gives you a file object - a special Python object that acts as a 
+"handle" or "interface" to the file.
+
+Think of it like this:
+• The file on disk = A book in a library
+• The file object = A library card that gives you access to read the book
+• Methods (like read()) = Ways to interact with the book (read pages, etc.)
+
+You need the file object to perform operations on the file.
+
+CREATING A FILE OBJECT - STEP BY STEP
+--------------------------------------
+Step 1: Call the open() function
+  open("Example1.txt", "r")
+  # This creates a file object, but we're not storing it anywhere yet
+
+Step 2: Store the file object in a variable
+  file1 = open("Example1.txt", "r")
+  # Now file1 contains the file object
+  # We can use file1 to interact with the file
+
+Step 3: Use the file object
+  content = file1.read()
+  # We use the file object (file1) to call methods (read())
+
+WHAT IS STORED IN THE VARIABLE?
+-------------------------------
+The variable stores a file object, which is a special type of Python object. 
+You can verify this:
+
+  file1 = open("Example1.txt", "r")
+  print(type(file1))
+  # Output: <class '_io.TextIOWrapper'>
+
+This shows that file1 is a TextIOWrapper object, which is Python's way of 
+representing an open text file.
+
+CHECKING IF FILE OBJECT IS CREATED SUCCESSFULLY
+------------------------------------------------
+If the file opens successfully, you'll get a file object. If there's an error 
+(such as file not found), Python will raise an exception:
+
+  try:
+      file1 = open("Example1.txt", "r")
+      print("File opened successfully!")
+      print("File object:", file1)
+  except FileNotFoundError:
+      print("File not found!")
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: try:
+        • Starts a try block - attempts to execute code that might cause errors
+        
+Line 2:     file1 = open("Example1.txt", "r")
+        • Attempts to open the file
+        • If successful, creates file object and stores in file1
+        
+Line 3:     print("File opened successfully!")
+        • Prints success message if file opens
+        
+Line 4:     print("File object:", file1)
+        • Prints information about the file object
+        • Shows something like: <_io.TextIOWrapper name='Example1.txt' mode='r' encoding='utf-8'>
+        
+Line 5: except FileNotFoundError:
+        • Catches FileNotFoundError if file doesn't exist
+        
+Line 6:     print("File not found!")
+        • Prints error message if file not found
+
+WHAT CAN YOU DO WITH A FILE OBJECT?
+-----------------------------------
+Once you have a file object, you can:
+• Read data from the file (read(), readline(), readlines())
+• Get file information (name, mode attributes)
+• Check if file is closed (closed attribute)
+• Close the file (close() method)
+• And more (depending on the mode)
+
+We'll cover reading methods in detail in Part 2 of this guide.
+
+[END SECTION 1.5]
+================================================================================
+
+SECTION 1.6: FILE OBJECT ATTRIBUTES
+------------------------------------
+
+DEFINITION
+----------
+File objects have attributes that provide information about the file. Attributes 
+are properties of the object that you can access to get information, but you 
+don't call them like methods (no parentheses).
+
+DETAILED EXPLANATION
+--------------------
+Think of attributes like properties of an object:
+• A car has attributes: color, model, year
+• A file object has attributes: name, mode, closed
+
+Attributes give you information about the file object without performing actions. 
+Methods (like read()) perform actions, while attributes just provide information.
+
+ACCESSING ATTRIBUTES
+--------------------
+You access attributes using dot notation:
+  file_object.attribute_name
+
+No parentheses needed - attributes are not methods!
+
+ATTRIBUTE 1: NAME
+-----------------
+WHAT IT DOES:
+Returns the name of the file as a string.
+
+SYNTAX:
+  file_object.name
+
+EXAMPLE:
+  file1 = open("Example1.txt", "r")
+  print(file1.name)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: file1 = open("Example1.txt", "r")
+        • Opens the file and creates file object
+        • Stores file object in variable file1
+        
+Line 2: print(file1.name)
+        • file1 = The file object
+        • . = Dot notation (accesses the attribute)
+        • name = The name attribute
+        • Prints the file name
+        
+        OUTPUT: Example1.txt
+
+WHAT YOU GET:
+The result is a string containing the name of the file. This is useful when 
+you want to know which file you're working with, especially if you're working 
+with multiple files.
+
+MORE EXAMPLES:
+  file1 = open("data/Example1.txt", "r")
+  print(file1.name)
+  # Output: data/Example1.txt (includes the path)
+
+  file2 = open("C:\\Users\\Documents\\file.txt", "r")
+  print(file2.name)
+  # Output: C:\Users\Documents\file.txt (full path)
+
+ATTRIBUTE 2: MODE
+-----------------
+WHAT IT DOES:
+Returns the mode the file was opened in as a string.
+
+SYNTAX:
+  file_object.mode
+
+EXAMPLE:
+  file1 = open("Example1.txt", "r")
+  print(file1.mode)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: file1 = open("Example1.txt", "r")
+        • Opens file in read mode ("r")
+        
+Line 2: print(file1.mode)
+        • file1 = The file object
+        • . = Dot notation
+        • mode = The mode attribute
+        • Prints the mode
+        
+        OUTPUT: r
+
+WHAT YOU GET:
+The result is a string showing what mode the file is in. Common values:
+• "r" - Read mode
+• "w" - Write mode
+• "a" - Append mode
+
+This is useful for debugging or when you want to verify how a file was opened.
+
+MORE EXAMPLES:
+  file1 = open("Example1.txt", "r")
+  print(file1.mode)  # Output: r
+  
+  file2 = open("Example2.txt", "w")
+  print(file2.mode)  # Output: w
+  
+  file3 = open("Example3.txt", "a")
+  print(file3.mode)  # Output: a
+
+ATTRIBUTE 3: CLOSED
+-------------------
+WHAT IT DOES:
+Returns True if the file is closed, False if it's still open.
+
+SYNTAX:
+  file_object.closed
+
+EXAMPLE:
+  file1 = open("Example1.txt", "r")
+  print(file1.closed)  # False (file is open)
+  file1.close()
+  print(file1.closed)  # True (file is closed)
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: file1 = open("Example1.txt", "r")
+        • Opens the file
+        • File object is now open
+        
+Line 2: print(file1.closed)
+        • Checks if file is closed
+        • Returns False because file is still open
+        • OUTPUT: False
+        
+Line 3: file1.close()
+        • Closes the file
+        • Releases system resources
+        
+Line 4: print(file1.closed)
+        • Checks if file is closed again
+        • Returns True because file is now closed
+        • OUTPUT: True
+
+WHY IS THIS USEFUL?
+This attribute helps you verify whether a file is properly closed, which is 
+important for resource management and preventing file access issues.
+
+COMPLETE EXAMPLE USING ALL ATTRIBUTES
+-------------------------------------
+  file1 = open("Example1.txt", "r")
+  
+  print("File name:", file1.name)
+  print("File mode:", file1.mode)
+  print("Is file closed?", file1.closed)
+  
+  file1.close()
+  
+  print("Is file closed now?", file1.closed)
+
+EXPECTED OUTPUT:
+  File name: Example1.txt
+  File mode: r
+  Is file closed? False
+  Is file closed now? True
+
+LINE-BY-LINE EXPLANATION:
+-------------------------
+Line 1: file1 = open("Example1.txt", "r")
+        • Opens file and creates file object
+        
+Lines 3-5: Print statements showing file attributes
+        • name: Shows the file name
+        • mode: Shows the mode ("r")
+        • closed: Shows False (file is open)
+        
+Line 7: file1.close()
+        • Closes the file
+        
+Line 9: print("Is file closed now?", file1.closed)
+        • Shows True (file is now closed)
+
+IMPORTANT NOTE ABOUT ATTRIBUTES
+--------------------------------
+Attributes are read-only in most cases - you can read them but not change them 
+directly. You can't do:
+  file1.name = "NewName.txt"  # This won't change the actual file name
+
+The attributes reflect the state of the file object, not something you modify 
+directly.
+
+[END SECTION 1.6]
+================================================================================
+
+END OF PART 1
+=============
+
+You've now learned:
+✓ What file handling is and why it's important
+✓ How to use the open() function
+✓ Understanding file paths (relative and absolute)
+✓ File modes (read, write, append) and when to use them
+✓ How to create file objects
+✓ File object attributes (name, mode, closed)
+
+In Part 2, you'll learn:
+• How to read entire files using read()
+• How to read files line by line using readline() and readlines()
+• The with statement for automatic file management
+• Reading specific numbers of characters
+• Practical examples with detailed explanations
+
+Continue to Part 2 for reading methods and the with statement!
+
+================================================================================
