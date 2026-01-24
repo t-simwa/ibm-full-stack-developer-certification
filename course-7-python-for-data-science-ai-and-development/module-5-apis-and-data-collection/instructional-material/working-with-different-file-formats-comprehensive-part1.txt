@@ -1,0 +1,896 @@
+================================================================================
+WORKING WITH DIFFERENT FILE FORMATS
+Comprehensive Study Guide - Part 1
+================================================================================
+
+WELCOME
+-------
+Welcome to Working with Different File Formats. This comprehensive guide will teach 
+you everything you need to know about working with various file formats in Python, 
+including CSV, JSON, and XML files. You will learn how to read, process, and 
+manipulate data from these different formats using Python libraries.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+90-120 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES
+-------------------
+After studying this guide, you will be able to:
+• Define different file formats such as CSV, XML, and JSON
+• Understand the characteristics and use cases of each file format
+• Write simple programs to read and output data from various file formats
+• List what Python libraries are needed to extract data from different formats
+• Use the Pandas library to read CSV files
+• Understand how to handle files with and without headers
+• Organize data output using dataframes and column attributes
+• Recognize file extensions and what they indicate about file types
+• Understand the importance of file formats in data collection and analysis
+
+OVERVIEW
+--------
+When collecting data, you will find there are many different file formats that need 
+to be collected or read in order to complete a data-driven story or analysis. When 
+gathering data, Python can make the process simpler with its predefined libraries. 
+Before we explore Python, let's first check out some of the various file formats.
+
+In this comprehensive guide, you will learn:
+• How to recognize different file types by their extensions
+• How to use Python libraries to extract data from various formats
+• How to use dataframes when collecting data
+• Detailed explanations of CSV, JSON, and XML file formats
+• Step-by-step code examples with line-by-line explanations
+• Best practices for working with different file formats
+
+================================================================================
+TABLE OF CONTENTS - PART 1
+================================================================================
+
+This part covers the fundamentals of file formats and working with CSV files:
+
+PART 1: INTRODUCTION TO FILE FORMATS AND CSV FILES
+  SECTION 1.1: UNDERSTANDING FILE FORMATS AND EXTENSIONS
+  SECTION 1.2: INTRODUCTION TO CSV FILES
+  SECTION 1.3: INTRODUCTION TO PANDAS LIBRARY
+  SECTION 1.4: READING CSV FILES WITH PANDAS
+  SECTION 1.5: HANDLING CSV FILES WITHOUT HEADERS
+  SECTION 1.6: ORGANIZING DATA WITH COLUMN ATTRIBUTES
+
+NOTE: Part 2 covers JSON file format, Part 3 covers XML file format, summary, 
+and best practices.
+
+================================================================================
+NAVIGATION TIP
+================================================================================
+Most text editors support code folding. You can:
+• Fold sections by clicking the fold icon next to section headers
+• Use Ctrl+Shift+[ (Windows/Linux) or Cmd+Option+[ (Mac) to fold
+• Use Ctrl+Shift+] (Windows/Linux) or Cmd+Option+] (Mac) to unfold
+• Fold all sections: Ctrl+K Ctrl+0 (Windows/Linux) or Cmd+K Cmd+0 (Mac)
+• Unfold all: Ctrl+K Ctrl+J (Windows/Linux) or Cmd+K Cmd+J (Mac)
+
+Search for section numbers (e.g., "SECTION 1.3:") to quickly jump to any section.
+
+================================================================================
+PART 1: INTRODUCTION TO FILE FORMATS AND CSV FILES
+================================================================================
+
+SECTION 1.1: UNDERSTANDING FILE FORMATS AND EXTENSIONS
+-------------------------------------------------------
+
+DEFINITION
+----------
+A file format is a standard way that information is encoded for storage in a 
+computer file. File extensions are the letters that appear after the period (.) 
+in a filename, and they indicate what type of file it is and what program is 
+needed to open it.
+
+DETAILED EXPLANATION
+--------------------
+When looking at a file name, you will notice an extension at the end of the title. 
+These extensions let you know what type of file it is and what is needed to open 
+it. For instance, if you see a title like "FileExample.csv", you will know this 
+is a "CSV" file. This is only one example of different file types as there are 
+many more such as "JSON" or "XML".
+
+WHAT ARE FILE EXTENSIONS?
+-------------------------
+File extensions are typically 2-4 characters long and appear after the last 
+period in a filename. They serve as a quick identifier for:
+• The type of data stored in the file
+• The format or structure of the data
+• What programs can open or process the file
+• How the file should be interpreted
+
+EXAMPLES OF COMMON FILE EXTENSIONS:
+• .csv - Comma-Separated Values file
+• .json - JavaScript Object Notation file
+• .xml - Extensible Markup Language file
+• .txt - Plain text file
+• .pdf - Portable Document Format file
+• .xlsx - Microsoft Excel file
+• .py - Python script file
+• .html - HyperText Markup Language file
+
+WHY ARE FILE EXTENSIONS IMPORTANT?
+----------------------------------
+1. QUICK IDENTIFICATION
+   • Instantly know what type of file you're working with
+   • Understand the data structure before opening
+   • Choose the right tool or library to process the file
+
+2. PROGRAM COMPATIBILITY
+   • Operating systems use extensions to determine which program opens a file
+   • Python libraries need to know the file type to process it correctly
+   • Different file formats require different parsing methods
+
+3. DATA STRUCTURE UNDERSTANDING
+   • CSV files have rows and columns separated by commas
+   • JSON files have nested key-value pairs
+   • XML files have hierarchical tags and attributes
+
+REAL-WORLD ANALOGY
+------------------
+Think of file extensions like labels on containers. Just as a label on a container 
+tells you what's inside (like "Flour" or "Sugar"), a file extension tells you what 
+type of data is inside the file. Just as you'd use different tools to open a can 
+versus a jar, you need different Python libraries to read different file formats.
+
+THE RELATIONSHIP BETWEEN FILE FORMATS AND DATA COLLECTION
+---------------------------------------------------------
+When collecting data, you will find there are many different file formats that 
+need to be collected or read in order to complete a data-driven story or analysis. 
+Different sources provide data in different formats:
+• APIs often return JSON data
+• Spreadsheets are commonly saved as CSV files
+• Some systems export data as XML files
+• Databases can export data in various formats
+
+Understanding file formats is crucial because:
+• You need to know how to read each format
+• Different formats require different Python libraries
+• Each format has its own structure and rules
+• Some formats are better suited for certain types of data
+
+[END SECTION 1.1]
+================================================================================
+
+SECTION 1.2: INTRODUCTION TO CSV FILES
+---------------------------------------
+
+DEFINITION
+----------
+CSV stands for Comma-Separated Values. A CSV file is a plain text file that stores 
+tabular data (data in rows and columns) where each line represents a row, and 
+values within each row are separated by commas.
+
+DETAILED EXPLANATION
+--------------------
+CSV files are one of the most common file formats for storing and exchanging 
+tabular data. They are simple, lightweight, and can be opened by many programs, 
+including spreadsheet applications like Microsoft Excel, Google Sheets, and text 
+editors.
+
+STRUCTURE OF A CSV FILE
+-----------------------
+A CSV file consists of:
+• Rows: Each line in the file represents one row of data
+• Columns: Values within each row are separated by commas
+• Headers: The first row often (but not always) contains column names
+• Values: Data points separated by commas
+
+EXAMPLE OF A CSV FILE STRUCTURE:
+---------------------------------
+Name,Age,City,Salary
+John Doe,30,New York,50000
+Jane Smith,25,Los Angeles,60000
+Bob Johnson,35,Chicago,55000
+
+In this example:
+• "Name,Age,City,Salary" is the header row (column names)
+• Each subsequent line is a data row
+• Commas separate each value
+• Each row has the same number of values (4 columns)
+
+CHARACTERISTICS OF CSV FILES
+----------------------------
+1. PLAIN TEXT FORMAT
+   • Human-readable (you can open it in a text editor)
+   • No special encoding required (usually UTF-8)
+   • Can be edited with any text editor
+
+2. SIMPLE STRUCTURE
+   • Easy to understand
+   • No complex formatting
+   • Straightforward row-column structure
+
+3. WIDELY SUPPORTED
+   • Can be opened in Excel, Google Sheets, and other spreadsheet programs
+   • Supported by virtually all programming languages
+   • Easy to import into databases
+
+4. LIGHTWEIGHT
+   • Small file sizes
+   • Fast to read and write
+   • Efficient for large datasets
+
+COMMON USE CASES FOR CSV FILES
+-------------------------------
+1. DATA EXPORT FROM DATABASES
+   • Exporting query results from SQL databases
+   • Backing up data in a simple format
+   • Transferring data between systems
+
+2. SPREADSHEET DATA
+   • Saving Excel data in a universal format
+   • Sharing data that needs to be opened in spreadsheets
+   • Storing tabular data for analysis
+
+3. DATA ANALYSIS
+   • Importing data into Python for analysis
+   • Sharing datasets for machine learning
+   • Storing results from data processing
+
+4. API RESPONSES
+   • Some APIs return data in CSV format
+   • Downloading data from web services
+   • Bulk data exports
+
+ADVANTAGES OF CSV FILES
+-----------------------
+• Simple and easy to understand
+• Human-readable format
+• Widely supported across platforms
+• Small file size
+• Easy to create and edit
+• Perfect for tabular data
+
+LIMITATIONS OF CSV FILES
+-----------------------
+• No support for complex data structures (nested data)
+• No data types (everything is text)
+• No formatting (colors, fonts, etc.)
+• Can be problematic with commas in data values
+• No support for multiple sheets (unlike Excel)
+
+[END SECTION 1.2]
+================================================================================
+
+SECTION 1.3: INTRODUCTION TO PANDAS LIBRARY
+--------------------------------------------
+
+DEFINITION
+----------
+Pandas is a powerful Python library for data manipulation and analysis. It provides 
+data structures and functions needed to work with structured data, including the 
+ability to easily read different file types like CSV, JSON, Excel, and more.
+
+DETAILED EXPLANATION
+--------------------
+The first Python library to become familiar with is called Pandas. By importing 
+this library at the beginning of the code, we are then able to easily read the 
+different file types. Pandas is one of the most popular and essential libraries 
+for data science and data analysis in Python.
+
+WHAT IS PANDAS?
+---------------
+Pandas stands for "Panel Data" and is an open-source library built on top of 
+NumPy (another Python library for numerical computing). It provides:
+• Data structures for storing and manipulating data
+• Functions for reading and writing various file formats
+• Tools for data cleaning and transformation
+• Methods for data analysis and statistics
+
+KEY FEATURES OF PANDAS
+----------------------
+1. DATA STRUCTURES
+   • DataFrame: Two-dimensional labeled data structure (like a spreadsheet)
+   • Series: One-dimensional labeled array (like a single column)
+
+2. FILE READING CAPABILITIES
+   • read_csv() - Read CSV files
+   • read_json() - Read JSON files
+   • read_excel() - Read Excel files
+   • read_xml() - Read XML files (in newer versions)
+   • And many more...
+
+3. DATA MANIPULATION
+   • Filtering and selecting data
+   • Grouping and aggregating data
+   • Merging and joining datasets
+   • Reshaping data
+
+4. DATA ANALYSIS
+   • Statistical functions
+   • Data cleaning tools
+   • Missing data handling
+   • Data transformation
+
+WHY USE PANDAS FOR FILE READING?
+---------------------------------
+1. SIMPLICITY
+   • One function call to read entire files
+   • Automatic parsing of data types
+   • Handles common file reading issues automatically
+
+2. POWERFUL DATA STRUCTURES
+   • DataFrames make data manipulation easy
+   • Labeled columns and rows for easy access
+   • Efficient operations on large datasets
+
+3. COMPREHENSIVE SUPPORT
+   • Supports many file formats
+   • Handles various data types
+   • Works with different encodings
+
+4. INTEGRATION
+   • Works well with other Python libraries
+   • Easy to convert to NumPy arrays
+   • Compatible with visualization libraries
+
+HOW TO INSTALL PANDAS
+---------------------
+If Pandas is not already installed, you can install it using pip:
+
+pip install pandas
+
+Or using conda:
+
+conda install pandas
+
+IMPORTING PANDAS
+----------------
+To use Pandas in your Python code, you need to import it. The standard way to 
+import Pandas is:
+
+import pandas as pd
+
+This imports the pandas library and gives it the alias "pd", which is the 
+conventional short name used by the Python data science community. Using "pd" 
+instead of typing "pandas" every time makes the code shorter and more readable.
+
+WHAT DOES "IMPORT PANDAS AS PD" MEAN?
+-------------------------------------
+• import pandas - This brings the entire pandas library into your Python script
+• as pd - This creates a shorter name "pd" that you can use instead of "pandas"
+• Now instead of writing "pandas.read_csv()", you can write "pd.read_csv()"
+
+EXAMPLE OF IMPORTING PANDAS
+----------------------------
+import pandas as pd
+
+# Now you can use pd instead of pandas
+# pd.read_csv() instead of pandas.read_csv()
+# pd.DataFrame() instead of pandas.DataFrame()
+
+REAL-WORLD ANALOGY
+------------------
+Think of Pandas like a universal translator for data files. Just as a translator 
+helps you understand documents in different languages, Pandas helps Python 
+understand data stored in different file formats. It reads the "language" of CSV, 
+JSON, XML, and other formats, and translates them into a format Python can easily 
+work with (DataFrames).
+
+[END SECTION 1.3]
+================================================================================
+
+SECTION 1.4: READING CSV FILES WITH PANDAS
+-------------------------------------------
+
+DEFINITION
+----------
+Reading a CSV file with Pandas involves using the read_csv() function to load the 
+contents of a CSV file into a Pandas DataFrame, which is a two-dimensional data 
+structure that makes it easy to work with tabular data.
+
+DETAILED EXPLANATION
+--------------------
+Since we have now imported the Pandas library, let's use it to read the first 
+"CSV" file. In this instance, we have come across the "FileExample.csv" file. 
+The first step is to assign the file to a variable. Then create another variable 
+to read the file with the help of the Pandas library. We can then call read_csv 
+function to output the data to the screen.
+
+STEP-BY-STEP PROCESS
+--------------------
+1. ASSIGN THE FILE TO A VARIABLE
+   • Store the filename (and path if needed) in a variable
+   • This makes it easy to reference the file later
+   • Example: filename = "FileExample.csv"
+
+2. CREATE A VARIABLE TO READ THE FILE
+   • Use pd.read_csv() function to read the file
+   • Store the result in a variable (commonly called "df" for DataFrame)
+   • Example: df = pd.read_csv(filename)
+
+3. OUTPUT THE DATA TO THE SCREEN
+   • Use print() function to display the DataFrame
+   • Example: print(df)
+
+BASIC CODE EXAMPLE
+------------------
+Let's break down a simple example:
+
+import pandas as pd
+
+filename = "FileExample.csv"
+df = pd.read_csv(filename)
+print(df)
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: import pandas as pd
+   • This imports the Pandas library
+   • "as pd" creates a shorter alias for pandas
+   • Now we can use "pd" instead of typing "pandas" every time
+
+Line 2: filename = "FileExample.csv"
+   • This creates a variable called "filename"
+   • It stores the string "FileExample.csv" (the name of our CSV file)
+   • This variable holds the path/name of the file we want to read
+
+Line 3: df = pd.read_csv(filename)
+   • "pd.read_csv()" is a function from the Pandas library that reads CSV files
+   • "filename" is passed as an argument (the file we want to read)
+   • The function reads the CSV file and converts it into a DataFrame
+   • "df" is a variable that stores the DataFrame (the data from the CSV file)
+   • "df" is a common abbreviation for "DataFrame"
+
+Line 4: print(df)
+   • "print()" is a built-in Python function that displays output
+   • "df" is the DataFrame we created in the previous line
+   • This displays the entire DataFrame on the screen
+
+WHAT HAPPENS WHEN YOU RUN THIS CODE?
+------------------------------------
+1. Python imports the Pandas library
+2. The filename is stored in the "filename" variable
+3. Pandas reads the CSV file and creates a DataFrame
+4. The DataFrame is stored in the "df" variable
+5. The contents of the DataFrame are printed to the screen
+
+WHAT IS A DATAFRAME?
+--------------------
+A DataFrame is a two-dimensional data structure in Pandas that:
+• Has rows and columns (like a spreadsheet)
+• Can have labeled rows (index) and columns
+• Allows you to easily access, manipulate, and analyze data
+• Automatically handles data types and formatting
+
+EXAMPLE WITH ACTUAL DATA
+------------------------
+Let's say "FileExample.csv" contains:
+
+Name,Age,City
+John,30,New York
+Jane,25,Los Angeles
+Bob,35,Chicago
+
+When you run the code, the output will look like:
+
+    Name  Age         City
+0   John   30     New York
+1   Jane   25  Los Angeles
+2    Bob   35      Chicago
+
+Notice:
+• The column names are displayed at the top
+• Each row has an index number (0, 1, 2) on the left
+• The data is neatly organized in columns
+• Pandas automatically formats the output
+
+WHAT IF THE FILE IS IN A DIFFERENT DIRECTORY?
+---------------------------------------------
+If your CSV file is not in the same directory as your Python script, you need to 
+provide the full path:
+
+# Windows example
+filename = "C:\\Users\\YourName\\Documents\\FileExample.csv"
+
+# Or using forward slashes (works on Windows too)
+filename = "C:/Users/YourName/Documents/FileExample.csv"
+
+# Relative path example (file in a subfolder)
+filename = "data/FileExample.csv"
+
+# Relative path going up one directory
+filename = "../data/FileExample.csv"
+
+COMMON PARAMETERS FOR read_csv()
+--------------------------------
+The read_csv() function has many optional parameters. Here are some common ones:
+
+pd.read_csv(
+    filename,           # The file to read (required)
+    sep=',',            # Separator (default is comma)
+    header=0,           # Which row to use as headers (0 = first row)
+    index_col=None,     # Which column to use as index
+    encoding='utf-8'    # File encoding
+)
+
+[END SECTION 1.4]
+================================================================================
+
+SECTION 1.5: HANDLING CSV FILES WITHOUT HEADERS
+-----------------------------------------------
+
+DEFINITION
+----------
+When a CSV file doesn't have a header row (column names), Pandas will 
+automatically use the first row of data as the header. This can cause problems 
+because the first row of actual data will be treated as column names instead of 
+data values.
+
+DETAILED EXPLANATION
+--------------------
+With this example, there were no headers for the data, so it added the first line 
+as the header. Since we don't want the first line of data as the header, let's 
+find out how to correct this issue.
+
+THE PROBLEM
+-----------
+When Pandas reads a CSV file without headers, it assumes the first row contains 
+column names. If your CSV file looks like this:
+
+John,30,New York
+Jane,25,Los Angeles
+Bob,35,Chicago
+
+Pandas will treat it as:
+• Column 1: "John" (but this is actually a name value!)
+• Column 2: "30" (but this is actually an age value!)
+• Column 3: "New York" (but this is actually a city value!)
+
+This means:
+• You lose the first row of actual data
+• Your column names don't make sense
+• Your data analysis will be incorrect
+
+EXAMPLE OF THE PROBLEM
+----------------------
+Let's say you have a CSV file "data.csv" with no headers:
+
+John,30,New York
+Jane,25,Los Angeles
+Bob,35,Chicago
+
+If you run:
+df = pd.read_csv("data.csv")
+print(df)
+
+The output might look like:
+      John  30  New York
+0     Jane  25  Los Angeles
+1      Bob  35  Chicago
+
+Notice how "John", "30", and "New York" became column names, and you lost that 
+row of data!
+
+THE SOLUTION: SPECIFYING HEADER PARAMETER
+------------------------------------------
+To fix this, you need to tell Pandas that there are no headers. You do this by 
+setting the header parameter to None:
+
+df = pd.read_csv("data.csv", header=None)
+
+LINE-BY-LINE EXPLANATION
+------------------------
+df = pd.read_csv("data.csv", header=None)
+
+• "df" - Variable to store the DataFrame
+• "pd.read_csv()" - Function to read CSV files
+• "data.csv" - The file to read
+• "header=None" - Parameter telling Pandas there are no headers
+  - None means "no header row"
+  - Pandas will create default column names (0, 1, 2, etc.)
+
+WHAT HAPPENS NOW?
+-----------------
+When you specify header=None, Pandas will:
+1. Not treat the first row as column names
+2. Use all rows as data
+3. Create default column names: 0, 1, 2, 3, etc.
+
+So the output will be:
+     0    1          2
+0  John  30   New York
+1  Jane  25  Los Angeles
+2   Bob  35     Chicago
+
+Now all your data is preserved!
+
+BETTER SOLUTION: PROVIDING CUSTOM COLUMN NAMES
+---------------------------------------------
+Instead of using default column names (0, 1, 2), you can provide your own:
+
+df = pd.read_csv("data.csv", header=None, names=['Name', 'Age', 'City'])
+
+LINE-BY-LINE EXPLANATION
+------------------------
+df = pd.read_csv("data.csv", header=None, names=['Name', 'Age', 'City'])
+
+• "data.csv" - The file to read
+• "header=None" - No header row in the file
+• "names=['Name', 'Age', 'City']" - Custom column names to use
+  - This is a list of strings
+  - Each string becomes a column name
+  - The order matters: first name = first column, etc.
+
+Now the output will be:
+    Name  Age         City
+0   John   30     New York
+1   Jane   25  Los Angeles
+2    Bob   35      Chicago
+
+This is much better! You have:
+• All your data preserved
+• Meaningful column names
+• Properly structured DataFrame
+
+COMPLETE EXAMPLE
+----------------
+import pandas as pd
+
+# Read CSV file without headers
+df = pd.read_csv("data.csv", header=None, names=['Name', 'Age', 'City'])
+
+# Display the DataFrame
+print(df)
+
+# Access specific columns
+print(df['Name'])    # Print just the Name column
+print(df['Age'])     # Print just the Age column
+
+OTHER WAYS TO HANDLE HEADERS
+-----------------------------
+1. SKIP ROWS
+   If you want to skip the first few rows:
+   df = pd.read_csv("data.csv", skiprows=1)  # Skip first row
+
+2. SPECIFY HEADER ROW NUMBER
+   If headers are in a different row:
+   df = pd.read_csv("data.csv", header=2)  # Row 2 (0-indexed) is header
+
+3. NO HEADER, USE FIRST ROW AS DATA
+   df = pd.read_csv("data.csv", header=None)  # No headers, use default names
+
+[END SECTION 1.5]
+================================================================================
+
+SECTION 1.6: ORGANIZING DATA WITH COLUMN ATTRIBUTES
+----------------------------------------------------
+
+DEFINITION
+----------
+The columns attribute in Pandas allows you to access and modify the column names 
+of a DataFrame. This helps organize data output by providing meaningful column 
+headers instead of default numeric names or incorrect headers from the first data row.
+
+DETAILED EXPLANATION
+--------------------
+Now that we have learned how to read and output the data from a "CSV" file, let's 
+make it look a little more organized. From the last example, we were able to print 
+out the data, but because the file had no headers, it printed the first line of 
+data as a header. We easily solve this by adding a dataframe attribute. We use 
+the variable "df" to call the file and then add the "columns" attribute. By adding 
+this one line to our program, we can then neatly organize the data output into 
+the specified headers for each column.
+
+WHAT IS THE COLUMNS ATTRIBUTE?
+-------------------------------
+The columns attribute is a property of a Pandas DataFrame that:
+• Contains the column names/labels
+• Can be accessed to see what columns exist
+• Can be modified to change column names
+• Helps organize and label your data
+
+HOW TO USE THE COLUMNS ATTRIBUTE
+---------------------------------
+There are two main ways to use the columns attribute:
+
+1. VIEWING COLUMN NAMES
+   print(df.columns)
+   This shows you all the column names in your DataFrame.
+
+2. SETTING COLUMN NAMES
+   df.columns = ['Column1', 'Column2', 'Column3']
+   This changes the column names to your specified values.
+
+EXAMPLE: VIEWING COLUMN NAMES
+------------------------------
+import pandas as pd
+
+df = pd.read_csv("data.csv", header=None)
+print(df.columns)
+
+Output:
+Index([0, 1, 2], dtype='object')
+
+This shows the current column names are 0, 1, and 2 (default names).
+
+EXAMPLE: SETTING COLUMN NAMES
+------------------------------
+import pandas as pd
+
+# Read file without headers
+df = pd.read_csv("data.csv", header=None)
+
+# Set custom column names
+df.columns = ['Name', 'Age', 'City']
+
+# Now display the DataFrame
+print(df)
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: import pandas as pd
+   • Imports the Pandas library
+
+Line 2: df = pd.read_csv("data.csv", header=None)
+   • Reads the CSV file
+   • header=None tells Pandas there are no headers
+   • Result stored in variable "df"
+
+Line 3: df.columns = ['Name', 'Age', 'City']
+   • "df.columns" accesses the columns attribute of the DataFrame
+   • "=" assigns new values
+   • "['Name', 'Age', 'City']" is a list of new column names
+   • This replaces the default column names (0, 1, 2) with meaningful names
+
+Line 4: print(df)
+   • Displays the DataFrame with the new column names
+
+BEFORE AND AFTER COMPARISON
+---------------------------
+BEFORE (without setting columns):
+     0    1          2
+0  John  30   New York
+1  Jane  25  Los Angeles
+2   Bob  35     Chicago
+
+AFTER (with df.columns = ['Name', 'Age', 'City']):
+    Name  Age         City
+0   John   30     New York
+1   Jane   25  Los Angeles
+2    Bob   35      Chicago
+
+Much more readable and organized!
+
+ALTERNATIVE METHOD: USING NAMES PARAMETER
+-----------------------------------------
+Instead of setting columns after reading, you can specify them during reading:
+
+df = pd.read_csv("data.csv", header=None, names=['Name', 'Age', 'City'])
+
+This is often preferred because it's more efficient and cleaner.
+
+ACCESSING SPECIFIC COLUMNS
+---------------------------
+Once you have named columns, you can access them easily:
+
+# Access a single column
+print(df['Name'])      # Prints the Name column
+print(df['Age'])       # Prints the Age column
+
+# Access multiple columns
+print(df[['Name', 'City']])  # Prints Name and City columns
+
+# Access using dot notation (if column name has no spaces)
+print(df.Name)         # Same as df['Name']
+
+MODIFYING EXISTING COLUMN NAMES
+--------------------------------
+If your CSV file has headers but you want to change them:
+
+df = pd.read_csv("data.csv")
+df.columns = ['Name', 'Age', 'City']  # Replace existing headers
+
+Or rename specific columns:
+
+df.rename(columns={'OldName': 'NewName'}, inplace=True)
+
+COMPLETE WORKING EXAMPLE
+-------------------------
+import pandas as pd
+
+# Step 1: Read the CSV file (assuming no headers)
+filename = "FileExample.csv"
+df = pd.read_csv(filename, header=None)
+
+# Step 2: Set meaningful column names
+df.columns = ['Name', 'Age', 'City', 'Salary']
+
+# Step 3: Display the organized data
+print("Organized Data:")
+print(df)
+print("\n")
+
+# Step 4: Display just specific columns
+print("Names only:")
+print(df['Name'])
+print("\n")
+
+# Step 5: Display column information
+print("Column names:")
+print(df.columns)
+
+WHY IS ORGANIZING COLUMNS IMPORTANT?
+------------------------------------
+1. READABILITY
+   • Meaningful names are easier to understand
+   • Makes your code self-documenting
+   • Helps others understand your data
+
+2. DATA ACCESS
+   • Easy to reference columns by name
+   • Prevents errors from using wrong column numbers
+   • Makes code more maintainable
+
+3. PROFESSIONAL OUTPUT
+   • Clean, organized data presentation
+   • Better for reports and analysis
+   • Easier to share with others
+
+4. DATA ANALYSIS
+   • Easier to perform operations on named columns
+   • Better for filtering and grouping
+   • Makes data manipulation more intuitive
+
+[END SECTION 1.6]
+================================================================================
+
+SUMMARY OF PART 1
+==================
+
+In this part, you learned:
+
+1. FILE FORMATS AND EXTENSIONS
+   • File extensions indicate file types
+   • Different formats require different Python libraries
+   • Understanding formats is crucial for data collection
+
+2. CSV FILES
+   • Comma-Separated Values format
+   • Simple tabular data structure
+   • Widely used for data exchange
+
+3. PANDAS LIBRARY
+   • Essential library for data manipulation
+   • Provides read_csv() function for CSV files
+   • Creates DataFrames for easy data handling
+
+4. READING CSV FILES
+   • Use pd.read_csv() to read CSV files
+   • Store result in a DataFrame variable
+   • Print DataFrame to display data
+
+5. HANDLING FILES WITHOUT HEADERS
+   • Use header=None parameter
+   • Provide custom names with names parameter
+   • Prevents first data row from becoming headers
+
+6. ORGANIZING DATA
+   • Use df.columns to set column names
+   • Makes data more readable and organized
+   • Enables easier data access and analysis
+
+KEY TERMS FROM PART 1
+---------------------
+• File Extension: Letters after the period in a filename indicating file type
+• CSV: Comma-Separated Values file format
+• Pandas: Python library for data manipulation and analysis
+• DataFrame: Two-dimensional data structure in Pandas
+• Header: Row containing column names in a CSV file
+• Columns Attribute: Property of DataFrame containing column names
+
+NEXT STEPS
+----------
+In Part 2, you will learn about:
+• JSON file format and structure
+• Reading JSON files in Python
+• Working with JSON data
+• Converting between JSON and Python objects
+
+[END OF PART 1]
+================================================================================

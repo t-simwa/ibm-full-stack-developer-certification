@@ -1,0 +1,1184 @@
+================================================================================
+WORKING WITH DIFFERENT FILE FORMATS
+Comprehensive Study Guide - Part 2
+================================================================================
+
+WELCOME TO PART 2
+-----------------
+This part focuses on the JSON (JavaScript Object Notation) file format. You will 
+learn everything about JSON files, including their structure, how to read them in 
+Python, and how to work with JSON data effectively.
+
+ESTIMATED TIME NEEDED
+---------------------
+5 minutes (for basic reading)
+60-90 minutes (for comprehensive study with practice)
+
+LEARNING OBJECTIVES FOR PART 2
+-------------------------------
+After studying this part, you will be able to:
+• Define JSON (JavaScript Object Notation) file format
+• Understand the structure and syntax of JSON files
+• Explain how JSON is similar to Python dictionaries
+• Import the json library in Python
+• Read JSON files using json.load()
+• Parse JSON data from strings
+• Understand the relationship between JSON and Python data types
+• Work with nested JSON structures
+• Handle JSON files with multiple records
+
+OVERVIEW
+--------
+The next file format we will explore is the "JSON" file format. In this type of 
+file, the text is written in a language-independent data format and is similar to 
+a Python dictionary. The first step in reading this type of file is to import json. 
+After importing "json", we can add a line to open the file, call the "load" 
+attribute of "json" to begin and read the file, and lastly we can then print the file.
+
+================================================================================
+TABLE OF CONTENTS - PART 2
+================================================================================
+
+PART 2: WORKING WITH JSON FILES
+  SECTION 2.1: INTRODUCTION TO JSON FILES
+  SECTION 2.2: JSON STRUCTURE AND SYNTAX
+  SECTION 2.3: JSON VS PYTHON DICTIONARIES
+  SECTION 2.4: IMPORTING THE JSON LIBRARY
+  SECTION 2.5: READING JSON FILES WITH JSON.LOAD()
+  SECTION 2.6: WORKING WITH JSON DATA IN PYTHON
+  SECTION 2.7: HANDLING COMPLEX JSON STRUCTURES
+
+NOTE: Part 1 covered CSV files, Part 3 covers XML files, summary, and best practices.
+
+================================================================================
+PART 2: WORKING WITH JSON FILES
+================================================================================
+
+SECTION 2.1: INTRODUCTION TO JSON FILES
+----------------------------------------
+
+DEFINITION
+----------
+JSON stands for JavaScript Object Notation. It is a lightweight, language-independent 
+data interchange format that is easy for humans to read and write, and easy for 
+machines to parse and generate. JSON files store data in a text format using a 
+syntax similar to JavaScript object literals.
+
+DETAILED EXPLANATION
+--------------------
+In this type of file, the text is written in a language-independent data format 
+and is similar to a Python dictionary. JSON is one of the most popular formats for 
+storing and transmitting data, especially in web applications and APIs.
+
+WHAT DOES "LANGUAGE-INDEPENDENT" MEAN?
+---------------------------------------
+Language-independent means that JSON can be used with any programming language, 
+not just JavaScript. While JSON was derived from JavaScript, it has become a 
+universal standard that is supported by:
+• Python
+• JavaScript/Node.js
+• Java
+• C#
+• PHP
+• Ruby
+• Go
+• And virtually every modern programming language
+
+This means you can create JSON data in one language and read it in another 
+language without any problems.
+
+KEY CHARACTERISTICS OF JSON
+---------------------------
+1. TEXT-BASED FORMAT
+   • Stored as plain text
+   • Human-readable (you can open it in a text editor)
+   • No special encoding required (usually UTF-8)
+
+2. LIGHTWEIGHT
+   • Smaller file sizes compared to XML
+   • Fast to parse and generate
+   • Efficient for data transmission
+
+3. STRUCTURED DATA
+   • Represents objects, arrays, and primitive values
+   • Supports nested structures
+   • Can represent complex data relationships
+
+4. WIDELY SUPPORTED
+   • Built into most programming languages
+   • Standard format for web APIs
+   • Used by many databases and services
+
+COMMON USE CASES FOR JSON FILES
+--------------------------------
+1. API RESPONSES
+   • REST APIs return data in JSON format
+   • Web services exchange data using JSON
+   • Mobile apps receive JSON data from servers
+
+2. CONFIGURATION FILES
+   • Application settings stored in JSON
+   • Package.json for Node.js projects
+   • VS Code settings files
+
+3. DATA STORAGE
+   • NoSQL databases store data in JSON format
+   • Simple data persistence
+   • Export/import data between systems
+
+4. WEB APPLICATIONS
+   • Frontend-backend communication
+   • Storing user preferences
+   • Caching data
+
+ADVANTAGES OF JSON
+------------------
+• Human-readable format
+• Easy to parse and generate
+• Lightweight and efficient
+• Language-independent
+• Widely supported
+• Perfect for web applications
+• Supports nested data structures
+
+LIMITATIONS OF JSON
+-------------------
+• No support for comments
+• No support for functions or code
+• Limited data types (no dates, etc. as native types)
+• Must be valid JSON syntax (strict rules)
+• No support for undefined values (only null)
+
+REAL-WORLD ANALOGY
+------------------
+Think of JSON like a universal form that everyone can fill out and understand, 
+regardless of their native language. Just as a form has fields for name, address, 
+etc., JSON has a structure that any programming language can understand and work 
+with. It's like a standardized way of writing down information that everyone 
+agrees to use.
+
+[END SECTION 2.1]
+================================================================================
+
+SECTION 2.2: JSON STRUCTURE AND SYNTAX
+---------------------------------------
+
+DEFINITION
+----------
+JSON syntax consists of key-value pairs enclosed in curly braces for objects, 
+square brackets for arrays, and supports various data types including strings, 
+numbers, booleans, null, objects, and arrays.
+
+DETAILED EXPLANATION
+--------------------
+JSON has a specific syntax that must be followed. Understanding this syntax is 
+crucial for working with JSON files effectively.
+
+BASIC JSON SYNTAX RULES
+------------------------
+1. OBJECTS (DICTIONARIES)
+   • Enclosed in curly braces {}
+   • Contains key-value pairs
+   • Keys must be strings (in double quotes)
+   • Values can be strings, numbers, booleans, null, objects, or arrays
+   • Key-value pairs separated by commas
+   • Colon (:) separates keys from values
+
+2. ARRAYS (LISTS)
+   • Enclosed in square brackets []
+   • Contains ordered list of values
+   • Values separated by commas
+   • Can contain any JSON data type
+
+3. STRINGS
+   • Must be enclosed in double quotes ""
+   • Single quotes are NOT allowed
+   • Can contain escape characters (\n, \t, etc.)
+
+4. NUMBERS
+   • Can be integers or floating-point
+   • No leading zeros (except for decimals like 0.5)
+   • Can be negative
+
+5. BOOLEANS
+   • true or false (lowercase, no quotes)
+
+6. NULL
+   • null (lowercase, no quotes)
+   • Represents empty or missing value
+
+EXAMPLE OF A SIMPLE JSON OBJECT
+--------------------------------
+{
+  "name": "John Doe",
+  "age": 30,
+  "city": "New York",
+  "isStudent": false,
+  "salary": null
+}
+
+BREAKDOWN:
+• { } - Curly braces define an object
+• "name": "John Doe" - Key-value pair (key is "name", value is "John Doe")
+• Comma separates each key-value pair
+• "age": 30 - Number value (no quotes)
+• "isStudent": false - Boolean value (no quotes)
+• "salary": null - Null value
+
+EXAMPLE OF A JSON ARRAY
+------------------------
+["apple", "banana", "orange"]
+
+OR WITH NUMBERS:
+[1, 2, 3, 4, 5]
+
+OR WITH MIXED TYPES:
+["apple", 42, true, null]
+
+EXAMPLE OF NESTED JSON STRUCTURE
+---------------------------------
+{
+  "person": {
+    "name": "John Doe",
+    "age": 30,
+    "address": {
+      "street": "123 Main St",
+      "city": "New York",
+      "zipcode": "10001"
+    }
+  },
+  "hobbies": ["reading", "swimming", "coding"],
+  "isActive": true
+}
+
+BREAKDOWN:
+• Outer object contains "person", "hobbies", and "isActive"
+• "person" contains another object with nested data
+• "address" is nested inside "person"
+• "hobbies" is an array of strings
+• "isActive" is a boolean value
+
+COMMON JSON SYNTAX ERRORS
+-------------------------
+1. TRAILING COMMAS
+   WRONG: {"name": "John", "age": 30,}
+   RIGHT: {"name": "John", "age": 30}
+
+2. SINGLE QUOTES FOR STRINGS
+   WRONG: {'name': 'John'}
+   RIGHT: {"name": "John"}
+
+3. UNQUOTED KEYS
+   WRONG: {name: "John"}
+   RIGHT: {"name": "John"}
+
+4. COMMENTS (NOT ALLOWED)
+   WRONG: {"name": "John" /* comment */}
+   RIGHT: {"name": "John"}
+
+5. UNDEFINED VALUES
+   WRONG: {"name": undefined}
+   RIGHT: {"name": null}
+
+VALID JSON EXAMPLE FILE
+-----------------------
+Let's say you have a file called "data.json":
+
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "position": "Developer",
+      "salary": 50000,
+      "skills": ["Python", "JavaScript", "SQL"]
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "position": "Designer",
+      "salary": 60000,
+      "skills": ["Photoshop", "Illustrator", "Figma"]
+    }
+  ],
+  "company": {
+    "name": "Tech Corp",
+    "founded": 2010,
+    "active": true
+  }
+}
+
+This is a valid JSON structure with:
+• An object containing "employees" and "company"
+• "employees" is an array of objects
+• Each employee object has multiple properties
+• "skills" is an array within each employee object
+• "company" is a nested object
+
+[END SECTION 2.2]
+================================================================================
+
+SECTION 2.3: JSON VS PYTHON DICTIONARIES
+----------------------------------------
+
+DEFINITION
+----------
+JSON syntax is very similar to Python dictionaries, but there are important 
+differences. JSON is a data format (text), while Python dictionaries are data 
+structures (objects in memory). JSON can be converted to Python dictionaries and 
+vice versa.
+
+DETAILED EXPLANATION
+--------------------
+In this type of file, the text is written in a language-independent data format 
+and is similar to a Python dictionary. This similarity makes it easy to work 
+with JSON data in Python, but it's important to understand both the similarities 
+and differences.
+
+SIMILARITIES BETWEEN JSON AND PYTHON DICTIONARIES
+-------------------------------------------------
+1. KEY-VALUE PAIRS
+   • Both use key-value pairs
+   • Both use colons to separate keys from values
+   • Both use commas to separate items
+
+2. NESTED STRUCTURES
+   • Both support nested objects/dictionaries
+   • Both support arrays/lists
+   • Both can have complex hierarchical structures
+
+3. DATA TYPES
+   • Both support strings, numbers, booleans
+   • Both support null/None values
+   • Both support arrays/lists
+
+VISUAL COMPARISON
+-----------------
+JSON FORMAT:
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York"
+}
+
+PYTHON DICTIONARY:
+{
+  "name": "John",
+  "age": 30,
+  "city": "New York"
+}
+
+They look almost identical!
+
+KEY DIFFERENCES
+---------------
+1. JSON IS TEXT, DICTIONARIES ARE OBJECTS
+   • JSON is a string representation of data
+   • Python dictionaries are actual objects in memory
+   • JSON must be parsed to become a dictionary
+
+2. KEY QUOTES
+   • JSON: Keys MUST be strings in double quotes
+   • Python: Keys can be strings (single or double quotes) or other types
+
+3. VALUE QUOTES
+   • JSON: Strings MUST use double quotes
+   • Python: Strings can use single or double quotes
+
+4. BOOLEAN VALUES
+   • JSON: true/false (lowercase)
+   • Python: True/False (capitalized)
+
+5. NULL VALUES
+   • JSON: null (lowercase)
+   • Python: None (capitalized)
+
+6. COMMENTS
+   • JSON: No comments allowed
+   • Python: Comments allowed with #
+
+7. TRAILING COMMAS
+   • JSON: Not allowed
+   • Python: Allowed (in newer versions)
+
+CONVERSION BETWEEN JSON AND PYTHON
+-----------------------------------
+JSON STRING → PYTHON DICTIONARY:
+Use json.loads() to convert JSON string to Python dictionary
+
+PYTHON DICTIONARY → JSON STRING:
+Use json.dumps() to convert Python dictionary to JSON string
+
+EXAMPLE OF CONVERSION
+---------------------
+import json
+
+# JSON string (text)
+json_string = '{"name": "John", "age": 30}'
+
+# Convert JSON string to Python dictionary
+python_dict = json.loads(json_string)
+print(python_dict)  # {'name': 'John', 'age': 30}
+print(type(python_dict))  # <class 'dict'>
+
+# Convert Python dictionary to JSON string
+back_to_json = json.dumps(python_dict)
+print(back_to_json)  # {"name": "John", "age": 30}
+print(type(back_to_json))  # <class 'str'>
+
+WHY THE SIMILARITY MATTERS
+---------------------------
+Because JSON and Python dictionaries are so similar:
+• It's easy to understand JSON if you know Python dictionaries
+• Conversion between them is straightforward
+• You can work with JSON data using familiar dictionary operations
+• The learning curve is minimal
+
+[END SECTION 2.3]
+================================================================================
+
+SECTION 2.4: IMPORTING THE JSON LIBRARY
+----------------------------------------
+
+DEFINITION
+----------
+The json library is a built-in Python library (part of the standard library) that 
+provides functions for encoding and decoding JSON data. It does not need to be 
+installed separately as it comes with Python.
+
+DETAILED EXPLANATION
+--------------------
+The first step in reading this type of file is to import json. The json library 
+is Python's built-in module for working with JSON data. It provides all the 
+functions you need to read, write, and manipulate JSON data.
+
+WHAT IS THE JSON LIBRARY?
+-------------------------
+The json library is:
+• Part of Python's standard library (comes with Python)
+• No installation required
+• Provides functions for JSON encoding and decoding
+• Handles conversion between JSON and Python data types
+
+HOW TO IMPORT JSON
+------------------
+To use the json library, you simply import it at the beginning of your Python script:
+
+import json
+
+That's it! No installation needed, no special setup required.
+
+WHAT DOES "IMPORT JSON" DO?
+----------------------------
+When you write "import json", Python:
+1. Loads the json module into your script
+2. Makes all json functions available
+3. Allows you to use json.load(), json.dumps(), etc.
+
+EXAMPLE OF IMPORTING JSON
+-------------------------
+import json
+
+# Now you can use json functions
+# json.load() - Read JSON from file
+# json.loads() - Parse JSON from string
+# json.dump() - Write JSON to file
+# json.dumps() - Convert Python object to JSON string
+
+KEY FUNCTIONS IN THE JSON LIBRARY
+----------------------------------
+1. json.load(file_object)
+   • Reads JSON data from a file
+   • Takes a file object as argument
+   • Returns Python dictionary or list
+
+2. json.loads(json_string)
+   • Parses JSON data from a string
+   • Takes a JSON string as argument
+   • Returns Python dictionary or list
+
+3. json.dump(python_object, file_object)
+   • Writes Python object as JSON to a file
+   • Takes Python object and file object
+   • Writes directly to file
+
+4. json.dumps(python_object)
+   • Converts Python object to JSON string
+   • Takes Python object as argument
+   • Returns JSON string
+
+WHY USE THE JSON LIBRARY?
+-------------------------
+1. BUILT-IN AND RELIABLE
+   • Comes with Python, no installation needed
+   • Well-tested and maintained
+   • Standard way to work with JSON
+
+2. EASY TO USE
+   • Simple function calls
+   • Handles all the parsing details
+   • Automatic type conversion
+
+3. EFFICIENT
+   • Fast parsing and encoding
+   • Handles large JSON files
+   • Optimized for performance
+
+4. COMPREHENSIVE
+   • Handles all JSON data types
+   • Supports nested structures
+   • Error handling built-in
+
+[END SECTION 2.4]
+================================================================================
+
+SECTION 2.5: READING JSON FILES WITH JSON.LOAD()
+-------------------------------------------------
+
+DEFINITION
+----------
+json.load() is a function from the json library that reads JSON data from a file 
+and converts it into a Python dictionary or list. It takes a file object as an 
+argument and returns the parsed Python data structure.
+
+DETAILED EXPLANATION
+--------------------
+After importing "json", we can add a line to open the file, call the "load" 
+attribute of "json" to begin and read the file, and lastly we can then print the file.
+
+STEP-BY-STEP PROCESS
+--------------------
+1. IMPORT THE JSON LIBRARY
+   import json
+
+2. OPEN THE JSON FILE
+   Use Python's built-in open() function to open the file
+   Example: file = open("data.json", "r")
+
+3. CALL JSON.LOAD()
+   Pass the file object to json.load()
+   Example: data = json.load(file)
+
+4. CLOSE THE FILE
+   Always close the file when done
+   Example: file.close()
+
+5. PRINT OR USE THE DATA
+   The data is now a Python dictionary/list
+   Example: print(data)
+
+BASIC CODE EXAMPLE
+------------------
+import json
+
+file = open("data.json", "r")
+data = json.load(file)
+file.close()
+print(data)
+
+LINE-BY-LINE EXPLANATION
+------------------------
+Line 1: import json
+   • Imports the json library
+   • Makes json functions available in your script
+   • This is a built-in library, no installation needed
+
+Line 2: file = open("data.json", "r")
+   • "open()" is Python's built-in function to open files
+   • "data.json" is the name of the JSON file to open
+   • "r" means "read mode" (we're reading the file)
+   • The result is stored in variable "file"
+   • "file" is a file object that represents the opened file
+
+Line 3: data = json.load(file)
+   • "json.load()" is a function from the json library
+   • It reads JSON data from a file object
+   • "file" is passed as an argument (the file we opened)
+   • The function parses the JSON and converts it to Python data types
+   • The result (a Python dictionary or list) is stored in "data"
+
+Line 4: file.close()
+   • Closes the file
+   • Important for freeing up system resources
+   • Always close files when you're done with them
+
+Line 5: print(data)
+   • Prints the Python dictionary/list to the screen
+   • Shows the data that was read from the JSON file
+
+BETTER PRACTICE: USING WITH STATEMENT
+--------------------------------------
+Instead of manually opening and closing files, use Python's "with" statement:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+    print(data)
+
+LINE-BY-LINE EXPLANATION (WITH STATEMENT)
+------------------------------------------
+Line 1: import json
+   • Imports the json library
+
+Line 2: with open("data.json", "r") as file:
+   • "with" statement automatically handles file closing
+   • "open()" opens the file in read mode
+   • "as file" assigns the file object to variable "file"
+   • The colon (:) starts a code block
+   • File automatically closes when the block ends
+
+Line 3: data = json.load(file)
+   • Reads and parses JSON from the file
+   • Converts JSON to Python dictionary/list
+   • Stores result in "data"
+
+Line 4: print(data)
+   • Displays the data
+   • This line is inside the "with" block
+
+WHY USE THE WITH STATEMENT?
+----------------------------
+1. AUTOMATIC FILE CLOSING
+   • File closes automatically when block ends
+   • Even if an error occurs
+   • Prevents resource leaks
+
+2. CLEANER CODE
+   • Less code to write
+   • No need to remember to close files
+   • More Pythonic (follows Python best practices)
+
+3. ERROR HANDLING
+   • File closes even if an exception occurs
+   • Prevents file corruption
+   • More reliable
+
+EXAMPLE WITH ACTUAL JSON FILE
+------------------------------
+Let's say "data.json" contains:
+
+{
+  "name": "John Doe",
+  "age": 30,
+  "city": "New York"
+}
+
+When you run:
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+    print(data)
+
+Output:
+{'name': 'John Doe', 'age': 30, 'city': 'New York'}
+
+Notice:
+• The JSON object became a Python dictionary
+• Double quotes became single quotes (Python style)
+• Numbers stayed as numbers
+• The structure is preserved
+
+EXAMPLE WITH JSON ARRAY
+-----------------------
+If "data.json" contains an array:
+
+["apple", "banana", "orange"]
+
+The code:
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+    print(data)
+
+Output:
+['apple', 'banana', 'orange']
+
+Notice it became a Python list!
+
+EXAMPLE WITH NESTED STRUCTURE
+------------------------------
+If "data.json" contains:
+
+{
+  "person": {
+    "name": "John",
+    "age": 30
+  },
+  "hobbies": ["reading", "swimming"]
+}
+
+The code:
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+    print(data)
+
+Output:
+{'person': {'name': 'John', 'age': 30}, 'hobbies': ['reading', 'swimming']}
+
+The nested structure is preserved!
+
+ACCESSING DATA AFTER LOADING
+-----------------------------
+Once you've loaded JSON into a Python dictionary, you can access it like any 
+dictionary:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Access top-level keys
+print(data["name"])        # John Doe
+print(data["age"])         # 30
+
+# Access nested data
+print(data["person"]["name"])  # John
+
+# Access array elements
+print(data["hobbies"][0])   # reading
+
+HANDLING FILE PATHS
+-------------------
+If the JSON file is in a different directory:
+
+# Absolute path (Windows)
+with open("C:\\Users\\YourName\\data.json", "r") as file:
+    data = json.load(file)
+
+# Relative path (file in subfolder)
+with open("data/files/data.json", "r") as file:
+    data = json.load(file)
+
+# Relative path (file in parent directory)
+with open("../data.json", "r") as file:
+    data = json.load(file)
+
+ERROR HANDLING
+--------------
+It's good practice to handle potential errors:
+
+import json
+
+try:
+    with open("data.json", "r") as file:
+        data = json.load(file)
+        print(data)
+except FileNotFoundError:
+    print("File not found!")
+except json.JSONDecodeError:
+    print("Invalid JSON format!")
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+[END SECTION 2.5]
+================================================================================
+
+SECTION 2.6: WORKING WITH JSON DATA IN PYTHON
+----------------------------------------------
+
+DEFINITION
+----------
+After loading JSON data into Python, you can work with it just like any Python 
+dictionary or list. You can access values, modify data, iterate through items, 
+and perform various operations on the data.
+
+DETAILED EXPLANATION
+--------------------
+Once you've loaded JSON data using json.load(), the data becomes a Python 
+dictionary or list. You can then use all standard Python operations to work with 
+this data.
+
+ACCESSING JSON DATA
+-------------------
+After loading JSON, you can access data using dictionary or list operations:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# If data is a dictionary
+print(data["key"])           # Access by key
+print(data.get("key"))       # Safe access (returns None if key doesn't exist)
+
+# If data is a list
+print(data[0])               # Access first element
+print(data[-1])              # Access last element
+
+EXAMPLE: ACCESSING NESTED DATA
+-------------------------------
+If your JSON file contains:
+
+{
+  "company": {
+    "name": "Tech Corp",
+    "employees": [
+      {"name": "John", "age": 30},
+      {"name": "Jane", "age": 25}
+    ]
+  }
+}
+
+You can access it like this:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Access nested dictionary
+company_name = data["company"]["name"]
+print(company_name)  # Tech Corp
+
+# Access array element
+first_employee = data["company"]["employees"][0]
+print(first_employee)  # {'name': 'John', 'age': 30}
+
+# Access nested value in array element
+employee_name = data["company"]["employees"][0]["name"]
+print(employee_name)  # John
+
+ITERATING THROUGH JSON DATA
+---------------------------
+You can loop through JSON data just like Python dictionaries and lists:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Iterate through dictionary
+for key, value in data.items():
+    print(f"{key}: {value}")
+
+# Iterate through list
+for item in data:
+    print(item)
+
+# Iterate through nested structures
+for employee in data["company"]["employees"]:
+    print(employee["name"])
+
+MODIFYING JSON DATA
+-------------------
+After loading, you can modify the data:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Modify values
+data["name"] = "New Name"
+
+# Add new keys
+data["newKey"] = "newValue"
+
+# Modify nested data
+data["company"]["name"] = "New Company Name"
+
+# Add to arrays
+data["hobbies"].append("coding")
+
+SEARCHING JSON DATA
+-------------------
+You can search through JSON data:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Check if key exists
+if "name" in data:
+    print(data["name"])
+
+# Find items in list
+for employee in data["employees"]:
+    if employee["age"] > 25:
+        print(employee["name"])
+
+FILTERING JSON DATA
+-------------------
+Filter data based on conditions:
+
+import json
+
+with open("data.json", "r") as file:
+    data = json.load(file)
+
+# Filter employees by age
+young_employees = [emp for emp in data["employees"] if emp["age"] < 30]
+
+# Filter by multiple conditions
+senior_devs = [emp for emp in data["employees"] 
+               if emp["position"] == "Developer" and emp["age"] > 25]
+
+COMPLETE WORKING EXAMPLE
+------------------------
+import json
+
+# Read JSON file
+with open("employees.json", "r") as file:
+    employees_data = json.load(file)
+
+# Display all employees
+print("All Employees:")
+for employee in employees_data["employees"]:
+    print(f"Name: {employee['name']}, Age: {employee['age']}")
+
+# Find employees over 30
+print("\nEmployees over 30:")
+for employee in employees_data["employees"]:
+    if employee["age"] > 30:
+        print(employee["name"])
+
+# Calculate average age
+ages = [emp["age"] for emp in employees_data["employees"]]
+average_age = sum(ages) / len(ages)
+print(f"\nAverage Age: {average_age}")
+
+[END SECTION 2.6]
+================================================================================
+
+SECTION 2.7: HANDLING COMPLEX JSON STRUCTURES
+-----------------------------------------------
+
+DEFINITION
+----------
+Complex JSON structures include nested objects, arrays of objects, arrays within 
+objects, and deeply nested hierarchies. Working with these structures requires 
+understanding how to navigate through multiple levels of nesting.
+
+DETAILED EXPLANATION
+--------------------
+Real-world JSON files often contain complex nested structures. Understanding how 
+to work with these structures is essential for effective data processing.
+
+TYPES OF COMPLEX STRUCTURES
+----------------------------
+1. NESTED OBJECTS
+   Objects within objects (dictionaries within dictionaries)
+
+2. ARRAYS OF OBJECTS
+   Lists containing multiple objects
+
+3. OBJECTS WITH ARRAYS
+   Objects that contain arrays as values
+
+4. DEEPLY NESTED STRUCTURES
+   Multiple levels of nesting
+
+EXAMPLE: COMPLEX JSON STRUCTURE
+--------------------------------
+{
+  "company": {
+    "name": "Tech Corp",
+    "departments": [
+      {
+        "name": "Engineering",
+        "employees": [
+          {
+            "id": 1,
+            "name": "John Doe",
+            "skills": ["Python", "JavaScript"],
+            "contact": {
+              "email": "john@example.com",
+              "phone": "123-456-7890"
+            }
+          },
+          {
+            "id": 2,
+            "name": "Jane Smith",
+            "skills": ["Java", "SQL"],
+            "contact": {
+              "email": "jane@example.com",
+              "phone": "098-765-4321"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Marketing",
+        "employees": [
+          {
+            "id": 3,
+            "name": "Bob Johnson",
+            "skills": ["SEO", "Content Writing"],
+            "contact": {
+              "email": "bob@example.com",
+              "phone": "555-123-4567"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+
+WORKING WITH THIS STRUCTURE
+----------------------------
+import json
+
+with open("company.json", "r") as file:
+    company_data = json.load(file)
+
+# Access company name
+company_name = company_data["company"]["name"]
+print(company_name)  # Tech Corp
+
+# Access first department
+first_dept = company_data["company"]["departments"][0]
+print(first_dept["name"])  # Engineering
+
+# Access first employee in first department
+first_employee = company_data["company"]["departments"][0]["employees"][0]
+print(first_employee["name"])  # John Doe
+
+# Access employee's email
+email = company_data["company"]["departments"][0]["employees"][0]["contact"]["email"]
+print(email)  # john@example.com
+
+# Iterate through all departments
+for department in company_data["company"]["departments"]:
+    print(f"\nDepartment: {department['name']}")
+    for employee in department["employees"]:
+        print(f"  Employee: {employee['name']}")
+        print(f"  Skills: {', '.join(employee['skills'])}")
+
+NAVIGATING COMPLEX STRUCTURES
+------------------------------
+When working with complex structures:
+
+1. START FROM THE OUTSIDE
+   • Begin with the top-level object
+   • Work your way inward
+
+2. USE INTERMEDIATE VARIABLES
+   • Store nested objects in variables
+   • Makes code more readable
+
+3. CHECK FOR EXISTENCE
+   • Verify keys exist before accessing
+   • Handle missing data gracefully
+
+EXAMPLE WITH SAFE ACCESS
+------------------------
+import json
+
+with open("company.json", "r") as file:
+    company_data = json.load(file)
+
+# Safe access with error handling
+try:
+    # Navigate through structure
+    company = company_data.get("company", {})
+    departments = company.get("departments", [])
+    
+    for dept in departments:
+        employees = dept.get("employees", [])
+        for emp in employees:
+            contact = emp.get("contact", {})
+            email = contact.get("email", "No email")
+            print(f"{emp.get('name', 'Unknown')}: {email}")
+except Exception as e:
+    print(f"Error accessing data: {e}")
+
+FLATTENING COMPLEX STRUCTURES
+------------------------------
+Sometimes you need to flatten nested structures:
+
+import json
+
+def flatten_employees(data):
+    """Extract all employees from nested structure"""
+    employees = []
+    
+    company = data.get("company", {})
+    departments = company.get("departments", [])
+    
+    for dept in departments:
+        dept_employees = dept.get("employees", [])
+        for emp in dept_employees:
+            # Add department name to employee data
+            emp_copy = emp.copy()
+            emp_copy["department"] = dept.get("name")
+            employees.append(emp_copy)
+    
+    return employees
+
+with open("company.json", "r") as file:
+    company_data = json.load(file)
+
+all_employees = flatten_employees(company_data)
+for emp in all_employees:
+    print(f"{emp['name']} - {emp['department']}")
+
+[END SECTION 2.7]
+================================================================================
+
+SUMMARY OF PART 2
+==================
+
+In this part, you learned:
+
+1. JSON FILE FORMAT
+   • JavaScript Object Notation
+   • Language-independent data format
+   • Similar to Python dictionaries
+
+2. JSON STRUCTURE AND SYNTAX
+   • Objects use curly braces {}
+   • Arrays use square brackets []
+   • Keys must be strings in double quotes
+   • Supports strings, numbers, booleans, null, objects, arrays
+
+3. JSON VS PYTHON DICTIONARIES
+   • Very similar syntax
+   • JSON is text, dictionaries are objects
+   • Easy conversion between them
+
+4. IMPORTING JSON LIBRARY
+   • Built-in Python library
+   • No installation needed
+   • import json
+
+5. READING JSON FILES
+   • Use json.load() with file object
+   • Use "with" statement for automatic file closing
+   • Returns Python dictionary or list
+
+6. WORKING WITH JSON DATA
+   • Access like Python dictionaries/lists
+   • Modify, iterate, filter data
+   • Handle nested structures
+
+7. COMPLEX JSON STRUCTURES
+   • Navigate nested objects and arrays
+   • Safe access patterns
+   • Flattening techniques
+
+KEY TERMS FROM PART 2
+---------------------
+• JSON: JavaScript Object Notation, a data interchange format
+• json.load(): Function to read JSON from a file
+• Language-independent: Works with any programming language
+• Nested Structure: Data structures within other data structures
+• File Object: Python object representing an opened file
+• With Statement: Python construct for automatic resource management
+
+NEXT STEPS
+----------
+In Part 3, you will learn about:
+• XML file format and structure
+• Reading XML files in Python
+• Parsing XML data
+• Summary and best practices
+
+[END OF PART 2]
+================================================================================
